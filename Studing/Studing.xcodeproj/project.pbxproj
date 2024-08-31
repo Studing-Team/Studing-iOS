@@ -13,6 +13,11 @@
 		3F3992602C82C8E40045CF1E /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3F39925F2C82C8E40045CF1E /* Base */; };
 		3F3992622C82C8E60045CF1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F3992612C82C8E60045CF1E /* Assets.xcassets */; };
 		3F3992652C82C8E60045CF1E /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3F3992642C82C8E60045CF1E /* Base */; };
+		3F39926E2C82C9080045CF1E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 3F39926D2C82C9080045CF1E /* Then */; };
+		3F3992712C82C9390045CF1E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992702C82C9390045CF1E /* SnapKit */; };
+		3F3992732C82C9390045CF1E /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992722C82C9390045CF1E /* SnapKit-Dynamic */; };
+		3F3992762C82C9690045CF1E /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992752C82C9690045CF1E /* Moya */; };
+		3F3992792C82C9FA0045CF1E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992782C82C9FA0045CF1E /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +36,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F39926E2C82C9080045CF1E /* Then in Frameworks */,
+				3F3992712C82C9390045CF1E /* SnapKit in Frameworks */,
+				3F3992792C82C9FA0045CF1E /* FirebaseMessaging in Frameworks */,
+				3F3992762C82C9690045CF1E /* Moya in Frameworks */,
+				3F3992732C82C9390045CF1E /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +93,13 @@
 			dependencies = (
 			);
 			name = Studing;
+			packageProductDependencies = (
+				3F39926D2C82C9080045CF1E /* Then */,
+				3F3992702C82C9390045CF1E /* SnapKit */,
+				3F3992722C82C9390045CF1E /* SnapKit-Dynamic */,
+				3F3992752C82C9690045CF1E /* Moya */,
+				3F3992782C82C9FA0045CF1E /* FirebaseMessaging */,
+			);
 			productName = Studing;
 			productReference = 3F3992552C82C8E40045CF1E /* Studing.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +128,12 @@
 				Base,
 			);
 			mainGroup = 3F39924C2C82C8E40045CF1E;
+			packageReferences = (
+				3F39926C2C82C9080045CF1E /* XCRemoteSwiftPackageReference "Then" */,
+				3F39926F2C82C9390045CF1E /* XCRemoteSwiftPackageReference "SnapKit" */,
+				3F3992742C82C9690045CF1E /* XCRemoteSwiftPackageReference "Moya" */,
+				3F3992772C82C9FA0045CF1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 3F3992562C82C8E40045CF1E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -363,6 +386,69 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3F39926C2C82C9080045CF1E /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		3F39926F2C82C9390045CF1E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		3F3992742C82C9690045CF1E /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+		3F3992772C82C9FA0045CF1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3F39926D2C82C9080045CF1E /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F39926C2C82C9080045CF1E /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		3F3992702C82C9390045CF1E /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F39926F2C82C9390045CF1E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		3F3992722C82C9390045CF1E /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F39926F2C82C9390045CF1E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+		3F3992752C82C9690045CF1E /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F3992742C82C9690045CF1E /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		3F3992782C82C9FA0045CF1E /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F3992772C82C9FA0045CF1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3F39924D2C82C8E40045CF1E /* Project object */;
 }
