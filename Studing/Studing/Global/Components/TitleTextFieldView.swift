@@ -65,7 +65,7 @@ private extension TitleTextFieldView {
 
 // MARK: - Extension
 
-private extension TitleTextFieldView {
+extension TitleTextFieldView {
     func getInputText() -> String? {
         return textField.text
     }
