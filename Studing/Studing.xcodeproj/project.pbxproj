@@ -10,22 +10,46 @@
 		3F25A3592C96A676006E2715 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3582C96A676006E2715 /* UIView+.swift */; };
 		3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A35B2C96A76E006E2715 /* StringLiterals.swift */; };
 		3F25A35F2C96A85E006E2715 /* TitleTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */; };
+		3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3612C96CF4C006E2715 /* Coordinator.swift */; };
+		3F25A3642C96D001006E2715 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3632C96D001006E2715 /* AppCoordinator.swift */; };
+		3F25A3662C96D058006E2715 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3652C96D058006E2715 /* LoginCoordinator.swift */; };
+		3F25A36A2C96D11A006E2715 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3692C96D11A006E2715 /* LoginViewModel.swift */; };
+		3F25A36D2C96D34D006E2715 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A36C2C96D34D006E2715 /* BaseViewModel.swift */; };
+		3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */; };
+		3F25A3712C96D4D9006E2715 /* UserInfoSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3702C96D4D9006E2715 /* UserInfoSignUpViewController.swift */; };
 		3F3992592C82C8E40045CF1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3992582C82C8E40045CF1E /* AppDelegate.swift */; };
 		3F39925B2C82C8E40045CF1E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39925A2C82C8E40045CF1E /* SceneDelegate.swift */; };
 		3F39925D2C82C8E40045CF1E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39925C2C82C8E40045CF1E /* LoginViewController.swift */; };
 		3F3992622C82C8E60045CF1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F3992612C82C8E60045CF1E /* Assets.xcassets */; };
 		3F3992652C82C8E60045CF1E /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3F3992642C82C8E60045CF1E /* Base */; };
 		3F39926E2C82C9080045CF1E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 3F39926D2C82C9080045CF1E /* Then */; };
-		3F3992712C82C9390045CF1E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992702C82C9390045CF1E /* SnapKit */; };
-		3F3992732C82C9390045CF1E /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992722C82C9390045CF1E /* SnapKit-Dynamic */; };
 		3F3992762C82C9690045CF1E /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992752C82C9690045CF1E /* Moya */; };
 		3F3992792C82C9FA0045CF1E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992782C82C9FA0045CF1E /* FirebaseMessaging */; };
+		3F3CFDAC2C97321700DC9F9A /* UniversityInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDAB2C97321700DC9F9A /* UniversityInfoViewController.swift */; };
+		3F3CFDAE2C97326000DC9F9A /* MajorInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDAD2C97326000DC9F9A /* MajorInfoViewController.swift */; };
+		3F3CFDB02C9733A100DC9F9A /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDAF2C9733A100DC9F9A /* TermsOfServiceViewController.swift */; };
+		3F3CFDB22C973D7E00DC9F9A /* AuthUniversityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDB12C973D7E00DC9F9A /* AuthUniversityViewController.swift */; };
+		3F3CFDB42C9742C900DC9F9A /* SuccessSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDB32C9742C900DC9F9A /* SuccessSignUpViewController.swift */; };
+		3F3CFDB92C97BCF800DC9F9A /* Combine+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDB82C97BCF800DC9F9A /* Combine+.swift */; };
+		3F3CFDBB2C97BE5D00DC9F9A /* UIControl+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDBA2C97BE5D00DC9F9A /* UIControl+.swift */; };
+		3F3CFDBE2C97C47100DC9F9A /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDBD2C97C47100DC9F9A /* UserInfo.swift */; };
+		3F3CFDC02C98093700DC9F9A /* UniversityInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDBF2C98093700DC9F9A /* UniversityInfoViewModel.swift */; };
+		3F3CFDC22C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDC12C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift */; };
+		3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */; };
+		3FDEE9E32C970A7A00633C93 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDEE9E22C970A7A00633C93 /* SnapKit */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3F25A3582C96A676006E2715 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		3F25A35B2C96A76E006E2715 /* StringLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLiterals.swift; sourceTree = "<group>"; };
 		3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextFieldView.swift; sourceTree = "<group>"; };
+		3F25A3612C96CF4C006E2715 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		3F25A3632C96D001006E2715 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		3F25A3652C96D058006E2715 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		3F25A3692C96D11A006E2715 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		3F25A36C2C96D34D006E2715 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCoordinator.swift; sourceTree = "<group>"; };
+		3F25A3702C96D4D9006E2715 /* UserInfoSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoSignUpViewController.swift; sourceTree = "<group>"; };
 		3F3992552C82C8E40045CF1E /* Studing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Studing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F3992582C82C8E40045CF1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3F39925A2C82C8E40045CF1E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -33,6 +57,17 @@
 		3F3992612C82C8E60045CF1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F3992642C82C8E60045CF1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F3992662C82C8E60045CF1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F3CFDAB2C97321700DC9F9A /* UniversityInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityInfoViewController.swift; sourceTree = "<group>"; };
+		3F3CFDAD2C97326000DC9F9A /* MajorInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MajorInfoViewController.swift; sourceTree = "<group>"; };
+		3F3CFDAF2C9733A100DC9F9A /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
+		3F3CFDB12C973D7E00DC9F9A /* AuthUniversityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthUniversityViewController.swift; sourceTree = "<group>"; };
+		3F3CFDB32C9742C900DC9F9A /* SuccessSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessSignUpViewController.swift; sourceTree = "<group>"; };
+		3F3CFDB82C97BCF800DC9F9A /* Combine+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Combine+.swift"; sourceTree = "<group>"; };
+		3F3CFDBA2C97BE5D00DC9F9A /* UIControl+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+.swift"; sourceTree = "<group>"; };
+		3F3CFDBD2C97C47100DC9F9A /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		3F3CFDBF2C98093700DC9F9A /* UniversityInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityInfoViewModel.swift; sourceTree = "<group>"; };
+		3F3CFDC12C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoSignUpViewModel.swift; sourceTree = "<group>"; };
+		3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,10 +76,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F39926E2C82C9080045CF1E /* Then in Frameworks */,
-				3F3992712C82C9390045CF1E /* SnapKit in Frameworks */,
+				3FDEE9E32C970A7A00633C93 /* SnapKit in Frameworks */,
 				3F3992792C82C9FA0045CF1E /* FirebaseMessaging in Frameworks */,
 				3F3992762C82C9690045CF1E /* Moya in Frameworks */,
-				3F3992732C82C9390045CF1E /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +89,9 @@
 			isa = PBXGroup;
 			children = (
 				3F25A3582C96A676006E2715 /* UIView+.swift */,
+				3F3CFDB82C97BCF800DC9F9A /* Combine+.swift */,
+				3F3CFDBA2C97BE5D00DC9F9A /* UIControl+.swift */,
+				3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -75,11 +112,55 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		3F25A3602C96CF14006E2715 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				3F25A3612C96CF4C006E2715 /* Coordinator.swift */,
+				3F25A3632C96D001006E2715 /* AppCoordinator.swift */,
+				3F25A3652C96D058006E2715 /* LoginCoordinator.swift */,
+				3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		3F25A3672C96D0C6006E2715 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				3F39925C2C82C8E40045CF1E /* LoginViewController.swift */,
+				3F25A3702C96D4D9006E2715 /* UserInfoSignUpViewController.swift */,
+				3F3CFDAB2C97321700DC9F9A /* UniversityInfoViewController.swift */,
+				3F3CFDAD2C97326000DC9F9A /* MajorInfoViewController.swift */,
+				3F3CFDAF2C9733A100DC9F9A /* TermsOfServiceViewController.swift */,
+				3F3CFDB12C973D7E00DC9F9A /* AuthUniversityViewController.swift */,
+				3F3CFDB32C9742C900DC9F9A /* SuccessSignUpViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		3F25A3682C96D0DA006E2715 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				3F25A3692C96D11A006E2715 /* LoginViewModel.swift */,
+				3F3CFDC12C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift */,
+				3F3CFDBF2C98093700DC9F9A /* UniversityInfoViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		3F25A36B2C96D32C006E2715 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				3F25A36C2C96D34D006E2715 /* BaseViewModel.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		3F39924C2C82C8E40045CF1E = {
 			isa = PBXGroup;
 			children = (
 				3F3992572C82C8E40045CF1E /* Studing */,
 				3F3992562C82C8E40045CF1E /* Products */,
+				3FDEE9E12C970A7A00633C93 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,10 +175,10 @@
 		3F3992572C82C8E40045CF1E /* Studing */ = {
 			isa = PBXGroup;
 			children = (
-				3F39927F2C82D2830045CF1E /* Supporting Files */,
 				3F39927D2C82D2440045CF1E /* Application */,
 				3F39927A2C82D2220045CF1E /* Global */,
 				3F39927B2C82D22A0045CF1E /* Network */,
+				3F25A3602C96CF14006E2715 /* Coordinators */,
 				3F39927C2C82D2300045CF1E /* Present */,
 			);
 			path = Studing;
@@ -106,10 +187,12 @@
 		3F39927A2C82D2220045CF1E /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				3F25A36B2C96D32C006E2715 /* Protocol */,
 				3F25A35D2C96A825006E2715 /* Components */,
 				3F25A35A2C96A764006E2715 /* Consts */,
 				3F25A3572C96A669006E2715 /* Extension */,
 				3F39927E2C82D25B0045CF1E /* Resoureces */,
+				3F39927F2C82D2830045CF1E /* Supporting Files */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -124,7 +207,7 @@
 		3F39927C2C82D2300045CF1E /* Present */ = {
 			isa = PBXGroup;
 			children = (
-				3F3992802C82D2A30045CF1E /* Signup */,
+				3F3992802C82D2A30045CF1E /* Login & Signup */,
 			);
 			path = Present;
 			sourceTree = "<group>";
@@ -155,12 +238,29 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3F3992802C82D2A30045CF1E /* Signup */ = {
+		3F3992802C82D2A30045CF1E /* Login & Signup */ = {
 			isa = PBXGroup;
 			children = (
-				3F39925C2C82C8E40045CF1E /* LoginViewController.swift */,
+				3F3CFDBC2C97C44000DC9F9A /* Model */,
+				3F25A3682C96D0DA006E2715 /* ViewModel */,
+				3F25A3672C96D0C6006E2715 /* ViewController */,
 			);
-			path = Signup;
+			path = "Login & Signup";
+			sourceTree = "<group>";
+		};
+		3F3CFDBC2C97C44000DC9F9A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3F3CFDBD2C97C47100DC9F9A /* UserInfo.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3FDEE9E12C970A7A00633C93 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,10 +281,9 @@
 			name = Studing;
 			packageProductDependencies = (
 				3F39926D2C82C9080045CF1E /* Then */,
-				3F3992702C82C9390045CF1E /* SnapKit */,
-				3F3992722C82C9390045CF1E /* SnapKit-Dynamic */,
 				3F3992752C82C9690045CF1E /* Moya */,
 				3F3992782C82C9FA0045CF1E /* FirebaseMessaging */,
+				3FDEE9E22C970A7A00633C93 /* SnapKit */,
 			);
 			productName = Studing;
 			productReference = 3F3992552C82C8E40045CF1E /* Studing.app */;
@@ -246,12 +345,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F25A36D2C96D34D006E2715 /* BaseViewModel.swift in Sources */,
+				3F3CFDB02C9733A100DC9F9A /* TermsOfServiceViewController.swift in Sources */,
+				3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */,
 				3F25A3592C96A676006E2715 /* UIView+.swift in Sources */,
+				3F3CFDAC2C97321700DC9F9A /* UniversityInfoViewController.swift in Sources */,
+				3F3CFDB22C973D7E00DC9F9A /* AuthUniversityViewController.swift in Sources */,
 				3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */,
 				3F39925D2C82C8E40045CF1E /* LoginViewController.swift in Sources */,
 				3F3992592C82C8E40045CF1E /* AppDelegate.swift in Sources */,
+				3F3CFDB42C9742C900DC9F9A /* SuccessSignUpViewController.swift in Sources */,
+				3F3CFDAE2C97326000DC9F9A /* MajorInfoViewController.swift in Sources */,
+				3F25A3642C96D001006E2715 /* AppCoordinator.swift in Sources */,
 				3F39925B2C82C8E40045CF1E /* SceneDelegate.swift in Sources */,
+				3F25A3662C96D058006E2715 /* LoginCoordinator.swift in Sources */,
+				3F3CFDBB2C97BE5D00DC9F9A /* UIControl+.swift in Sources */,
+				3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */,
+				3F3CFDC22C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift in Sources */,
 				3F25A35F2C96A85E006E2715 /* TitleTextFieldView.swift in Sources */,
+				3F3CFDC02C98093700DC9F9A /* UniversityInfoViewModel.swift in Sources */,
+				3F25A36A2C96D11A006E2715 /* LoginViewModel.swift in Sources */,
+				3F3CFDB92C97BCF800DC9F9A /* Combine+.swift in Sources */,
+				3F25A3712C96D4D9006E2715 /* UserInfoSignUpViewController.swift in Sources */,
+				3F3CFDBE2C97C47100DC9F9A /* UserInfo.swift in Sources */,
+				3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +438,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Studing/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -378,6 +496,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Studing/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -397,7 +516,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Studing/Info.plist;
+				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -424,7 +543,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Studing/Info.plist;
+				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -506,16 +625,6 @@
 			package = 3F39926C2C82C9080045CF1E /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
 		};
-		3F3992702C82C9390045CF1E /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3F39926F2C82C9390045CF1E /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		3F3992722C82C9390045CF1E /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3F39926F2C82C9390045CF1E /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
-		};
 		3F3992752C82C9690045CF1E /* Moya */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3F3992742C82C9690045CF1E /* XCRemoteSwiftPackageReference "Moya" */;
@@ -525,6 +634,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3F3992772C82C9FA0045CF1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		3FDEE9E22C970A7A00633C93 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F39926F2C82C9390045CF1E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

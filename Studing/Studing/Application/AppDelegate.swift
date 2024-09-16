@@ -14,6 +14,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // 네비게이션 바의 외관을 설정합니다.
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        
+        // 네비게이션 바 제목과 큰 제목의 색상
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        // 네비게이션 바 버튼 색상 설정
+        appearance.buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+        // 전체 네비게이션 바에 적용
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        
+        
         return true
     }
 
