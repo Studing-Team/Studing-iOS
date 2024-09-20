@@ -79,7 +79,7 @@ private extension UserInfoSignUpViewController {
         let input = UserInfoSignUpViewModel.Input(
             userId: userIdTitleTextField.textPublisher.eraseToAnyPublisher(),
             userPw: userPwTextField.textPublisher.eraseToAnyPublisher(),
-            confirmPw: userPwTextField.textPublisher.eraseToAnyPublisher(),
+            confirmPw: comfirmPwTitleTextField.textPublisher.eraseToAnyPublisher(),
             nextTap: nextButton.tapPublisher)
         
         let output = viewModel.transform(input: input)
@@ -87,6 +87,13 @@ private extension UserInfoSignUpViewController {
         /// 다음 버튼이 눌릴 수 있는지
         output.isNextButtonEnabled
             .assign(to: \.isEnabled, on: nextButton)
+            .store(in: &cancellables)
+        
+        /// 비밀번호가 일치한지
+        output.isPasswordMatching
+            .sink { [weak self] isMatching in
+                print(isMatching ? "true" : "false")
+            }
             .store(in: &cancellables)
         
         /// UniversityInfoView 로 화면 전환

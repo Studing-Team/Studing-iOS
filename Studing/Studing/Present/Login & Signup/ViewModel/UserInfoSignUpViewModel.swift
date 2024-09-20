@@ -24,6 +24,7 @@ final class UserInfoSignUpViewModel: BaseViewModel {
     struct Output {
         let universityInfoViewAction: AnyPublisher<Void, Never>
         let isNextButtonEnabled: AnyPublisher<Bool, Never>
+        let isPasswordMatching: AnyPublisher<Bool, Never>
     }
     
     // MARK: - Private properties
@@ -36,15 +37,24 @@ final class UserInfoSignUpViewModel: BaseViewModel {
         
         let inputUserInfo = Publishers.CombineLatest3(input.userId, input.userPw, input.confirmPw)
         
-        let isNextButtonEnabled = inputUserInfo
-            .map { userId, userPw, confirmPw in
-                !userId.isEmpty && !userPw.isEmpty && !confirmPw.isEmpty
+        let isPasswordMatching = Publishers.CombineLatest(input.userPw, input.confirmPw)
+            .map { userPw, confirmPw in
+                return userPw == confirmPw && !userPw.isEmpty
             }
+            .eraseToAnyPublisher()
+        
+        let isNextButtonEnabled = Publishers.CombineLatest(inputUserInfo, isPasswordMatching)
+            .map { (userInfo, isMatching) -> Bool in
+                let (userId, userPw, confirmPw) = userInfo
+                return !userId.isEmpty && !userPw.isEmpty && !confirmPw.isEmpty && isMatching
+            }
+            .prepend(false)
             .eraseToAnyPublisher()
         
         return Output(
             universityInfoViewAction: input.nextTap,
-            isNextButtonEnabled: isNextButtonEnabled
+            isNextButtonEnabled: isNextButtonEnabled,
+            isPasswordMatching: isPasswordMatching        
         )
     }
 }
