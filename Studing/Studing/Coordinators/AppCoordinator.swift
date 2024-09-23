@@ -16,7 +16,38 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        showLoginFlow()
+        showLaunchScreen()
+    }
+
+    private func showLaunchScreen() {
+        let launchScreenVC = LaunchScreenViewController()
+        navigationController.setViewControllers([launchScreenVC], animated: false)
+        
+        // LaunchScreen을 일정 시간 동안 표시한 후 로그인 플로우로 전환
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.removeLaunchScreenAndShowLoginFlow()
+        }
+    }
+    
+    private func removeLaunchScreenAndShowLoginFlow() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            print("AppCoordinator: removeLaunchScreenAndShowLoginFlow() called")
+            // 현재 LaunchScreenViewController를 네비게이션 스택에서 제거
+            self.navigationController.viewControllers.removeAll()
+            
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController)
+            self.childCoordinators.append(loginCoordinator)
+            loginCoordinator.delegate = self
+            
+            // 애니메이션과 함께 LoginFlow로 전환
+            UIView.transition(with: self.navigationController.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                loginCoordinator.start()
+            }, completion: { _ in
+                // 현재 LaunchScreenViewController를 네비게이션 스택에서 제거
+                self.navigationController.viewControllers.removeAll { $0 is LaunchScreenViewController }
+            })
+        }
     }
 
     private func showLoginFlow() {

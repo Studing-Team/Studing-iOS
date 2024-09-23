@@ -21,7 +21,7 @@ final class UniversityInfoViewController: UIViewController {
     
     private let universityTitleLabel = UILabel()
     private let universityTitleTextField = TitleTextFieldView(textFieldType: .university)
-    private let nextButton = UIButton()
+    private let nextButton = CustomButton(buttonStyle: .next)
     
     // MARK: - init
     
@@ -84,11 +84,6 @@ private extension UniversityInfoViewController {
         universityTitleLabel.do {
             $0.text = StringLiterals.Title.authUniversity
         }
-        
-        nextButton.do {
-            $0.setTitle("다음", for: .normal)
-            $0.setTitleColor(.black, for: .normal)
-        }
     }
     
     func setupHierarchy() {
@@ -110,6 +105,7 @@ private extension UniversityInfoViewController {
         nextButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(19)
             $0.bottom.equalToSuperview().inset(31)
+            $0.height.equalTo(50)
         }
     }
     

@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F162B822C9D92B300DF2E1C /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B812C9D92B300DF2E1C /* Color.xcassets */; };
+		3F162B842C9D987300DF2E1C /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */; };
+		3F162B872C9DA70700DF2E1C /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B862C9DA70600DF2E1C /* Montserrat-ExtraBold.ttf */; };
+		3F162B892C9DA71B00DF2E1C /* FontLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F162B882C9DA71B00DF2E1C /* FontLiterals.swift */; };
+		3F162B8B2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B8A2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf */; };
+		3F162B8D2C9DBA0D00DF2E1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */; };
 		3F25A3592C96A676006E2715 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3582C96A676006E2715 /* UIView+.swift */; };
 		3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A35B2C96A76E006E2715 /* StringLiterals.swift */; };
 		3F25A35F2C96A85E006E2715 /* TitleTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */; };
@@ -21,7 +27,6 @@
 		3F39925B2C82C8E40045CF1E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39925A2C82C8E40045CF1E /* SceneDelegate.swift */; };
 		3F39925D2C82C8E40045CF1E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39925C2C82C8E40045CF1E /* LoginViewController.swift */; };
 		3F3992622C82C8E60045CF1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F3992612C82C8E60045CF1E /* Assets.xcassets */; };
-		3F3992652C82C8E60045CF1E /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3F3992642C82C8E60045CF1E /* Base */; };
 		3F39926E2C82C9080045CF1E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 3F39926D2C82C9080045CF1E /* Then */; };
 		3F3992762C82C9690045CF1E /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992752C82C9690045CF1E /* Moya */; };
 		3F3992792C82C9FA0045CF1E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 3F3992782C82C9FA0045CF1E /* FirebaseMessaging */; };
@@ -37,6 +42,9 @@
 		3F3CFDC22C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDC12C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift */; };
 		3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */; };
 		3F3CFDCC2C9827D200DC9F9A /* UserInfoSignUpViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDCB2C9827D200DC9F9A /* UserInfoSignUpViewModelTests.swift */; };
+		3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5960292CA0EE5F00688FE3 /* CustomButton.swift */; };
+		3F59602D2CA13E8F00688FE3 /* TextFieldEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */; };
+		3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602E2CA1422100688FE3 /* UIStackView+.swift */; };
 		3FDEE9E32C970A7A00633C93 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDEE9E22C970A7A00633C93 /* SnapKit */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
@@ -51,6 +59,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F162B812C9D92B300DF2E1C /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
+		3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
+		3F162B862C9DA70600DF2E1C /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
+		3F162B882C9DA71B00DF2E1C /* FontLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontLiterals.swift; sourceTree = "<group>"; };
+		3F162B8A2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-VariableFont_opsz,wght.ttf"; sourceTree = "<group>"; };
+		3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F25A3582C96A676006E2715 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		3F25A35B2C96A76E006E2715 /* StringLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLiterals.swift; sourceTree = "<group>"; };
 		3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextFieldView.swift; sourceTree = "<group>"; };
@@ -66,7 +80,6 @@
 		3F39925A2C82C8E40045CF1E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3F39925C2C82C8E40045CF1E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		3F3992612C82C8E60045CF1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3F3992642C82C8E60045CF1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F3992662C82C8E60045CF1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F3CFDAB2C97321700DC9F9A /* UniversityInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityInfoViewController.swift; sourceTree = "<group>"; };
 		3F3CFDAD2C97326000DC9F9A /* MajorInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MajorInfoViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +94,9 @@
 		3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		3F3CFDC92C9827D200DC9F9A /* StudingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F3CFDCB2C9827D200DC9F9A /* UserInfoSignUpViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoSignUpViewModelTests.swift; sourceTree = "<group>"; };
+		3F5960292CA0EE5F00688FE3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldEnum.swift; sourceTree = "<group>"; };
+		3F59602E2CA1422100688FE3 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +121,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F162B852C9DA69F00DF2E1C /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				3F162B862C9DA70600DF2E1C /* Montserrat-ExtraBold.ttf */,
+				3F162B8A2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		3F25A3572C96A669006E2715 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +137,7 @@
 				3F3CFDB82C97BCF800DC9F9A /* Combine+.swift */,
 				3F3CFDBA2C97BE5D00DC9F9A /* UIControl+.swift */,
 				3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */,
+				3F59602E2CA1422100688FE3 /* UIStackView+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -120,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				3F25A35B2C96A76E006E2715 /* StringLiterals.swift */,
+				3F162B882C9DA71B00DF2E1C /* FontLiterals.swift */,
 			);
 			path = Consts;
 			sourceTree = "<group>";
@@ -128,6 +155,8 @@
 			isa = PBXGroup;
 			children = (
 				3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */,
+				3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */,
+				3F5960292CA0EE5F00688FE3 /* CustomButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -202,6 +231,7 @@
 				3F39927B2C82D22A0045CF1E /* Network */,
 				3F25A3602C96CF14006E2715 /* Coordinators */,
 				3F39927C2C82D2300045CF1E /* Present */,
+				3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */,
 			);
 			path = Studing;
 			sourceTree = "<group>";
@@ -209,6 +239,7 @@
 		3F39927A2C82D2220045CF1E /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				3F59602B2CA13E8200688FE3 /* Enum */,
 				3F25A36B2C96D32C006E2715 /* Protocol */,
 				3F25A35D2C96A825006E2715 /* Components */,
 				3F25A35A2C96A764006E2715 /* Consts */,
@@ -246,8 +277,9 @@
 		3F39927E2C82D25B0045CF1E /* Resoureces */ = {
 			isa = PBXGroup;
 			children = (
-				3F3992632C82C8E60045CF1E /* LaunchScreen.storyboard */,
+				3F162B852C9DA69F00DF2E1C /* Fonts */,
 				3F3992612C82C8E60045CF1E /* Assets.xcassets */,
+				3F162B812C9D92B300DF2E1C /* Color.xcassets */,
 			);
 			path = Resoureces;
 			sourceTree = "<group>";
@@ -284,6 +316,14 @@
 				3F3CFDCB2C9827D200DC9F9A /* UserInfoSignUpViewModelTests.swift */,
 			);
 			path = StudingTests;
+			sourceTree = "<group>";
+		};
+		3F59602B2CA13E8200688FE3 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */,
+			);
+			path = Enum;
 			sourceTree = "<group>";
 		};
 		3FDEE9E12C970A7A00633C93 /* Frameworks */ = {
@@ -387,7 +427,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F3992622C82C8E60045CF1E /* Assets.xcassets in Resources */,
-				3F3992652C82C8E60045CF1E /* Base in Resources */,
+				3F162B872C9DA70700DF2E1C /* Montserrat-ExtraBold.ttf in Resources */,
+				3F162B8B2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf in Resources */,
+				3F162B8D2C9DBA0D00DF2E1C /* LaunchScreen.storyboard in Resources */,
+				3F162B822C9D92B300DF2E1C /* Color.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,10 +448,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F162B892C9DA71B00DF2E1C /* FontLiterals.swift in Sources */,
 				3F25A36D2C96D34D006E2715 /* BaseViewModel.swift in Sources */,
+				3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */,
 				3F3CFDB02C9733A100DC9F9A /* TermsOfServiceViewController.swift in Sources */,
 				3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */,
 				3F25A3592C96A676006E2715 /* UIView+.swift in Sources */,
+				3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */,
 				3F3CFDAC2C97321700DC9F9A /* UniversityInfoViewController.swift in Sources */,
 				3F3CFDB22C973D7E00DC9F9A /* AuthUniversityViewController.swift in Sources */,
 				3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */,
@@ -423,9 +469,11 @@
 				3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */,
 				3F3CFDC22C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift in Sources */,
 				3F25A35F2C96A85E006E2715 /* TitleTextFieldView.swift in Sources */,
+				3F162B842C9D987300DF2E1C /* LaunchScreenViewController.swift in Sources */,
 				3F3CFDC02C98093700DC9F9A /* UniversityInfoViewModel.swift in Sources */,
 				3F25A36A2C96D11A006E2715 /* LoginViewModel.swift in Sources */,
 				3F3CFDB92C97BCF800DC9F9A /* Combine+.swift in Sources */,
+				3F59602D2CA13E8F00688FE3 /* TextFieldEnum.swift in Sources */,
 				3F25A3712C96D4D9006E2715 /* UserInfoSignUpViewController.swift in Sources */,
 				3F3CFDBE2C97C47100DC9F9A /* UserInfo.swift in Sources */,
 				3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */,
@@ -449,17 +497,6 @@
 			targetProxy = 3F3CFDCD2C9827D200DC9F9A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		3F3992632C82C8E60045CF1E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3F3992642C82C8E60045CF1E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3F3992672C82C8E60045CF1E /* Debug */ = {
@@ -593,6 +630,8 @@
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -602,7 +641,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Niro.Studing;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -620,6 +659,8 @@
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -629,7 +670,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Niro.Studing;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

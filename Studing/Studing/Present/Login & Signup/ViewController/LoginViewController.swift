@@ -22,10 +22,13 @@ final class LoginViewController: UIViewController {
     
     // MARK: - UI Properties
     
-    private let logoImage = UIImageView()
+    private let studingTitleLabel = UILabel()
     private let userIdTextField = UITextField()
     private let userPwTextField = UITextField()
-    private let loginButton = UIButton()
+    private let loginButton = CustomButton(buttonStyle: .login)
+    private let bottomMenuStackView = UIStackView()
+    private let findMyIdButton = UIButton()
+    private let findMyPwButton = UIButton()
     private let signUpButton = UIButton()
     private let kakaoButton = UIButton()
     
@@ -47,7 +50,8 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         print("Push LoginViewController")
         
-        view.backgroundColor = .white
+        view.applyGradient(colors: [.loginStartGradient, .loginEndGradient], direction: .topRightToBottomLeft, locations: [-0.2, 1.3])
+        
         hideKeyboard()
         setupStyle()
         setupHierarchy()
@@ -111,48 +115,69 @@ private extension LoginViewController {
     }
     
     func setupStyle() {
-        logoImage.do {
-            $0.backgroundColor = .black
+        studingTitleLabel.do {
+            $0.text = "Studing"
+            $0.textColor = .white
+            $0.font = .montserratExtraBold(size: 34)
         }
         
         userIdTextField.do {
             $0.placeholder = "아이디"
+            $0.backgroundColor = .black5
+            $0.layer.cornerRadius = 10
         }
         
         userPwTextField.do {
             $0.placeholder = "비밀번호"
+            $0.backgroundColor = .black5
+            $0.layer.cornerRadius = 10
         }
         
-        loginButton.do {
-            $0.setTitle("로그인", for: .normal)
-            $0.backgroundColor = .black
-            $0.tintColor = .black
+        bottomMenuStackView.do {
+            $0.addArrangedSubviews(findMyIdButton, createDivider(), findMyPwButton, createDivider(), signUpButton)
+            $0.axis = .horizontal
+            $0.alignment = .center
+            $0.distribution = .equalSpacing
+            $0.spacing = 15
+        }
+        
+        findMyIdButton.do {
+            $0.setTitle("아이디 찾기", for: .normal)
+            $0.titleLabel?.font = .interBody2()
+            $0.setTitleColor(.black, for: .normal)
+        }
+        
+        findMyPwButton.do {
+            $0.setTitle("비밀번호 찾기", for: .normal)
+            $0.titleLabel?.font = .interBody2()
+            $0.setTitleColor(.black, for: .normal)
         }
         
         signUpButton.do {
             $0.setTitle("회원가입", for: .normal)
+            $0.titleLabel?.font = .interBody2()
             $0.setTitleColor(.black, for: .normal)
         }
         
         kakaoButton.do {
-            $0.setTitle("카카오톡 문의하기", for: .normal)
-            $0.setTitleColor(.black, for: .normal)
+            $0.setImage(UIImage.kakaoTalkIcon, for: .normal)
+            $0.layer.cornerRadius = 10
+            $0.clipsToBounds = true
         }
     }
     
     func setupHierarchy() {
-        view.addSubviews(logoImage, userIdTextField, userPwTextField, loginButton, signUpButton, kakaoButton)
+        view.addSubviews(studingTitleLabel, userIdTextField, userPwTextField, loginButton, bottomMenuStackView, kakaoButton)
     }
     
     func setupLayout() {
-        logoImage.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(view.convertByHeightRatio(121))
-            $0.horizontalEdges.equalToSuperview().inset(116)
-            $0.height.equalTo(142)
+        studingTitleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(view.convertByHeightRatio(219))
+            $0.centerX.equalToSuperview()
         }
       
         userIdTextField.snp.makeConstraints {
-            $0.top.equalTo(logoImage.snp.bottom).offset(view.convertByHeightRatio(48))
+            $0.top.equalTo(studingTitleLabel.snp.bottom).offset(view.convertByHeightRatio(80))
             $0.horizontalEdges.equalToSuperview().inset(36)
             $0.height.equalTo(42)
         }
@@ -166,21 +191,35 @@ private extension LoginViewController {
         loginButton.snp.makeConstraints {
             $0.top.equalTo(userPwTextField.snp.bottom).offset(view.convertByHeightRatio(11))
             $0.horizontalEdges.equalToSuperview().inset(36)
-            $0.height.equalTo(42)
+            $0.height.equalTo(36)
         }
-
-        signUpButton.snp.makeConstraints {
-            $0.top.equalTo(loginButton.snp.bottom).offset(view.convertByHeightRatio(31))
-            $0.horizontalEdges.equalToSuperview().inset(160)
+        
+        bottomMenuStackView.snp.makeConstraints {
+            $0.top.equalTo(loginButton.snp.bottom).offset(view.convertByHeightRatio(25))
+            $0.horizontalEdges.equalToSuperview().inset(56)
         }
 
         kakaoButton.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview().inset(110)
-            $0.bottom.equalToSuperview().offset(view.convertByHeightRatio(-37))
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(view.convertByHeightRatio(-20))
+            $0.width.height.equalTo(49)
         }
     }
     
     func setupDelegate() {
         
+    }
+    
+    // Divider를 생성하는 함수
+    func createDivider() -> UIView {
+        let divider = UIView()
+        divider.backgroundColor = .black40 // Divider 색상 설정
+        
+        divider.snp.makeConstraints {
+            $0.width.equalTo(1) // Divider의 너비를 설정
+            $0.height.equalTo(14)
+        }
+        
+        return divider
     }
 }

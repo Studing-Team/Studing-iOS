@@ -27,7 +27,7 @@ final class UserInfoSignUpViewController: UIViewController {
     private let userIdTitleTextField = TitleTextFieldView(textFieldType: .userId)
     private let userPwTextField = TitleTextFieldView(textFieldType: .userPw)
     private let comfirmPwTitleTextField = TitleTextFieldView(textFieldType: .confirmPw)
-    private let nextButton = UIButton()
+    private let nextButton = CustomButton(buttonStyle: .next)
     
     // MARK: - init
     
@@ -48,7 +48,7 @@ final class UserInfoSignUpViewController: UIViewController {
         super.viewDidLoad()
         
         print("Push SignUpViewController")
-        view.backgroundColor = .white
+        view.backgroundColor = .signupBackground
         
         hideKeyboard()
         setupStyle()
@@ -86,13 +86,28 @@ private extension UserInfoSignUpViewController {
         
         /// 다음 버튼이 눌릴 수 있는지
         output.isNextButtonEnabled
-            .assign(to: \.isEnabled, on: nextButton)
+            .map { $0 ? ButtonState.activate : ButtonState.deactivate }
+            .assign(to: \.buttonState, on: nextButton)
             .store(in: &cancellables)
         
-        /// 비밀번호가 일치한지
-        output.isPasswordMatching
-            .sink { [weak self] isMatching in
-                print(isMatching ? "true" : "false")
+        /// userIdTextField 의 State
+        output.userIdState
+            .sink { [weak self] state in
+                self?.userIdTitleTextField.setState(state)
+            }
+            .store(in: &cancellables)
+        
+        /// userPwTextField 의 State
+        output.userPwState
+            .sink { [weak self] state in
+                self?.userPwTextField.setState(state)
+            }
+            .store(in: &cancellables)
+        
+        /// comfirmPwTextField 의 State
+        output.confirmPwState
+            .sink { [weak self] state in
+                self?.comfirmPwTitleTextField.setState(state)
             }
             .store(in: &cancellables)
         
@@ -116,17 +131,13 @@ private extension UserInfoSignUpViewController {
     
     func setupStyle() {
         titleLabel.do {
-            $0.text = "회원 정보"
+            $0.text = "회원 정보를 입력해주세요"
+            $0.font = .interHeadline2()
+            $0.textColor = .black50
         }
         
         duplicateIdButton.do {
             $0.setTitle("중복확인", for: .normal)
-            $0.setTitleColor(.black, for: .normal)
-        }
-        
-        nextButton.do {
-            $0.setTitle("다음", for: .normal)
-            $0.isEnabled = false
             $0.setTitleColor(.black, for: .normal)
         }
     }
@@ -163,8 +174,9 @@ private extension UserInfoSignUpViewController {
         }
         
         nextButton.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview().inset(19)
-            $0.bottom.equalToSuperview().inset(31)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(8)
+            $0.height.equalTo(50)
         }
     }
     
