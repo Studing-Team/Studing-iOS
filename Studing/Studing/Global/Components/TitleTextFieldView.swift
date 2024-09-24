@@ -11,66 +11,32 @@ import Combine
 import SnapKit
 import Then
 
-enum TextFieldInputType {
-    case userId
-    case userPw
-    case confirmPw
-    case userName
-    case studentId
-    case university
-    
-    var title: String {
-        switch self {
-        case .userId:
-            return "아이디"
-        case .userPw:
-            return "비밀번호"
-        case .confirmPw:
-            return "비밀번호 확인"
-        case .userName:
-            return "이름"
-        case .studentId:
-            return "전체 학번"
-        case .university:
-            return "대학교"
-        }
-    }
-    
-    var placeholder: String {
-        switch self {
-        case .userId:
-            return "아이디를 입력해주세요."
-        case .userPw:
-            return "비밀번호를 입력해주세요."
-        case .confirmPw:
-            return "비밀번호를 다시 한 번 입력해주세요."
-        case .userName:
-            return "이름을 입력해주세요."
-        case .studentId:
-            return "전체 학번을 입력해주세요 (예시 -20241234)"
-        case .university:
-            return "대학교를 검색해주세요."
-        }
-    }
-}
-
 final class TitleTextFieldView: UIView {
 
     // MARK: - UI Properties
     
+    private var textFieldState: TextFieldState
     private let titleLabel = UILabel()
     private let textField = UITextField()
+    private var stateMessageLabel = UILabel()
+    
+    // MARK: - Combine Publishers Properties
     
     let textPublisher = PassthroughSubject<String, Never>()
+    let statePublisher = CurrentValueSubject<TextFieldState, Never>(.normal)
+    
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Life Cycle
     
-    init(textFieldType: TextFieldInputType) {
+    init(textFieldType: TextFieldInputType, textFieldState: TextFieldState = .normal) {
+        self.textFieldState = textFieldState
         super.init(frame: .zero)
         
         setupStyle(textFieldType: textFieldType)
         setupHierarchy()
         setupLayout()
+        setupBindings()
     }
     
     required init?(coder: NSCoder) {
@@ -84,16 +50,22 @@ private extension TitleTextFieldView {
     func setupStyle(textFieldType: TextFieldInputType) {
         titleLabel.do {
             $0.text = textFieldType.title
+            $0.font = .interSubtitle2()
+            $0.textColor = .black30
         }
         
         textField.do {
             $0.placeholder = textFieldType.placeholder
             $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         }
+        
+        stateMessageLabel.do {
+            $0.font = .interCaption12()
+        }
     }
     
     func setupHierarchy() {
-        addSubviews(titleLabel, textField)
+        addSubviews(titleLabel, textField, stateMessageLabel)
     }
     
     func setupLayout() {
@@ -105,12 +77,32 @@ private extension TitleTextFieldView {
         textField.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(6)
             $0.horizontalEdges.equalToSuperview()
+        }
+        
+        stateMessageLabel.snp.makeConstraints {
+            $0.top.equalTo(textField.snp.bottom).offset(6)
+            $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
     }
     
+    func setupBindings() {
+        statePublisher
+            .sink { [weak self] state in
+                self?.updateUI(state: state)
+            }
+            .store(in: &cancellables)
+    }
+    
     @objc private func textFieldDidChange() {
         textPublisher.send(textField.text ?? "")
+    }
+    
+    func updateUI(state: TextFieldState) {
+        textField.layer.borderColor = state.color.cgColor
+        textField.layer.borderWidth = 1
+        stateMessageLabel.textColor = state.color
+        stateMessageLabel.text = state.message
     }
 }
 
@@ -119,5 +111,9 @@ private extension TitleTextFieldView {
 extension TitleTextFieldView {
     func getInputText() -> String? {
         return textField.text
+    }
+    
+    func setState(_ state: TextFieldState) {
+        statePublisher.send(state)
     }
 }
