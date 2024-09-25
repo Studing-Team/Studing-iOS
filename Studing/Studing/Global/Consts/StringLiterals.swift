@@ -14,7 +14,10 @@ enum StringLiterals {
     }
     
     enum Title {
-        static let authUniversity = "학교 정보"
+        static let authUserInfo = "회원 정보를 입력해주세요"
+        static let authUniversity = "학교 정보를 입력해주세요"
+        static let authMajor = "학과 정보를 입력해주세요"
+        static let authStudentNum = "학번을 선택해주세요"
     }
     
     enum Button {

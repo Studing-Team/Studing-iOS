@@ -84,7 +84,6 @@ class CustomButton: UIButton {
         self.buttonState = buttonState
         super.init(frame: .zero)
         setupButton()
-//        updateButtonState()
     }
     
     required init?(coder: NSCoder) {
@@ -92,14 +91,10 @@ class CustomButton: UIButton {
     }
 
     private func setupButton() {
-        
         var config = UIButton.Configuration.filled()
         
         // 폰트 설정
-        let titleString = AttributedString(buttonStyle.title, 
-                                           attributes: .init([
-                                            .font: UIFont.interSubtitle2()
-                                           ]))
+        let titleString = AttributedString(buttonStyle.title, attributes: .init([.font: UIFont.interSubtitle2()]))
         
         if buttonStyle == .showStuding {
             config.image = UIImage(systemName: "chevron.right")
@@ -114,18 +109,18 @@ class CustomButton: UIButton {
         
         self.configuration = config
         
-        layer.cornerRadius = 10
+        layer.cornerRadius = buttonStyle == .login ? 18 : 10
         clipsToBounds = true
     }
     
     // 버튼 상태에 따라 스타일 업데이트
     private func updateButtonState() {
+        // 활성화 상태에 따라 버튼 클릭 가능 여부 설정
+        self.isUserInteractionEnabled = buttonState == .activate
+        
         var config = self.configuration ?? UIButton.Configuration.filled()
         
-        let titleString = AttributedString(buttonStyle.title,
-                                           attributes: .init([
-                                            .font: UIFont.interSubtitle2()
-                                           ]))
+        let titleString = AttributedString(buttonStyle.title,attributes: .init([.font: UIFont.interSubtitle2()]))
         
         config.attributedTitle = titleString
         
@@ -139,8 +134,5 @@ class CustomButton: UIButton {
         
         config.baseForegroundColor = buttonStyle.foregroundColor
         self.configuration = config
-        
-        // 활성화 상태에 따라 버튼 클릭 가능 여부 설정
-        self.isEnabled = buttonState == .activate
     }
 }
