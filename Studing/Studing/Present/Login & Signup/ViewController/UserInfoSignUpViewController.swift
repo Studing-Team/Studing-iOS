@@ -22,6 +22,7 @@ final class UserInfoSignUpViewController: UIViewController {
     
     // MARK: - UI Properties
     
+    private let stepCountView = StepCountView(count: 1)
     private let titleLabel = UILabel()
     private let duplicateIdButton = UIButton()
     private let userIdTitleTextField = TitleTextFieldView(textFieldType: .userId)
@@ -94,6 +95,13 @@ private extension UserInfoSignUpViewController {
         output.userIdState
             .sink { [weak self] state in
                 self?.userIdTitleTextField.setState(state)
+                
+                switch state {
+                case .normal, .invalid, .duplicate:
+                    self?.duplicateIdButton.backgroundColor = .black30
+                case .success:
+                    self?.duplicateIdButton.backgroundColor = .primary50
+                }
             }
             .store(in: &cancellables)
         
@@ -131,45 +139,54 @@ private extension UserInfoSignUpViewController {
     
     func setupStyle() {
         titleLabel.do {
-            $0.text = "회원 정보를 입력해주세요"
+            $0.text = StringLiterals.Title.authUserInfo
             $0.font = .interHeadline2()
             $0.textColor = .black50
         }
         
         duplicateIdButton.do {
-            $0.setTitle("중복확인", for: .normal)
-            $0.setTitleColor(.black, for: .normal)
+            $0.setAttributedTitle(NSAttributedString(string: "중복확인", attributes: .init([.font: UIFont.interBody2()])), for: .normal)
+            $0.setTitleColor(.white, for: .normal)
+            $0.layer.cornerRadius = 10
+            $0.backgroundColor = .black30
         }
     }
     
     func setupHierarchy() {
-        view.addSubviews(titleLabel, userIdTitleTextField, duplicateIdButton, userPwTextField, comfirmPwTitleTextField, nextButton)
+        view.addSubviews(stepCountView, titleLabel, userIdTitleTextField, duplicateIdButton, userPwTextField, comfirmPwTitleTextField, nextButton)
     }
     
     func setupLayout() {
+        stepCountView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(view.convertByHeightRatio(20))
+            $0.leading.equalToSuperview().offset(19)
+        }
+        
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(view.convertByHeightRatio(34))
+            $0.top.equalTo(stepCountView.snp.bottom).offset(view.convertByHeightRatio(15))
             $0.leading.equalToSuperview().offset(19)
         }
         
         userIdTitleTextField.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(view.convertByHeightRatio(24))
+            $0.top.equalTo(titleLabel.snp.bottom).offset(view.convertByHeightRatio(30))
             $0.leading.equalToSuperview().offset(19)
         }
         
         duplicateIdButton.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(view.convertByHeightRatio(24))
-            $0.leading.equalTo(userIdTitleTextField.snp.trailing).offset(5)
-            $0.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(view.convertByHeightRatio(58))
+            $0.leading.equalTo(userIdTitleTextField.snp.trailing).offset(10)
+            $0.trailing.equalToSuperview().inset(22)
+            $0.width.equalTo(69)
+            $0.height.equalTo(38)
         }
         
         userPwTextField.snp.makeConstraints {
-            $0.top.equalTo(userIdTitleTextField.snp.bottom).offset(view.convertByHeightRatio(32))
+            $0.top.equalTo(userIdTitleTextField.snp.bottom).offset(view.convertByHeightRatio(15))
             $0.horizontalEdges.equalToSuperview().inset(19)
         }
         
         comfirmPwTitleTextField.snp.makeConstraints {
-            $0.top.equalTo(userPwTextField.snp.bottom).offset(view.convertByHeightRatio(28))
+            $0.top.equalTo(userPwTextField.snp.bottom).offset(view.convertByHeightRatio(15))
             $0.horizontalEdges.equalToSuperview().inset(19)
         }
         

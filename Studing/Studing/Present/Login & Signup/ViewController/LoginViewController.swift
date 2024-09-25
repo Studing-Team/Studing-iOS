@@ -122,15 +122,29 @@ private extension LoginViewController {
         }
         
         userIdTextField.do {
-            $0.placeholder = "아이디"
-            $0.backgroundColor = .black5
-            $0.layer.cornerRadius = 10
+            $0.attributedPlaceholder = NSAttributedString(string: "아이디", attributes: [.foregroundColor: UIColor.black50])
+            $0.font = .interBody1()
+            $0.backgroundColor = .black10
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+            $0.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+            $0.leftViewMode = .always
+            $0.rightViewMode = .always
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.white.cgColor
+            $0.layer.cornerRadius = 18
         }
         
         userPwTextField.do {
-            $0.placeholder = "비밀번호"
-            $0.backgroundColor = .black5
-            $0.layer.cornerRadius = 10
+            $0.attributedPlaceholder = NSAttributedString(string: "비밀번호", attributes: [.foregroundColor: UIColor.black50])
+            $0.font = .interBody1()
+            $0.backgroundColor = .black10
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+            $0.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
+            $0.leftViewMode = .always
+            $0.rightViewMode = .always
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.white.cgColor
+            $0.layer.cornerRadius = 18
         }
         
         bottomMenuStackView.do {
@@ -179,13 +193,13 @@ private extension LoginViewController {
         userIdTextField.snp.makeConstraints {
             $0.top.equalTo(studingTitleLabel.snp.bottom).offset(view.convertByHeightRatio(80))
             $0.horizontalEdges.equalToSuperview().inset(36)
-            $0.height.equalTo(42)
+            $0.height.equalTo(36)
         }
         
         userPwTextField.snp.makeConstraints {
             $0.top.equalTo(userIdTextField.snp.bottom).offset(view.convertByHeightRatio(11))
             $0.horizontalEdges.equalToSuperview().inset(36)
-            $0.height.equalTo(42)
+            $0.height.equalTo(36)
         }
         
         loginButton.snp.makeConstraints {
