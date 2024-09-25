@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 import SnapKit
 import Then
@@ -17,8 +18,11 @@ final class UniversityInfoViewController: UIViewController {
     private var viewModel: UniversityInfoViewModel
     weak var coordinator: SignUpCoordinator?
     
+    private var cancellables = Set<AnyCancellable>()
+    
     // MARK: - UI Properties
     
+    private let stepCountView = StepCountView(count: 2)
     private let universityTitleLabel = UILabel()
     private let universityTitleTextField = TitleTextFieldView(textFieldType: .university)
     private let nextButton = CustomButton(buttonStyle: .next)
@@ -42,8 +46,9 @@ final class UniversityInfoViewController: UIViewController {
         super.viewDidLoad()
         
         print("Push UniversityInfoViewController")
-        view.backgroundColor = .white
+        view.backgroundColor = .signupBackground
         
+        hideKeyboard()
         setupStyle()
         setupHierarchy()
         setupLayout()
@@ -68,7 +73,15 @@ final class UniversityInfoViewController: UIViewController {
 
 private extension UniversityInfoViewController {
     func bindViewModel() {
+        let input = UniversityInfoViewModel.Input(nextTap: nextButton.tapPublisher)
         
+        let output = viewModel.transform(input: input)
+        
+        output.majorInfoViewAction
+            .sink { [weak self] _ in
+                self?.coordinator?.pushMajorInfoView()
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -83,16 +96,23 @@ private extension UniversityInfoViewController {
     func setupStyle() {
         universityTitleLabel.do {
             $0.text = StringLiterals.Title.authUniversity
+            $0.font = .interHeadline2()
+            $0.textColor = .black50
         }
     }
     
     func setupHierarchy() {
-        view.addSubviews(universityTitleLabel, universityTitleTextField, nextButton)
+        view.addSubviews(stepCountView, universityTitleLabel, universityTitleTextField, nextButton)
     }
     
     func setupLayout() {
+        stepCountView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(view.convertByHeightRatio(20))
+            $0.leading.equalToSuperview().offset(19)
+        }
+        
         universityTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(view.convertByHeightRatio(34))
+            $0.top.equalTo(stepCountView.snp.bottom).offset(view.convertByHeightRatio(15))
             $0.leading.equalToSuperview().offset(19)
         }
         
@@ -103,8 +123,8 @@ private extension UniversityInfoViewController {
         }
         
         nextButton.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview().inset(19)
-            $0.bottom.equalToSuperview().inset(31)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(8)
             $0.height.equalTo(50)
         }
     }
