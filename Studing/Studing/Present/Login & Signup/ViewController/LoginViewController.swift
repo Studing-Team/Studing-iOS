@@ -62,7 +62,6 @@ final class LoginViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         setNavigationBar()
     }
 }
@@ -90,7 +89,6 @@ private extension LoginViewController {
                 self?.coordinator?.showSignUp()
             }
             .store(in: &cancellables)
-            
         
         output.loginResult
             .sink { [weak self] result in

@@ -48,7 +48,7 @@ final class UserInfoSignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Push SignUpViewController")
+        print("Push UserInfoSignUpViewController")
         view.backgroundColor = .signupBackground
         
         hideKeyboard()
@@ -68,7 +68,7 @@ final class UserInfoSignUpViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        print("Pop SignUpViewController")
+        print("Pop UserInfoSignUpViewController")
     }
 }
 
@@ -87,7 +87,8 @@ private extension UserInfoSignUpViewController {
         
         /// 다음 버튼이 눌릴 수 있는지
         output.isNextButtonEnabled
-            .map { $0 ? ButtonState.activate : ButtonState.deactivate }
+//            .map { $0 ? ButtonState.activate : ButtonState.deactivate }
+            .map { _ in .activate }
             .assign(to: \.buttonState, on: nextButton)
             .store(in: &cancellables)
         
@@ -132,9 +133,7 @@ private extension UserInfoSignUpViewController {
 
 private extension UserInfoSignUpViewController {
     func setNavigationBar() {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.navigationItem.title = StringLiterals.NavigationTitle.signUp
-        self.navigationItem.largeTitleDisplayMode = .inline
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     func setupStyle() {

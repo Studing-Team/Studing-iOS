@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 import SnapKit
 import Then
@@ -14,12 +15,30 @@ final class MajorInfoViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var viewModel: MajorInfoViewModel
+    weak var coordinator: SignUpCoordinator?
+    
+    private var cancellables = Set<AnyCancellable>()
+    
     // MARK: - UI Properties
     
     private let stepCountView = StepCountView(count: 3)
     private let majorTitleLabel = UILabel()
     private let majorTitleTextField = TitleTextFieldView(textFieldType: .major)
     private let nextButton = CustomButton(buttonStyle: .next)
+    
+    // MARK: - init
+    
+    init(viewModel: MajorInfoViewModel,
+         coordinator: SignUpCoordinator) {
+        self.viewModel = viewModel
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     
@@ -34,6 +53,7 @@ final class MajorInfoViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupDelegate()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,7 +63,25 @@ final class MajorInfoViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
         print("Pop MajorInfoViewController")
+    }
+}
+
+// MARK: - Private Bind Extensions
+
+private extension MajorInfoViewController {
+    func bindViewModel() {
+        let input = MajorInfoViewModel.Input(nextTap: nextButton.tapPublisher)
+        
+        let output = viewModel.transform(input: input)
+        
+        output.TermsOfServiceViewAction
+            .sink { [weak self] _ in
+                self?.coordinator?.pushTermsOfServiceView()
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -51,8 +89,7 @@ final class MajorInfoViewController: UIViewController {
 
 private extension MajorInfoViewController {
     func setNavigationBar() {
-        self.navigationItem.title = StringLiterals.NavigationTitle.signUp
-        self.navigationItem.largeTitleDisplayMode = .inline
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     func setupStyle() {

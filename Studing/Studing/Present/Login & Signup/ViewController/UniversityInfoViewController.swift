@@ -58,7 +58,7 @@ final class UniversityInfoViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        print("wiewWill UniversityInfoViewController")
         setNavigationBar()
     }
     
@@ -89,8 +89,7 @@ private extension UniversityInfoViewController {
 
 private extension UniversityInfoViewController {
     func setNavigationBar() {
-        self.navigationItem.title = StringLiterals.NavigationTitle.signUp
-        self.navigationItem.largeTitleDisplayMode = .inline
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     func setupStyle() {
