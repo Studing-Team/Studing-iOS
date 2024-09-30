@@ -14,6 +14,9 @@
 		3F162B8B2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B8A2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf */; };
 		3F162B8D2C9DBA0D00DF2E1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */; };
 		3F1F1F782CA27720006DFD76 /* StepCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F772CA27720006DFD76 /* StepCountView.swift */; };
+		3F1F1F7C2CA3B859006DFD76 /* CusomSignUpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */; };
+		3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */; };
+		3F1F1F802CA3F4CF006DFD76 /* MajorInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7F2CA3F4CF006DFD76 /* MajorInfoViewModel.swift */; };
 		3F25A3592C96A676006E2715 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3582C96A676006E2715 /* UIView+.swift */; };
 		3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A35B2C96A76E006E2715 /* StringLiterals.swift */; };
 		3F25A35F2C96A85E006E2715 /* TitleTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */; };
@@ -67,6 +70,9 @@
 		3F162B8A2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-VariableFont_opsz,wght.ttf"; sourceTree = "<group>"; };
 		3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F1F1F772CA27720006DFD76 /* StepCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountView.swift; sourceTree = "<group>"; };
+		3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CusomSignUpNavigationController.swift; sourceTree = "<group>"; };
+		3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeLiterals.swift; sourceTree = "<group>"; };
+		3F1F1F7F2CA3F4CF006DFD76 /* MajorInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MajorInfoViewModel.swift; sourceTree = "<group>"; };
 		3F25A3582C96A676006E2715 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		3F25A35B2C96A76E006E2715 /* StringLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringLiterals.swift; sourceTree = "<group>"; };
 		3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextFieldView.swift; sourceTree = "<group>"; };
@@ -149,6 +155,7 @@
 			children = (
 				3F25A35B2C96A76E006E2715 /* StringLiterals.swift */,
 				3F162B882C9DA71B00DF2E1C /* FontLiterals.swift */,
+				3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */,
 			);
 			path = Consts;
 			sourceTree = "<group>";
@@ -160,6 +167,7 @@
 				3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */,
 				3F5960292CA0EE5F00688FE3 /* CustomButton.swift */,
 				3F1F1F772CA27720006DFD76 /* StepCountView.swift */,
+				3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -195,6 +203,7 @@
 				3F25A3692C96D11A006E2715 /* LoginViewModel.swift */,
 				3F3CFDC12C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift */,
 				3F3CFDBF2C98093700DC9F9A /* UniversityInfoViewModel.swift */,
+				3F1F1F7F2CA3F4CF006DFD76 /* MajorInfoViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -459,14 +468,17 @@
 				3F25A3592C96A676006E2715 /* UIView+.swift in Sources */,
 				3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */,
 				3F3CFDAC2C97321700DC9F9A /* UniversityInfoViewController.swift in Sources */,
+				3F1F1F802CA3F4CF006DFD76 /* MajorInfoViewModel.swift in Sources */,
 				3F3CFDB22C973D7E00DC9F9A /* AuthUniversityViewController.swift in Sources */,
 				3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */,
 				3F39925D2C82C8E40045CF1E /* LoginViewController.swift in Sources */,
 				3F3992592C82C8E40045CF1E /* AppDelegate.swift in Sources */,
 				3F3CFDB42C9742C900DC9F9A /* SuccessSignUpViewController.swift in Sources */,
+				3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */,
 				3F3CFDAE2C97326000DC9F9A /* MajorInfoViewController.swift in Sources */,
 				3F25A3642C96D001006E2715 /* AppCoordinator.swift in Sources */,
 				3F39925B2C82C8E40045CF1E /* SceneDelegate.swift in Sources */,
+				3F1F1F7C2CA3B859006DFD76 /* CusomSignUpNavigationController.swift in Sources */,
 				3F25A3662C96D058006E2715 /* LoginCoordinator.swift in Sources */,
 				3F3CFDBB2C97BE5D00DC9F9A /* UIControl+.swift in Sources */,
 				3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */,

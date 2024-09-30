@@ -8,7 +8,7 @@
 import UIKit
 
 protocol Coordinator: AnyObject {
-    var navigationController: UINavigationController { get set }
+    var navigationController: CustomSignUpNavigationController { get set }
     var childCoordinators: [Coordinator] { get set }
     func start()
 }

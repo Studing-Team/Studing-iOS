@@ -8,10 +8,10 @@
 import UIKit
 
 final class AppCoordinator: Coordinator {
-    var navigationController: UINavigationController
+    var navigationController: CustomSignUpNavigationController
     var childCoordinators: [Coordinator] = []
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: CustomSignUpNavigationController) {
         self.navigationController = navigationController
     }
     
@@ -55,12 +55,6 @@ final class AppCoordinator: Coordinator {
         childCoordinators.append(loginCoordinator)
         loginCoordinator.delegate = self
         loginCoordinator.start()
-    }
-    
-    private func showSignUpFlow() {
-        let signUpCoordinator = SignUpCoordinator(navigationController: navigationController)
-        childCoordinators.append(signUpCoordinator)
-        signUpCoordinator.start()
     }
 
     private func showMainFlow() {
