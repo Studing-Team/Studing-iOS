@@ -35,7 +35,7 @@ enum ButtonStyle {
         case .notification:
             return "알림 받기"
         case .showStuding:
-            return "스튜딩 구경하기"
+            return "스튜딩 시작하기"
         case .duplicate:
             return "중복확인"
         case .retry:
@@ -55,7 +55,7 @@ enum ButtonStyle {
         case .next, .authentication:
             return .black20
         case .showStuding:
-            return .white
+            return .white.withAlphaComponent(0.1)
         default:
             return .primary50
         }
@@ -97,9 +97,8 @@ class CustomButton: UIButton {
         let titleString = AttributedString(buttonStyle.title, attributes: .init([.font: UIFont.interSubtitle2()]))
         
         if buttonStyle == .showStuding {
-            config.image = UIImage(systemName: "chevron.right")
-            config.imagePlacement = .trailing
-            config.imagePadding = 10
+            config.background.strokeColor = .white
+            config.background.strokeWidth = 1.0
         }
         
         config.attributedTitle = titleString
@@ -109,7 +108,7 @@ class CustomButton: UIButton {
         
         self.configuration = config
         
-        layer.cornerRadius = buttonStyle == .login ? 18 : 10
+        layer.cornerRadius = buttonStyle == .login ? 18 : 25
         clipsToBounds = true
     }
     
