@@ -17,8 +17,10 @@ final class SuccessSignUpViewController: UIViewController {
     // MARK: - UI Properties
     
     private let successTitleLabel = UILabel()
+    private let successSubTitleLabel = UILabel()
     private let logoImage = UIImageView()
-    private let pushMainHomeButton = UIButton()
+    private let studingTitleLabel = UILabel()
+    private let pushMainHomeButton = CustomButton(buttonStyle: .showStuding)
     
     // MARK: - Life Cycle
     
@@ -26,6 +28,8 @@ final class SuccessSignUpViewController: UIViewController {
         super.viewDidLoad()
         
         print("Push SuccessSignUpViewController")
+        
+        view.applyGradient(colors: [.loginStartGradient, .loginEndGradient], direction: .topRightToBottomLeft, locations: [-0.2, 1.3])
         
         setupStyle()
         setupHierarchy()
@@ -54,10 +58,24 @@ private extension SuccessSignUpViewController {
     func setupStyle() {
         successTitleLabel.do {
             $0.text = StringLiterals.Authentication.successSignUpTitle
+            $0.textColor = .white
+            $0.font = .interHeadline2()
+        }
+        
+        successSubTitleLabel.do {
+            $0.text = StringLiterals.Authentication.successSignUpSubTitle
+            $0.textColor = .white
+            $0.font = .interBody1()
         }
         
         pushMainHomeButton.do {
             $0.setTitle(StringLiterals.Button.pushMainHomeTitle, for: .normal)
+        }
+        
+        studingTitleLabel.do {
+            $0.text = "Studing"
+            $0.textColor = .white
+            $0.font = .montserratExtraBold(size: 34)
         }
     }
     
@@ -70,13 +88,18 @@ private extension SuccessSignUpViewController {
             $0.top.equalToSuperview().offset(view.convertByHeightRatio(256))
         }
         
+        successSubTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(successSubTitleLabel.snp.bottom).offset(10)
+        }
+        
         logoImage.snp.makeConstraints {
-            $0.top.equalTo(successTitleLabel.snp.bottom).offset(35)
+            $0.top.equalTo(successSubTitleLabel.snp.bottom).offset(38)
         }
         
         pushMainHomeButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().inset(19)
+            $0.height.equalTo(60)
             $0.bottom.equalToSuperview().offset(view.convertByHeightRatio(-35))
         }
     }

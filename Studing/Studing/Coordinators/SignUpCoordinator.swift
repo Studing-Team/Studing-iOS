@@ -8,21 +8,24 @@
 import UIKit
 
 final class SignUpCoordinator: Coordinator {
-    var navigationController: UINavigationController
+    var navigationController: CustomSignUpNavigationController
     var childCoordinators: [Coordinator] = []
     weak var parentCoordinator: LoginCoordinator?
     
     var universityName: String?
     var majorName: String?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: CustomSignUpNavigationController) {
         self.navigationController = navigationController
+        self.navigationController.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     func start() {
         let userInfoSignUpVM = UserInfoSignUpViewModel()
         
         let signUpVC = UserInfoSignUpViewController(viewModel: userInfoSignUpVM, coordinator: self)
+
+        navigationController.changeSignUpStep(count: 1)
         navigationController.pushViewController(signUpVC, animated: true)
     }
 
@@ -31,16 +34,23 @@ final class SignUpCoordinator: Coordinator {
         universityInfoVM.delegate = self
         
         let universityInfoVC = UniversityInfoViewController(viewModel: universityInfoVM, coordinator: self)
+        
+        navigationController.changeSignUpStep(count: 2)
         navigationController.pushViewController(universityInfoVC, animated: true)
     }
     
     func pushMajorInfoView() {
-        let majorInfoVC = MajorInfoViewController()
+        let majorInfoVM = MajorInfoViewModel()
+        let majorInfoVC = MajorInfoViewController(viewModel: majorInfoVM, coordinator: self)
+        
+        navigationController.changeSignUpStep(count: 3)
         navigationController.pushViewController(majorInfoVC, animated: true)
     }
     
     func pushTermsOfServiceView() {
         let termsOfServiceVC = TermsOfServiceViewController()
+        
+        navigationController.changeSignUpStep(count: 4)
         navigationController.pushViewController(termsOfServiceVC, animated: true)
     }
     

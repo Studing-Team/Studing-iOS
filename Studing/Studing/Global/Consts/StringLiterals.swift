@@ -18,6 +18,8 @@ enum StringLiterals {
         static let authUniversity = "학교 정보를 입력해주세요"
         static let authMajor = "학과 정보를 입력해주세요"
         static let authStudentNum = "학번을 선택해주세요"
+        static let authTermsofService = "서비스 이용을 위해\n이용약관 동의가 필요해요"
+        static let authUniversityStudent = "학교 인증을 통해\n스튜딩을 시작할 수 있어요!"
     }
     
     enum Button {
@@ -36,6 +38,7 @@ enum StringLiterals {
         static let AuthenticatingSubTitle1 = "입력한 정보와 제출한 정보가\n일치하는지 확인 중이에요"
         static let AuthenticatingSubTitle2 = "학교 인증이 완료된 이후에\n스튜딩의 모든 기능을 이용할 수 있어요"
         static let AuthenticatingSubTitle3 = "알림을 설정해주시면 학교 인증\n승인 여부를 바로 확인하실 수 있어요!"
-        static let successSignUpTitle = "스튜딩에 오신걸 환영해요!"
+        static let successSignUpTitle = "환영합니다!"
+        static let successSignUpSubTitle = "스튜딩과 함께 대학생의 모든 것을 즐겨봐요"
     }
 }

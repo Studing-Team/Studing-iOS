@@ -12,11 +12,11 @@ protocol LoginCoordinatorDelegate {
 }
 
 final class LoginCoordinator: Coordinator {
-    var navigationController: UINavigationController
+    var navigationController: CustomSignUpNavigationController
     var childCoordinators: [Coordinator] = []
     var delegate: LoginCoordinatorDelegate?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: CustomSignUpNavigationController) {
         self.navigationController = navigationController
     }
     
@@ -29,7 +29,6 @@ final class LoginCoordinator: Coordinator {
     func showSignUp() {
         let signUpCoordinator = SignUpCoordinator(navigationController: navigationController)
         childCoordinators.append(signUpCoordinator)
-//        signUpCoordinator.parentCoordinator = self
         signUpCoordinator.start()
     }
     
