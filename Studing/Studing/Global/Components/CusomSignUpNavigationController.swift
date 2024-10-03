@@ -45,8 +45,8 @@ final class CustomSignUpNavigationController: UINavigationController {
     private let safeAreaView: UIView = UIView()
     private let leftButton = UIButton()
     private let naviTitleLabel = UILabel()
-    private let dividerView = UIView()
     private let progressbarView = UIView()
+    private let progressbarBackgroundView = UIView()
     
     // MARK: - Life Cycle
     
@@ -61,7 +61,7 @@ final class CustomSignUpNavigationController: UINavigationController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        progressbarView.applyGradient(colors: [.loginEndGradient, .loginStartGradient], direction: .leftToRight, locations: [0, 1.0])
+        progressbarView.applyGradient(colors: [.loginEndGradient, .loginStartGradient], direction: .leftToRight, locations: [0.5, 1.1])
         progressbarView.layer.cornerRadius = 2
     }
     
@@ -99,12 +99,11 @@ final class CustomSignUpNavigationController: UINavigationController {
         let newWidth = SizeLiterals.Screen.screenWidth * CGFloat(signUpStepCount) / 6.0
         print(newWidth)
         
-        progressbarView.snp.remakeConstraints { make in
-            make.top.equalTo(dividerView.snp.bottom)
-            make.leading.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.height.equalTo(4)
-            make.width.equalTo(newWidth)
+        progressbarView.snp.remakeConstraints {
+            $0.leading.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(4)
+            $0.width.equalTo(newWidth)
         }
             
         UIView.animate(withDuration: 0.3) {
@@ -136,11 +135,7 @@ private extension CustomSignUpNavigationController {
             $0.text = "회원가입"
             $0.font = .interSubtitle1()
         }
-        
-        dividerView.do {
-            $0.backgroundColor = .black10
-        }
-        
+
         leftButton.do {
             $0.setImage(UIImage(systemName: leftButtonType == .xmark ? "xmark" : "chevron.left")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)), for: .normal)
             $0.tintColor = .black50
@@ -150,6 +145,10 @@ private extension CustomSignUpNavigationController {
         progressbarView.do {
             $0.applyGradient(colors: [.loginEndGradient, .loginStartGradient], direction: .leftToRight, locations: [0, 1.0])
             $0.layer.cornerRadius = 2
+        }
+        
+        progressbarBackgroundView.do {
+            $0.backgroundColor = .black10
         }
     }
     
@@ -165,8 +164,7 @@ private extension CustomSignUpNavigationController {
     
     func setupHierarchy() {
         view.addSubviews(safeAreaView, customNavigationBar)
-        
-        customNavigationBar.addSubviews(leftButton, naviTitleLabel, dividerView, progressbarView)
+        customNavigationBar.addSubviews(leftButton, naviTitleLabel, progressbarBackgroundView, progressbarView)
     }
     
     func setupLayout() {
@@ -192,16 +190,16 @@ private extension CustomSignUpNavigationController {
             $0.centerY.equalToSuperview()
         }
         
-        dividerView.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(1)
-        }
-        
         progressbarView.snp.makeConstraints {
-            $0.top.equalTo(dividerView.snp.bottom)
             $0.leading.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.width.equalTo(SizeLiterals.Screen.screenWidth * CGFloat(signUpStepCount) / 6.0)
+            $0.height.equalTo(4)
+        }
+        
+        progressbarBackgroundView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
             $0.height.equalTo(4)
         }
     }

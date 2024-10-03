@@ -42,21 +42,21 @@ final class UserInfoSignUpViewModel: BaseViewModel {
         let userIdState = input.userId
             .map { [weak self] userId -> TextFieldState in
                 // 여기에 userId 유효성 검사 로직을 추가할 수 있습니다.
-                self?.validateUserId(userId) ?? .normal
+                self?.validateUserId(userId) ?? .normal(type: .userId)
             }
             .eraseToAnyPublisher()
         
         let userPwState = input.userPw
             .map { [weak self] userPw -> TextFieldState in
                 // 여기에 userPw 유효성 검사 로직을 추가할 수 있습니다.
-                self?.validateUserPw(userPw) ?? .normal
+                self?.validateUserPw(userPw) ?? .normal(type: .userPw)
             }
             .eraseToAnyPublisher()
         
         let confirmPwState = Publishers.CombineLatest(input.userPw, input.confirmPw)
             .map { [weak self] userPw, confirmPw in
                 //  return userPw == confirmPw && !userPw.isEmpty
-                self?.validateConfirmPw(userPw, confirmPw) ?? .normal
+                self?.validateConfirmPw(userPw, confirmPw) ?? .normal(type: .confirmPw)
             }
             .eraseToAnyPublisher()
         
