@@ -17,9 +17,17 @@ enum StringLiterals {
         static let authUserInfo = "회원 정보를 입력해주세요"
         static let authUniversity = "학교 정보를 입력해주세요"
         static let authMajor = "학과 정보를 입력해주세요"
-        static let authStudentNum = "학번을 선택해주세요"
+        static let authStudentID = "학번을 선택해주세요"
         static let authTermsofService = "서비스 이용을 위해\n이용약관 동의가 필요해요"
         static let authUniversityStudent = "학교 인증을 통해\n스튜딩을 시작할 수 있어요!"
+        
+        static let noExistsSerachUniversity = "찾으시는 대학교가 없으신가요?"
+        static let noExistsSerachMajor = "찾으시는 학과가 없으신가요?"
+    }
+    
+    enum SubTitle {
+        static let noExistsSerachUniversity = "아래 버튼을 눌러 구글폼을 통해 우리 학교를 등록해요.\n3일 이내로 빠르게 추가해드릴게요!"
+        static let noExistsSerachMajor = "아래 버튼을 눌러 구글폼을 통해 나의 학과를 등록해요.\n3일 이내로 빠르게 추가해드릴게요!"
     }
     
     enum Button {

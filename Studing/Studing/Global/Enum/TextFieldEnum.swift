@@ -8,7 +8,7 @@
 import UIKit
 
 enum TextFieldState {
-    case normal
+    case normal(type: TextFieldInputType)
     case success(type: TextFieldInputType)
     case duplicate(type: TextFieldInputType)
     case invalid(type: TextFieldInputType)
@@ -26,8 +26,15 @@ enum TextFieldState {
     
     var message: String {
         switch self {
-        case .normal:
-            return ""
+        case .normal(let type):
+            switch type {
+            case .university:
+                return "현재 등록된 학교만 보여드려요!"
+            case .major:
+                return  "현재 등록된 학과만 보여드려요!"
+            default:
+                return ""
+            }
         case .success(let type):
             switch type {
             case .userId:
