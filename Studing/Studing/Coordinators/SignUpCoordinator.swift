@@ -47,10 +47,18 @@ final class SignUpCoordinator: Coordinator {
         navigationController.pushViewController(majorInfoVC, animated: true)
     }
     
+    func pushStudentIdView() {
+        let studentIdVM = StudentIdViewModel()
+        let studentIdVC = StudentIdViewController(viewModel: studentIdVM, coordinator: self)
+        
+        navigationController.changeSignUpStep(count: 4)
+        navigationController.pushViewController(studentIdVC, animated: true)
+    }
+    
     func pushTermsOfServiceView() {
         let termsOfServiceVC = TermsOfServiceViewController()
         
-        navigationController.changeSignUpStep(count: 4)
+        navigationController.changeSignUpStep(count: 5)
         navigationController.pushViewController(termsOfServiceVC, animated: true)
     }
     
