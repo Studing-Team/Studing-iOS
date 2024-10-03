@@ -191,8 +191,8 @@ private extension UserInfoSignUpViewController {
         
         nextButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(8)
-            $0.height.equalTo(50)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(10)
+            $0.height.equalTo(48)
         }
     }
     
