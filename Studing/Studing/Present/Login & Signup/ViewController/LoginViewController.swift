@@ -30,6 +30,8 @@ final class LoginViewController: UIViewController {
     private let findMyIdButton = UIButton()
     private let findMyPwButton = UIButton()
     private let signUpButton = UIButton()
+    private let indicateImageView = UIImageView()
+    private let indicateTitleLabel = UILabel()
     private let kakaoButton = UIButton()
     
     // MARK: - init
@@ -142,7 +144,7 @@ private extension LoginViewController {
             $0.rightViewMode = .always
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.white.cgColor
-            $0.layer.cornerRadius = 18
+            $0.layer.cornerRadius = 17
         }
         
         bottomMenuStackView.do {
@@ -171,6 +173,17 @@ private extension LoginViewController {
             $0.setTitleColor(.black, for: .normal)
         }
         
+        indicateImageView.do {
+            $0.image = UIImage(named: "indicateImage")
+            $0.clipsToBounds = true
+        }
+        
+        indicateTitleLabel.do {
+            $0.text = "카카오톡 문의하기"
+            $0.textColor = .black30
+            $0.font = .interBody2()
+        }
+    
         kakaoButton.do {
             $0.setImage(UIImage.kakaoTalkIcon, for: .normal)
             $0.layer.cornerRadius = 10
@@ -179,7 +192,8 @@ private extension LoginViewController {
     }
     
     func setupHierarchy() {
-        view.addSubviews(studingTitleLabel, userIdTextField, userPwTextField, loginButton, bottomMenuStackView, kakaoButton)
+        view.addSubviews(studingTitleLabel, userIdTextField, userPwTextField, loginButton, bottomMenuStackView, indicateImageView, kakaoButton)
+        indicateImageView.addSubview(indicateTitleLabel)
     }
     
     func setupLayout() {
@@ -190,28 +204,43 @@ private extension LoginViewController {
       
         userIdTextField.snp.makeConstraints {
             $0.top.equalTo(studingTitleLabel.snp.bottom).offset(view.convertByHeightRatio(80))
-            $0.horizontalEdges.equalToSuperview().inset(36)
-            $0.height.equalTo(36)
+            $0.leading.equalToSuperview().offset(38)
+            $0.trailing.equalToSuperview().inset(37)
+            $0.height.equalTo(34)
         }
         
         userPwTextField.snp.makeConstraints {
-            $0.top.equalTo(userIdTextField.snp.bottom).offset(view.convertByHeightRatio(11))
-            $0.horizontalEdges.equalToSuperview().inset(36)
-            $0.height.equalTo(36)
+            $0.top.equalTo(userIdTextField.snp.bottom).offset(view.convertByHeightRatio(15))
+            $0.leading.equalToSuperview().offset(38)
+            $0.trailing.equalToSuperview().inset(37)
+            $0.height.equalTo(34)
         }
         
         loginButton.snp.makeConstraints {
-            $0.top.equalTo(userPwTextField.snp.bottom).offset(view.convertByHeightRatio(11))
-            $0.horizontalEdges.equalToSuperview().inset(36)
+            $0.top.equalTo(userPwTextField.snp.bottom).offset(view.convertByHeightRatio(15))
+            $0.leading.equalToSuperview().offset(38)
+            $0.trailing.equalToSuperview().inset(37)
             $0.height.equalTo(36)
         }
         
         bottomMenuStackView.snp.makeConstraints {
-            $0.top.equalTo(loginButton.snp.bottom).offset(view.convertByHeightRatio(25))
+            $0.top.equalTo(loginButton.snp.bottom).offset(view.convertByHeightRatio(20))
             $0.horizontalEdges.equalToSuperview().inset(56)
+        }
+        
+        indicateImageView.snp.makeConstraints {
+            $0.top.equalTo(bottomMenuStackView.snp.bottom).offset(view.convertByHeightRatio(137))
+            $0.centerX.equalToSuperview()
+        }
+        
+        indicateTitleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(7)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-15)
         }
 
         kakaoButton.snp.makeConstraints {
+            $0.top.equalTo(indicateImageView.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(view.convertByHeightRatio(-20))
             $0.width.height.equalTo(49)
