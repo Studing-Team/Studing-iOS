@@ -31,20 +31,21 @@ final class TitleTextFieldView: UIView, UITextFieldDelegate {
     private let titleLabel = UILabel()
     private let textField = UITextField()
     private var stateMessageLabel = UILabel()
-    private var visibilityButton = UIButton()
+    private var rightButton = UIButton()
     
     // MARK: - Combine Publishers Properties
     
     let textPublisher = PassthroughSubject<String, Never>()
-    let statePublisher = CurrentValueSubject<TextFieldState, Never>(.normal)
+    let statePublisher: CurrentValueSubject<TextFieldState, Never>
     
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Life Cycle
     
-    init(textFieldType: TextFieldInputType, textFieldState: TextFieldState = .normal) {
+    init(textFieldType: TextFieldInputType) {
         self.textFieldType = textFieldType
-        self.textFieldState = textFieldState
+        self.textFieldState = .normal(type: textFieldType)
+        self.statePublisher = CurrentValueSubject<TextFieldState, Never>(.normal(type: textFieldType))
         super.init(frame: .zero)
         
         setupStyle()
@@ -65,9 +66,9 @@ final class TitleTextFieldView: UIView, UITextFieldDelegate {
         if (textFieldType == .userPw) || (textFieldType == .confirmPw) {
             switch textField.isSecureTextEntry {
             case true:
-                visibilityButton.setImage(UIImage(resource: .focuseNotVisibility), for: .normal)
+                rightButton.setImage(UIImage(resource: .focuseNotVisibility), for: .normal)
             case false:
-                visibilityButton.setImage(UIImage(resource: .focuseVisibility), for: .normal)
+                rightButton.setImage(UIImage(resource: .focuseVisibility), for: .normal)
             }
         }
     }
@@ -76,11 +77,32 @@ final class TitleTextFieldView: UIView, UITextFieldDelegate {
         if (textFieldType == .userPw) || (textFieldType == .confirmPw) {
             switch textField.isSecureTextEntry {
             case true:
-                visibilityButton.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
+                rightButton.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
             case false:
-                visibilityButton.setImage(UIImage(resource: .notFocuseVisibility), for: .normal)
+                rightButton.setImage(UIImage(resource: .notFocuseVisibility), for: .normal)
             }
         }
+    }
+}
+
+// MARK: - Objc Extension
+
+private extension TitleTextFieldView {
+    @objc private func textFieldDidChange() {
+        textPublisher.send(textField.text ?? "")
+    }
+    
+    @objc private func togglePasswordVisibility() {
+        textField.isSecureTextEntry.toggle()
+        rightButton.setImage(UIImage(resource: textField.isSecureTextEntry ? .focuseNotVisibility : .focuseVisibility), for: .normal)
+    }
+    
+    @objc private func clearTextField() {
+        textField.text = ""
+        textPublisher.send("")
+        textField.becomeFirstResponder()
+        rightButton.setImage(UIImage(systemName: "magnifyingglass")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
+        rightButton.removeTarget(self, action: #selector(clearTextField), for: .touchUpInside)
     }
 }
 
@@ -108,10 +130,16 @@ private extension TitleTextFieldView {
         
         stateMessageLabel.do {
             $0.font = .interCaption12()
+            $0.textColor = .black30
         }
         
-        visibilityButton.do {
-            $0.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
+        rightButton.do {
+            switch textFieldType {
+            case .university, .major:
+                $0.setImage(UIImage(systemName: "magnifyingglass")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
+            default:
+                $0.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
+            }
             $0.frame = CGRect(x: 0, y: 0, width: 24, height: 22.51)
         }
     }
@@ -146,45 +174,34 @@ private extension TitleTextFieldView {
                 self?.updateUI(state: state)
             }
             .store(in: &cancellables)
-    }
-    
-    @objc private func textFieldDidChange() {
-        textPublisher.send(textField.text ?? "")
+        
+        textPublisher
+            .sink { [weak self] text in
+                self?.updateRightButtonForTextChange(text: text)
+            }
+            .store(in: &cancellables)
     }
     
     func updateUI(state: TextFieldState) {
         textField.layer.borderColor = state.color.cgColor
         textField.layer.borderWidth = 1
-        stateMessageLabel.textColor = state.color
+        
+        switch textFieldType {
+        case .university, .major:
+            stateMessageLabel.textColor = .black30
+        default:
+            stateMessageLabel.textColor = state.color
+        }
+        
         stateMessageLabel.text = state.message
     }
     
     func createRightButton(textFieldType: TextFieldInputType) {
         switch textFieldType {
         case .userPw, .confirmPw:
-            
-            // 버튼을 감싸는 패딩 뷰 생성
-            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 15, height: 22.51))
-            paddingView.addSubview(visibilityButton)
-            
-            // 버튼을 paddingView의 왼쪽에 붙이기
-            visibilityButton.frame.origin = CGPoint(x: 0, y: 0)
-            visibilityButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
-            
-            textField.rightView = paddingView
-            
-            textField.isSecureTextEntry = true
+            createVisibilityButton()
         case .university, .major:
-            
-            // 버튼을 감싸는 패딩 뷰 생성
-            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 15, height: 24))
-            
-            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 22.51))
-            imageView.image = UIImage(systemName: "magnifyingglass")?.withTintColor(.black30, renderingMode: .alwaysOriginal)
-            
-            paddingView.addSubview(imageView)
-            textField.rightView = paddingView
-            
+            createClearOrSearchButton() // 새로운 함수 호출
         default:
             textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         }
@@ -192,9 +209,45 @@ private extension TitleTextFieldView {
         textField.rightViewMode = .always
     }
     
-    @objc private func togglePasswordVisibility() {
-        textField.isSecureTextEntry.toggle()
-        visibilityButton.setImage(UIImage(resource: textField.isSecureTextEntry ? .focuseNotVisibility : .focuseVisibility), for: .normal)
+    // 비밀번호 가시성 토글 버튼 생성
+    func createVisibilityButton() {
+        
+        // 버튼을 감싸는 패딩 뷰 생성
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 15, height: 22.51))
+        paddingView.addSubview(rightButton)
+        
+        // 버튼을 paddingView의 왼쪽에 붙이기
+        rightButton.frame.origin = CGPoint(x: 0, y: 0)
+        rightButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        
+        textField.rightView = paddingView
+        textField.isSecureTextEntry = true
+    }
+    
+    // 돋보기 또는 X 버튼 생성
+    func createClearOrSearchButton() {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 15, height: 24))
+        paddingView.addSubview(rightButton)
+        
+        rightButton.frame.origin = CGPoint(x: 0, y: 0)
+        rightButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+
+        textField.rightView = paddingView
+    }
+    
+    // 텍스트가 변경되면 버튼의 이미지를 업데이트
+    func updateRightButtonForTextChange(text: String) {
+        guard textFieldType == .university || textFieldType == .major else { return }
+        
+        if text.isEmpty {
+            // 텍스트 필드가 비어있을 때는 돋보기 아이콘
+            rightButton.setImage(UIImage(systemName: "magnifyingglass")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
+            rightButton.removeTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        } else {
+            // 텍스트 필드에 값이 있을 때는 X 아이콘
+            rightButton.setImage(UIImage(systemName: "xmark.circle.fill")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
+            rightButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        }
     }
 }
 

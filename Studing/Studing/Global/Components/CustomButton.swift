@@ -15,7 +15,8 @@ enum ButtonState {
 enum ButtonStyle {
     case next
     case login
-    case register
+    case registerUniverstiy
+    case registerMajor
     case authentication
     case notification
     case showStuding
@@ -28,8 +29,10 @@ enum ButtonStyle {
             return "다음"
         case .login:
             return "로그인"
-        case .register:
+        case .registerUniverstiy:
             return "우리 학교 등록하기"
+        case .registerMajor:
+            return "우리 학과 등록하기"
         case .authentication:
             return "인증하기"
         case .notification:
@@ -45,7 +48,7 @@ enum ButtonStyle {
     
     var enableBackground: UIColor {
         switch self {
-        case .next, .login, .register, .authentication, .notification, .showStuding, .duplicate, .retry:
+        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .showStuding, .duplicate, .retry:
             return .primary50
         }
     }
@@ -63,7 +66,7 @@ enum ButtonStyle {
     
     var foregroundColor: UIColor {
         switch self {
-        case .next, .login, .register, .authentication, .notification, .showStuding, .duplicate, .retry:
+        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .showStuding, .duplicate, .retry:
             return .white
         }
     }

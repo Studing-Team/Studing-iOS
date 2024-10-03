@@ -75,9 +75,8 @@ private extension LaunchScreenViewController {
         }
         
         studingTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(subTitleLabel.snp.bottom).offset(5)
+            $0.top.equalTo(subTitleLabel.snp.bottom)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(view.convertByHeightRatio(-284))
         }
     }
 }
