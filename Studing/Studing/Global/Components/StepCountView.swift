@@ -42,7 +42,7 @@ private extension StepCountView {
         backgroundView.do {
             $0.backgroundColor = .white
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.black40.cgColor
+            $0.layer.borderColor = UIColor.black10.cgColor
             $0.layer.cornerRadius = 14
         }
         
