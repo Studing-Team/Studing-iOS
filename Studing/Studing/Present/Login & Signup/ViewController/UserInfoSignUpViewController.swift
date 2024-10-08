@@ -98,7 +98,7 @@ private extension UserInfoSignUpViewController {
                 self?.userIdTitleTextField.setState(state)
                 
                 switch state {
-                case .normal, .invalid, .duplicate:
+                case .normal, .invalid, .duplicate, .select:
                     self?.duplicateIdButton.backgroundColor = .black30
                 case .success:
                     self?.duplicateIdButton.backgroundColor = .primary50

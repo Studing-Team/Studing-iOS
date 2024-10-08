@@ -11,13 +11,30 @@ import Combine
 final class StudentIdViewModel: BaseViewModel {
     // MARK: - Input
     
+    var studentIdData = [StudentIdInfoModel(studentId: "24학번"),
+                         StudentIdInfoModel(studentId: "23학번"),
+                         StudentIdInfoModel(studentId: "22학번"),
+                         StudentIdInfoModel(studentId: "21학번"),
+                         StudentIdInfoModel(studentId: "20학번"),
+                         StudentIdInfoModel(studentId: "19학번"),
+                         StudentIdInfoModel(studentId: "18학번"),
+                         StudentIdInfoModel(studentId: "17학번"),
+                         StudentIdInfoModel(studentId: "16학번"),
+                         StudentIdInfoModel(studentId: "15학번"),
+                         StudentIdInfoModel(studentId: "14학번 이하")
+    ]
+    
     struct Input {
         let nextTap: AnyPublisher<Void, Never>
+        let selectedIndexPath: AnyPublisher<IndexPath, Never>
     }
     
     // MARK: - Output
     
     struct Output {
+        let selectedStudentId: AnyPublisher<String?, Never>
+        let shouldHideCollectionView: AnyPublisher<Bool, Never>
+        let isNextButtonEnabled: AnyPublisher<Bool, Never>
         let TermsOfServiceViewAction: AnyPublisher<Void, Never>
     }
     
@@ -28,8 +45,27 @@ final class StudentIdViewModel: BaseViewModel {
     // MARK: - Public methods
     
     func transform(input: Input) -> Output {
-
+        
+        let selectedStudentId = input.selectedIndexPath
+            .map { [weak self] indexPath -> String? in
+                self?.studentIdData[indexPath.row].studentId
+            }
+            .eraseToAnyPublisher()
+        
+        let shouldHideCollectionView = input.selectedIndexPath
+            .map { _ in true }
+            .eraseToAnyPublisher()
+        
+        let isNextButtonEnabled = Publishers.CombineLatest(selectedStudentId, shouldHideCollectionView)
+            .map { id, hidden in
+                id?.isEmpty == false
+            }
+            .eraseToAnyPublisher()
+ 
         return Output(
+            selectedStudentId: selectedStudentId,
+            shouldHideCollectionView: shouldHideCollectionView,
+            isNextButtonEnabled: isNextButtonEnabled,
             TermsOfServiceViewAction: input.nextTap
         )
     }
