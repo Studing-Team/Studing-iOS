@@ -9,6 +9,7 @@ import UIKit
 
 enum TextFieldState {
     case normal(type: TextFieldInputType)
+    case select(type: TextFieldInputType)
     case success(type: TextFieldInputType)
     case duplicate(type: TextFieldInputType)
     case invalid(type: TextFieldInputType)
@@ -17,10 +18,35 @@ enum TextFieldState {
         switch self {
         case .normal:
             return .black10
+        case .select(let type):
+            switch type {
+            case .studentId:
+                return .primary50
+            default:
+                return .black10
+            }
         case .success:
             return .primary50
         case .duplicate, .invalid:
             return .studingRed
+        }
+    }
+    
+    var borderColor: CGColor {
+        switch self {
+        case .normal:
+            return UIColor.black10.cgColor
+        case .select(let type):
+            switch type {
+            case .studentId:
+                return UIColor.primary50.cgColor
+            default:
+                return UIColor.black10.cgColor
+            }
+        case .success:
+            return UIColor.primary50.cgColor
+        case .duplicate, .invalid:
+            return UIColor.studingRed.cgColor
         }
     }
     
@@ -66,6 +92,8 @@ enum TextFieldState {
             default:
                 return ""
             }
+        default:
+            return ""
         }
     }
 }
@@ -90,7 +118,7 @@ enum TextFieldInputType {
         case .userName:
             return "이름"
         case .studentId:
-            return "전체 학번"
+            return "학번"
         case .university:
             return "대학교"
         case .major:
