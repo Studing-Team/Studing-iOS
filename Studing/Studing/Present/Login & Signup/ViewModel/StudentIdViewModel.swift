@@ -56,8 +56,8 @@ final class StudentIdViewModel: BaseViewModel {
             .map { _ in true }
             .eraseToAnyPublisher()
         
-        let isNextButtonEnabled = Publishers.CombineLatest(selectedStudentId, shouldHideCollectionView)
-            .map { id, hidden in
+        let isNextButtonEnabled = selectedStudentId
+            .map { id in
                 id?.isEmpty == false
             }
             .eraseToAnyPublisher()
