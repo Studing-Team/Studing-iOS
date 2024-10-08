@@ -61,6 +61,8 @@ private extension StepCountView {
     func setupLayout() {
         backgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+            $0.width.equalTo(79)
+            $0.height.equalTo(28)
         }
         
         stepCountView.snp.makeConstraints {
