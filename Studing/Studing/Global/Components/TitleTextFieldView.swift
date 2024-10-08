@@ -29,9 +29,10 @@ final class TitleTextFieldView: UIView, UITextFieldDelegate {
     private var textFieldState: TextFieldState
     private let textFieldType: TextFieldInputType
     private let titleLabel = UILabel()
-    private let textField = UITextField()
     private var stateMessageLabel = UILabel()
     private var rightButton = UIButton()
+    
+    var textField = UITextField()
     
     // MARK: - Combine Publishers Properties
     
@@ -137,6 +138,8 @@ private extension TitleTextFieldView {
             switch textFieldType {
             case .university, .major:
                 $0.setImage(UIImage(systemName: "magnifyingglass")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
+            case .studentId:
+                $0.setImage(UIImage(systemName: "chevron.down")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
             default:
                 $0.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
             }
@@ -145,7 +148,12 @@ private extension TitleTextFieldView {
     }
     
     func setupHierarchy() {
-        addSubviews(titleLabel, textField, stateMessageLabel)
+        switch textFieldType {
+        case .studentId:
+            addSubviews(titleLabel, textField)
+        default:
+            addSubviews(titleLabel, textField, stateMessageLabel)
+        }
     }
     
     func setupLayout() {
@@ -154,17 +162,28 @@ private extension TitleTextFieldView {
             $0.horizontalEdges.equalToSuperview()
         }
         
-        textField.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(textFieldHeight)
-        }
-        
-        stateMessageLabel.snp.makeConstraints {
-            $0.top.equalTo(textField.snp.bottom).offset(5)
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(20)
+        switch textFieldType {
+        case .studentId:
+            textField.snp.makeConstraints {
+                $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+                $0.horizontalEdges.equalToSuperview()
+                $0.bottom.equalToSuperview()
+                $0.height.equalTo(textFieldHeight)
+            }
+            
+        default:
+            textField.snp.makeConstraints {
+                $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+                $0.horizontalEdges.equalToSuperview()
+                $0.height.equalTo(textFieldHeight)
+            }
+            
+            stateMessageLabel.snp.makeConstraints {
+                $0.top.equalTo(textField.snp.bottom).offset(5)
+                $0.horizontalEdges.equalToSuperview()
+                $0.bottom.equalToSuperview()
+                $0.height.equalTo(20)
+            }
         }
     }
     
@@ -183,8 +202,8 @@ private extension TitleTextFieldView {
     }
     
     func updateUI(state: TextFieldState) {
-        textField.layer.borderColor = state.color.cgColor
-        textField.layer.borderWidth = 1
+        updateBorderColor(state)
+        updateStudentIdRightButton(state)
         
         switch textFieldType {
         case .university, .major:
@@ -196,12 +215,29 @@ private extension TitleTextFieldView {
         stateMessageLabel.text = state.message
     }
     
+    func updateBorderColor(_ state: TextFieldState) {
+        print(state)
+        textField.layer.borderColor = state.borderColor
+        textField.layer.borderWidth = 1
+    }
+    
+    func updateTextColor(_ state: TextFieldState) {
+        switch textFieldType {
+        case .university, .major:
+            stateMessageLabel.textColor = .black30
+        default:
+            stateMessageLabel.textColor = state.color
+        }
+    }
+    
     func createRightButton(textFieldType: TextFieldInputType) {
         switch textFieldType {
         case .userPw, .confirmPw:
             createVisibilityButton()
         case .university, .major:
             createClearOrSearchButton() // 새로운 함수 호출
+        case .studentId:
+            createDownButton()
         default:
             textField.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         }
@@ -231,7 +267,17 @@ private extension TitleTextFieldView {
         
         rightButton.frame.origin = CGPoint(x: 0, y: 0)
         rightButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
-
+        
+        textField.rightView = paddingView
+    }
+    
+    // 아래방향 버튼 생성
+    func createDownButton() {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 24 + 15, height: 22.51))
+        paddingView.addSubview(rightButton)
+        
+        rightButton.frame.origin = CGPoint(x: 0, y: 0)
+        
         textField.rightView = paddingView
     }
     
@@ -247,6 +293,20 @@ private extension TitleTextFieldView {
             // 텍스트 필드에 값이 있을 때는 X 아이콘
             rightButton.setImage(UIImage(systemName: "xmark.circle.fill")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
             rightButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        }
+    }
+    
+    /// studentIDTextField 에서 rightButton 을 바꾸는 함수
+    func updateStudentIdRightButton(_ state: TextFieldState) {
+        guard textFieldType == .studentId else { return }
+            
+        switch state {
+        case .normal:
+            rightButton.setImage(UIImage(systemName: "chevron.down")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
+        case .select:
+            rightButton.setImage(UIImage(systemName: "chevron.up")?.withTintColor(.primary50, renderingMode: .alwaysOriginal), for: .normal)
+        default:
+            break
         }
     }
 }
