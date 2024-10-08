@@ -83,7 +83,10 @@ private extension StudentIdViewController {
             .store(in: &cancellables)
         
         output.shouldHideCollectionView
-            .assign(to: \.isHidden, on : studentIdInputCollectionView)
+            .sink { [weak self] result in
+                self?.studentIdInputCollectionView.isHidden = result
+                self?.studentIdTitleTextField.updateStudentIdRightButton(.normal(type: .studentId))
+            }
             .store(in: &cancellables)
         
         output.isNextButtonEnabled

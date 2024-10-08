@@ -216,7 +216,6 @@ private extension TitleTextFieldView {
     }
     
     func updateBorderColor(_ state: TextFieldState) {
-        print(state)
         textField.layer.borderColor = state.borderColor
         textField.layer.borderWidth = 1
     }
@@ -295,7 +294,11 @@ private extension TitleTextFieldView {
             rightButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
         }
     }
-    
+}
+
+// MARK: - Extension
+
+extension TitleTextFieldView {
     /// studentIDTextField 에서 rightButton 을 바꾸는 함수
     func updateStudentIdRightButton(_ state: TextFieldState) {
         guard textFieldType == .studentId else { return }
@@ -309,11 +312,7 @@ private extension TitleTextFieldView {
             break
         }
     }
-}
-
-// MARK: - Extension
-
-extension TitleTextFieldView {
+    
     func getInputText() -> String? {
         return textField.text
     }
