@@ -56,7 +56,8 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushTermsOfServiceView() {
-        let termsOfServiceVC = TermsOfServiceViewController()
+        let termsOfServiceVM = TermsOfServiceViewModel()
+        let termsOfServiceVC = TermsOfServiceViewController(viewModel: termsOfServiceVM, coordinator: self)
         
         navigationController.changeSignUpStep(count: 5)
         navigationController.pushViewController(termsOfServiceVC, animated: true)
@@ -64,6 +65,8 @@ final class SignUpCoordinator: Coordinator {
     
     func pushAuthUniversityView() {
         let authUniversityVC = AuthUniversityViewController()
+        
+        navigationController.changeSignUpStep(count: 6)
         navigationController.pushViewController(authUniversityVC, animated: true)
     }
     

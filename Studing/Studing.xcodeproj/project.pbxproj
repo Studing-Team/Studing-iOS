@@ -49,6 +49,7 @@
 		3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5960292CA0EE5F00688FE3 /* CustomButton.swift */; };
 		3F59602D2CA13E8F00688FE3 /* TextFieldEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */; };
 		3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602E2CA1422100688FE3 /* UIStackView+.swift */; };
+		3F6AB78C2CBE3C77006D1A29 /* DashedLineBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6AB78B2CBE3C77006D1A29 /* DashedLineBorderView.swift */; };
 		3F82C32F2CAE936600492EEE /* NoExistsSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F82C32E2CAE936600492EEE /* NoExistsSearchResultView.swift */; };
 		3F82C3312CAE93B700492EEE /* StudentIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F82C3302CAE93B700492EEE /* StudentIdViewController.swift */; };
 		3F82C3332CAE93E500492EEE /* StudentIdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F82C3322CAE93E500492EEE /* StudentIdViewModel.swift */; };
@@ -60,6 +61,10 @@
 		3F9DC8A82CB4ECA900850136 /* StudentIdInputCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DC8A72CB4ECA900850136 /* StudentIdInputCollectionCell.swift */; };
 		3F9DC8AC2CB4ECE000850136 /* StudentIdInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DC8AB2CB4ECE000850136 /* StudentIdInfoModel.swift */; };
 		3FDEE9E32C970A7A00633C93 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDEE9E22C970A7A00633C93 /* SnapKit */; settings = {ATTRIBUTES = (Required, ); }; };
+		3FEA67552CB7F82D00675805 /* AgreeTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA67542CB7F82D00675805 /* AgreeTypeView.swift */; };
+		3FEA67572CB81A9A00675805 /* CheckBoxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA67562CB81A9A00675805 /* CheckBoxButton.swift */; };
+		3FEA67592CB81F2E00675805 /* TermsOfServiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA67582CB81F2E00675805 /* TermsOfServiceViewModel.swift */; };
+		3FEA675B2CB8BEF500675805 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA675A2CB8BEF500675805 /* UILabel+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +120,7 @@
 		3F5960292CA0EE5F00688FE3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldEnum.swift; sourceTree = "<group>"; };
 		3F59602E2CA1422100688FE3 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
+		3F6AB78B2CBE3C77006D1A29 /* DashedLineBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashedLineBorderView.swift; sourceTree = "<group>"; };
 		3F82C32E2CAE936600492EEE /* NoExistsSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoExistsSearchResultView.swift; sourceTree = "<group>"; };
 		3F82C3302CAE93B700492EEE /* StudentIdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdViewController.swift; sourceTree = "<group>"; };
 		3F82C3322CAE93E500492EEE /* StudentIdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdViewModel.swift; sourceTree = "<group>"; };
@@ -125,6 +131,10 @@
 		3F82C33C2CAE94E000492EEE /* MajorInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MajorInfoModel.swift; sourceTree = "<group>"; };
 		3F9DC8A72CB4ECA900850136 /* StudentIdInputCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdInputCollectionCell.swift; sourceTree = "<group>"; };
 		3F9DC8AB2CB4ECE000850136 /* StudentIdInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdInfoModel.swift; sourceTree = "<group>"; };
+		3FEA67542CB7F82D00675805 /* AgreeTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreeTypeView.swift; sourceTree = "<group>"; };
+		3FEA67562CB81A9A00675805 /* CheckBoxButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxButton.swift; sourceTree = "<group>"; };
+		3FEA67582CB81F2E00675805 /* TermsOfServiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewModel.swift; sourceTree = "<group>"; };
+		3FEA675A2CB8BEF500675805 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +177,7 @@
 				3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */,
 				3F59602E2CA1422100688FE3 /* UIStackView+.swift */,
 				3F82C3382CAE94A600492EEE /* NSObject+.swift */,
+				3FEA675A2CB8BEF500675805 /* UILabel+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -192,6 +203,7 @@
 				3F82C32E2CAE936600492EEE /* NoExistsSearchResultView.swift */,
 				3F82C3342CAE946400492EEE /* SearchResultCollectionView.swift */,
 				3F82C3362CAE948300492EEE /* SearchResultCollectionViewCell.swift */,
+				3F6AB78B2CBE3C77006D1A29 /* DashedLineBorderView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -230,6 +242,7 @@
 				3F3CFDBF2C98093700DC9F9A /* UniversityInfoViewModel.swift */,
 				3F1F1F7F2CA3F4CF006DFD76 /* MajorInfoViewModel.swift */,
 				3F82C3322CAE93E500492EEE /* StudentIdViewModel.swift */,
+				3FEA67582CB81F2E00675805 /* TermsOfServiceViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -372,6 +385,8 @@
 			isa = PBXGroup;
 			children = (
 				3F9DC8A72CB4ECA900850136 /* StudentIdInputCollectionCell.swift */,
+				3FEA67542CB7F82D00675805 /* AgreeTypeView.swift */,
+				3FEA67562CB81A9A00675805 /* CheckBoxButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -507,9 +522,12 @@
 				3F82C3312CAE93B700492EEE /* StudentIdViewController.swift in Sources */,
 				3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */,
 				3F25A3592C96A676006E2715 /* UIView+.swift in Sources */,
+				3F6AB78C2CBE3C77006D1A29 /* DashedLineBorderView.swift in Sources */,
+				3FEA67592CB81F2E00675805 /* TermsOfServiceViewModel.swift in Sources */,
 				3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */,
 				3F3CFDAC2C97321700DC9F9A /* UniversityInfoViewController.swift in Sources */,
 				3F82C3392CAE94A600492EEE /* NSObject+.swift in Sources */,
+				3FEA675B2CB8BEF500675805 /* UILabel+.swift in Sources */,
 				3F82C32F2CAE936600492EEE /* NoExistsSearchResultView.swift in Sources */,
 				3F1F1F802CA3F4CF006DFD76 /* MajorInfoViewModel.swift in Sources */,
 				3F3CFDB22C973D7E00DC9F9A /* AuthUniversityViewController.swift in Sources */,
@@ -520,6 +538,7 @@
 				3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */,
 				3F3CFDAE2C97326000DC9F9A /* MajorInfoViewController.swift in Sources */,
 				3F25A3642C96D001006E2715 /* AppCoordinator.swift in Sources */,
+				3FEA67572CB81A9A00675805 /* CheckBoxButton.swift in Sources */,
 				3F39925B2C82C8E40045CF1E /* SceneDelegate.swift in Sources */,
 				3F9DC8A82CB4ECA900850136 /* StudentIdInputCollectionCell.swift in Sources */,
 				3F1F1F7C2CA3B859006DFD76 /* CusomSignUpNavigationController.swift in Sources */,
@@ -529,6 +548,7 @@
 				3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */,
 				3F82C33D2CAE94E000492EEE /* MajorInfoModel.swift in Sources */,
 				3F3CFDC22C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift in Sources */,
+				3FEA67552CB7F82D00675805 /* AgreeTypeView.swift in Sources */,
 				3F25A35F2C96A85E006E2715 /* TitleTextFieldView.swift in Sources */,
 				3F9DC8AC2CB4ECE000850136 /* StudentIdInfoModel.swift in Sources */,
 				3F162B842C9D987300DF2E1C /* LaunchScreenViewController.swift in Sources */,

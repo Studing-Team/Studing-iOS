@@ -22,6 +22,7 @@ enum ButtonStyle {
     case showStuding
     case duplicate
     case retry
+    case studentCard
     
     var title: String {
         switch self {
@@ -43,12 +44,14 @@ enum ButtonStyle {
             return "중복확인"
         case .retry:
             return "다시 시도"
+        case .studentCard:
+            return "학생증 업로드"
         }
     }
     
     var enableBackground: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .showStuding, .duplicate, .retry:
+        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .showStuding, .duplicate, .retry, .studentCard:
             return .primary50
         }
     }
@@ -66,7 +69,7 @@ enum ButtonStyle {
     
     var foregroundColor: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .showStuding, .duplicate, .retry:
+        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .showStuding, .duplicate, .retry, .studentCard:
             return .white
         }
     }
@@ -97,7 +100,9 @@ class CustomButton: UIButton {
         var config = UIButton.Configuration.filled()
         
         // 폰트 설정
-        let titleString = AttributedString(buttonStyle.title, attributes: .init([.font: UIFont.interSubtitle2()]))
+        let titleString = AttributedString(buttonStyle.title, attributes: .init(
+            [.font: buttonStyle == .studentCard ? UIFont.interBody2() : UIFont.interSubtitle2()]
+        ))
         
         if buttonStyle == .showStuding {
             config.background.strokeColor = .white
@@ -111,7 +116,16 @@ class CustomButton: UIButton {
         
         self.configuration = config
         
-        layer.cornerRadius = buttonStyle == .login ? 18 : 25
+        switch buttonStyle {
+        case .login:
+            layer.cornerRadius =  18
+        case .studentCard:
+            layer.cornerRadius = 12
+        default:
+            layer.cornerRadius = 25
+        }
+        
+//        layer.cornerRadius = buttonStyle == .login ? 18 : 25
         clipsToBounds = true
     }
     
