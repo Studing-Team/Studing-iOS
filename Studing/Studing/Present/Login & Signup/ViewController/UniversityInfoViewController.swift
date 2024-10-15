@@ -154,7 +154,7 @@ private extension UniversityInfoViewController {
         nextButton.snp.makeConstraints {
             $0.top.equalTo(searchResultCollectionView.snp.bottom).offset(view.convertByHeightRatio(30))
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(16)
             $0.height.equalTo(48)
         }
     }
