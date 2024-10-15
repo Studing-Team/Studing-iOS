@@ -163,7 +163,7 @@ private extension TitleTextFieldView {
         }
         
         switch textFieldType {
-        case .studentId:
+        case .studentId, .userName, .allStudentId:
             textField.snp.makeConstraints {
                 $0.top.equalTo(titleLabel.snp.bottom).offset(10)
                 $0.horizontalEdges.equalToSuperview()
