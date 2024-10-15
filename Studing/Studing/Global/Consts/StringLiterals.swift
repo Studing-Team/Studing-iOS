@@ -39,7 +39,7 @@ enum StringLiterals {
     
     enum Authentication {
         static let universityTitle = "학생증으로 학교 인증을 해주세요"
-        static let universitySubTitle = "실물 학생증 또는 모바일 학생증 이미지를 첨부해주세요\n승인까지 최대 24시간이 걸릴 수 있어요"
+        static let universitySubTitle = "실물 학생증 또는 모바일 학생증 이미지를 첨부해주세요\n승인까지 최대 24시간이 걸릴 수 있어요 :)"
         static let studentCardTitle = "이곳을 클릭해서 이미지를 업로드해주세요!"
         static let AuthenticatingTitle1 = "학교 인증을 진행 중이에요!"
         static let AuthenticatingTitle2 = "24시간 이내로 승인 여부를 알려드릴게요!"
