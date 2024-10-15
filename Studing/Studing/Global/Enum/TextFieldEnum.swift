@@ -106,6 +106,7 @@ enum TextFieldInputType {
     case studentId
     case university
     case major
+    case allStudentId
     
     var title: String {
         switch self {
@@ -123,6 +124,8 @@ enum TextFieldInputType {
             return "대학교"
         case .major:
             return "전공학과"
+        case .allStudentId:
+            return "전체 학번"
         }
     }
     
@@ -142,6 +145,8 @@ enum TextFieldInputType {
             return "대학교를 입력해주세요"
         case .major:
             return "학과를 입력해주세요"
+        case .allStudentId:
+            return "ex. 202021234"
         }
     }
 }
