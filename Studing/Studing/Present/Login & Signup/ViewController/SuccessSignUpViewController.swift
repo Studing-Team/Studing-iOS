@@ -20,7 +20,7 @@ final class SuccessSignUpViewController: UIViewController {
     private let successSubTitleLabel = UILabel()
     private let logoImage = UIImageView()
     private let studingTitleLabel = UILabel()
-    private let pushMainHomeButton = CustomButton(buttonStyle: .showStuding)
+    private let mainHomeButton = CustomButton(buttonStyle: .showStudingHome)
     
     // MARK: - Life Cycle
     
@@ -68,8 +68,15 @@ private extension SuccessSignUpViewController {
             $0.font = .interBody1()
         }
         
-        pushMainHomeButton.do {
-            $0.setTitle(StringLiterals.Button.pushMainHomeTitle, for: .normal)
+        logoImage.do {
+            $0.image = UIImage(resource: .splashLogo)
+        }
+        
+        mainHomeButton.do {
+            $0.layer.borderColor = UIColor.black10.cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 25.0
+            $0.clipsToBounds = true
         }
         
         studingTitleLabel.do {
@@ -80,27 +87,36 @@ private extension SuccessSignUpViewController {
     }
     
     func setupHierarchy() {
-        view.addSubviews(successTitleLabel, logoImage, pushMainHomeButton)
+        view.addSubviews(successTitleLabel, successSubTitleLabel, logoImage, studingTitleLabel, mainHomeButton)
     }
     
     func setupLayout() {
         successTitleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(view.convertByHeightRatio(256))
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(view.convertByHeightRatio(198))
+            $0.centerX.equalToSuperview()
         }
         
         successSubTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(successSubTitleLabel.snp.bottom).offset(10)
+            $0.top.equalTo(successTitleLabel.snp.bottom).offset(view.convertByHeightRatio(10))
+            $0.centerX.equalToSuperview()
         }
         
         logoImage.snp.makeConstraints {
-            $0.top.equalTo(successSubTitleLabel.snp.bottom).offset(38)
+            $0.top.equalTo(successSubTitleLabel.snp.bottom).offset(view.convertByHeightRatio(38))
+            $0.centerX.equalToSuperview()
         }
         
-        pushMainHomeButton.snp.makeConstraints {
+        studingTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(logoImage.snp.bottom).offset(view.convertByHeightRatio(30))
+            $0.centerX.equalToSuperview()
+        }
+        
+        mainHomeButton.snp.makeConstraints {
+            $0.top.equalTo(studingTitleLabel.snp.bottom).offset(view.convertByHeightRatio(150))
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().inset(19)
             $0.height.equalTo(60)
-            $0.bottom.equalToSuperview().offset(view.convertByHeightRatio(-35))
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-4)
         }
     }
     

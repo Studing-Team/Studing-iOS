@@ -37,8 +37,6 @@ final class UserInfoSignUpViewModel: BaseViewModel {
     
     func transform(input: Input) -> Output {
         
-        let inputUserInfo = Publishers.CombineLatest3(input.userId, input.userPw, input.confirmPw)
-        
         let userIdState = input.userId
             .map { [weak self] userId -> TextFieldState in
                 // 여기에 userId 유효성 검사 로직을 추가할 수 있습니다.

@@ -127,14 +127,12 @@ private extension TermsOfServiceViewController {
         
         output.marketingBoxTap
             .sink { [weak self] isSelected in
-                print("버튼 눌림")
                 self?.marketingBoxButton.updateButtonState(isSelected)
             }
             .store(in: &cancellables)
         
         output.authUniversityViewAction
             .sink { [weak self] _ in
-                print("버튼 눌림")
                 self?.coordinator?.pushAuthUniversityView()
             }
             .store(in: &cancellables)
@@ -236,7 +234,6 @@ private extension TermsOfServiceViewController {
             $0.top.equalTo(serviceTitleLabel.snp.bottom).offset(view.convertByHeightRatio(30))
             $0.leading.equalToSuperview().offset(19)
             $0.trailing.equalToSuperview().inset(20)
-//            $0.bottom.equalTo(serviceAgreeContainerView.).inset(518)
             $0.height.equalTo(44)
         }
         

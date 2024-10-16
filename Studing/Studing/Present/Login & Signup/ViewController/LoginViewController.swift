@@ -26,9 +26,6 @@ final class LoginViewController: UIViewController {
     private let userIdTextField = UITextField()
     private let userPwTextField = UITextField()
     private let loginButton = CustomButton(buttonStyle: .login)
-    private let bottomMenuStackView = UIStackView()
-    private let findMyIdButton = UIButton()
-    private let findMyPwButton = UIButton()
     private let signUpButton = UIButton()
     private let indicateImageView = UIImageView()
     private let indicateTitleLabel = UILabel()
@@ -146,31 +143,14 @@ private extension LoginViewController {
             $0.layer.borderColor = UIColor.white.cgColor
             $0.layer.cornerRadius = 17
         }
-        
-        bottomMenuStackView.do {
-            $0.addArrangedSubviews(findMyIdButton, createDivider(), findMyPwButton, createDivider(), signUpButton)
-            $0.axis = .horizontal
-            $0.alignment = .center
-            $0.distribution = .equalSpacing
-            $0.spacing = 15
-        }
-        
-        findMyIdButton.do {
-            $0.setTitle("아이디 찾기", for: .normal)
-            $0.titleLabel?.font = .interBody2()
-            $0.setTitleColor(.black, for: .normal)
-        }
-        
-        findMyPwButton.do {
-            $0.setTitle("비밀번호 찾기", for: .normal)
-            $0.titleLabel?.font = .interBody2()
-            $0.setTitleColor(.black, for: .normal)
-        }
-        
+
         signUpButton.do {
-            $0.setTitle("회원가입", for: .normal)
-            $0.titleLabel?.font = .interBody2()
-            $0.setTitleColor(.black, for: .normal)
+            let attributedString = NSAttributedString(string: "회원가입", attributes: [
+                .font: UIFont.interBody2(),
+                .foregroundColor: UIColor.black50,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ])
+            $0.setAttributedTitle(attributedString, for: .normal)
         }
         
         indicateImageView.do {
@@ -179,20 +159,20 @@ private extension LoginViewController {
         }
         
         indicateTitleLabel.do {
-            $0.text = "카카오톡 문의하기"
+            $0.text = "스튜딩에 문의하기"
             $0.textColor = .black30
             $0.font = .interBody2()
         }
     
         kakaoButton.do {
-            $0.setImage(UIImage.kakaoTalkIcon, for: .normal)
+            $0.setImage(UIImage.inquiry, for: .normal)
             $0.layer.cornerRadius = 10
             $0.clipsToBounds = true
         }
     }
     
     func setupHierarchy() {
-        view.addSubviews(studingTitleLabel, userIdTextField, userPwTextField, loginButton, bottomMenuStackView, indicateImageView, kakaoButton)
+        view.addSubviews(studingTitleLabel, userIdTextField, userPwTextField, loginButton, signUpButton, indicateImageView, kakaoButton)
         indicateImageView.addSubview(indicateTitleLabel)
     }
     
@@ -222,14 +202,16 @@ private extension LoginViewController {
             $0.trailing.equalToSuperview().inset(37)
             $0.height.equalTo(36)
         }
-        
-        bottomMenuStackView.snp.makeConstraints {
+    
+        signUpButton.snp.makeConstraints {
             $0.top.equalTo(loginButton.snp.bottom).offset(view.convertByHeightRatio(20))
-            $0.horizontalEdges.equalToSuperview().inset(56)
+            $0.leading.equalToSuperview().offset(162)
+            $0.trailing.equalToSuperview().inset(161)
+            $0.height.equalTo(18)
         }
-        
+
         indicateImageView.snp.makeConstraints {
-            $0.top.equalTo(bottomMenuStackView.snp.bottom).offset(view.convertByHeightRatio(137))
+            $0.top.equalTo(signUpButton.snp.bottom).offset(view.convertByHeightRatio(137))
             $0.centerX.equalToSuperview()
         }
         

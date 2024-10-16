@@ -60,6 +60,7 @@ final class StudentIdViewModel: BaseViewModel {
             .map { id in
                 id?.isEmpty == false
             }
+            .prepend(false)
             .eraseToAnyPublisher()
  
         return Output(
