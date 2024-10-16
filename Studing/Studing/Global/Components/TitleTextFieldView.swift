@@ -67,9 +67,9 @@ final class TitleTextFieldView: UIView, UITextFieldDelegate {
         if (textFieldType == .userPw) || (textFieldType == .confirmPw) {
             switch textField.isSecureTextEntry {
             case true:
-                rightButton.setImage(UIImage(resource: .focuseNotVisibility), for: .normal)
-            case false:
                 rightButton.setImage(UIImage(resource: .focuseVisibility), for: .normal)
+            case false:
+                rightButton.setImage(UIImage(resource: .focuseNotVisibility), for: .normal)
             }
         }
     }
@@ -78,10 +78,22 @@ final class TitleTextFieldView: UIView, UITextFieldDelegate {
         if (textFieldType == .userPw) || (textFieldType == .confirmPw) {
             switch textField.isSecureTextEntry {
             case true:
-                rightButton.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
-            case false:
                 rightButton.setImage(UIImage(resource: .notFocuseVisibility), for: .normal)
+            case false:
+                rightButton.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
             }
+        }
+    }
+    
+    func updateRightButtonColor(_ state: TextFieldState) {
+        switch textFieldType {
+        case .university, .major:
+            if let image = rightButton.image(for: .normal) {
+                let tintedImage = image.withTintColor(.primary50, renderingMode: .alwaysOriginal)
+                rightButton.setImage(tintedImage, for: .normal)
+            }
+        default:
+            break
         }
     }
 }
@@ -94,8 +106,8 @@ private extension TitleTextFieldView {
     }
     
     @objc private func togglePasswordVisibility() {
-        textField.isSecureTextEntry.toggle()
-        rightButton.setImage(UIImage(resource: textField.isSecureTextEntry ? .focuseNotVisibility : .focuseVisibility), for: .normal)
+        textField.isSecureTextEntry.toggle() //focuseVisibility focuseNotVisibility
+        rightButton.setImage(UIImage(resource: textField.isSecureTextEntry ? .focuseVisibility : .focuseNotVisibility), for: .normal)
     }
     
     @objc private func clearTextField() {
@@ -104,6 +116,7 @@ private extension TitleTextFieldView {
         textField.becomeFirstResponder()
         rightButton.setImage(UIImage(systemName: "magnifyingglass")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
         rightButton.removeTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+        textField.layer.borderColor = UIColor.black10.cgColor
     }
 }
 
@@ -141,7 +154,7 @@ private extension TitleTextFieldView {
             case .studentId:
                 $0.setImage(UIImage(systemName: "chevron.down")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
             default:
-                $0.setImage(UIImage(resource: .notFocuseNotVisibility), for: .normal)
+                $0.setImage(UIImage(resource: .notFocuseVisibility), for: .normal)
             }
             $0.frame = CGRect(x: 0, y: 0, width: 24, height: 22.51)
         }
@@ -292,6 +305,8 @@ private extension TitleTextFieldView {
             // 텍스트 필드에 값이 있을 때는 X 아이콘
             rightButton.setImage(UIImage(systemName: "xmark.circle.fill")?.withTintColor(.black30, renderingMode: .alwaysOriginal), for: .normal)
             rightButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
+            
+            textField.layer.borderColor = UIColor.black10.cgColor
         }
     }
 }

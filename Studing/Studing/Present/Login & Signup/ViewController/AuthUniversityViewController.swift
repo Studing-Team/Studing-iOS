@@ -10,11 +10,19 @@ import UIKit
 
 import SnapKit
 import Then
+import PhotosUI
 
 final class AuthUniversityViewController: UIViewController {
 
     // MARK: - Properties
+    
+    private var viewModel: AuthUniversityViewModel
+    weak var coordinator: SignUpCoordinator?
+    
+    // MARK: - Combine Publishers Properties
 
+    private let selectedImageDataSubject = CurrentValueSubject<Data?, Never>(nil)
+    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Properties
@@ -25,11 +33,34 @@ final class AuthUniversityViewController: UIViewController {
     
     private let uploadBackgroundView = DashedLineBorderView()
     private let uploadImageView = UIImageView()
+    private lazy var seletedImageView = UIImageView()
+    
     private let uploadStudentCardTitle = UILabel()
     private let studentCardButton = CustomButton(buttonStyle: .studentCard)
     private let userNameTitleTextField = TitleTextFieldView(textFieldType: .userName)
     private let studentIdTitleTextField = TitleTextFieldView(textFieldType: .allStudentId)
     private let authenticationButton = CustomButton(buttonStyle: .next)
+    
+    private lazy var imagePicker: PHPickerViewController = {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 1
+        configuration.filter = .images
+        let picker = PHPickerViewController(configuration: configuration)
+        return picker
+    }()
+    
+    // MARK: - init
+    
+    init(viewModel: AuthUniversityViewModel,
+         coordinator: SignUpCoordinator) {
+        self.viewModel = viewModel
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     
@@ -43,6 +74,7 @@ final class AuthUniversityViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupDelegate()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,12 +88,51 @@ final class AuthUniversityViewController: UIViewController {
     }
 }
 
+// MARK: - Private Bind Extensions
+
+private extension AuthUniversityViewController {
+    func bindViewModel() {
+        
+        let input = AuthUniversityViewModel.Input(
+            studentCardTap: studentCardButton.tapPublisher, 
+            selectedImageData: selectedImageDataSubject.eraseToAnyPublisher(),
+            userName: userNameTitleTextField.textPublisher.eraseToAnyPublisher(),
+            allStudentId: studentIdTitleTextField.textPublisher.eraseToAnyPublisher(),
+            nextTap: authenticationButton.tapPublisher
+        )
+        
+        let output = viewModel.transform(input: input)
+
+        output.openImagePicker
+            .sink { [weak self] _ in
+                self?.presentPHPicker()
+            }
+            .store(in: &cancellables)
+        
+        output.isSelectedImage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isSelected in
+                self?.updateViewState(isImageSelected: isSelected)
+            }
+            .store(in: &cancellables)
+        
+        output.isNextButtonEnabled
+            .map { $0 ? ButtonState.activate : ButtonState.deactivate }
+            .assign(to: \.buttonState, on: authenticationButton)
+            .store(in: &cancellables)
+        
+        output.authUniversityViewAction
+            .sink { [weak self] _ in
+                self?.coordinator?.pushAuthWaitingView()
+            }
+            .store(in: &cancellables)
+    }
+}
 // MARK: - Private Extensions
 
 private extension AuthUniversityViewController {
     func setNavigationBar() {
-        self.navigationItem.title = StringLiterals.NavigationTitle.authUniversity
-        self.navigationItem.largeTitleDisplayMode = .inline
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     func setupStyle() {
@@ -77,6 +148,13 @@ private extension AuthUniversityViewController {
             $0.font = .interBody3()
             $0.textColor = .black40
             $0.numberOfLines = 2
+        }
+        
+        seletedImageView.do {
+            $0.isHidden = true
+            $0.layer.cornerRadius = 20
+            $0.clipsToBounds = true
+            $0.contentMode = .scaleAspectFill
         }
         
         uploadBackgroundView.do {
@@ -101,7 +179,7 @@ private extension AuthUniversityViewController {
     }
     
     func setupHierarchy() {
-        view.addSubviews(stepCountView, authTitleLabel, authSubTitleLabel, uploadBackgroundView, userNameTitleTextField, studentIdTitleTextField, authenticationButton)
+        view.addSubviews(stepCountView, authTitleLabel, authSubTitleLabel, uploadBackgroundView, seletedImageView, userNameTitleTextField, studentIdTitleTextField, authenticationButton)
         
         uploadBackgroundView.addSubviews(uploadImageView, uploadStudentCardTitle, studentCardButton)
     }
@@ -126,6 +204,12 @@ private extension AuthUniversityViewController {
         uploadBackgroundView.snp.makeConstraints {
             $0.top.equalTo(authSubTitleLabel.snp.bottom).offset(view.convertByHeightRatio(36))
             $0.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        seletedImageView.snp.makeConstraints {
+            $0.top.equalTo(authSubTitleLabel.snp.bottom).offset(view.convertByHeightRatio(36))
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(view.convertByHeightRatio(186))
         }
         
         userNameTitleTextField.snp.makeConstraints {
@@ -168,7 +252,56 @@ private extension AuthUniversityViewController {
         }
     }
     
+    func updateViewState(isImageSelected: Bool) {
+        uploadBackgroundView.isHidden = isImageSelected
+        seletedImageView.isHidden = !isImageSelected
+
+        if isImageSelected {
+            userNameTitleTextField.snp.remakeConstraints {
+                $0.top.equalTo(seletedImageView.snp.bottom).offset(view.convertByHeightRatio(40))
+                $0.leading.equalToSuperview().offset(19)
+                $0.trailing.equalToSuperview().offset(-20)
+            }
+        } else {
+            userNameTitleTextField.snp.remakeConstraints {
+                $0.top.equalTo(uploadBackgroundView.snp.bottom).offset(view.convertByHeightRatio(40))
+                $0.leading.equalToSuperview().offset(19)
+                $0.trailing.equalToSuperview().offset(-20)
+            }
+        }
+
+        view.layoutIfNeeded()
+    }
+    
     func setupDelegate() {
-        
+        imagePicker.delegate = self
+    }
+    
+    private func presentPHPicker() {
+        present(imagePicker, animated: true)
     }
 }
+
+
+extension AuthUniversityViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+
+        guard let provider = results.first?.itemProvider else { return }
+
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                DispatchQueue.main.async {
+                    guard let self, let image = image as? UIImage else { return }
+                    
+                    self.seletedImageView.image = image
+                    
+                    if let imageData = image.jpegData(compressionQuality: 0.8) {
+                        self.selectedImageDataSubject.send(imageData)
+                    }
+                }
+            }
+        }
+    }
+}
+

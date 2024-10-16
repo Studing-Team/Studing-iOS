@@ -64,7 +64,16 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushAuthUniversityView() {
-        let authUniversityVC = AuthUniversityViewController()
+        let authUniversityVM = AuthUniversityViewModel()
+        let authUniversityVC = AuthUniversityViewController(viewModel: authUniversityVM, coordinator: self)
+        
+        navigationController.changeSignUpStep(count: 6)
+        navigationController.pushViewController(authUniversityVC, animated: true)
+    }
+    
+    func pushAuthWaitingView() {
+        let authWaitingVM = AuthWaitingViewModel()
+        let authUniversityVC = AuthWaitingViewController(viewModel: authWaitingVM, coordinator: self)
         
         navigationController.changeSignUpStep(count: 6)
         navigationController.pushViewController(authUniversityVC, animated: true)

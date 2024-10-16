@@ -18,6 +18,8 @@ final class MajorInfoViewController: UIViewController {
     private var viewModel: MajorInfoViewModel
     weak var coordinator: SignUpCoordinator?
     
+    private var selectedSearchResultSubject = PassthroughSubject<String, Never>()
+    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Properties
@@ -25,7 +27,7 @@ final class MajorInfoViewController: UIViewController {
     private let stepCountView = StepCountView(count: 3)
     private let majorTitleLabel = UILabel()
     private let majorTitleTextField = TitleTextFieldView(textFieldType: .major)
-    private let searchResultCollectionView = SearchResultCollectionView<MajorInfoModel>(searchType: .major)
+    private var searchResultCollectionView = SearchResultCollectionView<MajorInfoModel>(searchType: .major)
     private let noExistsSearchResultView = NoExistsSearchResultView(serachResultType: .major)
     private let nextButton = CustomButton(buttonStyle: .next)
     
@@ -71,6 +73,7 @@ private extension MajorInfoViewController {
     func bindViewModel() {
         let input = MajorInfoViewModel.Input(
             majorName: majorTitleTextField.textPublisher.eraseToAnyPublisher(),
+            selectMajorName: selectedSearchResultSubject.eraseToAnyPublisher(),
             nextTap: nextButton.tapPublisher
         )
         
@@ -88,6 +91,21 @@ private extension MajorInfoViewController {
                     self?.updateLayout(state: .noInput)
                 }
             }
+            .store(in: &cancellables)
+        
+        output.selectUniversity
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] selectName in
+                self?.majorTitleTextField.textField.text = selectName
+                self?.majorTitleTextField.setState(.success(type: .major))
+                self?.majorTitleTextField.updateRightButtonColor(.success(type: .major))
+                self?.updateLayout(state: .noInput)
+            }
+            .store(in: &cancellables)
+        
+        output.isEnableButton
+            .map { $0 ? ButtonState.activate : ButtonState.deactivate }
+            .assign(to: \.buttonState, on: nextButton)
             .store(in: &cancellables)
         
         output.TermsOfServiceViewAction
@@ -188,6 +206,17 @@ private extension MajorInfoViewController {
     }
     
     func setupDelegate() {
-        
+        self.searchResultCollectionView.searchResultDelegate = self
+    }
+}
+
+// MARK: - SearchResultCellDelegate
+
+extension MajorInfoViewController: SearchResultCellDelegate {
+    func didSelectSearchResult(_ result: any SearchResultModel) {
+        if let majorInfoModel = result as? MajorInfoModel {
+            majorTitleTextField.textPublisher.send(majorInfoModel.resultData)
+            selectedSearchResultSubject.send(majorInfoModel.resultData)
+        }
     }
 }

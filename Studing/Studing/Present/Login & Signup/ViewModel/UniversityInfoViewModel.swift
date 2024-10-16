@@ -22,6 +22,7 @@ final class UniversityInfoViewModel: BaseViewModel {
     
     struct Input {
         let universityName: AnyPublisher<String, Never>
+        let selectUniversityName: AnyPublisher<String, Never>
         let nextTap: AnyPublisher<Void, Never>
     }
     
@@ -29,6 +30,8 @@ final class UniversityInfoViewModel: BaseViewModel {
     
     struct Output {
         let searchUnivsersityResult: AnyPublisher<([UniversityInfoModel], String), Never>
+        let selectUniversity: AnyPublisher<String, Never>
+        let isEnableButton: AnyPublisher<Bool, Never>
         let majorInfoViewAction: AnyPublisher<Void, Never>
     }
     
@@ -61,8 +64,17 @@ final class UniversityInfoViewModel: BaseViewModel {
             }
             .eraseToAnyPublisher()
         
+        let isEnableButton = Publishers.CombineLatest(input.universityName, input.selectUniversityName)
+            .map { (universityName, selectedName) in
+                return !universityName.isEmpty && universityName == selectedName
+            }
+            .prepend(false)
+            .eraseToAnyPublisher()
+        
         return Output(
             searchUnivsersityResult: universityNamesPublisher,
+            selectUniversity: input.selectUniversityName,
+            isEnableButton: isEnableButton,
             majorInfoViewAction: input.nextTap
         )
     }

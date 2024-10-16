@@ -89,6 +89,8 @@ enum TextFieldState {
                 return "영문, 숫자를 사용한 6자~12자를 입력해주세요"
             case .userPw:
                 return "영문, 숫자, 특수문자를 각각 1개 이상 포함한 8~16로 입력해주세요"
+            case .confirmPw:
+                return "비밀번호가 일치하지 않아요"
             default:
                 return ""
             }

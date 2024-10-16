@@ -7,75 +7,7 @@
 
 import UIKit
 
-enum ButtonState {
-    case activate
-    case deactivate
-}
-
-enum ButtonStyle {
-    case next
-    case login
-    case registerUniverstiy
-    case registerMajor
-    case authentication
-    case notification
-    case showStuding
-    case duplicate
-    case retry
-    case studentCard
-    
-    var title: String {
-        switch self {
-        case .next:
-            return "다음"
-        case .login:
-            return "로그인"
-        case .registerUniverstiy:
-            return "우리 학교 등록하기"
-        case .registerMajor:
-            return "우리 학과 등록하기"
-        case .authentication:
-            return "인증하기"
-        case .notification:
-            return "알림 받기"
-        case .showStuding:
-            return "스튜딩 시작하기"
-        case .duplicate:
-            return "중복확인"
-        case .retry:
-            return "다시 시도"
-        case .studentCard:
-            return "학생증 업로드"
-        }
-    }
-    
-    var enableBackground: UIColor {
-        switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .showStuding, .duplicate, .retry, .studentCard:
-            return .primary50
-        }
-    }
-    
-    var disableBackground: UIColor {
-        switch self {
-        case .next, .authentication:
-            return .black20
-        case .showStuding:
-            return .white.withAlphaComponent(0.1)
-        default:
-            return .primary50
-        }
-    }
-    
-    var foregroundColor: UIColor {
-        switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .showStuding, .duplicate, .retry, .studentCard:
-            return .white
-        }
-    }
-}
-
-class CustomButton: UIButton {
+final class CustomButton: UIButton {
     
     var buttonStyle: ButtonStyle
     var buttonState: ButtonState {
@@ -103,12 +35,7 @@ class CustomButton: UIButton {
         let titleString = AttributedString(buttonStyle.title, attributes: .init(
             [.font: buttonStyle == .studentCard ? UIFont.interBody2() : UIFont.interSubtitle2()]
         ))
-        
-        if buttonStyle == .showStuding {
-            config.background.strokeColor = .white
-            config.background.strokeWidth = 1.0
-        }
-        
+
         config.attributedTitle = titleString
         config.baseBackgroundColor = buttonStyle.disableBackground
         config.baseForegroundColor = buttonStyle.foregroundColor
@@ -125,7 +52,6 @@ class CustomButton: UIButton {
             layer.cornerRadius = 25
         }
         
-//        layer.cornerRadius = buttonStyle == .login ? 18 : 25
         clipsToBounds = true
     }
     

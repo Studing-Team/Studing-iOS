@@ -24,6 +24,8 @@ final class UniversityInfoViewController: UIViewController {
     private var viewModel: UniversityInfoViewModel
     weak var coordinator: SignUpCoordinator?
     
+    private var selectedSearchResultSubject = PassthroughSubject<String, Never>()
+    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Properties
@@ -83,6 +85,7 @@ private extension UniversityInfoViewController {
     func bindViewModel() {
         let input = UniversityInfoViewModel.Input(
             universityName: universityTitleTextField.textPublisher.eraseToAnyPublisher(),
+            selectUniversityName: selectedSearchResultSubject.eraseToAnyPublisher(),
             nextTap: nextButton.tapPublisher
         )
         
@@ -100,6 +103,21 @@ private extension UniversityInfoViewController {
                     self?.updateLayout(state: .noInput)
                 }
             }
+            .store(in: &cancellables)
+        
+        output.selectUniversity
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] selectName in
+                self?.universityTitleTextField.textField.text = selectName
+                self?.universityTitleTextField.setState(.success(type: .university))
+                self?.universityTitleTextField.updateRightButtonColor(.success(type: .university))
+                self?.updateLayout(state: .noInput)
+            }
+            .store(in: &cancellables)
+        
+        output.isEnableButton
+            .map { $0 ? ButtonState.activate : ButtonState.deactivate }
+            .assign(to: \.buttonState, on: nextButton)
             .store(in: &cancellables)
         
         output.majorInfoViewAction
@@ -204,6 +222,17 @@ private extension UniversityInfoViewController {
     }
     
     func setupDelegate() {
-        
+        self.searchResultCollectionView.searchResultDelegate = self
+    }
+}
+
+// MARK: - SearchResultCellDelegate
+
+extension UniversityInfoViewController: SearchResultCellDelegate {
+    func didSelectSearchResult(_ result: any SearchResultModel) {
+        if let universityResult = result as? UniversityInfoModel {
+            universityTitleTextField.textPublisher.send(universityResult.resultData)
+            selectedSearchResultSubject.send(universityResult.resultData)
+        }
     }
 }

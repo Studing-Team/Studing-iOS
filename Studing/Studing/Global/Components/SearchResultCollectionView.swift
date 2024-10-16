@@ -19,6 +19,10 @@ protocol SearchResultModel: Equatable, Hashable {
     var resultData: String { get }
 }
 
+protocol SearchResultCellDelegate: AnyObject {
+    func didSelectSearchResult(_ result: any SearchResultModel)
+}
+
 final class SearchResultCollectionView<T: SearchResultModel>: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     // MARK: - Properties
@@ -26,6 +30,8 @@ final class SearchResultCollectionView<T: SearchResultModel>: UICollectionView, 
     private var searchType: SearchType
     private var currentSearchName: String = ""
     private var data: [T] = []
+    
+    weak var searchResultDelegate: SearchResultCellDelegate?
     
     // MARK: - Init
     
@@ -61,6 +67,11 @@ final class SearchResultCollectionView<T: SearchResultModel>: UICollectionView, 
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedItem = data[indexPath.row]
+        searchResultDelegate?.didSelectSearchResult(selectedItem)
+    }
+    
     // sizeForItemAt: 각 Cell의 크기를 CGSize 형태로 return
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.convertByWidthRatio(335), height: 20)
@@ -91,5 +102,11 @@ private extension SearchResultCollectionView {
     func setupDelegate() {
         self.dataSource = self
         self.delegate = self
+    }
+}
+
+extension SearchResultCollectionView: SearchResultCellDelegate {
+    func didSelectSearchResult(_ result: any SearchResultModel) {
+        searchResultDelegate?.didSelectSearchResult(result)
     }
 }

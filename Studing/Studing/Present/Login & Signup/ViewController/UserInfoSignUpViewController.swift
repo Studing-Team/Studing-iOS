@@ -97,12 +97,12 @@ private extension UserInfoSignUpViewController {
             .sink { [weak self] state in
                 self?.userIdTitleTextField.setState(state)
                 
-                switch state {
-                case .normal, .invalid, .duplicate, .select:
-                    self?.duplicateIdButton.backgroundColor = .black30
-                case .success:
-                    self?.duplicateIdButton.backgroundColor = .primary50
-                }
+//                switch state {
+//                case .normal, .invalid, .duplicate, .select:
+//                    self?.duplicateIdButton.backgroundColor = .black30
+//                case .success:
+//                    self?.duplicateIdButton.backgroundColor = .primary50
+//                }
             }
             .store(in: &cancellables)
         
@@ -191,7 +191,7 @@ private extension UserInfoSignUpViewController {
         
         nextButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(16)
             $0.height.equalTo(48)
         }
     }
