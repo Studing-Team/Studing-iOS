@@ -16,6 +16,7 @@ final class MajorInfoViewModel: BaseViewModel {
     
     struct Input {
         let majorName: AnyPublisher<String, Never>
+        let selectMajorName: AnyPublisher<String, Never>
         let nextTap: AnyPublisher<Void, Never>
     }
     
@@ -23,6 +24,8 @@ final class MajorInfoViewModel: BaseViewModel {
     
     struct Output {
         let searchMajorResult: AnyPublisher<([MajorInfoModel], String), Never>
+        let selectUniversity: AnyPublisher<String, Never>
+        let isEnableButton: AnyPublisher<Bool, Never>
         let TermsOfServiceViewAction: AnyPublisher<Void, Never>
     }
     
@@ -50,8 +53,17 @@ final class MajorInfoViewModel: BaseViewModel {
             }
             .eraseToAnyPublisher()
         
+        let isEnableButton = Publishers.CombineLatest(input.majorName, input.selectMajorName)
+            .map { (majorName, selectedName) in
+                return !majorName.isEmpty && majorName == selectedName
+            }
+            .prepend(false)
+            .eraseToAnyPublisher()
+        
         return Output(
             searchMajorResult: majorNamesPublisher,
+            selectUniversity: input.selectMajorName,
+            isEnableButton: isEnableButton,
             TermsOfServiceViewAction: input.nextTap
         )
     }
