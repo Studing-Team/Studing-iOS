@@ -75,4 +75,18 @@ extension UIView {
         
         layer.insertSublayer(gradientLayer, at: 0)
     }
+    
+    func applyRadiusGradient(colors: [UIColor], direction: GradientDirection, locations: [NSNumber]? = nil) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = bounds
+        gradientLayer.colors = colors.map { $0.cgColor }
+        gradientLayer.startPoint = direction.startPoint
+        gradientLayer.endPoint = direction.endPoint
+        gradientLayer.locations = locations
+        gradientLayer.cornerRadius = 67 / 2
+        
+        layer.sublayers?.filter { $0 is CAGradientLayer }.forEach { $0.removeFromSuperlayer() }
+        
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
 }

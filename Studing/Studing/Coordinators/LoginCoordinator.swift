@@ -13,7 +13,7 @@ protocol LoginCoordinatorDelegate {
 
 final class LoginCoordinator: Coordinator {
     var navigationController: CustomSignUpNavigationController
-    var childCoordinators: [Coordinator] = []
+    var childCoordinators: [any Coordinator] = []
     var delegate: LoginCoordinatorDelegate?
     
     init(navigationController: CustomSignUpNavigationController) {
@@ -29,10 +29,18 @@ final class LoginCoordinator: Coordinator {
     func showSignUp() {
         let signUpCoordinator = SignUpCoordinator(navigationController: navigationController)
         childCoordinators.append(signUpCoordinator)
+        signUpCoordinator.delegate = self
         signUpCoordinator.start()
     }
     
     func login() {
         delegate?.didLoginFinishFlow(self)
+    }
+}
+
+extension LoginCoordinator: SignUpCoordinatorDelegate {
+    func didSignUpFinishFlow(_ coordinator: SignUpCoordinator) {
+        childCoordinators.removeAll { $0 === coordinator }
+        delegate?.didLoginFinishFlow(self)  // LoginCoordinator의 delegate 메서드를 호출
     }
 }

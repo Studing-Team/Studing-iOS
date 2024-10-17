@@ -7,10 +7,16 @@
 
 import UIKit
 
+protocol SignUpCoordinatorDelegate: AnyObject {
+    func didSignUpFinishFlow(_ coordinator: SignUpCoordinator)
+}
+
 final class SignUpCoordinator: Coordinator {
     var navigationController: CustomSignUpNavigationController
-    var childCoordinators: [Coordinator] = []
+    var childCoordinators: [any Coordinator] = []
+    
     weak var parentCoordinator: LoginCoordinator?
+    weak var delegate: SignUpCoordinatorDelegate?
     
     var universityName: String?
     var majorName: String?
@@ -80,8 +86,12 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushSuccessSignUpView() {
-        let successSignUpVC = SuccessSignUpViewController()
+        let successSignUpVC = SuccessSignUpViewController(coordinator: self)
         navigationController.pushViewController(successSignUpVC, animated: true)
+    }
+    
+    func finishSignUp() {
+        delegate?.didSignUpFinishFlow(self)
     }
 }
 
