@@ -19,6 +19,15 @@
 		3F1739702CBE496100DE8859 /* AuthWaitingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17396F2CBE496100DE8859 /* AuthWaitingViewModel.swift */; };
 		3F1739722CBEB45F00DE8859 /* AuthWaitCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739712CBEB45F00DE8859 /* AuthWaitCheckView.swift */; };
 		3F1739742CBF571F00DE8859 /* AuthWaitStateEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739732CBF571F00DE8859 /* AuthWaitStateEnum.swift */; };
+		3F1739762CC0103D00DE8859 /* TabBarItemEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739752CC0103D00DE8859 /* TabBarItemEnum.swift */; };
+		3F1739782CC0117300DE8859 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739772CC0117300DE8859 /* TabBarCoordinator.swift */; };
+		3F17397C2CC0139000DE8859 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17397B2CC0139000DE8859 /* HomeCoordinator.swift */; };
+		3F17397E2CC017F800DE8859 /* StoreCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17397D2CC017F800DE8859 /* StoreCoordinator.swift */; };
+		3F1739802CC0187B00DE8859 /* MypageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17397F2CC0187B00DE8859 /* MypageCoordinator.swift */; };
+		3F1739852CC01CAB00DE8859 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739842CC01CAB00DE8859 /* HomeViewController.swift */; };
+		3F1739872CC01CC300DE8859 /* StoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739862CC01CC300DE8859 /* StoreViewController.swift */; };
+		3F1739892CC01CDC00DE8859 /* MypageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739882CC01CDC00DE8859 /* MypageViewController.swift */; };
+		3F17398C2CC0861D00DE8859 /* CustomTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17398B2CC0861C00DE8859 /* CustomTabBarViewController.swift */; };
 		3F1F1F782CA27720006DFD76 /* StepCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F772CA27720006DFD76 /* StepCountView.swift */; };
 		3F1F1F7C2CA3B859006DFD76 /* CusomSignUpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */; };
 		3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */; };
@@ -96,6 +105,15 @@
 		3F17396F2CBE496100DE8859 /* AuthWaitingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthWaitingViewModel.swift; sourceTree = "<group>"; };
 		3F1739712CBEB45F00DE8859 /* AuthWaitCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthWaitCheckView.swift; sourceTree = "<group>"; };
 		3F1739732CBF571F00DE8859 /* AuthWaitStateEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthWaitStateEnum.swift; sourceTree = "<group>"; };
+		3F1739752CC0103D00DE8859 /* TabBarItemEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemEnum.swift; sourceTree = "<group>"; };
+		3F1739772CC0117300DE8859 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
+		3F17397B2CC0139000DE8859 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		3F17397D2CC017F800DE8859 /* StoreCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCoordinator.swift; sourceTree = "<group>"; };
+		3F17397F2CC0187B00DE8859 /* MypageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageCoordinator.swift; sourceTree = "<group>"; };
+		3F1739842CC01CAB00DE8859 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		3F1739862CC01CC300DE8859 /* StoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreViewController.swift; sourceTree = "<group>"; };
+		3F1739882CC01CDC00DE8859 /* MypageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewController.swift; sourceTree = "<group>"; };
+		3F17398B2CC0861C00DE8859 /* CustomTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarViewController.swift; sourceTree = "<group>"; };
 		3F1F1F772CA27720006DFD76 /* StepCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountView.swift; sourceTree = "<group>"; };
 		3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CusomSignUpNavigationController.swift; sourceTree = "<group>"; };
 		3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeLiterals.swift; sourceTree = "<group>"; };
@@ -180,6 +198,41 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		3F1739812CC01C7900DE8859 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				3F1739842CC01CAB00DE8859 /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		3F1739822CC01C8C00DE8859 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				3F1739862CC01CC300DE8859 /* StoreViewController.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		3F1739832CC01C9200DE8859 /* Mypage */ = {
+			isa = PBXGroup;
+			children = (
+				3F1739882CC01CDC00DE8859 /* MypageViewController.swift */,
+			);
+			path = Mypage;
+			sourceTree = "<group>";
+		};
+		3F17398A2CC01DE300DE8859 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				3F17398B2CC0861C00DE8859 /* CustomTabBarViewController.swift */,
+				3F1739812CC01C7900DE8859 /* Home */,
+				3F1739822CC01C8C00DE8859 /* Store */,
+				3F1739832CC01C9200DE8859 /* Mypage */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
 		3F25A3572C96A669006E2715 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,6 +281,10 @@
 				3F25A3632C96D001006E2715 /* AppCoordinator.swift */,
 				3F25A3652C96D058006E2715 /* LoginCoordinator.swift */,
 				3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */,
+				3F1739772CC0117300DE8859 /* TabBarCoordinator.swift */,
+				3F17397B2CC0139000DE8859 /* HomeCoordinator.swift */,
+				3F17397D2CC017F800DE8859 /* StoreCoordinator.swift */,
+				3F17397F2CC0187B00DE8859 /* MypageCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -328,6 +385,7 @@
 			isa = PBXGroup;
 			children = (
 				3F3992802C82D2A30045CF1E /* Login & Signup */,
+				3F17398A2CC01DE300DE8859 /* TabBar */,
 			);
 			path = Present;
 			sourceTree = "<group>";
@@ -395,6 +453,7 @@
 				3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */,
 				3F17396B2CBE442E00DE8859 /* CustomButtonEnum.swift */,
 				3F1739732CBF571F00DE8859 /* AuthWaitStateEnum.swift */,
+				3F1739752CC0103D00DE8859 /* TabBarItemEnum.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -540,12 +599,15 @@
 				3F82C3312CAE93B700492EEE /* StudentIdViewController.swift in Sources */,
 				3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */,
 				3F25A3592C96A676006E2715 /* UIView+.swift in Sources */,
+				3F1739892CC01CDC00DE8859 /* MypageViewController.swift in Sources */,
 				3F6AB78C2CBE3C77006D1A29 /* DashedLineBorderView.swift in Sources */,
+				3F1739782CC0117300DE8859 /* TabBarCoordinator.swift in Sources */,
 				3FEA67592CB81F2E00675805 /* TermsOfServiceViewModel.swift in Sources */,
 				3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */,
 				3F3CFDAC2C97321700DC9F9A /* UniversityInfoViewController.swift in Sources */,
 				3F82C3392CAE94A600492EEE /* NSObject+.swift in Sources */,
 				3F17396A2CBE43E100DE8859 /* AuthWaitingViewController.swift in Sources */,
+				3F17397E2CC017F800DE8859 /* StoreCoordinator.swift in Sources */,
 				3FEA675B2CB8BEF500675805 /* UILabel+.swift in Sources */,
 				3F82C32F2CAE936600492EEE /* NoExistsSearchResultView.swift in Sources */,
 				3F1F1F802CA3F4CF006DFD76 /* MajorInfoViewModel.swift in Sources */,
@@ -553,12 +615,14 @@
 				3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */,
 				3F1739722CBEB45F00DE8859 /* AuthWaitCheckView.swift in Sources */,
 				3F39925D2C82C8E40045CF1E /* LoginViewController.swift in Sources */,
+				3F1739872CC01CC300DE8859 /* StoreViewController.swift in Sources */,
 				3F3992592C82C8E40045CF1E /* AppDelegate.swift in Sources */,
 				3F3CFDB42C9742C900DC9F9A /* SuccessSignUpViewController.swift in Sources */,
 				3F17396E2CBE495200DE8859 /* AuthUniversityViewModel.swift in Sources */,
 				3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */,
 				3F3CFDAE2C97326000DC9F9A /* MajorInfoViewController.swift in Sources */,
 				3F25A3642C96D001006E2715 /* AppCoordinator.swift in Sources */,
+				3F17398C2CC0861D00DE8859 /* CustomTabBarViewController.swift in Sources */,
 				3FEA67572CB81A9A00675805 /* CheckBoxButton.swift in Sources */,
 				3F39925B2C82C8E40045CF1E /* SceneDelegate.swift in Sources */,
 				3F9DC8A82CB4ECA900850136 /* StudentIdInputCollectionCell.swift in Sources */,
@@ -575,6 +639,7 @@
 				3F162B842C9D987300DF2E1C /* LaunchScreenViewController.swift in Sources */,
 				3F3CFDC02C98093700DC9F9A /* UniversityInfoViewModel.swift in Sources */,
 				3F1739702CBE496100DE8859 /* AuthWaitingViewModel.swift in Sources */,
+				3F1739802CC0187B00DE8859 /* MypageCoordinator.swift in Sources */,
 				3F25A36A2C96D11A006E2715 /* LoginViewModel.swift in Sources */,
 				3F82C3352CAE946400492EEE /* SearchResultCollectionView.swift in Sources */,
 				3F3CFDB92C97BCF800DC9F9A /* Combine+.swift in Sources */,
@@ -584,7 +649,10 @@
 				3F3CFDBE2C97C47100DC9F9A /* UserInfo.swift in Sources */,
 				3F1739742CBF571F00DE8859 /* AuthWaitStateEnum.swift in Sources */,
 				3F1F1F782CA27720006DFD76 /* StepCountView.swift in Sources */,
+				3F1739762CC0103D00DE8859 /* TabBarItemEnum.swift in Sources */,
 				3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */,
+				3F1739852CC01CAB00DE8859 /* HomeViewController.swift in Sources */,
+				3F17397C2CC0139000DE8859 /* HomeCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
