@@ -5,6 +5,7 @@
 //  Created by ParkJunHyuk on 9/16/24.
 //
 
+import Combine
 import UIKit
 
 import SnapKit
@@ -14,6 +15,10 @@ final class SuccessSignUpViewController: UIViewController {
     
     // MARK: - Properties
     
+    weak var coordinator: SignUpCoordinator?
+    
+    private var cancellables = Set<AnyCancellable>()
+    
     // MARK: - UI Properties
     
     private let successTitleLabel = UILabel()
@@ -21,6 +26,17 @@ final class SuccessSignUpViewController: UIViewController {
     private let logoImage = UIImageView()
     private let studingTitleLabel = UILabel()
     private let mainHomeButton = CustomButton(buttonStyle: .showStudingHome)
+    
+    // MARK: - init
+    
+    init(coordinator: SignUpCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     
@@ -77,6 +93,7 @@ private extension SuccessSignUpViewController {
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 25.0
             $0.clipsToBounds = true
+            $0.addTarget(self, action: #selector(mainViewTap), for: .touchUpInside)
         }
         
         studingTitleLabel.do {
@@ -84,6 +101,11 @@ private extension SuccessSignUpViewController {
             $0.textColor = .white
             $0.font = .montserratExtraBold(size: 34)
         }
+    }
+    
+    @objc
+    func mainViewTap() {
+        self.coordinator?.finishSignUp()
     }
     
     func setupHierarchy() {

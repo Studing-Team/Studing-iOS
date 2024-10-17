@@ -8,8 +8,10 @@
 import UIKit
 
 final class AppCoordinator: Coordinator {
-    var navigationController: CustomSignUpNavigationController
-    var childCoordinators: [Coordinator] = []
+    typealias NavigationControllerType = CustomSignUpNavigationController
+    
+    var navigationController: NavigationControllerType
+    var childCoordinators: [any Coordinator] = []
     
     init(navigationController: CustomSignUpNavigationController) {
         self.navigationController = navigationController
@@ -57,8 +59,10 @@ final class AppCoordinator: Coordinator {
         loginCoordinator.start()
     }
 
-    private func showMainFlow() {
-        // TODO: - MainView 로의 전환
+    private func showTabBarFlow() {
+        let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
+        childCoordinators.append(tabBarCoordinator)
+        tabBarCoordinator.start()
     }
 }
 
@@ -67,6 +71,6 @@ final class AppCoordinator: Coordinator {
 extension AppCoordinator: LoginCoordinatorDelegate {
     func didLoginFinishFlow(_ coordinator: LoginCoordinator) {
         childCoordinators.removeAll { $0 === coordinator }
-        showMainFlow()
+        showTabBarFlow()
     }
 }
