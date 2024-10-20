@@ -6,6 +6,7 @@
 	<array>
 		<string>Inter-VariableFont_opsz,wght.ttf</string>
 		<string>Montserrat-ExtraBold.ttf</string>
+		<string>MontserratAlternates-Bold.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

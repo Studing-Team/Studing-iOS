@@ -17,12 +17,12 @@ final class MypageViewController: UIViewController {
     
     // MARK: - UI Properties
     
+    private let studingHeaderView = StudingHeaderView(type: .mypage)
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
         
         setNavigationBar()
         setupStyle()
@@ -40,15 +40,20 @@ private extension MypageViewController {
     }
     
     func setupStyle() {
+        view.applyGradient(colors: [.loginStartGradient.withFigmaStyleAlpha(0.3), .loginEndGradient.withFigmaStyleAlpha(0.3)], direction: .topToBottom, locations: [0, 1])
         
     }
     
     func setupHierarchy() {
-        
+        view.addSubviews(studingHeaderView)
     }
     
     func setupLayout() {
-        
+        studingHeaderView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(56)
+        }
     }
     
     func setupDelegate() {
