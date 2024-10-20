@@ -9,6 +9,7 @@ import UIKit
 
 enum FontName: String {
     case MontserratExtraBold = "Montserrat-ExtraBold"
+    case MontserratAlternatesBold = "MontserratAlternates-Bold"
     case InterRegualr = "Inter-Regular"
     case InterRegualrThin = "Inter-Regular_Thin"
     case InterRegualrExtraLight = "Inter-Regular_ExtraLight"
@@ -23,6 +24,10 @@ enum FontName: String {
 extension UIFont {
     @nonobjc class func montserratExtraBold(size: CGFloat) -> UIFont {
         return UIFont(name: FontName.MontserratExtraBold.rawValue, size: size)!
+    }
+    
+    @nonobjc class func montserratAlternatesBold(size: CGFloat) -> UIFont {
+        return UIFont(name: FontName.MontserratAlternatesBold.rawValue, size: size)!
     }
     
     @nonobjc class func interHeadline1() -> UIFont {
@@ -67,6 +72,10 @@ extension UIFont {
     
     @nonobjc class func interCaption12() -> UIFont {
         return UIFont(name: FontName.InterRegualr.rawValue, size: 12)!
+    }
+    
+    @nonobjc class func interCaption11() -> UIFont {
+        return UIFont(name: FontName.InterRegualr.rawValue, size: 11)!
     }
     
     @nonobjc class func interCaption10() -> UIFont {

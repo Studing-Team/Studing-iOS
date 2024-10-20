@@ -46,11 +46,13 @@ extension UIView {
     enum GradientDirection {
         case topRightToBottomLeft
         case leftToRight
+        case topToBottom
         
         var startPoint: CGPoint {
             switch self {
             case .topRightToBottomLeft: return CGPoint(x: 0.7, y: 0)
             case .leftToRight: return CGPoint(x: 0, y: 0.5)
+            case .topToBottom: return CGPoint(x: 0.5, y: 0)
             }
         }
         
@@ -58,6 +60,7 @@ extension UIView {
             switch self {
             case .topRightToBottomLeft: return CGPoint(x: 0, y: 1)
             case .leftToRight: return CGPoint(x: 1, y: 0.5)
+            case .topToBottom: return CGPoint(x: 0.5, y: 1)
             }
         }
     }
@@ -72,7 +75,7 @@ extension UIView {
         
         // 기존의 그라데이션 레이어가 있다면 제거
         layer.sublayers?.filter { $0 is CAGradientLayer }.forEach { $0.removeFromSuperlayer() }
-        
+
         layer.insertSublayer(gradientLayer, at: 0)
     }
     

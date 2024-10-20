@@ -49,4 +49,9 @@ enum StringLiterals {
         static let successSignUpTitle = "환영합니다!"
         static let successSignUpSubTitle = "스튜딩과 함께 대학생의 모든 것을 즐겨봐요"
     }
+    
+    enum Header {
+        static let nameTitle = "Studing"
+        static let mypateTItle = "마이페이지"
+    }
 }
