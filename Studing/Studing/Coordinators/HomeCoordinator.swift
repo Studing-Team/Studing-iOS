@@ -21,4 +21,12 @@ final class HomeCoordinator: Coordinator {
         let homeVC = HomeViewController()
         navigationController.pushViewController(homeVC, animated: true)
     }
+    
+    func pushDetailAnnouce() {
+        
+    }
+    
+    func pushDetailBookmarkAnnouce() {
+        
+    }
 }
