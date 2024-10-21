@@ -11,20 +11,6 @@ import UIKit
 import SnapKit
 import Then
 
-/// 섹션을 구분하는 열거형으로, 놓친 공지사항(missAnnouce)와 학생회(association),  학생회 공지사항(annouce), 저장한 공지사항(bookmark)  4 가지 섹션 타입을 정의합니다.
-enum SectionType: Int, CaseIterable {
-    case missAnnouce
-    case association
-    case annouce
-    case bookmark
-    case emptyBookmark
-}
-
-struct SectionData {
-    let type: SectionType
-    let items: [HomeSectionData]
-}
-
 final class HomeViewController: UIViewController {
     
     // MARK: - Properties
