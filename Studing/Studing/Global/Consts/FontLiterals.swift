@@ -89,4 +89,8 @@ extension UIFont {
     @nonobjc class func interPretendard() -> UIFont {
         return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 14)!
     }
+    
+    @nonobjc class func interChips12() -> UIFont {
+        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 12)!
+    }
 }
