@@ -20,6 +20,8 @@ final class MissAnnounceCollectionViewCell: UICollectionViewCell {
     private let missAnnounceCount = UILabel()
     private let subTitleLabel = UILabel()
     
+    private let bellImage = UIImageView()
+    
     // MARK: - Life Cycles
     
     override init(frame: CGRect) {
@@ -80,10 +82,15 @@ private extension MissAnnounceCollectionViewCell {
             $0.font = .interCaption12()
             $0.textColor = .white
         }
+        
+        bellImage.do {
+            $0.image = UIImage(resource: .bell)
+            $0.contentMode = .scaleAspectFit
+        }
     }
     
     func setupHierarchy() {
-        self.addSubviews(verticalStackView)
+        self.addSubviews(bellImage, verticalStackView)
     }
     
     func setupLayout() {
@@ -91,6 +98,13 @@ private extension MissAnnounceCollectionViewCell {
             $0.top.equalToSuperview().offset(45)
             $0.leading.equalToSuperview().offset(convertByWidthRatio(16))
             $0.bottom.equalToSuperview().inset(18)
+        }
+        
+        bellImage.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().inset(convertByWidthRatio(10))
+            $0.bottom.equalToSuperview().inset(10)
+            $0.size.equalTo(85)
         }
     }
 }
