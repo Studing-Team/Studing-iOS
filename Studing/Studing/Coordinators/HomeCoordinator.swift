@@ -19,14 +19,33 @@ final class HomeCoordinator: Coordinator {
 
     func start() {
         let homeVC = HomeViewController()
+        homeVC.coordinator = self
         navigationController.pushViewController(homeVC, animated: true)
+        navigationController.navigationItem.hidesBackButton = true
     }
     
     func pushDetailAnnouce() {
+        let annouceListVC = AnnouceListViewController(type: .association)
         
+        annouceListVC.hidesBottomBarWhenPushed = true
+        
+        if let customNav = navigationController as? CustomAnnouceNavigationController {
+            customNav.setNavigationType(.announce)
+            customNav.setNavigationTitle("학생회 공지 리스트")
+        }
+        
+        navigationController.pushViewController(annouceListVC, animated: true)
     }
     
     func pushDetailBookmarkAnnouce() {
+        let annouceListVC = AnnouceListViewController(type: .bookmark)
+        annouceListVC.hidesBottomBarWhenPushed = true
         
+        if let customNav = navigationController as? CustomAnnouceNavigationController {
+            customNav.setNavigationType(.announce)
+            customNav.setNavigationTitle("저장한 공지사항을 확인해요")
+        }
+        
+        navigationController.pushViewController(annouceListVC, animated: true)
     }
 }

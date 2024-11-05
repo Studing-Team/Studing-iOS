@@ -35,20 +35,23 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
     }
 
     func createTabController(_ item: TabBarItemType) -> UINavigationController {
-        let navigationController = UINavigationController()
+        var navigationController = UINavigationController()
         
         navigationController.setNavigationBarHidden(false, animated: false)
         
         switch item {
         case .home:
-            let homeCoordinator = HomeCoordinator(navigationController: navigationController)
+            navigationController = CustomAnnouceNavigationController()
+            let homeCoordinator = HomeCoordinator(navigationController: navigationController as! CustomAnnouceNavigationController)
             childCoordinators.append(homeCoordinator)
             homeCoordinator.start()
         case .store:
+            navigationController = UINavigationController()
             let storeCoordinator = StoreCoordinator(navigationController: navigationController)
             childCoordinators.append(storeCoordinator)
             storeCoordinator.start()
         case .mypage:
+            navigationController = UINavigationController()
             let mypageCoordinator = MypageCoordinator(navigationController: navigationController)
             childCoordinators.append(mypageCoordinator)
             mypageCoordinator.start()

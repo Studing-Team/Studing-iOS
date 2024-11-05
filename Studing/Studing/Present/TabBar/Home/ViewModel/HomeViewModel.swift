@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-
 final class HomeViewModel: BaseViewModel {
     
     var sectionsData = CurrentValueSubject<[SectionType]?, Never>(nil)

@@ -60,9 +60,16 @@ final class AppCoordinator: Coordinator {
     }
 
     private func showTabBarFlow() {
+        navigationController.viewControllers.removeAll()
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
         childCoordinators.append(tabBarCoordinator)
-        tabBarCoordinator.start()
+        
+        // 애니메이션과 함께 LoginFlow로 전환
+        UIView.transition(with: self.navigationController.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            tabBarCoordinator.start()
+        }, completion: { _ in
+            
+        })
     }
 }
 

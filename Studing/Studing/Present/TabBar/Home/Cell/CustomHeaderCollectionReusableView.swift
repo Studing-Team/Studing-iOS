@@ -44,13 +44,16 @@ extension CustomHeaderCollectionReusableView {
         switch type {
         case .missAnnouce:
             headerTitleLabel.text = ""
+            rightButton.isHidden = true
         case .association:
             headerTitleLabel.text = "\(headerTitle)의 학생회 소식"
             rightButton.isHidden = true
         case .annouce:
             headerTitleLabel.text = "\(headerTitle) 공지사항이에요"
+            rightButton.isHidden = false
         case .bookmark:
             headerTitleLabel.text = "\(headerTitle)님이 저장한 공지사항이에요"
+            rightButton.isHidden = false
         case .emptyBookmark:
             headerTitleLabel.text = "필요한 공지만 골라서 저장해요 :)"
             rightButton.isHidden = true
@@ -70,6 +73,7 @@ private extension CustomHeaderCollectionReusableView {
         }
         
         rightButton.do {
+            $0.isHidden = true
             $0.addTarget(self, action: #selector(didTapRightButton), for: .touchUpInside)
         }
     }
@@ -110,6 +114,6 @@ private extension CustomHeaderCollectionReusableView {
     }
     
     @objc private func didTapRightButton() {
-       rightButtonTapped?()  // 클로저 호출
+       rightButtonTapped?()
     }
 }

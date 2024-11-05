@@ -1,8 +1,8 @@
 //
-//  AnnouceCollectionViewCell.swift
+//  AnnouceListCollectionViewCell.swift
 //  Studing
 //
-//  Created by ParkJunHyuk on 10/18/24.
+//  Created by ParkJunHyuk on 10/21/24.
 //
 
 import UIKit
@@ -10,7 +10,9 @@ import UIKit
 import SnapKit
 import Then
 
-final class AnnouceCollectionViewCell: UICollectionViewCell {
+final class AnnouceListCollectionViewCell: UICollectionViewCell {
+    
+    private lazy var annouceTypeView = AnnouceTypeView()
     
     private let contentsImage = UIImageView()
     private let titleLabel = UILabel()
@@ -55,12 +57,12 @@ final class AnnouceCollectionViewCell: UICollectionViewCell {
 
 // MARK: - Extensions
 
-extension AnnouceCollectionViewCell {
-    func configureCell(forModel model: AssociationAnnounceModel) {
+extension AnnouceListCollectionViewCell {
+    func configureCell(forModel model: AssociationAnnounceListModel) {
         titleLabel.text = "\(model.title)"
         contentsLabel.text = "\(model.contents)"
         
-                postDayLabel.text = "\(model.days)"
+        postDayLabel.text = "\(model.days)"
         
         favoriteCount.text = "\(model.favoriteCount)"
         bookmarkCount.text = "\(model.bookmarkCount)"
@@ -69,12 +71,12 @@ extension AnnouceCollectionViewCell {
         favoriteImage.image = UIImage(resource: model.isFavorite == true ? .favorite : .favorite)
         bookmarkImage.image = UIImage(resource: model.isBookmark == true ? .bookmark : .bookmark)
         watchImage.image = UIImage(resource: .visibility)
+        
+        annouceTypeView.configure(type: model.type)
     }
 }
 
-// MARK: - Private Extensions
-
-private extension AnnouceCollectionViewCell {
+private extension AnnouceListCollectionViewCell {
     func setupStyle() {
         
         self.backgroundColor = .white.withAlphaComponent(0.7)
@@ -93,6 +95,7 @@ private extension AnnouceCollectionViewCell {
         titleLabel.do {
             $0.font = .interBody2()
             $0.textColor = .black50
+            $0.numberOfLines = 2
         }
         
         contentsLabel.do {
@@ -151,32 +154,44 @@ private extension AnnouceCollectionViewCell {
             $0.distribution = .fillProportionally
         }
         
-        contentsStackView.do {
-            $0.addArrangedSubviews(contentsImage, postStackView, bottomStackView)
-            $0.axis = .vertical
-            $0.spacing = 15
-            $0.distribution = .equalSpacing
-        }
-        
         postStackView.do {
             $0.addArrangedSubviews(titleLabel, contentsLabel)
             $0.axis = .vertical
             $0.spacing = 10
             $0.distribution = .equalSpacing
         }
+        
+        contentsStackView.do {
+            $0.addArrangedSubviews(contentsImage, postStackView)
+            $0.axis = .horizontal
+            $0.spacing = 10
+            $0.distribution = .equalSpacing
+        }
     }
     
     func setupHierarchy() {
-        self.addSubviews(contentsStackView)
+        self.addSubviews(annouceTypeView, contentsStackView, bottomStackView)
     }
     
     func setupLayout() {
+        annouceTypeView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.leading.equalToSuperview().inset(15)
+        }
+        
         contentsStackView.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(15)
+            $0.top.equalTo(annouceTypeView.snp.bottom).offset(9)
+            $0.horizontalEdges.equalToSuperview().inset(15)
+        }
+        
+        bottomStackView.snp.makeConstraints {
+            $0.top.equalTo(contentsStackView.snp.bottom).offset(9)
+            $0.horizontalEdges.equalToSuperview().inset(15)
+            $0.bottom.equalToSuperview().inset(10)
         }
         
         contentsImage.snp.makeConstraints {
-            $0.height.equalTo(199)
+            $0.size.equalTo(83)
         }
         
         divider.snp.makeConstraints {

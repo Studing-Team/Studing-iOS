@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum TabBarItemType: String, CaseIterable {
+enum TabBarItemType: Int, CaseIterable {
     case home, store, mypage
     
     func itemName() -> String {
