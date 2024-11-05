@@ -7,119 +7,154 @@
 
 import UIKit
 
-final class CustomTabBarViewController: UITabBarController {
-    
-    private let customTabBar = UIView()
-    private let customBackgroundTabBar = UIView()
-    private var tabbarStackView = UIStackView()
-    private var tabButtons = [UIButton]()
-    override var selectedIndex: Int {
-        didSet {
-            updateTabButtonAppearance()
-        }
-    }
+final class CustomTabBar: UITabBar {
+    private let containerView = UIView()
+    private let roundedView = UIView()
+    private var tabStackView = UIStackView()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        selectedIndex = 0
-        
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupStyle()
         setupHierarchy()
         setupLayout()
-        setupDelegate()
-        addTabBarButtons()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        customBackgroundTabBar.do {
-            $0.applyRadiusGradient(colors: [.loginStartGradient, .loginEndGradient], direction: .topRightToBottomLeft, locations: [-0.2, 1.3])
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-}
+    
+    // viewDidLayoutSubviews와 같은 역할을 하는 layoutSubviews 추가
+    override func layoutSubviews() {
+        super.layoutSubviews()
 
-// MARK: - Private Extensions
+        containerView.applyRadiusGradient(
+            colors: [.loginStartGradient, .loginEndGradient],
+            direction: .topRightToBottomLeft,
+            locations: [-0.2, 1.3]
+        )
+    }
+    
+    private func setupStyle() {
+        backgroundColor = .clear
 
-extension CustomTabBarViewController {
-    func setupStyle() {
-        customTabBar.do {
+        roundedView.do {
             $0.backgroundColor = .white
-            $0.layer.cornerRadius = 64 / 2
+            $0.layer.cornerRadius = 32
         }
         
-        tabbarStackView.do {
+        tabStackView.do {
             $0.axis = .horizontal
-            $0.distribution = .equalCentering
+            $0.distribution = .equalSpacing
             $0.alignment = .center
+            $0.spacing = 20
         }
     }
     
-    func setupHierarchy() {
-        view.addSubviews(customBackgroundTabBar)
-        customBackgroundTabBar.addSubview(customTabBar)
-        customTabBar.addSubview(tabbarStackView)
+    private func setupHierarchy() {
+        addSubview(containerView)
+        containerView.addSubview(roundedView)
+        roundedView.addSubview(tabStackView)
     }
     
-    func setupLayout() {
-        customBackgroundTabBar.snp.makeConstraints {
+    private func setupLayout() {
+        containerView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(11)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(1)
+            $0.bottom.equalToSuperview().inset(28)
+//            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
             $0.height.equalTo(67)
         }
         
-        customTabBar.snp.makeConstraints {
+        roundedView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(1)
             $0.verticalEdges.equalToSuperview().inset(0.6)
         }
         
-        tabbarStackView.snp.makeConstraints {
-            $0.edges.equalTo(customTabBar).inset(UIEdgeInsets(top: 6, left: 40, bottom: 6, right: 40))
+        tabStackView.snp.makeConstraints {
+            $0.edges.equalTo(roundedView).inset(UIEdgeInsets(top: 13, left: 40, bottom: 13, right: 40))
         }
     }
     
-    func addTabBarButtons() {
-        for type in TabBarItemType.allCases {
+    func addButton(_ button: UIButton) {
+        tabStackView.addArrangedSubview(button)
+    }
+    
+    func updateButtonAppearance(selectedIndex: Int) {
+        tabStackView.arrangedSubviews.enumerated().forEach { index, view in
+            guard let button = view as? UIButton else { return }
             
+            if index == selectedIndex {
+                button.tintColor = .primary50
+                var updatedConfig = button.configuration
+                updatedConfig?.baseForegroundColor = .primary50
+                button.configuration = updatedConfig
+            } else {
+                button.tintColor = .black20
+                var updatedConfig = button.configuration
+                updatedConfig?.baseForegroundColor = .black20
+                button.configuration = updatedConfig
+            }
+        }
+    }
+}
+
+final class CustomTabBarViewController: UITabBarController {
+    
+    private lazy var customTabBar: CustomTabBar = CustomTabBar()
+    
+    // selectedIndex가 변경될 때마다 호출되도록 override
+    override var selectedIndex: Int {
+        didSet {
+            print(selectedIndex)
+            updateTabButtonAppearance()
+        }
+    }
+    
+    // MARK: - Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        delegate = self
+        setValue(customTabBar, forKey: "tabBar")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupCustomTabBar()
+        selectedIndex = 0
+    }
+
+    private func setupCustomTabBar() {
+        
+        setValue(customTabBar, forKey: "tabBar")
+
+        for type in TabBarItemType.allCases {
+
             var config = UIButton.Configuration.plain()
             
             let titleString = AttributedString(type.itemName(), attributes: .init([.font: UIFont.interCaption10()]))
-
+            
             config.image = type.itemIcon().withRenderingMode(.alwaysTemplate)
             config.imagePlacement = .top
             config.imagePadding = 4
-
+            
             config.attributedSubtitle = titleString
-
+            
             let button = UIButton(configuration: config)
             button.tag = type.itemTag()
             button.tintColor = .black20
 
-            button.addTarget(self, action: #selector(tabBarButtonTapped(_:)), for: .touchUpInside)
+            customTabBar.addButton(button)
+        }
+    }
 
-            tabButtons.append(button)
-            tabbarStackView.addArrangedSubview(button)
-        }
-    }
-    
-    @objc private func tabBarButtonTapped(_ sender: UIButton) {
-        selectedIndex = sender.tag
-    }
-    
-    func updateTabButtonAppearance() {
-        for (index, button) in tabButtons.enumerated() {
-            if index == selectedIndex {
-                button.tintColor = .primary50  // 선택된 탭의 색상
-                button.configuration?.image?.withTintColor(.primary50)
-            } else {
-                button.tintColor = .black20   // 선택되지 않은 탭의 색상
-                button.configuration?.image?.withTintColor(.black20)
-            }
-        }
-    }
-    
-    func setupDelegate() {
-        
+    private func updateTabButtonAppearance() {
+        customTabBar.updateButtonAppearance(selectedIndex: selectedIndex)
+   }
+}
+
+// UITabBarControllerDelegate 구현
+extension CustomTabBarViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        updateTabButtonAppearance()
     }
 }

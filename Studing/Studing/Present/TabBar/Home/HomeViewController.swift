@@ -41,7 +41,6 @@ final class HomeViewController: UIViewController {
         configureDataSource()
         applySnapshot()
         
-        setNavigationBar()
         setupStyle()
         setupHierarchy()
         setupLayout()
@@ -55,6 +54,14 @@ final class HomeViewController: UIViewController {
         homeViewModel.getMySections()
         
         selectedAssociationSubject.send(0)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+        if let customNav = navigationController as? CustomAnnouceNavigationController {
+            customNav.setNavigationType(.home)
+        }
     }
 }
 
@@ -106,10 +113,6 @@ private extension HomeViewController {
 // MARK: - Private Extensions
 
 private extension HomeViewController {
-    func setNavigationBar() {
-        self.navigationController?.isNavigationBarHidden = true
-    }
-    
     func setupCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
@@ -425,6 +428,16 @@ private extension HomeViewController {
             
             // 헤더가 성공적으로 dequeue되었는지 확인
             guard let header = header else { return nil }
+        
+            // 버튼 탭 핸들러를 먼저 설정 (중요!)
+            if sectionType == .annouce || sectionType == .bookmark {
+                header.rightButtonTapped = { [weak self] in
+                    self?.selectedHeaderButtonSubject.send(sectionType)
+                }
+            } else {
+                header.rightButtonTapped = nil
+            }
+
             
             // 각 섹션별로 헤더 내용 설정
             switch sectionType {
@@ -433,16 +446,9 @@ private extension HomeViewController {
                 
             case .annouce:
                 header.configureHeader(type: .annouce, headerTitle: self?.homeViewModel.selectedAssociationTitle.value ?? "")
-                header.rightButtonTapped = {
-                    self?.selectedHeaderButtonSubject.send(.annouce)
-                }
                 
             case .bookmark:
                 header.configureHeader(type: .bookmark, headerTitle: "상우")
-                
-                header.rightButtonTapped = {
-                    self?.selectedHeaderButtonSubject.send(.bookmark)
-                }
                 
             case .emptyBookmark:
                 header.configureHeader(type: .emptyBookmark, headerTitle: "")
