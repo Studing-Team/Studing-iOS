@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 final class AnnouceListViewModel: BaseViewModel {
-    private let associationsSubject = CurrentValueSubject<[AssociationModel], Never>([])
-    private let announcesSubject = CurrentValueSubject<[AssociationAnnounceListModel], Never>([])
-    private let bookmarkSubject = CurrentValueSubject<[BookmarkModel], Never>([])
+    var associationsSubject = CurrentValueSubject<[AssociationModel], Never>([])
+    var announcesSubject = CurrentValueSubject<[AssociationAnnounceListModel], Never>([])
+    var bookmarkSubject = CurrentValueSubject<[BookmarkModel], Never>([])
     
     struct Input {
         
