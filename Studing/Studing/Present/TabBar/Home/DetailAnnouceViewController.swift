@@ -43,6 +43,14 @@ final class DetailAnnouceViewController: UIViewController {
     
     private let nextButton = UIButton()
     
+    private var collectionHeight: CGFloat = 0 {
+        didSet {
+            updateLayout()
+        }
+    }
+    
+    private var chagneHeight = false
+    
     // MARK: - init
     
     init(type: DetailAnnouceType, coordinator: HomeCoordinator) {
@@ -84,19 +92,29 @@ final class DetailAnnouceViewController: UIViewController {
         if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
             customNavController.setNavigationType(.detail)
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        print(collectionView.frame.height)
-        if !hasAddedExtraHeight {
-            
-            contentView.snp.remakeConstraints {
-                $0.edges.equalTo(scrollView.contentLayoutGuide)
-                $0.bottom.equalToSuperview()//.inset(30)
-                $0.width.equalTo(scrollView.frameLayoutGuide)
-                $0.height.equalTo(collectionView.frame.height + 50)
-            }
-            
-            hasAddedExtraHeight = true
+        print("size 높이:", collectionView.contentSize.height)
+        print("frame 높이:", collectionView.frame.height)
+        
+        if collectionView.contentSize.height > collectionView.frame.height && !chagneHeight {
+            collectionHeight = max(collectionView.contentSize.height, collectionHeight)
+            chagneHeight = true
         }
+    }
+    
+    func updateLayout() {
+        contentView.snp.remakeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)  // 가로 스크롤 방지
+            $0.bottom.equalToSuperview().inset(30)
+            $0.height.equalTo(collectionHeight - 40)
+        }
+        
+        view.layoutIfNeeded()
     }
 }
 
@@ -194,7 +212,7 @@ private extension DetailAnnouceViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(bookmarkButton.snp.top)
+            $0.bottom.equalTo(bookmarkButton.snp.centerY)
         }
         
         scrollView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
@@ -202,10 +220,11 @@ private extension DetailAnnouceViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.frameLayoutGuide)  // 가로 스크롤 방지
+            $0.height.equalTo(80 + 355 + 44 + 85)
         }
         
         collectionView.snp.makeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.edges.equalToSuperview()
         }
         
         likeButton.snp.makeConstraints {
@@ -288,7 +307,7 @@ private extension DetailAnnouceViewController {
             case .content:
                 section = self.createContentSection()
             }
- 
+            
             return section
         }
         
@@ -335,7 +354,7 @@ private extension DetailAnnouceViewController {
         // Group 정의
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),  // 섹션 너비의 100%
-            heightDimension: .absolute(335)       // 높이만 고정
+            heightDimension: .estimated(335)       // 높이만 고정
         )
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
