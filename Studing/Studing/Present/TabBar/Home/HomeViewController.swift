@@ -30,6 +30,17 @@ final class HomeViewController: UIViewController {
     private var collectionView: UICollectionView!
     private var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable>!
     
+    // MARK: - init
+    
+    init(coordinator: HomeCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -58,9 +69,9 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = true
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
-            customNav.setNavigationType(.home)
+        
+        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+            customNavController.setNavigationType(.home)
         }
     }
 }
@@ -84,9 +95,9 @@ private extension HomeViewController {
             .sink { [weak self] type in
                 switch type {
                 case .annouce:
-                    self?.coordinator?.pushDetailAnnouce()
+                    self?.coordinator?.pushAnnouceList()
                 case .bookmark:
-                    self?.coordinator?.pushDetailBookmarkAnnouce()
+                    self?.coordinator?.pushBookmarkList()
                 default:
                     break
                 }
@@ -516,18 +527,12 @@ private extension HomeViewController {
     }
     
     func setupHierarchy() {
-        view.addSubviews(studingHeaderView, collectionView)
+        view.addSubviews(collectionView)
     }
     
     func setupLayout() {
-        studingHeaderView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(56)
-        }
-        
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(studingHeaderView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
