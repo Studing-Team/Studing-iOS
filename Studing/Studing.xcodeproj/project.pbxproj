@@ -94,6 +94,14 @@
 		3FB2034F2CC5C450003F381D /* BookmarkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB2034E2CC5C450003F381D /* BookmarkModel.swift */; };
 		3FB203512CC5C47D003F381D /* EmptyBookmarkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB203502CC5C47D003F381D /* EmptyBookmarkModel.swift */; };
 		3FD4B8F72CD9E29500308E08 /* BookmarkListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B8F62CD9E29500308E08 /* BookmarkListCollectionViewCell.swift */; };
+		3FD4B8F92CD9FEB500308E08 /* DetailAnnouceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B8F82CD9FEB500308E08 /* DetailAnnouceViewController.swift */; };
+		3FD4B8FC2CDA03C500308E08 /* DetailAnnouceHeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B8FB2CDA03C500308E08 /* DetailAnnouceHeaderCollectionViewCell.swift */; };
+		3FD4B8FE2CDA0A4000308E08 /* DetailAnnouceImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B8FD2CDA0A4000308E08 /* DetailAnnouceImagesCollectionViewCell.swift */; };
+		3FD4B9002CDA0E0E00308E08 /* DetailAnnouceContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B8FF2CDA0E0E00308E08 /* DetailAnnouceContentCollectionViewCell.swift */; };
+		3FD4B9022CDA119300308E08 /* DetailAnnouceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B9012CDA119300308E08 /* DetailAnnouceViewModel.swift */; };
+		3FD4B9042CDA17FE00308E08 /* DetailAnnouceHeaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B9032CDA17FE00308E08 /* DetailAnnouceHeaderModel.swift */; };
+		3FD4B9062CDA180C00308E08 /* DetailAnnouceImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B9052CDA180C00308E08 /* DetailAnnouceImageModel.swift */; };
+		3FD4B9082CDA18CE00308E08 /* DetailAnnouceContentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD4B9072CDA18CE00308E08 /* DetailAnnouceContentModel.swift */; };
 		3FDEE9E32C970A7A00633C93 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3FDEE9E22C970A7A00633C93 /* SnapKit */; settings = {ATTRIBUTES = (Required, ); }; };
 		3FE042F62CC5CF5300B55EAA /* MypageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE042F52CC5CF5300B55EAA /* MypageModel.swift */; };
 		3FE042F82CC5CF9400B55EAA /* MypageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE042F72CC5CF9400B55EAA /* MypageViewModel.swift */; };
@@ -212,6 +220,14 @@
 		3FB2034E2CC5C450003F381D /* BookmarkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkModel.swift; sourceTree = "<group>"; };
 		3FB203502CC5C47D003F381D /* EmptyBookmarkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyBookmarkModel.swift; sourceTree = "<group>"; };
 		3FD4B8F62CD9E29500308E08 /* BookmarkListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListCollectionViewCell.swift; sourceTree = "<group>"; };
+		3FD4B8F82CD9FEB500308E08 /* DetailAnnouceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceViewController.swift; sourceTree = "<group>"; };
+		3FD4B8FB2CDA03C500308E08 /* DetailAnnouceHeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceHeaderCollectionViewCell.swift; sourceTree = "<group>"; };
+		3FD4B8FD2CDA0A4000308E08 /* DetailAnnouceImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceImagesCollectionViewCell.swift; sourceTree = "<group>"; };
+		3FD4B8FF2CDA0E0E00308E08 /* DetailAnnouceContentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceContentCollectionViewCell.swift; sourceTree = "<group>"; };
+		3FD4B9012CDA119300308E08 /* DetailAnnouceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceViewModel.swift; sourceTree = "<group>"; };
+		3FD4B9032CDA17FE00308E08 /* DetailAnnouceHeaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceHeaderModel.swift; sourceTree = "<group>"; };
+		3FD4B9052CDA180C00308E08 /* DetailAnnouceImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceImageModel.swift; sourceTree = "<group>"; };
+		3FD4B9072CDA18CE00308E08 /* DetailAnnouceContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnouceContentModel.swift; sourceTree = "<group>"; };
 		3FE042F52CC5CF5300B55EAA /* MypageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageModel.swift; sourceTree = "<group>"; };
 		3FE042F72CC5CF9400B55EAA /* MypageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewModel.swift; sourceTree = "<group>"; };
 		3FE042F92CC5D38F00B55EAA /* MyInfoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -266,12 +282,14 @@
 		3F1739812CC01C7900DE8859 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				3FD4B8FA2CDA03A300308E08 /* Detail Cell */,
 				3FE0432F2CC6653500B55EAA /* Enum */,
 				3F31B3E52CC164C300EE92D6 /* Cell */,
 				3F31B3E22CC1630B00EE92D6 /* Model */,
 				3F31B3DB2CC158F700EE92D6 /* View */,
 				3FE043322CC693EF00B55EAA /* AnnouceListViewController.swift */,
 				3F1739842CC01CAB00DE8859 /* HomeViewController.swift */,
+				3FD4B8F82CD9FEB500308E08 /* DetailAnnouceViewController.swift */,
 				3F31B3F02CC49CA500EE92D6 /* ViewModel */,
 			);
 			path = Home;
@@ -425,6 +443,9 @@
 				3FB2034E2CC5C450003F381D /* BookmarkModel.swift */,
 				3FB203502CC5C47D003F381D /* EmptyBookmarkModel.swift */,
 				3F57612E2CC78F8E0039AC11 /* AssociationAnnounceListModel.swift */,
+				3FD4B9032CDA17FE00308E08 /* DetailAnnouceHeaderModel.swift */,
+				3FD4B9052CDA180C00308E08 /* DetailAnnouceImageModel.swift */,
+				3FD4B9072CDA18CE00308E08 /* DetailAnnouceContentModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -449,6 +470,7 @@
 			children = (
 				3F31B3F12CC49CCB00EE92D6 /* HomeViewModel.swift */,
 				3FE0433A2CC7710A00B55EAA /* AnnouceListViewModel.swift */,
+				3FD4B9012CDA119300308E08 /* DetailAnnouceViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -591,6 +613,16 @@
 				3FEA67562CB81A9A00675805 /* CheckBoxButton.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		3FD4B8FA2CDA03A300308E08 /* Detail Cell */ = {
+			isa = PBXGroup;
+			children = (
+				3FD4B8FB2CDA03C500308E08 /* DetailAnnouceHeaderCollectionViewCell.swift */,
+				3FD4B8FD2CDA0A4000308E08 /* DetailAnnouceImagesCollectionViewCell.swift */,
+				3FD4B8FF2CDA0E0E00308E08 /* DetailAnnouceContentCollectionViewCell.swift */,
+			);
+			path = "Detail Cell";
 			sourceTree = "<group>";
 		};
 		3FDEE9E12C970A7A00633C93 /* Frameworks */ = {
@@ -774,6 +806,7 @@
 				3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */,
 				3F3CFDB02C9733A100DC9F9A /* TermsOfServiceViewController.swift in Sources */,
 				3F82C3312CAE93B700492EEE /* StudentIdViewController.swift in Sources */,
+				3FD4B9042CDA17FE00308E08 /* DetailAnnouceHeaderModel.swift in Sources */,
 				3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */,
 				3F25A3592C96A676006E2715 /* UIView+.swift in Sources */,
 				3F31B3E12CC1625D00EE92D6 /* UIColor+.swift in Sources */,
@@ -800,12 +833,15 @@
 				3F82C32F2CAE936600492EEE /* NoExistsSearchResultView.swift in Sources */,
 				3F1F1F802CA3F4CF006DFD76 /* MajorInfoViewModel.swift in Sources */,
 				3F57612F2CC78F8E0039AC11 /* AssociationAnnounceListModel.swift in Sources */,
+				3FD4B9002CDA0E0E00308E08 /* DetailAnnouceContentCollectionViewCell.swift in Sources */,
+				3FD4B9022CDA119300308E08 /* DetailAnnouceViewModel.swift in Sources */,
 				3F3CFDB22C973D7E00DC9F9A /* AuthUniversityViewController.swift in Sources */,
 				3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */,
 				3FB203492CC5C409003F381D /* AssociationModel.swift in Sources */,
 				3FB2034D2CC5C435003F381D /* MissAnnounceModel.swift in Sources */,
 				3F1739722CBEB45F00DE8859 /* AuthWaitCheckView.swift in Sources */,
 				3F39925D2C82C8E40045CF1E /* LoginViewController.swift in Sources */,
+				3FD4B9062CDA180C00308E08 /* DetailAnnouceImageModel.swift in Sources */,
 				3FE0432E2CC6631100B55EAA /* MyPageType.swift in Sources */,
 				3F1739872CC01CC300DE8859 /* StoreViewController.swift in Sources */,
 				3F3992592C82C8E40045CF1E /* AppDelegate.swift in Sources */,
@@ -823,6 +859,7 @@
 				3FB2034F2CC5C450003F381D /* BookmarkModel.swift in Sources */,
 				3FEA67572CB81A9A00675805 /* CheckBoxButton.swift in Sources */,
 				3F39925B2C82C8E40045CF1E /* SceneDelegate.swift in Sources */,
+				3FD4B8FE2CDA0A4000308E08 /* DetailAnnouceImagesCollectionViewCell.swift in Sources */,
 				3F9DC8A82CB4ECA900850136 /* StudentIdInputCollectionCell.swift in Sources */,
 				3FB203512CC5C47D003F381D /* EmptyBookmarkModel.swift in Sources */,
 				3F1F1F7C2CA3B859006DFD76 /* CusomSignUpNavigationController.swift in Sources */,
@@ -849,13 +886,16 @@
 				3F3CFDB92C97BCF800DC9F9A /* Combine+.swift in Sources */,
 				3FE043352CC696A600B55EAA /* AnnouceListCollectionViewCell.swift in Sources */,
 				3F59602D2CA13E8F00688FE3 /* TextFieldEnum.swift in Sources */,
+				3FD4B8FC2CDA03C500308E08 /* DetailAnnouceHeaderCollectionViewCell.swift in Sources */,
 				3F17396C2CBE442E00DE8859 /* CustomButtonEnum.swift in Sources */,
 				3FB2034B2CC5C41A003F381D /* AssociationAnnounceModel.swift in Sources */,
 				3FE042FA2CC5D38F00B55EAA /* MyInfoCollectionViewCell.swift in Sources */,
 				3F25A3712C96D4D9006E2715 /* UserInfoSignUpViewController.swift in Sources */,
 				3F3CFDBE2C97C47100DC9F9A /* UserInfo.swift in Sources */,
 				3F1739742CBF571F00DE8859 /* AuthWaitStateEnum.swift in Sources */,
+				3FD4B9082CDA18CE00308E08 /* DetailAnnouceContentModel.swift in Sources */,
 				3F1F1F782CA27720006DFD76 /* StepCountView.swift in Sources */,
+				3FD4B8F92CD9FEB500308E08 /* DetailAnnouceViewController.swift in Sources */,
 				3F1739762CC0103D00DE8859 /* TabBarItemEnum.swift in Sources */,
 				3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */,
 				3F1739852CC01CAB00DE8859 /* HomeViewController.swift in Sources */,
