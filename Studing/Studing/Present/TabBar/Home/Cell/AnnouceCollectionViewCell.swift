@@ -60,7 +60,7 @@ extension AnnouceCollectionViewCell {
         titleLabel.text = "\(model.title)"
         contentsLabel.text = "\(model.contents)"
         
-                postDayLabel.text = "\(model.days)"
+        postDayLabel.text = "\(model.days)"
         
         favoriteCount.text = "\(model.favoriteCount)"
         bookmarkCount.text = "\(model.bookmarkCount)"

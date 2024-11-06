@@ -13,141 +13,251 @@ import Then
 enum NavigationType {
     case home
     case announce
+    case detail
 }
 
 final class CustomAnnouceNavigationController: UINavigationController {
     
-     // MARK: - Properties
+    // MARK: - Properties
     
-    private let navigationHeight: CGFloat = 60
-     private var currentType: NavigationType = .home
-    
-    // UI 업데이트를 담당하는 별도 메서드
-    private func updateNavigationUI(isHidden: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.hideDefaultNavigationBar()
-            self.safeAreaView.isHidden = isHidden
-            self.customNavigationBar.isHidden = isHidden
-            self.setupSafeArea(navigationBarHidden: isHidden)
-        }
-    }
-    
-    override var isNavigationBarHidden: Bool {
+    private var navigationHeight: CGFloat = 0
+    private var currentType: NavigationType = .home {
         didSet {
-            // UI 업데이트를 별도 메서드로 분리
-            updateNavigationUI(isHidden: isNavigationBarHidden)
+            updateNavigationVisibility()
         }
     }
-     
-     // MARK: - UI Properties
     
-     private let customNavigationBar = UIView()
-     private let leftButton = UIButton()
-     private let titleLabel = UILabel()
-     private let safeAreaView: UIView = UIView()
-     
-     // MARK: - Life Cycle
-     override func viewDidLoad() {
-         super.viewDidLoad()
-         navigationBar.isHidden = true
-         
-         setupStyle()
-         setupHierarchy()
-         setupLayout()
-     }
- }
+    // MARK: - UI Properties
+    
+    private let customNavigationBar = UIView()
+    private let leftButton = UIButton()
+    private let titleLabel = UILabel()
+    private let safeAreaView: UIView = UIView()
+    private let divider = UIView()
+    
+    // MARK: - Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationBar.isHidden = true
+        
+        setupStyle()
+        setupHierarchy()
+        setupLayout()
+    }
+}
 
- private extension CustomAnnouceNavigationController {
-     
-     /// DefaultNavigationBar를 hidden 시켜주는 함수
-     func hideDefaultNavigationBar() {
-         navigationBar.isHidden = true
-     }
-     
-     /// navigationBar가 hidden 상태인지 아닌지에 따라 view의 safeArea를 정해주는 함수
-     func setupSafeArea(navigationBarHidden: Bool) {
-         if navigationBarHidden {
-             additionalSafeAreaInsets = UIEdgeInsets(top: 0,
-                                                     left: 0,
-                                                     bottom: 0,
-                                                     right: 0)
-         } else {
-             additionalSafeAreaInsets = UIEdgeInsets(top: navigationHeight,
-                                                     left: 0,
-                                                     bottom: 0,
-                                                     right: 0)
-         }
-     }
+private extension CustomAnnouceNavigationController {
+    
+    /// DefaultNavigationBar를 hidden 시켜주는 함수
+    func hideDefaultNavigationBar() {
+        navigationBar.isHidden = true
+    }
+    
+    /// navigationBar가 hidden 상태인지 아닌지에 따라 view의 safeArea를 정해주는 함수
+    func setupSafeArea(navigationBarHidden: Bool) {
+        if navigationBarHidden {
+            additionalSafeAreaInsets = UIEdgeInsets(top: 0,
+                                                    left: 0,
+                                                    bottom: 0,
+                                                    right: 0)
+        } else {
+            additionalSafeAreaInsets = UIEdgeInsets(top: navigationHeight,
+                                                    left: 0,
+                                                    bottom: 0,
+                                                    right: 0)
+        }
+    }
+    
+    func setupStyle() {
+        customNavigationBar.do {
+            $0.backgroundColor = .clear
+        }
+        
+        titleLabel.do {
+            $0.font = .interSubtitle1()
+            $0.textColor = .black50
+        }
+        
+        leftButton.do {
+            $0.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+            $0.tintColor = .black50
+            $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        }
+        
+        divider.do {
+            $0.backgroundColor = .black10
+        }
+    }
+    
+    func setupHierarchy() {
+        view.addSubviews(safeAreaView)
+        safeAreaView.addSubviews(customNavigationBar, divider)
+        customNavigationBar.addSubviews(leftButton, titleLabel)
+    }
+    
+    private func applyHomeLayout() {
+        safeAreaView.snp.remakeConstraints {
+            $0.bottom.equalTo(view.snp.topMargin)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
+        }
+        
+        customNavigationBar.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        titleLabel.snp.remakeConstraints {
+            $0.leading.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview()
+        }
+    }
+    
+    private func applyDefaultLayout() {
+        // 기존 레이아웃
+        safeAreaView.snp.remakeConstraints {
+            $0.bottom.equalTo(view.snp.topMargin)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
+        }
+        
+        customNavigationBar.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        leftButton.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            //            $0.centerY.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-8)
+            $0.size.equalTo(24)
+        }
+        
+        titleLabel.snp.remakeConstraints {
+            $0.leading.equalTo(leftButton.snp.trailing).offset(10)
+            $0.centerY.equalTo(leftButton)
+        }
+    }
+    
+    private func applyDetailLayout() {
+        
+        print("디테일 시작")
+        // 디테일 화면용 레이아웃
+        safeAreaView.snp.remakeConstraints {
+            $0.bottom.equalTo(view.snp.topMargin)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
+        }
+        
+        customNavigationBar.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        leftButton.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.centerY.equalToSuperview()
+            $0.size.equalTo(24)
+        }
+        
+        titleLabel.snp.remakeConstraints {
+            $0.centerX.equalToSuperview()  // 가로 중앙 정렬
+            $0.centerY.equalTo(leftButton) // leftButton과 같은 세로선상에 위치
+        }
+        
+        divider.snp.remakeConstraints {
+            $0.top.equalTo(customNavigationBar.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+    }
+    
+    private func setupLayout() {
+        // 초기 레이아웃 설정
+        updateNavigationVisibility()
+    }
+    
+    private func updateNavigationVisibility() {
+        switch currentType {
+        case .home:
+            navigationHeight = 56
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            leftButton.isHidden = true
+            setupSafeArea(navigationBarHidden: false)
+            
+            applyHomeStyle()
+            applyHomeLayout()
+            
+        case .announce:
+            navigationHeight = 60
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            divider.isHidden = true
+            leftButton.isHidden = false
+            setupSafeArea(navigationBarHidden: false)
+            
+            // announce 스타일 적용
+            applyAnnounceStyle()
+            applyDefaultLayout()
+            
+        case .detail:
+            navigationHeight = 50
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            divider.isHidden = false
+            setupSafeArea(navigationBarHidden: false)
+            
+            // detail 스타일 적용
+            applyDetailStyle()
+            applyDetailLayout()
+        }
+    }
+    
+    @objc private func backButtonTapped(_ sender: UIButton) {
+        print("뒤로가기 버튼 동작")
+        self.popViewController(animated: true)
+    }
+    
+    private func applyHomeStyle() {
+        // announce 스타일 설정
+        customNavigationBar.backgroundColor = .clear
+        titleLabel.font = .montserratAlternatesBold(size: 28)
+        titleLabel.textColor = .black50
+        leftButton.tintColor = .black50
+    }
+    
+    private func applyAnnounceStyle() {
+        // announce 스타일 설정
+        customNavigationBar.backgroundColor = .clear
+        titleLabel.font = .interSubtitle1()
+        titleLabel.textColor = .black50
+        leftButton.tintColor = .black50
+    }
+    
+    private func applyDetailStyle() {
+        // detail 스타일 설정
+        customNavigationBar.backgroundColor = .black5
+        titleLabel.font = .interSubtitle1()
+        titleLabel.textColor = .black50
+        leftButton.tintColor = .black50
+    }
+}
 
-     func setupStyle() {
-         customNavigationBar.do {
-             $0.backgroundColor = .clear
-         }
-         
-         titleLabel.do {
-             $0.font = .interSubtitle1()
-             $0.textColor = .black50
-         }
-         
-         leftButton.do {
-             $0.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
-             $0.tintColor = .black50
-             $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-         }
-     }
-     
-     func setupHierarchy() {
-         view.addSubviews(safeAreaView, customNavigationBar)
-         customNavigationBar.addSubviews(leftButton, titleLabel)
-     }
-     
-     func setupLayout() {
-         safeAreaView.snp.makeConstraints {
-             $0.bottom.equalTo(view.snp.topMargin)
-             $0.horizontalEdges.equalToSuperview()
-             $0.height.equalTo(navigationHeight)
-         }
-         
-         customNavigationBar.snp.makeConstraints {
-             $0.top.equalTo(view.safeAreaLayoutGuide)
-             $0.leading.trailing.equalToSuperview()
-//             $0.height.equalTo(49)
-         }
-         
-         leftButton.snp.makeConstraints {
-             $0.leading.equalToSuperview().offset(16)
-             $0.bottom.equalToSuperview().offset(-8)
-             $0.size.equalTo(24)
-         }
-         
-         titleLabel.snp.makeConstraints {
-             $0.leading.equalTo(leftButton.snp.trailing).offset(10)
-             $0.centerY.equalTo(leftButton)
-         }
-     }
-     
-//     func updateNavigationVisibility() {
-//         switch currentType {
-//         case .home:
-//             customNavigationBar.isHidden = true
-//         case .announce:
-//             customNavigationBar.isHidden = false
-//         }
-//     }
-     
-     @objc private func backButtonTapped() {
-         popViewController(animated: true)
-     }
- }
-
- // MARK: - Public Methods
- extension CustomAnnouceNavigationController {
-     func setNavigationType(_ type: NavigationType) {
-         currentType = type
-     }
-     
-     func setNavigationTitle(_ title: String) {
-         titleLabel.text = title
-     }
- }
+// MARK: - Public Methods
+extension CustomAnnouceNavigationController {
+    func setNavigationType(_ type: NavigationType) {
+        currentType = type
+        
+        switch type {
+        case .announce:
+            setNavigationTitle("학생회 공지 리스트")
+        case .detail:
+            setNavigationTitle("공지사항")
+        case .home:
+            setNavigationTitle("Studing")
+        }
+    }
+    
+    func setNavigationTitle(_ title: String) {
+        titleLabel.text = title
+    }
+}

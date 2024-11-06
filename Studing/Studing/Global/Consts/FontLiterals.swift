@@ -47,15 +47,15 @@ extension UIFont {
     }
     
     @nonobjc class func interSubtitle1() -> UIFont {
-        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 18)!
+        return UIFont(name: FontName.InterRegualrBold.rawValue, size: 18)!
     }
     
     @nonobjc class func interSubtitle2() -> UIFont {
-        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 16)!
+        return UIFont(name: FontName.InterRegualrBold.rawValue, size: 16)!
     }
     
     @nonobjc class func interSubtitle3() -> UIFont {
-        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 14)!
+        return UIFont(name: FontName.InterRegualrBold.rawValue, size: 14)!
     }
     
     @nonobjc class func interBody1() -> UIFont {

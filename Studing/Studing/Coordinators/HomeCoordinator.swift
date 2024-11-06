@@ -18,27 +18,29 @@ final class HomeCoordinator: Coordinator {
     }
 
     func start() {
-        let homeVC = HomeViewController()
-        homeVC.coordinator = self
+        let homeVC = HomeViewController(coordinator: self)
+        
+        if let customNav = navigationController as? CustomAnnouceNavigationController {
+            customNav.setNavigationType(.home)
+        }
+        
         navigationController.pushViewController(homeVC, animated: true)
-        navigationController.navigationItem.hidesBackButton = true
     }
     
-    func pushDetailAnnouce() {
-        let annouceListVC = AnnouceListViewController(type: .association)
+    func pushAnnouceList() {
+        let annouceListVC = AnnouceListViewController(type: .association, coordinator: self)
         
         annouceListVC.hidesBottomBarWhenPushed = true
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {
             customNav.setNavigationType(.announce)
-            customNav.setNavigationTitle("학생회 공지 리스트")
         }
         
         navigationController.pushViewController(annouceListVC, animated: true)
     }
     
-    func pushDetailBookmarkAnnouce() {
-        let annouceListVC = AnnouceListViewController(type: .bookmark)
+    func pushBookmarkList() {
+        let annouceListVC = AnnouceListViewController(type: .bookmark, coordinator: self)
         annouceListVC.hidesBottomBarWhenPushed = true
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {
@@ -47,5 +49,16 @@ final class HomeCoordinator: Coordinator {
         }
         
         navigationController.pushViewController(annouceListVC, animated: true)
+    }
+    
+    func pushDetailAnnouce() {
+        let detailAnnouceVC = DetailAnnouceViewController(type: .bookmarkAnnouce, coordinator: self)
+        detailAnnouceVC.hidesBottomBarWhenPushed = true
+        
+        if let customNav = navigationController as? CustomAnnouceNavigationController {
+            customNav.setNavigationType(.detail)
+        }
+        
+        navigationController.pushViewController(detailAnnouceVC, animated: true)
     }
 }

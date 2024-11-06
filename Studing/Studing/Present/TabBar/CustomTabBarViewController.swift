@@ -60,7 +60,6 @@ final class CustomTabBar: UITabBar {
         containerView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(11)
             $0.bottom.equalToSuperview().inset(28)
-//            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
             $0.height.equalTo(67)
         }
         
@@ -114,7 +113,16 @@ final class CustomTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
+        
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .clear
+        appearance.shadowImage = UIImage()
+        
         setValue(customTabBar, forKey: "tabBar")
+        
+        customTabBar.standardAppearance = appearance
+        customTabBar.scrollEdgeAppearance = appearance
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,9 +132,6 @@ final class CustomTabBarViewController: UITabBarController {
     }
 
     private func setupCustomTabBar() {
-        
-        setValue(customTabBar, forKey: "tabBar")
-
         for type in TabBarItemType.allCases {
 
             var config = UIButton.Configuration.plain()
