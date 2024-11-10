@@ -17,6 +17,8 @@ final class AnnouceTypeView: UIView {
     private let backgroundView = UIView()
     private let typeTitleLabel = UILabel()
     
+    // MARK: - init
+    
     init() {
         super.init(frame: .zero)
         
@@ -34,7 +36,9 @@ final class AnnouceTypeView: UIView {
     }
 }
 
-extension AnnouceTypeView {
+// MARK: - Private Extensions
+
+private extension AnnouceTypeView {
     func setupStyle(_ type: AnnouceType) {
         backgroundView.do {
             $0.backgroundColor = .clear

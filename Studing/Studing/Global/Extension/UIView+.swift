@@ -92,4 +92,37 @@ extension UIView {
         
         layer.insertSublayer(gradientLayer, at: 0)
     }
+    
+    func applyGradientBorder(colors: [UIColor], direction: GradientDirection, locations: [NSNumber]? = nil, width: CGFloat = 1) {
+        // 기존 그라데이션 레이어 제거
+        layer.sublayers?.filter { $0.name == "gradientBorder" }.forEach { $0.removeFromSuperlayer() }
+        
+        // 그라데이션 경로 생성
+        let path = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius)
+        
+        // 그라데이션 레이어 생성
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = bounds
+        gradientLayer.colors = colors.map { $0.cgColor }
+        gradientLayer.startPoint = direction.startPoint
+        gradientLayer.endPoint = direction.endPoint
+        gradientLayer.name = "gradientBorder"
+        
+        // 테두리 마스크 생성
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.lineWidth = width
+        shapeLayer.path = path.cgPath
+        shapeLayer.fillColor = nil
+        shapeLayer.strokeColor = UIColor.black.cgColor // 임시 색상
+        
+        // 그라데이션을 테두리에만 적용
+        gradientLayer.mask = shapeLayer
+        
+        // 뷰에 추가
+        layer.addSublayer(gradientLayer)
+    }
+    
+    func removeGradientBorder() {
+        layer.sublayers?.filter { $0.name == "gradientBorder" }.forEach { $0.removeFromSuperlayer() }
+    }
 }

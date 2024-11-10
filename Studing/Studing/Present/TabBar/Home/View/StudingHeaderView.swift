@@ -26,6 +26,8 @@ final class StudingHeaderView: UIView {
     private let titleLabel = UILabel()
     private lazy var alarmImageView = UIImageView()
     
+    // MARK: - init
+    
     init(type: StudingHeaderType) {
         self.type = type
         super.init(frame: .zero)
