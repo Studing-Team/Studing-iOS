@@ -46,6 +46,11 @@ extension UIFont {
         return UIFont(name: FontName.InterRegualrMedium.rawValue, size: 20)!
     }
     
+    // 제휴업체 버튼
+    @nonobjc class func interHeadline5() -> UIFont {
+        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 14)!
+    }
+    
     @nonobjc class func interSubtitle1() -> UIFont {
         return UIFont(name: FontName.InterRegualrBold.rawValue, size: 18)!
     }
@@ -58,6 +63,10 @@ extension UIFont {
         return UIFont(name: FontName.InterRegualrBold.rawValue, size: 14)!
     }
     
+    @nonobjc class func interSubtitle4() -> UIFont {
+        return UIFont(name: FontName.InterRegualrBold.rawValue, size: 12)!
+    }
+    
     @nonobjc class func interBody1() -> UIFont {
         return UIFont(name: FontName.InterRegualr.rawValue, size: 16)!
     }
@@ -68,6 +77,16 @@ extension UIFont {
     
     @nonobjc class func interBody3() -> UIFont {
         return UIFont(name: FontName.InterRegualr.rawValue, size: 14)!
+    }
+    
+    /// 제휴 업체 주소
+    @nonobjc class func interBody4() -> UIFont {
+        return  UIFont(name: FontName.InterRegualr.rawValue, size: 11)!
+    }
+    
+    /// 제휴 업체 설명
+    @nonobjc class func interBody5() -> UIFont {
+        return  UIFont(name: FontName.InterRegualrMedium.rawValue, size: 14)!
     }
     
     @nonobjc class func interCaption12() -> UIFont {

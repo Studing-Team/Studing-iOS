@@ -19,7 +19,8 @@ final class StoreCoordinator: Coordinator {
     }
     
     func start() {
-        let storeVC = StoreViewController()
+        let storeVM = StoreViewModel()
+        let storeVC = StoreViewController(storeViewModel: storeVM)
         navigationController.pushViewController(storeVC, animated: true)
     }
 }
