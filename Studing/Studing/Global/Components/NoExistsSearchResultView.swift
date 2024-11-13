@@ -98,7 +98,6 @@ private extension NoExistsSearchResultView {
         }
         
         addInfoButton.snp.makeConstraints {
-            $0.top.equalTo(searchResultSubTitleLabel.snp.bottom).offset(convertByHeightRatio(135))
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview()
             $0.height.equalTo(48)

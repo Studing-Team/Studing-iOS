@@ -35,7 +35,7 @@ extension UIFont {
     }
     
     @nonobjc class func interHeadline2() -> UIFont {
-        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 24)!
+        return UIFont(name: FontName.InterRegualrBold.rawValue, size: 24)!
     }
     
     @nonobjc class func interHeadline3() -> UIFont {
