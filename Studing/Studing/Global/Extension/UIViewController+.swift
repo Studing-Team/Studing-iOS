@@ -66,3 +66,87 @@ extension UIViewController {
         navigationController?.popViewController(animated: true)
     }
 }
+
+/// 키보드 표시에 따른 화면 조정을 처리하는 UIViewController 확장
+extension UIViewController {
+   /// 키보드 이벤트 처리를 위한 설정을 수행하는 메서드
+   /// - Parameter spacing: 키보드와 텍스트필드 사이의 여백 (기본값: 40pt)
+   func setupKeyboardHandling(with spacing: CGFloat = 40) {
+       // 키보드가 나타날 때의 알림 observer 등록
+       NotificationCenter.default.addObserver(
+           self,                                        // 현재 ViewController를 observer로 등록
+           selector: #selector(handleKeyboardWillShow), // 키보드 표시 시 호출될 메서드
+           name: UIResponder.keyboardWillShowNotification, // 키보드 표시 알림
+           object: nil                                  // 특정 객체의 알림만 받지 않고 모든 알림 수신
+       )
+       
+       // 키보드가 사라질 때의 알림 observer 등록
+       NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(handleKeyboardWillHide),
+           name: UIResponder.keyboardWillHideNotification,
+           object: nil
+       )
+       
+       // 화면 터치 시 키보드를 숨기기 위한 제스처 추가
+       let tapGesture = UITapGestureRecognizer(
+           target: self,
+           action: #selector(dismissKeyboard)
+       )
+       view.addGestureRecognizer(tapGesture)
+   }
+   
+   /// 키보드가 나타날 때 호출되는 메서드
+   /// - Parameter notification: 키보드 관련 정보를 포함한 알림 객체
+   @objc private func handleKeyboardWillShow(_ notification: NSNotification) {
+       // notification에서 키보드 크기와 애니메이션 시간 추출
+       guard let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+             let duration: Double = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
+           return
+       }
+       
+       // 키보드의 실제 높이 계산
+       let keyboardHeight = keyboardFrame.cgRectValue.height
+       print("⌨️ Keyboard height: \(keyboardHeight)")
+       
+       // 현재 포커스된 텍스트필드 찾기
+       if let activeField = view.firstResponder as? UITextField {
+           // 텍스트필드의 좌표를 현재 view의 좌표계로 변환
+           let fieldFrame = activeField.convert(activeField.bounds, to: view)
+           print("📱 Field frame: \(fieldFrame)")
+           
+           // 텍스트필드 하단부터 화면 하단까지의 거리 계산
+           let distanceToBottom = view.frame.height - (fieldFrame.origin.y + fieldFrame.height)
+           print("↕️ Distance to bottom: \(distanceToBottom)")
+           
+           // 키보드에 의해 가려지는 공간 계산 (여유 공간 40pt 추가)
+           let collapseSpace = keyboardHeight - distanceToBottom + 80
+           print("📏 Collapse space: \(collapseSpace)")
+           
+           // 텍스트필드가 키보드에 가려질 경우에만 화면을 위로 이동
+           if collapseSpace > 0 {
+               // 설정된 시간동안 부드럽게 화면 이동 애니메이션 실행
+               UIView.animate(withDuration: duration) {
+                   self.view.frame.origin.y = -collapseSpace  // 화면을 위로 이동
+                   print("⬆️ Moving view up by: \(collapseSpace)")
+               }
+           }
+       }
+   }
+   
+   /// 키보드가 사라질 때 호출되는 메서드
+   /// - Parameter notification: 키보드 관련 정보를 포함한 알림 객체
+   @objc private func handleKeyboardWillHide(_ notification: NSNotification) {
+       // notification에서 애니메이션 시간 추출
+       guard let duration: Double = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
+           return
+       }
+       
+       print("⬇️ Moving view back to original position")
+       // 설정된 시간동안 부드럽게 화면을 원래 위치로 되돌리는 애니메이션 실행
+       UIView.animate(withDuration: duration) {
+           self.view.frame.origin.y = 0  // 화면을 원래 위치로 복원
+       }
+   }
+}
+

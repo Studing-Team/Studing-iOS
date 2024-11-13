@@ -10,6 +10,7 @@ import UIKit
 enum TextFieldState {
     case normal(type: TextFieldInputType)
     case select(type: TextFieldInputType)
+    case validSuccess(type: TextFieldInputType)
     case success(type: TextFieldInputType)
     case duplicate(type: TextFieldInputType)
     case invalid(type: TextFieldInputType)
@@ -25,7 +26,7 @@ enum TextFieldState {
             default:
                 return .black10
             }
-        case .success:
+        case .success, .validSuccess:
             return .primary50
         case .duplicate, .invalid:
             return .studingRed
@@ -43,7 +44,7 @@ enum TextFieldState {
             default:
                 return UIColor.black10.cgColor
             }
-        case .success:
+        case .success, .validSuccess:
             return UIColor.primary50.cgColor
         case .duplicate, .invalid:
             return UIColor.studingRed.cgColor
@@ -54,10 +55,10 @@ enum TextFieldState {
         switch self {
         case .normal(let type):
             switch type {
-            case .university:
-                return "현재 등록된 학교만 보여드려요!"
-            case .major:
-                return  "현재 등록된 학과만 보여드려요!"
+//            case .university:
+//                return "현재 등록된 학교만 보여드려요!"
+//            case .major:
+//                return  "현재 등록된 학과만 보여드려요!"
             default:
                 return ""
             }
@@ -91,6 +92,15 @@ enum TextFieldState {
                 return "영문, 숫자, 특수문자를 각각 1개 이상 포함한 8~16로 입력해주세요"
             case .confirmPw:
                 return "비밀번호가 일치하지 않아요"
+            default:
+                return ""
+            }
+        case .select(type: let type):
+            switch type {
+            case .university:
+                return "현재 등록된 학교만 보여드려요!"
+            case .major:
+                return "현재 등록된 학과만 보여드려요!"
             default:
                 return ""
             }

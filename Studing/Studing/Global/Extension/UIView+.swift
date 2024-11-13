@@ -125,4 +125,18 @@ extension UIView {
     func removeGradientBorder() {
         layer.sublayers?.filter { $0.name == "gradientBorder" }.forEach { $0.removeFromSuperlayer() }
     }
+    
+    var firstResponder: UIView? {
+        if isFirstResponder {
+            return self
+        }
+        
+        for subview in subviews {
+            if let firstResponder = subview.firstResponder {
+                return firstResponder
+            }
+        }
+        
+        return nil
+    }
 }

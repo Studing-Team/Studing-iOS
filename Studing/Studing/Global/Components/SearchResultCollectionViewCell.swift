@@ -65,7 +65,8 @@ extension SearchResultCollectionViewCell {
 private extension SearchResultCollectionViewCell {
     func setupStyle() {
         dotImageView.do {
-            $0.image = UIImage(systemName: "circle.fill")
+            let config = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold)
+            $0.image = UIImage(systemName: "circle.fill", withConfiguration: config)
             $0.tintColor = .black50
             $0.clipsToBounds = true
             $0.contentMode = .scaleAspectFit
@@ -84,6 +85,7 @@ private extension SearchResultCollectionViewCell {
     func setupLayout() {
         dotImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview()
             $0.width.height.equalTo(4)
         }
         

@@ -36,7 +36,7 @@ final class TitleTextFieldView: UIView, UITextFieldDelegate {
     
     // MARK: - Combine Publishers Properties
     
-    let textPublisher = PassthroughSubject<String, Never>()
+    let textPublisher = CurrentValueSubject<String, Never>("")
     let statePublisher: CurrentValueSubject<TextFieldState, Never>
     
     private var cancellables = Set<AnyCancellable>()
@@ -202,12 +202,14 @@ private extension TitleTextFieldView {
     
     func setupBindings() {
         statePublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 self?.updateUI(state: state)
             }
             .store(in: &cancellables)
         
         textPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] text in
                 self?.updateRightButtonForTextChange(text: text)
             }
