@@ -18,7 +18,15 @@ final class HomeCoordinator: Coordinator {
     }
 
     func start() {
-        let homeVC = HomeViewController(coordinator: self)
+        let homeVM = HomeViewModel(
+            associationLogoUseCase: AssociationLogoUseCase(repository: HomeRepositoryImpl()),
+            unreadAssociationUseCase: UnreadAssociationUseCase(repository: HomeRepositoryImpl()),
+            unreadAssociationAnnouceCountUseCase: UnreadAssociationAnnounceCountUseCase(repository: HomeRepositoryImpl()),
+            recentAnnouceUseCase: RecentAnnounceUseCase(repository: HomeRepositoryImpl()),
+            bookmarkAnnouceUseCase: BookmarkAnnounceListUseCase(repository: HomeRepositoryImpl())
+        )
+        
+        let homeVC = HomeViewController(homeViewModel: homeVM, coordinator: self)
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {
             customNav.setNavigationType(.home)
@@ -28,7 +36,7 @@ final class HomeCoordinator: Coordinator {
     }
     
     func pushAnnouceList() {
-        let annouceListVC = AnnouceListViewController(type: .association, coordinator: self)
+        let annouceListVC = AnnounceListViewController(type: .association, coordinator: self)
         
         annouceListVC.hidesBottomBarWhenPushed = true
         
@@ -40,7 +48,7 @@ final class HomeCoordinator: Coordinator {
     }
     
     func pushBookmarkList() {
-        let annouceListVC = AnnouceListViewController(type: .bookmark, coordinator: self)
+        let annouceListVC = AnnounceListViewController(type: .bookmark, coordinator: self)
         annouceListVC.hidesBottomBarWhenPushed = true
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {
@@ -52,7 +60,7 @@ final class HomeCoordinator: Coordinator {
     }
     
     func pushDetailAnnouce() {
-        let detailAnnouceVC = DetailAnnouceViewController(type: .bookmarkAnnouce, coordinator: self)
+        let detailAnnouceVC = DetailAnnounceViewController(type: .bookmarkAnnouce, coordinator: self)
         detailAnnouceVC.hidesBottomBarWhenPushed = true
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {

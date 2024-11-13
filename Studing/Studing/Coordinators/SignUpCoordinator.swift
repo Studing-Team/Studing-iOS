@@ -17,17 +17,20 @@ final class SignUpCoordinator: Coordinator {
     
     weak var parentCoordinator: LoginCoordinator?
     weak var delegate: SignUpCoordinatorDelegate?
-    
-    var universityName: String?
-    var majorName: String?
+
+    private let signUpStore: SignUpStore
     
     init(navigationController: CustomSignUpNavigationController) {
         self.navigationController = navigationController
         self.navigationController.interactivePopGestureRecognizer?.isEnabled = false
+        
+        self.signUpStore = SignUpStore()
     }
     
     func start() {
-        let userInfoSignUpVM = UserInfoSignUpViewModel()
+        let userInfoSignUpVM = UserInfoSignUpViewModel(checkDuplicateIdUseCase: CheckDuplicateIdUseCase(repository: MemberRepositoryImpl()))
+        
+        userInfoSignUpVM.delegate = self
         
         let signUpVC = UserInfoSignUpViewController(viewModel: userInfoSignUpVM, coordinator: self)
 
@@ -36,7 +39,8 @@ final class SignUpCoordinator: Coordinator {
     }
 
     func pushUnivsersityInfoView() {
-        let universityInfoVM = UniversityInfoViewModel()
+        let universityInfoVM = UniversityInfoViewModel(universityListUseCase: UniversityListUseCase(repository: UniversityDataRepositoryImpl()))
+        
         universityInfoVM.delegate = self
         
         let universityInfoVC = UniversityInfoViewController(viewModel: universityInfoVM, coordinator: self)
@@ -46,7 +50,10 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushMajorInfoView() {
-        let majorInfoVM = MajorInfoViewModel()
+        let majorInfoVM = MajorInfoViewModel(universityName: signUpStore.university ?? "", departmentListUseCase: DepartmentListUseCase(repository: UniversityDataRepositoryImpl()))
+        
+        majorInfoVM.delegate = self
+        
         let majorInfoVC = MajorInfoViewController(viewModel: majorInfoVM, coordinator: self)
         
         navigationController.changeSignUpStep(count: 3)
@@ -55,6 +62,9 @@ final class SignUpCoordinator: Coordinator {
     
     func pushStudentIdView() {
         let studentIdVM = StudentIdViewModel()
+        
+        studentIdVM.delegate = self
+        
         let studentIdVC = StudentIdViewController(viewModel: studentIdVM, coordinator: self)
         
         navigationController.changeSignUpStep(count: 4)
@@ -71,6 +81,9 @@ final class SignUpCoordinator: Coordinator {
     
     func pushAuthUniversityView() {
         let authUniversityVM = AuthUniversityViewModel()
+        
+        authUniversityVM.delegate = self
+        
         let authUniversityVC = AuthUniversityViewController(viewModel: authUniversityVM, coordinator: self)
         
         navigationController.changeSignUpStep(count: 6)
@@ -78,7 +91,8 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushAuthWaitingView() {
-        let authWaitingVM = AuthWaitingViewModel()
+        let authWaitingVM = AuthWaitingViewModel(signupUseCase: SignupUseCase(repository: MemberRepositoryImpl()), signupData: signUpStore.getUserData())
+        
         let authUniversityVC = AuthWaitingViewController(viewModel: authWaitingVM, coordinator: self)
         
         navigationController.changeSignUpStep(count: 6)
@@ -95,8 +109,47 @@ final class SignUpCoordinator: Coordinator {
     }
 }
 
+// MARK: - Input Delegate
+
+extension SignUpCoordinator: InputUserInfoDelegate {
+    func didSubmitUserId(_ userId: String) {
+        signUpStore.setUserId(userId)
+    }
+    
+    func didSubmitPassword(_ password: String) {
+        signUpStore.setPassword(password)
+    }
+}
+
+
 extension SignUpCoordinator: InputUniversityNameDelegate {
     func didSubmitUniversityName(_ name: String) {
-        self.universityName = name
+        signUpStore.setUniversity(name)
+    }
+}
+
+extension SignUpCoordinator: InputMajorDelegate {
+    func didSubmitMajor(_ major: String) {
+        signUpStore.setMajor(major)
+    }
+}
+
+extension SignUpCoordinator: InputAdmissionDelegate {
+    func didSubmitAdmission(_ admission: String) {
+        signUpStore.setAdmission(admission)
+    }
+}
+
+extension SignUpCoordinator: InputStudentInfoDelegate {
+    func didSubmitStudentCardImage(_ imageData: Data) {
+        signUpStore.setStudentCardImage(imageData)
+    }
+    
+    func didSubmitUserName(_ userName: String) {
+        signUpStore.setUserName(userName)
+    }
+    
+    func didSubmitStudentNumber(_ studentNumber: String) {
+        signUpStore.setStudentNumber(studentNumber)
     }
 }
