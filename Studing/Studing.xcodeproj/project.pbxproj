@@ -149,6 +149,7 @@
 		3F54DA182CE5369000314B46 /* BookmarkListEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F54DA172CE5369000314B46 /* BookmarkListEntity.swift */; };
 		3F54DA1A2CE5958B00314B46 /* EmptyBookmarkListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F54DA192CE5958B00314B46 /* EmptyBookmarkListCollectionViewCell.swift */; };
 		3F54DA1C2CE59BCB00314B46 /* AskStudingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F54DA1B2CE59BCB00314B46 /* AskStudingView.swift */; };
+		3F54DA1E2CE5C39600314B46 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */; };
 		3F57612F2CC78F8E0039AC11 /* AllAssociationAnnounceListEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F57612E2CC78F8E0039AC11 /* AllAssociationAnnounceListEntity.swift */; };
 		3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5960292CA0EE5F00688FE3 /* CustomButton.swift */; };
 		3F59602D2CA13E8F00688FE3 /* TextFieldEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */; };
@@ -162,6 +163,11 @@
 		3F82C3392CAE94A600492EEE /* NSObject+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F82C3382CAE94A600492EEE /* NSObject+.swift */; };
 		3F82C33B2CAE94CB00492EEE /* UniversityInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F82C33A2CAE94CB00492EEE /* UniversityInfoModel.swift */; };
 		3F82C33D2CAE94E000492EEE /* MajorInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F82C33C2CAE94E000492EEE /* MajorInfoModel.swift */; };
+		3F92633E2CE5CF5B00ADC1EB /* NotificationsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F92633D2CE5CF5B00ADC1EB /* NotificationsAPI.swift */; };
+		3F9263422CE5D05D00ADC1EB /* NotificationTokenRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9263412CE5D05D00ADC1EB /* NotificationTokenRequestDTO.swift */; };
+		3F9263442CE5D08F00ADC1EB /* NotificationRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9263432CE5D08F00ADC1EB /* NotificationRepositoryImpl.swift */; };
+		3F9263462CE5D0AB00ADC1EB /* NotificationsRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9263452CE5D0AB00ADC1EB /* NotificationsRepositoryProtocol.swift */; };
+		3F9263492CE5D1A600ADC1EB /* NotificationTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9263482CE5D1A600ADC1EB /* NotificationTokenUseCase.swift */; };
 		3F977C192CD1F27E00A3FE56 /* CustomAnnouceNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F977C182CD1F27E00A3FE56 /* CustomAnnouceNavigationController.swift */; };
 		3F9DC8A82CB4ECA900850136 /* StudentIdInputCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DC8A72CB4ECA900850136 /* StudentIdInputCollectionCell.swift */; };
 		3F9DC8AC2CB4ECE000850136 /* StudentIdInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DC8AB2CB4ECE000850136 /* StudentIdInfoModel.swift */; };
@@ -367,6 +373,7 @@
 		3F54DA172CE5369000314B46 /* BookmarkListEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListEntity.swift; sourceTree = "<group>"; };
 		3F54DA192CE5958B00314B46 /* EmptyBookmarkListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyBookmarkListCollectionViewCell.swift; sourceTree = "<group>"; };
 		3F54DA1B2CE59BCB00314B46 /* AskStudingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskStudingView.swift; sourceTree = "<group>"; };
+		3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3F57612E2CC78F8E0039AC11 /* AllAssociationAnnounceListEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllAssociationAnnounceListEntity.swift; sourceTree = "<group>"; };
 		3F5960292CA0EE5F00688FE3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldEnum.swift; sourceTree = "<group>"; };
@@ -380,6 +387,12 @@
 		3F82C3382CAE94A600492EEE /* NSObject+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+.swift"; sourceTree = "<group>"; };
 		3F82C33A2CAE94CB00492EEE /* UniversityInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversityInfoModel.swift; sourceTree = "<group>"; };
 		3F82C33C2CAE94E000492EEE /* MajorInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MajorInfoModel.swift; sourceTree = "<group>"; };
+		3F92633B2CE5CD0B00ADC1EB /* Studing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Studing.entitlements; sourceTree = "<group>"; };
+		3F92633D2CE5CF5B00ADC1EB /* NotificationsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsAPI.swift; sourceTree = "<group>"; };
+		3F9263412CE5D05D00ADC1EB /* NotificationTokenRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTokenRequestDTO.swift; sourceTree = "<group>"; };
+		3F9263432CE5D08F00ADC1EB /* NotificationRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepositoryImpl.swift; sourceTree = "<group>"; };
+		3F9263452CE5D0AB00ADC1EB /* NotificationsRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsRepositoryProtocol.swift; sourceTree = "<group>"; };
+		3F9263482CE5D1A600ADC1EB /* NotificationTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTokenUseCase.swift; sourceTree = "<group>"; };
 		3F977C182CD1F27E00A3FE56 /* CustomAnnouceNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnouceNavigationController.swift; sourceTree = "<group>"; };
 		3F9DC8A72CB4ECA900850136 /* StudentIdInputCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdInputCollectionCell.swift; sourceTree = "<group>"; };
 		3F9DC8AB2CB4ECE000850136 /* StudentIdInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdInfoModel.swift; sourceTree = "<group>"; };
@@ -692,6 +705,7 @@
 		3F3992572C82C8E40045CF1E /* Studing */ = {
 			isa = PBXGroup;
 			children = (
+				3F92633B2CE5CD0B00ADC1EB /* Studing.entitlements */,
 				3FFCFEE12CE0D386009D07A6 /* Data */,
 				3FFCFEE02CE0D37F009D07A6 /* Domain */,
 				3F39927D2C82D2440045CF1E /* Application */,
@@ -721,6 +735,7 @@
 		3F39927B2C82D22A0045CF1E /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				3F92633C2CE5CF4B00ADC1EB /* Notifications */,
 				3F54D9752CE190D200314B46 /* Notices */,
 				3F54D9722CE1174900314B46 /* Home */,
 				3F54D96F2CE115FF00314B46 /* UniversityData */,
@@ -757,6 +772,7 @@
 				3F162B812C9D92B300DF2E1C /* Color.xcassets */,
 				3F54D96A2CE10B7F00314B46 /* Config.xcconfig */,
 				3F54D96B2CE10B8900314B46 /* Config.swift */,
+				3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */,
 			);
 			path = Resoureces;
 			sourceTree = "<group>";
@@ -1030,6 +1046,38 @@
 			path = Enum;
 			sourceTree = "<group>";
 		};
+		3F92633C2CE5CF4B00ADC1EB /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				3F92633D2CE5CF5B00ADC1EB /* NotificationsAPI.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		3F92633F2CE5D04600ADC1EB /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				3F9263402CE5D05100ADC1EB /* Request */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		3F9263402CE5D05100ADC1EB /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				3F9263412CE5D05D00ADC1EB /* NotificationTokenRequestDTO.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		3F9263472CE5D19300ADC1EB /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				3F9263482CE5D1A600ADC1EB /* NotificationTokenUseCase.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		3F9DC8A62CB4EC0000850136 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1150,6 +1198,7 @@
 		3FFCFEE22CE0D38E009D07A6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3F92633F2CE5D04600ADC1EB /* Notifications */,
 				3F54D9E92CE4D29A00314B46 /* Notices */,
 				3F54D9892CE19BDA00314B46 /* Home */,
 				3F54D9832CE19A4B00314B46 /* UniversityData */,
@@ -1171,6 +1220,7 @@
 		3FFCFEE42CE0D39C009D07A6 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				3F9263472CE5D19300ADC1EB /* Notifications */,
 				3F54D9E42CE4D07500314B46 /* Notices */,
 				3F54D9C72CE364D900314B46 /* Home */,
 				3F54D9B22CE2116E00314B46 /* UniversityData */,
@@ -1186,6 +1236,7 @@
 				3F54D9B82CE2127000314B46 /* UniversityDataRepositoryProtocol.swift */,
 				3F54D9C82CE3650400314B46 /* HomeRepositoryProtocol.swift */,
 				3F54D9E72CE4D0EB00314B46 /* NoticesRepositoryProtocol.swift */,
+				3F9263452CE5D0AB00ADC1EB /* NotificationsRepositoryProtocol.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1197,6 +1248,7 @@
 				3F54D9B62CE2125600314B46 /* UniversityDataRepositoryImpl.swift */,
 				3F54D9CE2CE3681E00314B46 /* HomeRepositoryImpl.swift */,
 				3F54D9FE2CE4DC0200314B46 /* NoticesRepositoryImpl.swift */,
+				3F9263432CE5D08F00ADC1EB /* NotificationRepositoryImpl.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1321,6 +1373,7 @@
 				3F162B8B2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf in Resources */,
 				3F162B8D2C9DBA0D00DF2E1C /* LaunchScreen.storyboard in Resources */,
 				3F162B822C9D92B300DF2E1C /* Color.xcassets in Resources */,
+				3F54DA1E2CE5C39600314B46 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1414,6 +1467,7 @@
 				3F25A35C2C96A76E006E2715 /* StringLiterals.swift in Sources */,
 				3F54DA0F2CE4DF9E00314B46 /* BookmarkAnnouceUseCase.swift in Sources */,
 				3FB203492CC5C409003F381D /* AssociationEntity.swift in Sources */,
+				3F9263442CE5D08F00ADC1EB /* NotificationRepositoryImpl.swift in Sources */,
 				3F54DA1A2CE5958B00314B46 /* EmptyBookmarkListCollectionViewCell.swift in Sources */,
 				3FB2034D2CC5C435003F381D /* MissAnnounceEntity.swift in Sources */,
 				3F1739722CBEB45F00DE8859 /* AuthWaitCheckView.swift in Sources */,
@@ -1433,11 +1487,13 @@
 				3F54D9F12CE4D41F00314B46 /* AllAssociationAnnouceListResponseDTO.swift in Sources */,
 				3F17396E2CBE495200DE8859 /* AuthUniversityViewModel.swift in Sources */,
 				3F54D9932CE19D6400314B46 /* UnreadAssocationAnnouceCountResponseDTO.swift in Sources */,
+				3F92633E2CE5CF5B00ADC1EB /* NotificationsAPI.swift in Sources */,
 				3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */,
 				3F54DA162CE4F50900314B46 /* AllAnnounceEntity.swift in Sources */,
 				3FD4B91C2CDCD5BB00308E08 /* BenefitListCollectionViewCell.swift in Sources */,
 				3FD4B9132CDC4F6E00308E08 /* StoreModel.swift in Sources */,
 				3F54D9BD2CE2134D00314B46 /* DepartmentListUseCase.swift in Sources */,
+				3F9263492CE5D1A600ADC1EB /* NotificationTokenUseCase.swift in Sources */,
 				3F54D9AF2CE1C3F900314B46 /* NetworkError.swift in Sources */,
 				3FD4B9112CDBDA1500308E08 /* StoreViewModel.swift in Sources */,
 				3FE0433B2CC7710A00B55EAA /* AnnounceListViewModel.swift in Sources */,
@@ -1491,6 +1547,7 @@
 				3F54D9F52CE4D5EE00314B46 /* BookmarkAssociationAnnounceListRequestDTO.swift in Sources */,
 				3F54D99E2CE1A15600314B46 /* String+.swift in Sources */,
 				3F3CFDC02C98093700DC9F9A /* UniversityInfoViewModel.swift in Sources */,
+				3F9263462CE5D0AB00ADC1EB /* NotificationsRepositoryProtocol.swift in Sources */,
 				3F1739702CBE496100DE8859 /* AuthWaitingViewModel.swift in Sources */,
 				3FE043332CC693EF00B55EAA /* AnnounceListViewController.swift in Sources */,
 				3F1739802CC0187B00DE8859 /* MypageCoordinator.swift in Sources */,
@@ -1510,6 +1567,7 @@
 				3F54D9F32CE4D59300314B46 /* BookmarkAssociationAnnounceListResponseDTO.swift in Sources */,
 				3F54D9802CE1998C00314B46 /* SignupRequsetDTO.swift in Sources */,
 				3F17396C2CBE442E00DE8859 /* CustomButtonEnum.swift in Sources */,
+				3F9263422CE5D05D00ADC1EB /* NotificationTokenRequestDTO.swift in Sources */,
 				3FB2034B2CC5C41A003F381D /* AssociationAnnounceModel.swift in Sources */,
 				3F54D98C2CE19C2A00314B46 /* UniversityLogoResponseDTO.swift in Sources */,
 				3FE042FA2CC5D38F00B55EAA /* MyInfoCollectionViewCell.swift in Sources */,
@@ -1682,6 +1740,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3H27N59VG;
@@ -1712,6 +1771,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N3H27N59VG;

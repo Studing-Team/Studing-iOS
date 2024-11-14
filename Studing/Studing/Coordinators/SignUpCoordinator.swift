@@ -73,6 +73,9 @@ final class SignUpCoordinator: Coordinator {
     
     func pushTermsOfServiceView() {
         let termsOfServiceVM = TermsOfServiceViewModel()
+        
+        termsOfServiceVM.delegate = self
+        
         let termsOfServiceVC = TermsOfServiceViewController(viewModel: termsOfServiceVM, coordinator: self)
         
         navigationController.changeSignUpStep(count: 5)
@@ -137,6 +140,12 @@ extension SignUpCoordinator: InputMajorDelegate {
 extension SignUpCoordinator: InputAdmissionDelegate {
     func didSubmitAdmission(_ admission: String) {
         signUpStore.setAdmission(admission)
+    }
+}
+
+extension SignUpCoordinator: InputmarketingDelegate {
+    func didSubmitMarketing(_ isMarketing: Bool) {
+        signUpStore.setMarketing(isMarketing)
     }
 }
 
