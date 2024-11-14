@@ -19,7 +19,7 @@ struct AllAssociationAnnouceListResponseDTO: Decodable {
     let likeCount: Int
     let readCount: Int
     let saveCount: Int
-    let image: String
+    let image: String?
     let createdAt: String
     let saveCheck: Bool
     let likeCheck: Bool
@@ -36,5 +36,36 @@ struct AllAssociationAnnouceListResponseDTO: Decodable {
         case readCount = "viewCount"
         case saveCheck
         case likeCheck
+    }
+}
+
+extension AllAssociationAnnounceListResponseData {
+    func toEntities() -> [AllAssociationAnnounceListEntity] {
+        return notices.map { $0.toEntity() }
+    }
+}
+
+extension AllAssociationAnnouceListResponseDTO {
+    func toEntity() -> AllAssociationAnnounceListEntity {
+        return AllAssociationAnnounceListEntity(
+            type: convertToAnnounceType(type: tag),
+            title: title,
+            contents: content,
+            days: createdAt.formatDate(from: createdAt),
+            favoriteCount: likeCount,
+            bookmarkCount: saveCount, 
+            imageUrl: image,
+            watchCount: readCount,
+            isFavorite: likeCheck,
+            isBookmark: saveCheck
+        )
+    }
+    
+    func convertToAnnounceType(type: String) -> AnnounceType {
+        if type == "공지" {
+            return .annouce
+        } else {
+            return .event
+        }
     }
 }
