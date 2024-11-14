@@ -21,7 +21,7 @@ final class LoginCoordinator: Coordinator {
     }
     
     func start() {
-        let loginViewModel = LoginViewModel(signInUseCase: SignInUseCase(repository: MemberRepositoryImpl()))
+        let loginViewModel = LoginViewModel(signInUseCase: SignInUseCase(repository: MemberRepositoryImpl()), notificationTokenUseCase: NotificationTokenUseCase(repository: NotificationsRepositoryImpl()))
         let loginVC = LoginViewController(viewModel: loginViewModel, coordinator: self)
         navigationController.pushViewController(loginVC, animated: true)
     }

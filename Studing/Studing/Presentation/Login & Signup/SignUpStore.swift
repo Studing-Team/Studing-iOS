@@ -44,6 +44,7 @@ final class SignUpStore: UserInfoStoreProtocol, UniversityInfoStoreProtocol, Stu
     private(set) var university: String?
     private(set) var major: String?
     private(set) var admission: String?
+    private(set) var marketing: Bool?
     private(set) var studentCardImage: Data?
     private(set) var userName: String?
     private(set) var studentNumber: String?
@@ -81,6 +82,11 @@ final class SignUpStore: UserInfoStoreProtocol, UniversityInfoStoreProtocol, Stu
         self.admission = admission
     }
     
+    func setMarketing(_ isMarketing: Bool) {
+        print("마켓팅 수신동의 입력:", isMarketing)
+        self.marketing = isMarketing
+    }
+    
     func setStudentCardImage(_ image: Data) {
         print("학생증 입력")
         self.studentCardImage = image
@@ -103,6 +109,7 @@ final class SignUpStore: UserInfoStoreProtocol, UniversityInfoStoreProtocol, Stu
              let admission = admission,
              let studentNumber = studentNumber,
              let userName = userName,
+             let marketing = marketing,
              let university = university,
              let major = major,
              let studentCardImage = studentCardImage else {
@@ -118,7 +125,8 @@ final class SignUpStore: UserInfoStoreProtocol, UniversityInfoStoreProtocol, Stu
            studentNumber: studentNumber,
            memberUniversity: university,
            memberDepartment: major,
-           studentCardImage: studentCardImage
+           studentCardImage: studentCardImage,
+           marketingAgreement: marketing
        )
    }
     
@@ -128,6 +136,7 @@ final class SignUpStore: UserInfoStoreProtocol, UniversityInfoStoreProtocol, Stu
         university = nil
         major = nil
         admission = nil
+        marketing = nil
         studentCardImage = nil
         userName = nil
         studentNumber = nil

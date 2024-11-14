@@ -39,6 +39,7 @@ final class TermsOfServiceViewModel: BaseViewModel {
     // MARK: - Private properties
     
     private var cancellables = Set<AnyCancellable>()
+    weak var delegate: InputmarketingDelegate?
     
     // MARK: - Public methods
     
@@ -102,14 +103,16 @@ final class TermsOfServiceViewModel: BaseViewModel {
             isServiceBoxSubject,
             isUserInfoSubject
         )
-
+        
         let isNextButtonEnabled = nextButtonState
-            .map { allBox, serviceBox, userInfoBox in
-                allBox || (serviceBox && userInfoBox)
+            .map { [weak self] allBox, serviceBox, userInfoBox in
+                let isEnabled = allBox || (serviceBox && userInfoBox)
+                self?.delegate?.didSubmitMarketing(self?.isMarketingSubject.value ?? false)
+                return isEnabled
             }
             .eraseToAnyPublisher()
 
-       
+
         return Output(
             allCheckBoxTap: isAllCheckBoxSubject.eraseToAnyPublisher(),
             serviceBoxTap: isServiceBoxSubject.eraseToAnyPublisher(),

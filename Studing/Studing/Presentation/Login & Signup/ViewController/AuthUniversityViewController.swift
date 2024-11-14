@@ -300,7 +300,7 @@ extension AuthUniversityViewController: PHPickerViewControllerDelegate {
                 DispatchQueue.main.async {
                     guard let self, let image = image as? UIImage else { return }
                     
-                    if let imageData = image.jpegData(compressionQuality: 0.1) {
+                    if let imageData = image.jpegData(compressionQuality: 0.05) {
                         
                         self.seletedImageView.image = UIImage(data: imageData)
                         

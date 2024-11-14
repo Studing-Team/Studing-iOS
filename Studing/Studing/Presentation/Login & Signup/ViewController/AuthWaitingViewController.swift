@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import UserNotifications
 
 import SnapKit
 import Then
@@ -90,7 +91,50 @@ private extension AuthWaitingViewController {
                 self?.coordinator?.pushSuccessSignUpView()
             }
             .store(in: &cancellables)
+        
+        notificationButton.tapPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                
+                print("동작")
+                self?.requestNotificationPermission()
+            }
+            .store(in: &cancellables)
     }
+}
+
+extension AuthWaitingViewController {
+    private func requestNotificationPermission() {
+        // 직접 권한 요청
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if let error = error {
+                print("알림 권한 요청 에러: \(error)")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                if !granted {
+                    // 거부된 경우 설정으로 이동
+                    self.openSettings()
+                }
+            }
+        }
+    }
+    
+    private func requestAuthorization() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
+            DispatchQueue.main.async {
+                self?.notificationButton.isSelected = granted
+            }
+        }
+    }
+    
+    private func openSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
+    }
+
 }
 
 // MARK: - Private Extensions
