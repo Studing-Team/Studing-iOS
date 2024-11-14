@@ -22,17 +22,20 @@ enum AnnounceSectionType: CaseIterable {
 }
 
 enum BottomSectionItem: Hashable {
-    case association(AssociationAnnounceListModel)
-    case bookmark(BookmarkModel)
+    case association(AllAssociationAnnounceListEntity)
+    case allAnnounce(AllAnnounceEntity)
+    case bookmark(BookmarkListEntity)
+    case empty
 }
 
 final class AnnounceListViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var selectedAnnouceSubject = PassthroughSubject<Int, Never>()
+    private var assicationName: String?
+    private var selectedAssociationSubject = PassthroughSubject<Int, Never>()
     
-    private var announceViewModel = AnnounceListViewModel()
+    private let announceViewModel: AnnounceListViewModel
     private var type: AnnounceListType
     weak var coordinator: HomeCoordinator?
     
@@ -47,11 +50,14 @@ final class AnnounceListViewController: UIViewController {
     
     private var topCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var bottomCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var askStudingView = AskStudingView()
     
     // MARK: - init
     
-    init(type: AnnounceListType, coordinator: HomeCoordinator) {
+    init(type: AnnounceListType, assicationName: String? = nil, announceViewModel: AnnounceListViewModel, coordinator: HomeCoordinator) {
         self.type = type
+        self.assicationName = assicationName
+        self.announceViewModel = announceViewModel
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
@@ -74,15 +80,34 @@ final class AnnounceListViewController: UIViewController {
         setupCollectionView()
         configureDataSource()
         bindViewModel()
-        
-        announceViewModel.getMyAssociation()
-        
+          
         // type에 따른 데이터 요청
         switch type {
         case .association:
-            announceViewModel.getAnnouceData()
+            if assicationName == "전체" {
+                Task {
+                    await announceViewModel.fetchAllAssociationInitialData()
+                    
+                    selectedAssociationSubject.send(0)
+                }
+            } else {
+                Task {
+                    await announceViewModel.fetchAssociationInitialData(name: assicationName ?? "")
+                    
+                    let index = Int(announceViewModel.associationsSubject.value.firstIndex(where: { $0.associationType?.typeName == assicationName }) ?? 0)
+                    
+                    selectedAssociationSubject.send(index)
+                }
+            }
         case .bookmark:
-            announceViewModel.getBookmarkData()
+            Task {
+                await withTaskGroup(of: Void.self) { group in
+                    group.addTask { await self.announceViewModel.fetchAssociationInitialData(name: "전체") }
+                    group.addTask { await self.announceViewModel.postBookmarkAssociationAnnounceList(name: "전체") }
+                }
+                
+                selectedAssociationSubject.send(0)
+            }
         }
     }
     
@@ -90,7 +115,8 @@ final class AnnounceListViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
-            customNavController.setNavigationType(.announce)
+            
+            customNavController.setNavigationType(type == .association ? .announce : .bookmark)
         }
         
         
@@ -128,22 +154,43 @@ private extension AnnounceListViewController {
         bottomDataSource = UICollectionViewDiffableDataSource(collectionView: bottomCollectionView) { [weak self] collectionView, indexPath, item in
             switch self?.type {
             case .association:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AnnounceListCollectionViewCell.className, for: indexPath) as? AnnounceListCollectionViewCell,
-                      case .association(let model) = item else {
+                switch item {
+                case .allAnnounce(let model):
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AnnounceListCollectionViewCell.className, for: indexPath) as? AnnounceListCollectionViewCell else {
+                        return UICollectionViewCell()
+                    }
+                    cell.configureCell(forModel: model)
+                    return cell
+                    
+                case .association(let model):
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AnnounceListCollectionViewCell.className, for: indexPath) as? AnnounceListCollectionViewCell else {
+                        return UICollectionViewCell()
+                    }
+                    cell.configureCell(forModel: model)
+                    return cell
+                    
+                default:
                     return UICollectionViewCell()
                 }
-                
-                cell.configureCell(forModel: model)
-                return cell
                 
             case .bookmark:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookmarkListCollectionViewCell.className,for: indexPath) as? BookmarkListCollectionViewCell,
-                      case .bookmark(let model) = item else {
+                switch item {
+                case .bookmark(let model):
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookmarkListCollectionViewCell.className, for: indexPath) as? BookmarkListCollectionViewCell else {
+                        return UICollectionViewCell()
+                    }
+                    cell.configureCell(forModel: model)
+                    return cell
+                    
+                case .empty:
+                    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyBookmarkListCollectionViewCell.className, for: indexPath) as? EmptyBookmarkListCollectionViewCell else {
+                        return UICollectionViewCell()
+                    }
+                    return cell
+                    
+                default:
                     return UICollectionViewCell()
                 }
-                
-                cell.configureCell(forModel: model)
-                return cell
                 
             default:
                 return UICollectionViewCell()
@@ -155,7 +202,10 @@ private extension AnnounceListViewController {
 private extension AnnounceListViewController {
     private func bindViewModel() {
         
-        let input = AnnounceListViewModel.Input()
+        let input = AnnounceListViewModel.Input(
+            associationTap: selectedAssociationSubject.eraseToAnyPublisher()
+        )
+        
         let output = announceViewModel.transform(input: input)
         
         // Snapshot 업데이트를 위한 바인딩
@@ -168,7 +218,16 @@ private extension AnnounceListViewController {
         // type에 따라 다른 데이터 바인딩
         switch type {
         case .association:
-            output.announces
+            // 전체 공지사항 구독
+            output.allAnnounce
+                .sink { [weak self] announces in
+                    let items = announces.map { BottomSectionItem.allAnnounce($0) }
+                    self?.updateBottomSnapshot(with: items)
+                }
+                .store(in: &cancellables)
+                
+            // 학회별 공지사항 구독
+            output.anthoerAnnounces
                 .sink { [weak self] announces in
                     let items = announces.map { BottomSectionItem.association($0) }
                     self?.updateBottomSnapshot(with: items)
@@ -178,7 +237,7 @@ private extension AnnounceListViewController {
         case .bookmark:
             output.bookmarks
                 .sink { [weak self] bookmarks in
-                    let items = bookmarks.map { BottomSectionItem.bookmark($0) }
+                    let items = bookmarks.isEmpty ? [.empty] : bookmarks.map { BottomSectionItem.bookmark($0) }
                     self?.updateBottomSnapshot(with: items)
                 }
                 .store(in: &cancellables)
@@ -203,7 +262,13 @@ private extension AnnounceListViewController {
     }
     
     func setupHierarchy() {
-        view.addSubviews(topCollectionView, bottomCollectionView)
+        switch type {
+        case .association:
+            view.addSubviews(topCollectionView, askStudingView, bottomCollectionView)
+            
+        case .bookmark:
+            view.addSubviews(topCollectionView, bottomCollectionView)
+        }
     }
     
     func setupLayout() {
@@ -212,11 +277,25 @@ private extension AnnounceListViewController {
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(113)
         }
-        
-        bottomCollectionView.snp.makeConstraints {
-            $0.top.equalTo(topCollectionView.snp.bottom).offset(11)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview()
+            
+        if type == .association {
+            askStudingView.snp.makeConstraints {
+                $0.top.equalTo(topCollectionView.snp.bottom)
+                $0.horizontalEdges.equalToSuperview().inset(20)
+            }
+            
+            bottomCollectionView.snp.makeConstraints {
+                $0.top.equalTo(askStudingView.snp.bottom).offset(25)
+                $0.horizontalEdges.equalToSuperview().inset(20)
+                $0.bottom.equalToSuperview()
+            }
+        } else {
+            bottomCollectionView.snp.makeConstraints {
+                $0.top.equalTo(topCollectionView.snp.bottom).offset(11)
+                $0.horizontalEdges.equalToSuperview().inset(20)
+                $0.bottom.equalToSuperview()
+            }
+
         }
     }
     
@@ -233,6 +312,7 @@ private extension AnnounceListViewController {
             bottomCollectionView.register(AnnounceListCollectionViewCell.self, forCellWithReuseIdentifier: AnnounceListCollectionViewCell.className)
         case .bookmark:
             bottomCollectionView.register(BookmarkListCollectionViewCell.self, forCellWithReuseIdentifier: BookmarkListCollectionViewCell.className)
+            bottomCollectionView.register(EmptyBookmarkListCollectionViewCell.self, forCellWithReuseIdentifier: EmptyBookmarkListCollectionViewCell.className)
         }
     }
 }
@@ -248,7 +328,13 @@ extension AnnounceListViewController: UICollectionViewDelegateFlowLayout {
             case .association:
                 return CGSize(width: collectionView.bounds.width, height: 154)
             case .bookmark:
+                
+                if case .empty = bottomDataSource.itemIdentifier(for: indexPath) {
+                    return CGSize(width: collectionView.bounds.width, height: 466) // 빈 상태 셀의 높이 조정
+                }
                 return CGSize(width: collectionView.bounds.width, height: 100)
+                
+//                return CGSize(width: collectionView.bounds.width, height: 100)
             }
             
         default:
@@ -287,20 +373,21 @@ extension AnnounceListViewController: UICollectionViewDelegate {
         
         switch collectionView {
         case topCollectionView:
-            let data = announceViewModel.announcesSubject.value[indexPath.row]
+            let data = announceViewModel.associationsSubject.value[indexPath.row]
             
+            selectedAssociationSubject.send(indexPath.row)
             
         case bottomCollectionView:
             switch type {
             case .association:
-                let data = announceViewModel.announcesSubject.value[indexPath.row]
+//                let data = announceViewModel.announcesSubject.value[indexPath.row]
 //                selectedAnnouceSubject.send(indexPath.row)
                 
                 coordinator?.pushDetailAnnouce()
                 
                 
             case .bookmark:
-                let data = announceViewModel.bookmarkSubject.value[indexPath.row]
+                let data = announceViewModel.bookmarkListSubject.value[indexPath.row]
 //                selectedAnnouceSubject.send(indexPath.row)
                 
                 coordinator?.pushDetailAnnouce()

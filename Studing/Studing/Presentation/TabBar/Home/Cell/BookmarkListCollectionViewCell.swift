@@ -12,7 +12,7 @@ import Then
 
 final class BookmarkListCollectionViewCell: UICollectionViewCell {
     
-    private let contentsImage = UIImageView()
+    private let contentsImage = AFImageView()
     private let titleLabel = UILabel()
     private let postDayLabel = UILabel()
     private let bookmarkImage = UIImageView()
@@ -38,7 +38,9 @@ final class BookmarkListCollectionViewCell: UICollectionViewCell {
 // MARK: - Extensions
 
 extension BookmarkListCollectionViewCell {
-    func configureCell(forModel model : BookmarkModel) {
+    func configureCell(forModel model : BookmarkListEntity) {
+        contentsImage.setImage(model.imageUrl, type: .postImage)
+        
         titleLabel.text = "\(model.title)"
         postDayLabel.text = "\(model.days)"
     }

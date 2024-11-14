@@ -10,11 +10,19 @@ import UIKit
 import SnapKit
 import Then
 
+enum SelectedAnnounceType {
+    case all
+    case anthoer
+}
+
 final class AnnounceListCollectionViewCell: UICollectionViewCell {
     
-    private lazy var announceTypeView = AnnounceTypeView()
+    private lazy var selectedAnnounceType: SelectedAnnounceType = .all
     
-    private let contentsImage = UIImageView()
+    private lazy var announceTypeView = AnnounceTypeView()
+    private lazy var associationTypeView = AssociationTypeView()
+    
+    private let contentsImage = AFImageView()
     private let titleLabel = UILabel()
     private let contentsLabel = UILabel()
     
@@ -58,7 +66,18 @@ final class AnnounceListCollectionViewCell: UICollectionViewCell {
 // MARK: - Extensions
 
 extension AnnounceListCollectionViewCell {
-    func configureCell(forModel model: AssociationAnnounceListModel) {
+    func configureCell(forModel model: AllAssociationAnnounceListEntity) {
+        
+        selectedAnnounceType = .anthoer
+        
+//        // 기존 뷰들 제거
+        self.subviews.forEach { $0.removeFromSuperview() }
+        
+        // 필요한 뷰들 추가 및 설정
+        setupHierarchy()
+        setupLayout()
+        
+        contentsImage.setImage(model.imageUrl, type: .postImage)
         titleLabel.text = "\(model.title)"
         contentsLabel.text = "\(model.contents)"
         
@@ -73,6 +92,34 @@ extension AnnounceListCollectionViewCell {
         watchImage.image = UIImage(resource: .visibility)
         
         announceTypeView.configure(type: model.type)
+    }
+    
+    func configureCell(forModel model: AllAnnounceEntity) {
+        
+        selectedAnnounceType = .all
+        
+//        // 기존 뷰들 제거
+        self.subviews.forEach { $0.removeFromSuperview() }
+        
+        // 필요한 뷰들 추가 및 설정
+        setupHierarchy()
+        setupLayout()
+        
+        contentsImage.setImage(model.imageUrl, type: .postImage)
+        titleLabel.text = "\(model.title)"
+        contentsLabel.text = "\(model.contents)"
+        
+        postDayLabel.text = "\(model.days)"
+        
+        favoriteCount.text = "\(model.favoriteCount)"
+        bookmarkCount.text = "\(model.bookmarkCount)"
+        watchCount.text = "\(model.watchCount)"
+        
+        favoriteImage.image = UIImage(resource: model.isFavorite == true ? .favorite : .favorite)
+        bookmarkImage.image = UIImage(resource: model.isBookmark == true ? .bookmark : .bookmark)
+        watchImage.image = UIImage(resource: .visibility)
+        
+        associationTypeView.configure(title: model.writerInfo, type: model.associationType)
     }
 }
 
@@ -93,7 +140,7 @@ private extension AnnounceListCollectionViewCell {
         }
         
         titleLabel.do {
-            $0.font = .interBody2()
+            $0.font = .interSubtitle3()
             $0.textColor = .black50
             $0.numberOfLines = 2
         }
@@ -144,44 +191,64 @@ private extension AnnounceListCollectionViewCell {
             $0.addArrangedSubviews(favoriteInfoStackView, divider, bookmarkInfoStackView, divider2, watchInfoStackView)
             $0.axis = .horizontal
             $0.spacing = 5
-            $0.distribution = .equalCentering
+            $0.distribution = .fillProportionally
         }
         
         bottomStackView.do {
             $0.addArrangedSubviews(postDayLabel, contentsInfoStackView)
             $0.axis = .horizontal
             $0.spacing = 101
-            $0.distribution = .fillProportionally
+            $0.distribution = .fill
         }
         
         postStackView.do {
             $0.addArrangedSubviews(titleLabel, contentsLabel)
             $0.axis = .vertical
-            $0.spacing = 10
+            $0.spacing = 0
             $0.distribution = .equalSpacing
+            $0.alignment = .leading
         }
         
         contentsStackView.do {
             $0.addArrangedSubviews(contentsImage, postStackView)
             $0.axis = .horizontal
             $0.spacing = 10
-            $0.distribution = .equalSpacing
+            $0.distribution = .fill
+            $0.alignment = .leading
         }
     }
     
     func setupHierarchy() {
-        self.addSubviews(announceTypeView, contentsStackView, bottomStackView)
+        switch selectedAnnounceType {
+        case .all:
+            self.addSubviews(associationTypeView, contentsStackView, bottomStackView)
+        case .anthoer:
+            self.addSubviews(announceTypeView, contentsStackView, bottomStackView)
+        }
     }
     
     func setupLayout() {
-        announceTypeView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.leading.equalToSuperview().inset(15)
-        }
         
-        contentsStackView.snp.makeConstraints {
-            $0.top.equalTo(announceTypeView.snp.bottom).offset(9)
-            $0.horizontalEdges.equalToSuperview().inset(15)
+        if selectedAnnounceType == .all {
+            associationTypeView.snp.makeConstraints {
+                $0.top.equalToSuperview().offset(10)
+                $0.leading.equalToSuperview().inset(15)
+            }
+            
+            contentsStackView.snp.makeConstraints {
+                $0.top.equalTo(associationTypeView.snp.bottom).offset(6)
+                $0.horizontalEdges.equalToSuperview().inset(15)
+            }
+        } else {
+            announceTypeView.snp.makeConstraints {
+                $0.top.equalToSuperview().offset(10)
+                $0.leading.equalToSuperview().inset(15)
+            }
+            
+            contentsStackView.snp.makeConstraints {
+                $0.top.equalTo(announceTypeView.snp.bottom).offset(6)
+                $0.horizontalEdges.equalToSuperview().inset(15)
+            }
         }
         
         bottomStackView.snp.makeConstraints {
@@ -194,14 +261,28 @@ private extension AnnounceListCollectionViewCell {
             $0.size.equalTo(83)
         }
         
+        titleLabel.snp.makeConstraints {
+            $0.height.equalTo(36)
+        }
+        
+        contentsLabel.snp.makeConstraints {
+            $0.height.equalTo(37)
+        }
+        
         divider.snp.makeConstraints {
             $0.width.equalTo(1)
-            $0.height.equalTo(12)
+            $0.height.equalTo(10)
         }
         
         divider2.snp.makeConstraints {
             $0.width.equalTo(1)
-            $0.height.equalTo(12)
+            $0.height.equalTo(10)
         }
+        
+//        [favoriteImage, bookmarkImage, watchImage].forEach {
+//            $0.snp.makeConstraints{
+//                $0.size.equalTo(16)
+//            }
+//        }
     }
 }

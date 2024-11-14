@@ -112,10 +112,13 @@ private extension HomeViewController {
             .store(in: &cancellables)
         
         output.headerRightButtonTap
-            .sink { [weak self] type in
-                switch type {
+            .sink { [weak self] result in
+                
+                guard let result else { return }
+                
+                switch result.type {
                 case .annouce:
-                    self?.coordinator?.pushAnnouceList()
+                    self?.coordinator?.pushAnnouceList(result.associationName ?? "전체")
                 case .bookmark:
                     self?.coordinator?.pushBookmarkList()
                 default:

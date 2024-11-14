@@ -8,6 +8,13 @@
 import Foundation
 import Combine
 
+struct HeaderButtonAction {
+    let type: SectionType
+    let associationName: String?
+}
+
+
+
 final class HomeViewModel: BaseViewModel {
     
     var sectionsData = CurrentValueSubject<[SectionType]?, Never>(nil)
@@ -29,7 +36,7 @@ final class HomeViewModel: BaseViewModel {
     
     struct Output {
         let annouceHeaderText: AnyPublisher<String, Never>
-        let headerRightButtonTap: AnyPublisher<SectionType, Never>
+        let headerRightButtonTap: AnyPublisher<HeaderButtonAction?, Never>
     }
     
     // MARK: - Private properties
@@ -45,7 +52,7 @@ final class HomeViewModel: BaseViewModel {
     init(associationLogoUseCase: AssociationLogoUseCase,
          unreadAssociationUseCase: UnreadAssociationUseCase,
          unreadAssociationAnnouceCountUseCase: UnreadAssociationAnnounceCountUseCase,
-recentAnnouceUseCase: RecentAnnounceUseCase,
+         recentAnnouceUseCase: RecentAnnounceUseCase,
          bookmarkAnnouceUseCase: BookmarkAnnounceListUseCase
     ) {
         self.associationLogoUseCase = associationLogoUseCase
@@ -196,7 +203,7 @@ recentAnnouceUseCase: RecentAnnounceUseCase,
 //                self.selectedAssociationTitle.send(associationData[index].name)
 //                
 //                return associationData[index].name
-                guard let self = self else { return nil }
+                guard let self else { return nil }
                 
                 if let associationData = self.sectionDataDict[.association] as? [AssociationEntity] {
                     // 새로운 배열 생성
@@ -245,9 +252,34 @@ recentAnnouceUseCase: RecentAnnounceUseCase,
             }
             .store(in: &cancellables)
         
+        let rightButtonTap = input.headerRightButtonTap
+            .map { [weak self] type -> HeaderButtonAction? in
+                guard let self = self else {
+                    // self가 없더라도 기본값 반환
+                    return HeaderButtonAction(type: type, associationName: nil)
+                }
+                
+                switch type {
+                case .annouce:
+                    let associationType = (self.sectionDataDict[.association] as? [AssociationEntity])?
+                        .first(where: { $0.isSelected })?
+                        .associationType
+                    
+                    let selectAssociationName = associationType == nil ? "전체" : associationType?.typeName
+                    
+                    return HeaderButtonAction(type: type, associationName: selectAssociationName)
+                    
+                case .bookmark:
+                    return HeaderButtonAction(type: type, associationName: nil)
+                    
+                default:
+                    return nil
+                }
+            }
+        
         return Output(
             annouceHeaderText: selectedAssociationTitle.eraseToAnyPublisher(),
-            headerRightButtonTap: input.headerRightButtonTap.eraseToAnyPublisher()
+            headerRightButtonTap: rightButtonTap.eraseToAnyPublisher()
         )
     }
 }

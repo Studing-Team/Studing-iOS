@@ -33,7 +33,7 @@ extension NoticesAPI: APIEndpoint {
         case .postAllAssociationAnnounce:
             return basePath.rawValue + "/all-category"
         case .postBookmarkAssociationAnnounce:
-            return basePath.rawValue + "/save/save-category"
+            return basePath.rawValue + "/save-category"
         case .postCheckAnnouce(let noticeId):
             return basePath.rawValue + "/view-chehck/\(noticeId)"
         case .postUnreadAllAnnouce:

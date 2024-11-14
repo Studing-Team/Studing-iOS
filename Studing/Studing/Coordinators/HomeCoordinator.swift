@@ -35,8 +35,20 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(homeVC, animated: true)
     }
     
-    func pushAnnouceList() {
-        let annouceListVC = AnnounceListViewController(type: .association, coordinator: self)
+    func pushAnnouceList(_ associationName: String) {
+        print("이동하는 Name:", associationName)
+        let announceListVM = AnnounceListViewModel(
+            type: .association, associationLogoUseCase: AssociationLogoUseCase(repository: HomeRepositoryImpl()),
+            allAnnounceListUseCase: AllAnnounceListUseCase(repository: NoticesRepositoryImpl()),
+            allAssociationAnnounceListUseCase: AllAssociationAnnounceListUseCase(repository: NoticesRepositoryImpl()), assicationName: associationName
+        )
+        
+        let annouceListVC = AnnounceListViewController(
+            type: .association,
+            assicationName: associationName,
+            announceViewModel: announceListVM,
+            coordinator: self
+        )
         
         annouceListVC.hidesBottomBarWhenPushed = true
         
@@ -48,7 +60,20 @@ final class HomeCoordinator: Coordinator {
     }
     
     func pushBookmarkList() {
-        let annouceListVC = AnnounceListViewController(type: .bookmark, coordinator: self)
+        let announceListVM = AnnounceListViewModel(
+            type: .bookmark,
+            associationLogoUseCase: AssociationLogoUseCase(repository: HomeRepositoryImpl()),
+            allAnnounceListUseCase: AllAnnounceListUseCase(repository: NoticesRepositoryImpl()),
+            allAssociationAnnounceListUseCase: AllAssociationAnnounceListUseCase(repository: NoticesRepositoryImpl()),
+            bookmarkAssociationAnnounceListUseCase: BookmarkAssociationAnnounceListUseCase(repository: NoticesRepositoryImpl())
+        )
+        
+        let annouceListVC = AnnounceListViewController(
+            type: .bookmark,
+            announceViewModel: announceListVM,
+            coordinator: self
+        )
+        
         annouceListVC.hidesBottomBarWhenPushed = true
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {
