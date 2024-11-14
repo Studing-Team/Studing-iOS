@@ -24,6 +24,10 @@ protocol InputAdmissionDelegate: AnyObject {
     func didSubmitAdmission(_ admission: String)
 }
 
+protocol InputmarketingDelegate: AnyObject {
+    func didSubmitMarketing(_ isMarketing: Bool)
+}
+
 protocol InputStudentInfoDelegate: AnyObject {
     func didSubmitStudentCardImage(_ imageData: Data)
     func didSubmitUserName(_ userName: String)

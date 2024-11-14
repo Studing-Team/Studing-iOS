@@ -16,4 +16,5 @@ struct SignupRequestDTO: Encodable {
     let memberUniversity: String      // 사용자 대학교이름
     let memberDepartment: String      // 사용자 대학교 학과
     let studentCardImage: Data        // 학생증 사진
+    let marketingAgreement: Bool      // 마켓팅 수신 동의 유/무
 }
