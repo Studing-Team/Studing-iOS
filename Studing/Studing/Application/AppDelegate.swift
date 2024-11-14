@@ -6,14 +6,33 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseMessaging
+
+import UserNotifications
+//import FirebaseAuth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // MARK: - FireBase 설정
+        
+        FirebaseApp.configure()
+        
+        // 앱 실행 시 사용자에게 알림 허용 권한
+        UNUserNotificationCenter.current().delegate = self
+        
+        requestNotificationPermission()
+        
+        // UNUserNotificationCenterDelegate 를 구현한 메서드 실행
+        application.registerForRemoteNotifications()
+        
+        // FCM 델리게이트 설정 추가
+        Messaging.messaging().delegate = self
+        
+        // MARK: - NavigationBar 설정
         
         // 네비게이션 바의 외관을 설정합니다.
         let appearance = UINavigationBarAppearance()
@@ -28,8 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 전체 네비게이션 바에 적용
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        
-        
+    
+
         return true
     }
 
@@ -50,3 +69,80 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+// MARK: - MessagingDelegate
+
+extension AppDelegate: MessagingDelegate {
+    
+    // fcm 등록 토큰을 받았을 때
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+
+        print("토큰을 받았다")
+        // Store this token to firebase and retrieve when to send message to someone...
+        let dataDict: [String: String] = ["token": fcmToken ?? ""]
+        
+        // Store token in Firestore For Sending Notifications From Server in Future...
+        
+        print(dataDict)
+        
+        if let fcmToken {
+            let _ = KeychainManager.shared.save(key: .fcmToken, value: fcmToken)
+        }
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    // Foreground 상태에서 알림 받았을 때
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        let userInfo = notification.request.content.userInfo
+
+        print(userInfo)
+        
+        completionHandler([[.banner, .badge, .sound]])
+    }
+    
+    // 푸시메세지를 받았을 떄
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        
+        print(userInfo)
+        
+        completionHandler()
+    }
+    
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permission: \(error)")
+                return
+            }
+            if granted {
+                print("Notification permission granted.")
+            } else {
+                print("Notification permission denied.")
+            }
+        }
+    }
+}
+
+// MARK: - APNs 토큰 관련 메서드 추가
+
+extension AppDelegate {
+    // APNs 토큰 등록 성공
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+        
+        print("Succuess to register for remote notifications")
+
+    }
+    
+    // APNs 토큰 등록 실패
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register for remote notifications: \(error)")
+    }
+}

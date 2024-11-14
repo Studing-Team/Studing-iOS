@@ -16,6 +16,7 @@ enum Config {
         enum Keychain: String {
             case accessToken = "ACCESS_TOKEN_KEY"
             case refreshToken = "REFRESH_TOKEN_KEY"
+            case fcmToken = "FCM_TOKEN_KEY"
         }
     }
     
@@ -49,5 +50,11 @@ extension Config {
         return key
     }()
     
+    static let fcmTokenKey: String = {
+        guard let key = Config.infoDictionary[Keys.Keychain.fcmToken.rawValue] as? String else {
+            fatalError("⛔️FCM_TOKEN_KEY is not set in plist for this configuration⛔️")
+        }
+        return key
+    }()
 }
 

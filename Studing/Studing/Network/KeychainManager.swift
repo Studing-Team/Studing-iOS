@@ -28,6 +28,8 @@ enum KeychainKey: String {
     /// 리프레시 토큰을 저장하기 위한 키
     case refreshToken
     
+    case fcmToken
+    
     /// Info.plist에서 정의된 실제 키체인 키 값을 반환합니다.
         /// - Returns: Info.plist에 정의된 실제 키 문자열
     var value: String {
@@ -36,6 +38,8 @@ enum KeychainKey: String {
             return Config.accessTokenKey
         case .refreshToken:
             return Config.refreshTokenKey
+        case .fcmToken:
+            return Config.fcmTokenKey
         }
     }
 }
@@ -106,6 +110,8 @@ final class KeychainManager {
         
         if status == errSecSuccess {
             if let data = dataTypeRef as? Data {
+                
+                print("KeyChain - \(key) 불러오기 완료")
                 return String(data: data, encoding: .utf8)
             }
         }
