@@ -58,7 +58,7 @@ final class MyInfoCollectionViewCell: UICollectionViewCell {
 extension MyInfoCollectionViewCell {
     /// `MypageModel`을 받아서 셀의 UI 컴포넌트를 설정합니다.
     /// - Parameter model: 사용자 정보를 담고 있는 `MypageModel`
-    func configureCell(forModel model: MypageModel) {
+    func configureCell(forModel model: MypageInfoEntity) {
         myNameLabel.text = "\(model.userName)님"
         myUniversityLabel.text = model.university
         myMajorLabel.text = model.major

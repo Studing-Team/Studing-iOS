@@ -59,7 +59,7 @@ private extension AssociationTypeView {
     func setupLayout() {
         backgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-            $0.height.equalTo(18)
+            $0.height.equalTo(20)
         }
         
         typeTitleLabel.snp.makeConstraints {

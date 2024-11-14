@@ -34,7 +34,7 @@ extension HomeAPI: APIEndpoint {
         case .getBookmarkAnnouce:
             return basePath.rawValue + "/save"
         case .getMypage:
-            return basePath.rawValue + "/mypage"
+            return basePath.rawValue + "/mydata"
         }
     }
     

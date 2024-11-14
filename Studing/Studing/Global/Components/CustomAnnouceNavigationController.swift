@@ -13,6 +13,7 @@ import Then
 enum NavigationType {
     case home
     case announce
+    case bookmark
     case detail
 }
 
@@ -187,7 +188,7 @@ private extension CustomAnnouceNavigationController {
             applyHomeStyle()
             applyHomeLayout()
             
-        case .announce:
+        case .announce, .bookmark:
             navigationHeight = 60
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
@@ -250,6 +251,8 @@ extension CustomAnnouceNavigationController {
         switch type {
         case .announce:
             setNavigationTitle("학생회 공지 리스트")
+        case .bookmark:
+            setNavigationTitle("저장한 공지사항을 확인해요")
         case .detail:
             setNavigationTitle("공지사항")
         case .home:

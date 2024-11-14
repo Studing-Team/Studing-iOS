@@ -19,7 +19,9 @@ final class MypageCoordinator: Coordinator {
     }
     
     func start() {
-        let mypageVC = MypageViewController()
+        let mypageVM = MypageViewModel(mypageUseCase: MypageUseCase(repository: HomeRepositoryImpl()))
+        
+        let mypageVC = MypageViewController(mypageViewModel: mypageVM, coordinator: self)
         navigationController.pushViewController(mypageVC, animated: true)
     }
 }

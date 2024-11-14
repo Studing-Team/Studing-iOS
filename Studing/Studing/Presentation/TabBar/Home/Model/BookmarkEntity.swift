@@ -1,5 +1,5 @@
 //
-//  BookmarkModel.swift
+//  BookmarkEntity.swift
 //  Studing
 //
 //  Created by ParkJunHyuk on 10/21/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BookmarkModel: Hashable, HomeSectionData {
+struct BookmarkEntity: Hashable, HomeSectionData {
     let id = UUID()
     let association: String
     let title: String

@@ -13,7 +13,14 @@ import Then
 
 final class MypageViewController: UIViewController {
     
+    private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
+    private var cancellables = Set<AnyCancellable>()
+    
     // MARK: - Properties
+    
+    private let mypageViewModel: MypageViewModel
+    
+    weak var coordinator: MypageCoordinator?
     
     // MARK: - UI Properties
     
@@ -22,6 +29,19 @@ final class MypageViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         return UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     }()
+    
+    // MARK: - init
+    
+    init(mypageViewModel: MypageViewModel,
+        coordinator: MypageCoordinator) {
+        self.mypageViewModel = mypageViewModel
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     
@@ -34,13 +54,33 @@ final class MypageViewController: UIViewController {
         setupLayout()
         setupDelegate()
         setupCollectionView()
+        bindViewModel()
+        
+        viewDidLoadSubject.send(())
     }
 }
 
 // MARK: - Private Bind Extensions
 
 private extension MypageViewController {
-    
+    func bindViewModel() {
+        let input = MypageViewModel.Input(
+            viewDidLoad: viewDidLoadSubject.eraseToAnyPublisher()
+        )
+        
+        let output = mypageViewModel.transform(input: input)
+        
+        output.myPageInfo
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] info in
+                
+                if info != nil {
+                    self?.collectionView.reloadSections(IndexSet(integer: 0))
+                }
+//                self?.collectionView.reloadSections(IndexSet(integer: MyPageType.myInfo))
+            }
+            .store(in: &cancellables)
+    }
 }
 
 
@@ -218,8 +258,11 @@ extension MypageViewController: UICollectionViewDataSource, UICollectionViewDele
         case .myInfo:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyInfoCollectionViewCell.className, for: indexPath) as! MyInfoCollectionViewCell
             
-            // MyInfo 셀 구성
-            cell.configureCell(forModel: MypageModel(userName: "변상우", university: "서울과학기술대학교", major: "컴퓨터공학과", studentId: "20학번"))
+            if let myPageInfo = mypageViewModel.myPageInfoSubject.value {
+                cell.configureCell(forModel: myPageInfo)
+            }
+            
+            return cell
             
             return cell
             
