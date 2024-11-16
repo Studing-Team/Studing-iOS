@@ -19,7 +19,8 @@ final class StoreCoordinator: Coordinator {
     }
     
     func start() {
-        let storeVM = StoreViewModel()
+        let storeVM = StoreViewModel(partnerInfoUseCase: PartnerInfoUseCase(repository: PartnerRepositoryImpl()))
+        
         let storeVC = StoreViewController(storeViewModel: storeVM)
         navigationController.pushViewController(storeVC, animated: true)
     }

@@ -25,6 +25,8 @@ final class HomeViewModel: BaseViewModel {
     var sectionUpdatePublisher = PassthroughSubject<SectionType, Never>()
     var associationUpdatePublisher = PassthroughSubject<[IndexPath], Never>()
     
+    var selectedAssociationType = ""
+    
     // MARK: - Input
     
     struct Input {
@@ -65,144 +67,8 @@ final class HomeViewModel: BaseViewModel {
     // MARK: - Public methods
     
     func transform(input: Input) -> Output {
-        
-//        input.associationTap
-//            .map { [weak self] index -> String in
-//                
-//                guard let self = self, let associationData = self.sectionDataDict[.association] as? [AssociationEntity] else { return "" }
-//                
-//                selectedAssociationTitle.send(associationData[index].name)
-//                
-//                return associationData[index].name
-//            }
-//            .flatMap { name -> AnyPublisher<(AnnounceInfo, MissAnnounceInfo), Error> in
-//                
-//                
-//            }
-        
-//        input.associationTap
-//            .sink { [weak self] index in
-//                guard let self = self,
-//                      let associationData = self.sectionDataDict[.association] as? [AssociationEntity]
-//                else { return }
-//                
-//                var updatedData = associationData
-//                var changedItemIndexPaths: [IndexPath]
-//                
-//                let sectionNumber = Int(sectionsData.value?.firstIndex(of: .association) ?? 0)
-//                
-//                let previouseSelectedIndex = Int(associationData.firstIndex(where: { $0.isSelected }) ?? 0)
-//                
-//                if previouseSelectedIndex == index {
-//                    // 똑같은 셀을 눌렀을 때
-//                } else {
-//                    updatedData[previouseSelectedIndex].isSelected = false
-//                    updatedData[index].isSelected = true
-//                    
-//                    changedItemIndexPaths = [IndexPath(row: index, section: sectionNumber)]
-//                    changedItemIndexPaths.append(IndexPath(row: previouseSelectedIndex, section: sectionNumber))
-//                    
-//                    
-//                }
-//            }
-//            .store(in: &cancellables)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//        /// 학생회를 탭했을 때  sectionDataDict 에서 key 값이 association 인 의 데이터 중 name 을 반환
-//        /// selectedAssociationTitle 라는 CurrentValueSubject 에 name 을 보내고  공지사항 Header 에 학생회 이름을 할당
-//        // association tap 처리
-//        input.associationTap
-//            .sink { [weak self] index in
-//                guard let self = self,
-//                      let associationData = self.sectionDataDict[.association] as? [AssociationEntity]
-//                else { return }
-//                
-//                
-//                var updatedData = associationData
-//                var changedItemIndexPaths: [IndexPath]
-//                
-//                let sectionNumber = Int(sectionsData.value?.firstIndex(of: .association) ?? 0)
-//                
-//                let previouseSelectedIndex = Int(associationData.firstIndex(where: { $0.isSelected }) ?? 0)
-//                
-//                if previouseSelectedIndex == index {
-//                    // 똑같은 셀을 눌렀을 때
-//                } else {
-//                    updatedData[previouseSelectedIndex].isSelected = false
-//                    updatedData[index].isSelected = true
-//                    
-//                    changedItemIndexPaths = [IndexPath(row: index, section: sectionNumber)]
-//                    changedItemIndexPaths.append(IndexPath(row: previouseSelectedIndex, section: sectionNumber))
-//                }
-//                
-////                let updatedData = associationData.enumerated().map { (i, entity) in
-////                    var updatedEntity = entity
-////                    updatedEntity.isSelected = (i == index)
-////                    return updatedEntity
-////                }
-//                
-//                self.sectionDataDict[.association] = updatedData
-//                self.sectionUpdatePublisher.send(.association)
-//                
-//                if let selectedAssociation = updatedData.first(where: { $0.isSelected }) {
-//                    self.selectedAssociationTitle.send(selectedAssociation.name)
-//                    
-//                    Task {
-//                        await withTaskGroup(of: Void.self) { group in
-//                            group.addTask { await self.getAnnouceInfo(name: selectedAssociation.name) }
-//                            group.addTask { await self.getMissAnnouceInfo(name: selectedAssociation.name) }
-//                        }
-//                        
-//                        self.sectionUpdatePublisher.send(.annouce)
-//                        self.sectionUpdatePublisher.send(.missAnnouce)
-//                        
-//                    }
-//                }
-//            }
-//            .store(in: &cancellables)
-        
-        
         input.associationTap
             .compactMap { [weak self] index -> String? in
-//                guard let self = self,
-//                      let associationData = self.sectionDataDict[.association] as? [AssociationEntity]
-//                else { return nil }
-//                
-//                // 선택 상태 업데이트
-//                let updatedData = associationData.enumerated().map { (i, entity) in
-//                    var updatedEntity = entity
-//                    updatedEntity.isSelected = (i == index)
-//                    print("\(index) 업데이트")
-//                    return updatedEntity
-//                }
-//                
-//                self.sectionDataDict[.association] = updatedData
-//                
-//                self.sectionUpdatePublisher.send(.association)
-//                self.selectedAssociationTitle.send(associationData[index].name)
-//                
-//                return associationData[index].name
                 guard let self else { return nil }
                 
                 if let associationData = self.sectionDataDict[.association] as? [AssociationEntity] {
@@ -217,15 +83,8 @@ final class HomeViewModel: BaseViewModel {
                         )
                     }
                     
-                    // 업데이트된 데이터 저장
                     self.sectionDataDict[.association] = updatedData
-                    
-                    // UI 갱신 트리거
-//                    if let currentSections = self.sectionsData.value {
-//                        self.sectionsData.send(currentSections)
-//                    }
                     self.sectionUpdatePublisher.send(.association)
-                    // selectedAssociationTitle 업데이트
                     self.selectedAssociationTitle.send(updatedData[index].name)
                     
                     if updatedData[index].associationType != nil {
@@ -238,7 +97,7 @@ final class HomeViewModel: BaseViewModel {
             }
             .sink { [weak self] name in
                 guard let self = self else { return }
-
+                selectedAssociationType = name
                 // API 동시 호출
                 Task {
                     await withTaskGroup(of: Void.self) { group in
@@ -421,18 +280,5 @@ extension HomeViewModel {
         }
         
         return convertData
-    }
-    
-    func convertToAssociationType(_ affiliation: String) -> AssociationType {
-        
-        let lastTwoCharacters = String(affiliation.suffix(2))
-        
-        if lastTwoCharacters == "대학" {
-            return .college
-        } else if lastTwoCharacters == "생회" {
-            return .generalStudents
-        } else {
-            return .major
-        }
     }
 }

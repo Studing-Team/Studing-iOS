@@ -12,8 +12,9 @@ import SnapKit
 import Then
 
 enum DetailAnnounceType {
-    case bookmarkAnnouce
-    case unreadAnnouce
+    case bookmarkAnnounce
+    case announce
+    case unreadAnnounce
 }
 
 final class DetailAnnounceViewController: UIViewController {
@@ -21,7 +22,7 @@ final class DetailAnnounceViewController: UIViewController {
     // MARK: - Properties
     
     private var type: DetailAnnounceType
-    private let detailAnnouceViewModel = DetailAnnouceViewModel()
+    private let detailAnnouceViewModel: DetailAnnouceViewModel
     private var dataSource: UICollectionViewDiffableDataSource<DetailAnnouceSectionType, AnyHashable>!
     
     private var cancellables = Set<AnyCancellable>()
@@ -53,8 +54,9 @@ final class DetailAnnounceViewController: UIViewController {
     
     // MARK: - init
     
-    init(type: DetailAnnounceType, coordinator: HomeCoordinator) {
+    init(type: DetailAnnounceType, detailAnnouceViewModel: DetailAnnouceViewModel, coordinator: HomeCoordinator) {
         self.type = type
+        self.detailAnnouceViewModel = detailAnnouceViewModel
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
@@ -80,10 +82,14 @@ final class DetailAnnounceViewController: UIViewController {
         setupDelegate()
         bindViewModel()
         
-        detailAnnouceViewModel.convertHeaderData()
-        detailAnnouceViewModel.convertImageData()
-        detailAnnouceViewModel.convertContentData()
-        detailAnnouceViewModel.getMySections()
+        Task {
+            switch type {
+            case .bookmarkAnnounce, .announce:
+                await fetchInitialBookmarkData()
+            case .unreadAnnounce:
+                await fetchInitialUnReadAnnounceData()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,6 +112,18 @@ final class DetailAnnounceViewController: UIViewController {
         }
     }
     
+    func fetchInitialAnnounceData() async {
+        await detailAnnouceViewModel.getDetailAnnounce()
+    }
+    
+    func fetchInitialBookmarkData() async {
+        await detailAnnouceViewModel.getDetailAnnounce()
+    }
+    
+    func fetchInitialUnReadAnnounceData() async {
+        await detailAnnouceViewModel.postUnreadAllAnnounce()
+    }
+    
     func updateLayout() {
         contentView.snp.remakeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
@@ -123,13 +141,26 @@ final class DetailAnnounceViewController: UIViewController {
 private extension DetailAnnounceViewController {
     
     func bindViewModel() {
-//        let input = DetailAnnouceViewModel.Input()
-//        let output = detailAnnouceViewModel.transform(input: input)
+        let input = DetailAnnouceViewModel.Input(
+            likeButtonTap: likeButton.tapPublisher, 
+            bookmarkButtonTap: bookmarkButton.tapPublisher,
+            nextButtonTap: nextButton.tapPublisher
+        )
+        
+        let output = detailAnnouceViewModel.transform(input: input)
         
         detailAnnouceViewModel.sectionsData
             .sink { [weak self] sectionTypes in
                 // 섹션 타입이 업데이트되면 스냅샷 업데이트
                 self?.applySnapshot()
+            }
+            .store(in: &cancellables)
+        
+        output.isFavorite
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isFavorite in
+                let image = isFavorite ? UIImage(resource: .likeButton) : UIImage(resource: .unLikeButton)
+                self?.likeButton.setImage(image, for: .normal)
             }
             .store(in: &cancellables)
         
@@ -157,7 +188,6 @@ private extension DetailAnnounceViewController {
         likeButton.do {
             $0.backgroundColor = .white
             $0.layer.cornerRadius = 54 / 2
-            $0.setImage(UIImage(resource: .unFavorite), for: .normal)
             $0.layer.shadowColor = UIColor.black.cgColor  // 그림자 색상
             $0.layer.shadowOffset = CGSize(width: 0, height: 3)  // 그림자 위치
             $0.layer.shadowOpacity = 0.1  // 그림자 투명도
@@ -173,7 +203,7 @@ private extension DetailAnnounceViewController {
         }
         
         switch type {
-        case .bookmarkAnnouce:
+        case .announce, .bookmarkAnnounce:
             bookmarkButton.do {
                 $0.setTitle("저장하기", for: .normal) // 버튼의 제목 설정
                 $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
@@ -182,7 +212,7 @@ private extension DetailAnnounceViewController {
                 $0.layer.cornerRadius = 24
             }
             
-        case .unreadAnnouce:
+        case .unreadAnnounce:
             bookmarkButton.do {
                 $0.setTitle("저장하기", for: .normal) // 버튼의 제목 설정
                 $0.setTitleColor(.primary50, for: .normal) // 제목 색상 설정
@@ -197,10 +227,10 @@ private extension DetailAnnounceViewController {
     
     func setupHierarchy(_ type: DetailAnnounceType) {
         switch type {
-        case .bookmarkAnnouce:
+        case .announce, .bookmarkAnnounce:
             view.addSubviews(scrollView, likeButton, bookmarkButton)
             
-        case .unreadAnnouce:
+        case .unreadAnnounce:
             view.addSubviews(scrollView, likeButton, nextButton, bookmarkButton)
         }
 
@@ -234,14 +264,14 @@ private extension DetailAnnounceViewController {
         }
         
         switch type {
-        case .bookmarkAnnouce:
+        case .announce, .bookmarkAnnounce:
             bookmarkButton.snp.makeConstraints {
                 $0.horizontalEdges.equalToSuperview().inset(15)
                 $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(6)
                 $0.height.equalTo(48)
             }
             
-        case .unreadAnnouce:
+        case .unreadAnnounce:
             bookmarkButton.snp.makeConstraints {
                 $0.leading.equalToSuperview().inset(15)
                 $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(6)

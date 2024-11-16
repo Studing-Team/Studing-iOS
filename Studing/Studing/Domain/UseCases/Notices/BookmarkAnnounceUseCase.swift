@@ -1,5 +1,5 @@
 //
-//  BookmarkAnnouceUseCase.swift
+//  BookmarkAnnounceUseCase.swift
 //  Studing
 //
 //  Created by ParkJunHyuk on 11/13/24.

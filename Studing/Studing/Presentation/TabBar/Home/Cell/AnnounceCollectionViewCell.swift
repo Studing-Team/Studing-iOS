@@ -72,8 +72,8 @@ extension AnnounceCollectionViewCell {
         bookmarkCount.text = "\(model.bookmarkCount)"
         watchCount.text = "\(model.watchCount)"
         
-        favoriteImage.image = UIImage(resource: model.isFavorite == true ? .favorite : .favorite)
-        bookmarkImage.image = UIImage(resource: model.isBookmark == true ? .bookmark : .bookmark)
+        favoriteImage.image = UIImage(resource: model.isFavorite == true ? .favorite : .unFavorite)
+        bookmarkImage.image = UIImage(resource: model.isBookmark == true ? .bookmark : .unBookmark)
         watchImage.image = UIImage(resource: .visibility)
     }
 }

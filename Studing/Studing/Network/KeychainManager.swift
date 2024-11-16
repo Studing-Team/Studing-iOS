@@ -30,6 +30,8 @@ enum KeychainKey: String {
     
     case fcmToken
     
+    case signupInfo
+    
     /// Info.plist에서 정의된 실제 키체인 키 값을 반환합니다.
         /// - Returns: Info.plist에 정의된 실제 키 문자열
     var value: String {
@@ -40,6 +42,8 @@ enum KeychainKey: String {
             return Config.refreshTokenKey
         case .fcmToken:
             return Config.fcmTokenKey
+        case .signupInfo:
+            return Config.userInfoKey
         }
     }
 }
@@ -134,5 +138,52 @@ final class KeychainManager {
     func clearTokens() {
         delete(key: .accessToken)
         delete(key: .refreshToken)
+    }
+}
+
+extension KeychainManager {
+    // 클래스 인스턴스를 저장하는 함수
+    func saveData<T: Codable>(key: KeychainKey, value: T) {
+        do {
+            let data = try JSONEncoder().encode(value) // Codable 클래스 인코딩
+            let query: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrAccount as String: key.rawValue,
+                kSecValueData as String: data
+            ]
+            
+            SecItemDelete(query as CFDictionary) // 기존 데이터 삭제
+            SecItemAdd(query as CFDictionary, nil) // 새 데이터 저장
+            print("Keychain - \(key) 저장 완료")
+            
+        } catch {
+            print("Keychain 저장 오류: \(error)")
+        }
+    }
+    
+    // 저장된 클래스 인스턴스를 불러오는 함수
+    func loadData<T: Codable>(key: KeychainKey, type: T.Type) -> T? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key.rawValue,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        
+        var dataTypeRef: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
+        
+        guard status == errSecSuccess, let data = dataTypeRef as? Data else {
+            print("Keychain에서 \(key) 불러오기 실패")
+            return nil
+        }
+        
+        do {
+            let decodedObject = try JSONDecoder().decode(T.self, from: data)
+            return decodedObject
+        } catch {
+            print("Keychain 디코딩 오류: \(error)")
+            return nil
+        }
     }
 }

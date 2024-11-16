@@ -12,7 +12,7 @@ import Then
 
 final class DetailAnnouceImagesCollectionViewCell: UICollectionViewCell {
     
-    private let contentImageView = UIImageView()
+    private let contentImageView = AFImageView()
     private let imageCountView = UIView()
     private let imageCountLabel = UILabel()
     
@@ -34,7 +34,7 @@ final class DetailAnnouceImagesCollectionViewCell: UICollectionViewCell {
 extension DetailAnnouceImagesCollectionViewCell {
     func configureCell(forModel model: DetailAnnouceImageModel) {
         imageCountLabel.text = "\(1)/\(3)"
-        contentImageView.image = UIImage(resource: .dump)
+        contentImageView.setImage(model.image, type: .postImage)
     }
 }
 

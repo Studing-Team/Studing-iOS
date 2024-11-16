@@ -14,7 +14,7 @@ final class SignupUseCase {
         self.repository = repository
     }
     
-    func execute(request: SignupRequestDTO) async -> Result<EmptyResponse, NetworkError> {
+    func execute(request: SignupRequestDTO) async -> Result<SignupResponseDTO, NetworkError> {
         return await repository.postSignup(request: request)
     }
 }
