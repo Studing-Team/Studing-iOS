@@ -48,6 +48,7 @@ extension AllAssociationAnnounceListResponseData {
 extension AllAssociationAnnouceListResponseDTO {
     func toEntity() -> AllAssociationAnnounceListEntity {
         return AllAssociationAnnounceListEntity(
+            announceId: id,
             type: convertToAnnounceType(type: tag),
             title: title,
             contents: content,

@@ -12,7 +12,7 @@ final class MemberRepositoryImpl: MemberRepository {
         return await NetworkManager.shared.request(MemberAPI.postSignin(request))
     }
     
-    func postSignup(request: SignupRequestDTO) async -> Result<EmptyResponse, NetworkError> {
+    func postSignup(request: SignupRequestDTO) async -> Result<SignupResponseDTO, NetworkError> {
         return await NetworkManager.shared.request(MemberAPI.postSignup(request))
     }
     

@@ -9,6 +9,7 @@ import Foundation
 
 struct AllAssociationAnnounceListEntity: Hashable, HomeSectionData {
     let id = UUID()
+    let announceId: Int
     let type: AnnounceType
     let title: String
     let contents: String
