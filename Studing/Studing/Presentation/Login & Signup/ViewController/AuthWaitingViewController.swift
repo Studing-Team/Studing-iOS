@@ -19,6 +19,9 @@ final class AuthWaitingViewController: UIViewController {
     private var viewModel: AuthWaitingViewModel
     weak var coordinator: SignUpCoordinator?
     
+    private let permissionGrantedTap = PassthroughSubject<Void, Never>()
+    private let permissionDeniedTap = PassthroughSubject<Void, Never>()
+    
     // MARK: - Combine Publishers Properties
 
     private var cancellables = Set<AnyCancellable>()
@@ -81,7 +84,9 @@ private extension AuthWaitingViewController {
     func bindViewModel() {
         
         let input = AuthWaitingViewModel.Input(
-            showStudingTap: showStudingButton.tapPublisher
+            showStudingTap: showStudingButton.tapPublisher,
+            permissionGrantedTap: permissionGrantedTap.eraseToAnyPublisher(),
+            permissionDeniedTap: permissionDeniedTap.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(input: input)
@@ -100,12 +105,26 @@ private extension AuthWaitingViewController {
                 self?.requestNotificationPermission()
             }
             .store(in: &cancellables)
+        
+        output.permissionGrantedResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.coordinator?.pushSuccessSignUpView()
+            }
+            .store(in: &cancellables)
+        
+        
+        output.permissionDeniedResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.coordinator?.pushSuccessSignUpView()
+            }
+            .store(in: &cancellables)
     }
 }
 
 extension AuthWaitingViewController {
     private func requestNotificationPermission() {
-        // 직접 권한 요청
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             if let error = error {
                 print("알림 권한 요청 에러: \(error)")
@@ -113,22 +132,40 @@ extension AuthWaitingViewController {
             }
             
             DispatchQueue.main.async {
-                if !granted {
-                    // 거부된 경우 설정으로 이동
-                    self.openSettings()
+                if granted {
+                    // 허용된 경우의 로직
+                    self.handleNotificationPermissionGranted()
+                } else {
+                    // 거부된 경우의 로직
+                    self.handleNotificationPermissionDenied()
                 }
             }
         }
     }
     
-    private func requestAuthorization() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
-            DispatchQueue.main.async {
-                self?.notificationButton.isSelected = granted
-            }
-        }
+    private func handleNotificationPermissionGranted() {
+        // 알림 허용 시 필요한 작업
+        // 예: UserDefaults에 상태 저장, UI 업데이트 등
+        permissionGrantedTap.send()
     }
+
+    private func handleNotificationPermissionDenied() {
+        // 알림 거부 시 필요한 작업
+        // 예: 설정으로 이동 안내 얼럿 표시
+//        self.openSettings()
+        
+        permissionDeniedTap.send()
+    }
+
     
+//    private func requestAuthorization() {
+//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
+//            DispatchQueue.main.async {
+//                self?.notificationButton.isSelected = granted
+//            }
+//        }
+//    }
+//    
     private func openSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)

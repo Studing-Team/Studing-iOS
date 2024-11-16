@@ -8,5 +8,5 @@
 import Foundation
 
 protocol NotificationsRepository {
-    func postNotificationToken() async -> Result<EmptyResponse, NetworkError>
+    func postNotificationToken(memberId: Int) async -> Result<EmptyResponse, NetworkError>
 }

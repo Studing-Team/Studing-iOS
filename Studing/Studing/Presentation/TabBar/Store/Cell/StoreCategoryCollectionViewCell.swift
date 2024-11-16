@@ -32,7 +32,7 @@ enum CategoryType: CaseIterable {
         case .health:
             return "병원"
         case .bar:
-            return "술집"
+            return "주점"
         case .exercise:
             return "운동"
         }

@@ -83,9 +83,12 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushAuthUniversityView() {
-        let authUniversityVM = AuthUniversityViewModel()
+        let authUniversityVM = AuthUniversityViewModel(
+            signupUseCase: SignupUseCase(repository: MemberRepositoryImpl()), 
+            signupUserInfo: signUpStore.getUserData()
+        )
         
-        authUniversityVM.delegate = self
+//        authUniversityVM.delegate = self
         
         let authUniversityVC = AuthUniversityViewController(viewModel: authUniversityVM, coordinator: self)
         
@@ -94,7 +97,9 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushAuthWaitingView() {
-        let authWaitingVM = AuthWaitingViewModel(signupUseCase: SignupUseCase(repository: MemberRepositoryImpl()), signupData: signUpStore.getUserData())
+        let authWaitingVM = AuthWaitingViewModel(
+            notificationTokenUseCase: NotificationTokenUseCase(repository: NotificationsRepositoryImpl())
+        )
         
         let authUniversityVC = AuthWaitingViewController(viewModel: authWaitingVM, coordinator: self)
         
@@ -149,16 +154,16 @@ extension SignUpCoordinator: InputmarketingDelegate {
     }
 }
 
-extension SignUpCoordinator: InputStudentInfoDelegate {
-    func didSubmitStudentCardImage(_ imageData: Data) {
-        signUpStore.setStudentCardImage(imageData)
-    }
-    
-    func didSubmitUserName(_ userName: String) {
-        signUpStore.setUserName(userName)
-    }
-    
-    func didSubmitStudentNumber(_ studentNumber: String) {
-        signUpStore.setStudentNumber(studentNumber)
-    }
-}
+//extension SignUpCoordinator: InputStudentInfoDelegate {
+//    func didSubmitStudentCardImage(_ imageData: Data) {
+//        signUpStore.setStudentCardImage(imageData)
+//    }
+//    
+//    func didSubmitUserName(_ userName: String) {
+//        signUpStore.setUserName(userName)
+//    }
+//    
+//    func didSubmitStudentNumber(_ studentNumber: String) {
+//        signUpStore.setStudentNumber(studentNumber)
+//    }
+//}

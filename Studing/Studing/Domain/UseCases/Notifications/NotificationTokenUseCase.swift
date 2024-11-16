@@ -14,7 +14,7 @@ final class NotificationTokenUseCase {
         self.repository = repository
     }
     
-    func execute() async -> Result<EmptyResponse,NetworkError> {
-        return await repository.postNotificationToken()
+    func execute(memberId: Int) async -> Result<EmptyResponse,NetworkError> {
+        return await repository.postNotificationToken(memberId: memberId)
     }
 }

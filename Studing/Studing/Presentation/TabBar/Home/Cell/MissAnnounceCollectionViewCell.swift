@@ -16,6 +16,7 @@ final class MissAnnounceCollectionViewCell: UICollectionViewCell {
     
     private let verticalStackView = UIStackView()
     private let horizontalTitleStackView = UIStackView()
+    private let nextImageView = UIImageView()
     private let userNameTitleLabel = UILabel()
     private let missAnnounceCount = UILabel()
     private let subTitleLabel = UILabel()
@@ -64,7 +65,11 @@ private extension MissAnnounceCollectionViewCell {
         horizontalTitleStackView.do {
             $0.axis = .horizontal
             $0.addArrangedSubviews(userNameTitleLabel, missAnnounceCount)
-            $0.spacing = 2
+            $0.spacing = 5
+        }
+        
+        nextImageView.do {
+            $0.image = UIImage(resource: .unReadAnnounce)
         }
         
         userNameTitleLabel.do {
@@ -90,7 +95,7 @@ private extension MissAnnounceCollectionViewCell {
     }
     
     func setupHierarchy() {
-        self.addSubviews(bellImage, verticalStackView)
+        self.addSubviews(bellImage, nextImageView, verticalStackView)
     }
     
     func setupLayout() {
@@ -100,11 +105,18 @@ private extension MissAnnounceCollectionViewCell {
             $0.bottom.equalToSuperview().inset(18)
         }
         
+        nextImageView.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(convertByWidthRatio(17))
+            $0.bottom.equalToSuperview().inset(18)
+            $0.size.equalTo(48)
+        }
+        
         bellImage.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
-            $0.trailing.equalToSuperview().inset(convertByWidthRatio(10))
-            $0.bottom.equalToSuperview().inset(10)
-            $0.size.equalTo(85)
+//            $0.top.equalToSuperview().offset(10)
+            $0.verticalEdges.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(convertByWidthRatio(17))
+//            $0.bottom.equalToSuperview().inset(10)
+//            $0.size.equalTo(85)
         }
     }
 }

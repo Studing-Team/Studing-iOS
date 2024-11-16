@@ -59,7 +59,7 @@ final class StoreCollectionViewCell: UICollectionViewCell {
 // MARK: - Extensions
 
 extension StoreCollectionViewCell {
-    func configureCell(forModel model: StoreModel) {
+    func configureCell(forModel model: StoreEntity) {
         titleLabel.text = model.name
         categoryLabel.text = model.category.title
         categoryImageView.image = model.category.icon

@@ -16,9 +16,9 @@ final class StoreViewController: UIViewController {
     // MARK: - Properties
     
     private let categorySelectionSubject = PassthroughSubject<CategoryType, Never>()
-    
-    private var storeDataSource: UICollectionViewDiffableDataSource<Int, StoreModel>!
-    
+    private let searchTextSubject = PassthroughSubject<String, Never>()
+   
+    private var storeDataSource: UICollectionViewDiffableDataSource<Int, StoreEntity>!
     private let storeViewModel: StoreViewModel
     
     private var cancellables = Set<AnyCancellable>()
@@ -46,6 +46,7 @@ final class StoreViewController: UIViewController {
 
         view.applyGradient(colors: [.loginStartGradient.withFigmaStyleAlpha(0.3), .loginEndGradient.withFigmaStyleAlpha(0.3)], direction: .topToBottom, locations: [0, 1.0])
         
+        hideKeyboard()
         setNavigationBar()
         setupStyle()
         setupHierarchy()
@@ -53,8 +54,13 @@ final class StoreViewController: UIViewController {
         setupDelegate()
         setupCollectionView()
         
-        configureStoreDataSource()  // bindViewModel 전에 호출
+        configureStoreDataSource()
         bindViewModel()
+
+        let indexPath = IndexPath(item: 0, section: 0)
+        categoryCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
+        
+        categorySelectionSubject.send(.all)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,14 +74,17 @@ final class StoreViewController: UIViewController {
 private extension StoreViewController {
     func bindViewModel() {
         let input = StoreViewModel.Input(
-            categoryTap: categorySelectionSubject.eraseToAnyPublisher()
+            categoryTap: categorySelectionSubject.eraseToAnyPublisher(),
+            searchStoreName: searchTextSubject.eraseToAnyPublisher()
         )
         
         let output = storeViewModel.transform(input: input)
         
         output.storeList
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] stores in
                 self?.applyStoreSnapshot(with: stores)
+                self?.storeCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             }
             .store(in: &cancellables)
     }
@@ -100,9 +109,12 @@ private extension StoreViewController {
             layout.scrollDirection = .horizontal  // 가로 스크롤 설정
             layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             
+            $0.layer.shadowColor = UIColor.storeShadowBackground.withFigmaStyleAlpha(0.3).cgColor
+            $0.layer.shadowOffset = CGSize(width: 0, height: 7)
             $0.collectionViewLayout = layout
             $0.backgroundColor = .clear
             $0.allowsMultipleSelection = false
+            $0.scrollsToTop = true
             $0.showsHorizontalScrollIndicator = false
         }
         
@@ -138,6 +150,7 @@ private extension StoreViewController {
     func setupDelegate() {
         categoryCollectionView.delegate = self
         categoryCollectionView.dataSource = self
+        customSearchBarView.delegate = self
     }
 }
 
@@ -180,7 +193,7 @@ private extension StoreViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    func applyStoreSnapshot(with stores: [StoreModel]) {
+    func applyStoreSnapshot(with stores: [StoreEntity]) {
         if stores.isEmpty {
             let emptyView = EmptyStateView()
             storeCollectionView.backgroundView = emptyView
@@ -188,7 +201,7 @@ private extension StoreViewController {
             storeCollectionView.backgroundView = nil
         }
         
-        var snapshot = NSDiffableDataSourceSnapshot<Int, StoreModel>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, StoreEntity>()
         snapshot.appendSections([0])
         snapshot.appendItems(stores)
         
@@ -277,7 +290,7 @@ extension StoreViewController: StoreCellDelegate {
         // 선택된 셀만 토글
         items[indexPath.item].isExpanded.toggle()
 
-        snapshot = NSDiffableDataSourceSnapshot<Int, StoreModel>()
+        snapshot = NSDiffableDataSourceSnapshot<Int, StoreEntity>()
         snapshot.appendSections([0])
         snapshot.appendItems(items)
         
@@ -289,5 +302,11 @@ extension StoreViewController: StoreCellDelegate {
             animated: true
         )
         
+    }
+}
+
+extension StoreViewController: CustomSearchBarViewDelegate {
+    func searchBar(_ searchBar: CustomSearchBarView, textDidChange text: String) {
+        searchTextSubject.send(text)
     }
 }

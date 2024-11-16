@@ -95,7 +95,7 @@ private extension LoginViewController {
                 switch result {
                 case .success:
                     self?.coordinator?.login()
-                case .failure(let error):
+                case .failure:
 //                    self?.showError(error)
                     break
                 }

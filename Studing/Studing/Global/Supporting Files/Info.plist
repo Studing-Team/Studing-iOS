@@ -42,5 +42,7 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>USER_INFO_KEY</key>
+	<string>$(USER_INFO_KEY)</string>
 </dict>
 </plist>

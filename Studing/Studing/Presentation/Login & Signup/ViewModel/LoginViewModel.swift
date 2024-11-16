@@ -40,13 +40,10 @@ final class LoginViewModel: BaseViewModel {
     private var cancellables = Set<AnyCancellable>()
     
     private let signInUseCase: SignInUseCase
-    private let notificationTokenUseCase: NotificationTokenUseCase
     
-    init(signInUseCase: SignInUseCase,
-         notificationTokenUseCase: NotificationTokenUseCase
+    init(signInUseCase: SignInUseCase
     ) {
         self.signInUseCase = signInUseCase
-        self.notificationTokenUseCase = notificationTokenUseCase
     }
     
     // MARK: - Public methods
@@ -77,17 +74,11 @@ final class LoginViewModel: BaseViewModel {
                 
                 return Future { promise in
                     Task {
-                        let loginResult = await self.signIn(userId: self.usernameSubject.value, userPw: self.passwordSubject.value)
+                        let result = await self.signIn(userId: self.usernameSubject.value, userPw: self.passwordSubject.value)
                         
-                        switch loginResult {
+                        switch result {
                         case .success:
-                            let tokenResult = await self.saveNotificationToken()
-                            switch tokenResult {
-                            case .success:
-                                promise(.success(.success))
-                            case .failure(let error):
-                                promise(.success(.failure(error)))
-                            }
+                            promise(.success(.success))
                         case .failure(let error):
                             promise(.success(.failure(error)))
                         }
@@ -113,15 +104,6 @@ extension LoginViewModel {
             KeychainManager.shared.save(key: .accessToken, value: response.accessToken)
             
             return .success
-        case .failure(let error):
-            return .failure(error)
-        }
-    }
-    
-    func saveNotificationToken() async -> Result<Void, NetworkError> {
-        switch await notificationTokenUseCase.execute() {
-        case .success:
-            return .success(())
         case .failure(let error):
             return .failure(error)
         }

@@ -74,7 +74,6 @@ final class AuthUniversityViewController: UIViewController {
         print("Push AuthUniversityViewController")
         view.backgroundColor = .signupBackground
         
-//        hideKeyboard()
         setupStyle()
         setupHierarchy()
         setupLayout()
@@ -129,8 +128,11 @@ private extension AuthUniversityViewController {
             .store(in: &cancellables)
         
         output.authUniversityViewAction
-            .sink { [weak self] _ in
-                self?.coordinator?.pushAuthWaitingView()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                if result == true {
+                    self?.coordinator?.pushAuthWaitingView()
+                }
             }
             .store(in: &cancellables)
     }
@@ -300,7 +302,7 @@ extension AuthUniversityViewController: PHPickerViewControllerDelegate {
                 DispatchQueue.main.async {
                     guard let self, let image = image as? UIImage else { return }
                     
-                    if let imageData = image.jpegData(compressionQuality: 0.05) {
+                    if let imageData = image.jpegData(compressionQuality: 0.005) {
                         
                         self.seletedImageView.image = UIImage(data: imageData)
                         

@@ -9,5 +9,5 @@ import Foundation
 
 struct DetailAnnouceImageModel: Hashable, DetailAnnouceSectionData {
     let id = UUID()
-    let image: String
+    let image: String?
 }

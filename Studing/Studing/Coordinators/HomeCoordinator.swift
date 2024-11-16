@@ -84,8 +84,33 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(annouceListVC, animated: true)
     }
     
-    func pushDetailAnnouce() {
-        let detailAnnouceVC = DetailAnnounceViewController(type: .bookmarkAnnouce, coordinator: self)
+    func pushDetailAnnouce(type: DetailAnnounceType, announceId: Int? = nil, selectedAssociationType: String? = nil) {
+  
+        let repository = NoticesRepositoryImpl()
+        let viewModel: DetailAnnouceViewModel
+            
+        switch type {
+        case .announce, .bookmarkAnnounce:
+            viewModel = .createDetailViewModel(
+                type: type,
+                selectedNoticeId: announceId,
+                repository: repository
+            )
+            
+        case .unreadAnnounce:
+            viewModel = .createUnreadViewModel(
+                type: type,
+                selectedAssociationType: selectedAssociationType,
+                repository: repository
+            )
+        }
+        
+        let detailAnnouceVC = DetailAnnounceViewController(
+            type: type,
+            detailAnnouceViewModel: viewModel,
+            coordinator: self
+        )
+        
         detailAnnouceVC.hidesBottomBarWhenPushed = true
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {

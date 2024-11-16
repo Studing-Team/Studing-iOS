@@ -9,4 +9,5 @@ import Foundation
 
 struct NotificationTokenRequestDTO: Codable {
     let fcmToken: String
+    let memberId: Int
 }

@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 앱 실행 시 사용자에게 알림 허용 권한
         UNUserNotificationCenter.current().delegate = self
         
-        requestNotificationPermission()
+//        requestNotificationPermission()
         
         // UNUserNotificationCenterDelegate 를 구현한 메서드 실행
         application.registerForRemoteNotifications()
@@ -115,19 +115,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         completionHandler()
     }
     
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if let error = error {
-                print("Error requesting notification permission: \(error)")
-                return
-            }
-            if granted {
-                print("Notification permission granted.")
-            } else {
-                print("Notification permission denied.")
-            }
-        }
-    }
+//    func requestNotificationPermission() {
+//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+//            if let error = error {
+//                print("Error requesting notification permission: \(error)")
+//                return
+//            }
+//            if granted {
+//                print("Notification permission granted.")
+//            } else {
+//                print("Notification permission denied.")
+//            }
+//        }
+//    }
 }
 
 // MARK: - APNs 토큰 관련 메서드 추가

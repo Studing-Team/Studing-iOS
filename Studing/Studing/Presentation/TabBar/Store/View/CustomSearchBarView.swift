@@ -10,10 +10,15 @@ import UIKit
 import SnapKit
 import Then
 
+protocol CustomSearchBarViewDelegate: AnyObject {
+    func searchBar(_ searchBar: CustomSearchBarView, textDidChange text: String)
+}
+
 final class CustomSearchBarView: UIView {
 
     // MARK: - Properties
     
+    weak var delegate: CustomSearchBarViewDelegate?
     
     // MARK: - UI Properties
     
@@ -58,6 +63,7 @@ extension CustomSearchBarView {
             $0.textColor = .black40
             $0.backgroundColor = .clear
             $0.borderStyle = .none
+            $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         }
     }
     
@@ -87,5 +93,9 @@ extension CustomSearchBarView {
     
     func setupDelegate() {
 
+    }
+    
+    @objc private func textFieldDidChange() {
+        delegate?.searchBar(self, textDidChange: textField.text ?? "")
     }
 }

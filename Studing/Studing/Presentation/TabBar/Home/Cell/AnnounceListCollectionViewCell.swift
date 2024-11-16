@@ -87,8 +87,7 @@ extension AnnounceListCollectionViewCell {
         bookmarkCount.text = "\(model.bookmarkCount)"
         watchCount.text = "\(model.watchCount)"
         
-        favoriteImage.image = UIImage(resource: model.isFavorite == true ? .favorite : .favorite)
-        bookmarkImage.image = UIImage(resource: model.isBookmark == true ? .bookmark : .bookmark)
+        changeContentInfo(isFavorite: model.isFavorite, isBookmark: model.isBookmark)
         watchImage.image = UIImage(resource: .visibility)
         
         announceTypeView.configure(type: model.type)
@@ -115,11 +114,15 @@ extension AnnounceListCollectionViewCell {
         bookmarkCount.text = "\(model.bookmarkCount)"
         watchCount.text = "\(model.watchCount)"
         
-        favoriteImage.image = UIImage(resource: model.isFavorite == true ? .favorite : .favorite)
-        bookmarkImage.image = UIImage(resource: model.isBookmark == true ? .bookmark : .bookmark)
+        changeContentInfo(isFavorite: model.isFavorite, isBookmark: model.isBookmark)
         watchImage.image = UIImage(resource: .visibility)
         
         associationTypeView.configure(title: model.writerInfo, type: model.associationType)
+    }
+    
+    private func changeContentInfo(isFavorite: Bool, isBookmark: Bool) {
+        favoriteImage.image = UIImage(resource: isFavorite == true ? .favorite : .unFavorite)
+        bookmarkImage.image = UIImage(resource: isBookmark == true ? .bookmark : .unBookmark)
     }
 }
 

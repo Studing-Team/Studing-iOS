@@ -29,6 +29,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: - UI Properties
     
+    private let refreshControl = UIRefreshControl()
     private let studingHeaderView = StudingHeaderView(type: .home)
     private var collectionView: UICollectionView!
     private var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable>!
@@ -58,6 +59,7 @@ final class HomeViewController: UIViewController {
         applyInitialSnapshot()
         
         setupStyle()
+        setupRefreshControl()
         setupHierarchy()
         setupLayout()
         setupDelegate()
@@ -462,10 +464,17 @@ private extension HomeViewController {
 
 extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let sectionType = homeViewModel.sectionsData.value?[indexPath.section],
-              sectionType == .association else { return }
+        guard let sectionType = homeViewModel.sectionsData.value?[indexPath.section] else { return }
         
-        selectedAssociationSubject.send(indexPath.row)
+        switch sectionType {
+        case .missAnnouce:
+            self.coordinator?.pushDetailAnnouce(type: .unreadAnnounce, selectedAssociationType: homeViewModel.selectedAssociationType)
+            
+        case .association:
+            selectedAssociationSubject.send(indexPath.row)
+        default:
+            break
+        }
     }
 }
 
@@ -687,7 +696,24 @@ private extension HomeViewController {
         }
     }
     
+    func setupRefreshControl() {
+        refreshControl.tintColor = .primary50  // 로딩 인디케이터 색상
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+    }
+    
     func setupDelegate() {
         collectionView.delegate = self
+    }
+    
+    @objc private func handleRefresh() {
+        Task {
+            // 데이터 새로고침
+            await fetchInitialData()
+            // UI 업데이트는 메인 스레드에서
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+            }
+        }
     }
 }
