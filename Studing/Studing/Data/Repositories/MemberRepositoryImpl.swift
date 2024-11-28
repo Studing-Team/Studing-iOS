@@ -21,4 +21,12 @@ final class MemberRepositoryImpl: MemberRepository {
 
         return await NetworkManager.shared.request(MemberAPI.postCheckId(dto))
     }
+    
+    func deleteWithDraw() async -> Result<EmptyResponse, NetworkError> {
+        return await NetworkManager.shared.request(MemberAPI.deleteWithDraw)
+    }
+    
+    func postReSubmit(request: ReSubmitRequestDTO) async -> Result<EmptyResponse, NetworkError> {
+        return await NetworkManager.shared.request(MemberAPI.postReSubmit(request))
+    }
 }

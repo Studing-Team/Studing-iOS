@@ -20,7 +20,7 @@ final class NoticesRepositoryImpl: NoticesRepository {
         return await NetworkManager.shared.request(NoticesAPI.postBookmarkAssociationAnnounce(BookmarkAssociationAnnounceListRequestDTO(categorie: associationName)))
     }
     
-    func postCheckAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError> {
+    func postCheckAnnounce(noticeId: Int) async -> Result<SpecificStatusResponseDTO, NetworkError> {
         return await NetworkManager.shared.request(NoticesAPI.postCheckAnnouce(noticeId: noticeId))
     }
     

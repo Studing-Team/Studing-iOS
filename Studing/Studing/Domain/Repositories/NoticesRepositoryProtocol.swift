@@ -11,7 +11,7 @@ protocol NoticesRepository {
     func getAllAnnounce() async -> Result<AllAnnounceListResponseData,NetworkError>
     func postAllAssociationAnnounce(associationName: String) async -> Result<AllAssociationAnnounceListResponseData, NetworkError>
     func postBookmarkAssociationAnnounce(associationName: String) async -> Result<BookmarkAssociationAnnounceListResponseData, NetworkError>
-    func postCheckAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError>
+    func postCheckAnnounce(noticeId: Int) async -> Result<SpecificStatusResponseDTO, NetworkError>
     func postUnreadAllAnnounce(associationName: String) async -> Result<UnreadAllAnnounceListResponseData, NetworkError>
     func getDetailAnnounce(noticeId: Int) async -> Result<DetailAnnounceResponseDTO, NetworkError>
     func postLikeAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError>
