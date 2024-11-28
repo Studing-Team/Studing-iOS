@@ -15,7 +15,7 @@ final class SignUpCoordinator: Coordinator {
     var navigationController: CustomSignUpNavigationController
     var childCoordinators: [any Coordinator] = []
     
-    weak var parentCoordinator: LoginCoordinator?
+    weak var parentCoordinator: (any Coordinator)?//LoginCoordinator?
     weak var delegate: SignUpCoordinatorDelegate?
 
     private let signUpStore: SignUpStore
@@ -82,13 +82,24 @@ final class SignUpCoordinator: Coordinator {
         navigationController.pushViewController(termsOfServiceVC, animated: true)
     }
     
-    func pushAuthUniversityView() {
-        let authUniversityVM = AuthUniversityViewModel(
-            signupUseCase: SignupUseCase(repository: MemberRepositoryImpl()), 
-            signupUserInfo: signUpStore.getUserData()
-        )
+    func pushAuthUniversityView(type: AuthUniversityType) {
         
-//        authUniversityVM.delegate = self
+        var authUniversityVM: AuthUniversityViewModel
+        
+        switch type {
+        case .signup:
+            authUniversityVM = AuthUniversityViewModel(
+               signupUseCase: SignupUseCase(repository: MemberRepositoryImpl()),
+               signupUserInfo: signUpStore.getUserData(),
+               authType: .signup
+           )
+            
+        case .reSubmit:
+            authUniversityVM = AuthUniversityViewModel(
+                resubmitUseCase: ReSubmitUseCase(repository: MemberRepositoryImpl()),
+                authType: .reSubmit
+            )
+        }
         
         let authUniversityVC = AuthUniversityViewController(viewModel: authUniversityVM, coordinator: self)
         
@@ -108,7 +119,9 @@ final class SignUpCoordinator: Coordinator {
     }
     
     func pushSuccessSignUpView() {
-        let successSignUpVC = SuccessSignUpViewController(coordinator: self)
+        let successSignUpVM = SuccessSignUpViewModel(signInUseCase: SignInUseCase(repository: MemberRepositoryImpl()), signupUserInfo: signUpStore.getUserData())
+        
+        let successSignUpVC = SuccessSignUpViewController(coordinator: self, successSignUpViewModel: successSignUpVM)
         navigationController.pushViewController(successSignUpVC, animated: true)
     }
     

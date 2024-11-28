@@ -13,14 +13,18 @@ import Then
 
 final class MypageViewController: UIViewController {
     
-    private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
-    private var cancellables = Set<AnyCancellable>()
-    
     // MARK: - Properties
     
     private let mypageViewModel: MypageViewModel
-    
     weak var coordinator: MypageCoordinator?
+    
+    // MARK: - Combine Publishers Properties
+    
+    private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
+    private let selectedCellSubject = PassthroughSubject<(section: MyPageType, index: Int), Never>()
+    private var comfirmButtonTappend = PassthroughSubject<Void, Never>()
+    
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Properties
     
@@ -65,7 +69,9 @@ final class MypageViewController: UIViewController {
 private extension MypageViewController {
     func bindViewModel() {
         let input = MypageViewModel.Input(
-            viewDidLoad: viewDidLoadSubject.eraseToAnyPublisher()
+            viewDidLoad: viewDidLoadSubject.eraseToAnyPublisher(), 
+            selectedCell: selectedCellSubject.eraseToAnyPublisher(),
+            comfirmButtonAction: comfirmButtonTappend.eraseToAnyPublisher()
         )
         
         let output = mypageViewModel.transform(input: input)
@@ -73,11 +79,33 @@ private extension MypageViewController {
         output.myPageInfo
             .receive(on: DispatchQueue.main)
             .sink { [weak self] info in
-                
                 if info != nil {
                     self?.collectionView.reloadSections(IndexSet(integer: 0))
                 }
-//                self?.collectionView.reloadSections(IndexSet(integer: MyPageType.myInfo))
+            }
+            .store(in: &cancellables)
+        
+        output.navigationEvent
+            .sink { [weak self] event in
+                self?.sectionEventHandler(event)
+            }
+            .store(in: &cancellables)
+        
+        output.comfirmButtonResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                guard let self = self else { return }
+                
+                // 1. 현재 present된 ViewController가 CustomAlertViewController인지 확인
+                if let presentedVC = self.presentedViewController as? CustomAlertViewController {
+                    // 2. CustomAlertViewController dismiss
+                    presentedVC.dismiss(animated: false) { [weak self] in
+                        // 3. dismiss 완료 후 removeAuthUser 호출
+                        if result {
+                            self?.coordinator?.removeAuthUser()
+                        }
+                    }
+                }
             }
             .store(in: &cancellables)
     }
@@ -116,6 +144,48 @@ private extension MypageViewController {
     func setupDelegate() {
         collectionView.dataSource = self
         collectionView.delegate = self
+    }
+    
+    func sectionEventHandler(_ event: MypageNavigationType) {
+        switch event {
+        case .serviceCenter:
+            guard let url = URL(string: "https://studingofficial.notion.site/11905c1258e080ee91cecfb7ff633bab"),
+                  UIApplication.shared.canOpenURL(url) else { return }
+            UIApplication.shared.open(url, options: [:])
+            
+        case .notice:
+            guard let url = URL(string: "http://pf.kakao.com/_BzmZn"),
+                  UIApplication.shared.canOpenURL(url) else { return }
+            UIApplication.shared.open(url, options: [:])
+            
+        case .version:
+            break
+            
+        case .terms:
+            break
+            
+        case .privacyPolicy:
+            guard let url = URL(string: "https://studingofficial.notion.site/11905c1258e08063bba2f82d320de454"),
+                  UIApplication.shared.canOpenURL(url) else { return }
+            UIApplication.shared.open(url, options: [:])
+            
+        case .logout:
+            // 로그아웃 처리
+            self.showConfirmCancelAlert(
+                mainTitle: "로그아웃",
+                subTitle: "로그아웃 하시겠습니까?",
+                confirmTitle: "네",
+                cancelTitle: "아니요",
+                leftButtonHandler: {
+                    self.comfirmButtonTappend.send()
+                })
+            
+        case .withDraw:
+            self.coordinator?.pushWithDrawView()
+            
+        default:
+            break
+        }
     }
 }
 
@@ -264,8 +334,6 @@ extension MypageViewController: UICollectionViewDataSource, UICollectionViewDele
             
             return cell
             
-            return cell
-            
         case .useInfo, .etc:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyPageAnotherCollectionViewCell.className, for: indexPath) as! MyPageAnotherCollectionViewCell
             
@@ -281,5 +349,10 @@ extension MypageViewController: UICollectionViewDataSource, UICollectionViewDele
             
             return cell
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let section = MyPageType.allCases[indexPath.section]
+        selectedCellSubject.send((section: section, index: indexPath.row))
     }
 }

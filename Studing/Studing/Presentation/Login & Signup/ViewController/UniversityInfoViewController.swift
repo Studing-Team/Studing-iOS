@@ -111,10 +111,24 @@ private extension UniversityInfoViewController {
         output.selectUniversity
             .receive(on: DispatchQueue.main)
             .sink { [weak self] selectName in
+//                self?.view.endEditing(true)
+                print("눌림:", selectName)
+                self?.searchResultCollectionView.isHidden = true
                 self?.universityTitleTextField.textField.text = selectName
                 self?.universityTitleTextField.setState(.success(type: .university))
                 self?.universityTitleTextField.updateRightButtonColor(.success(type: .university))
                 self?.updateLayout(state: .noInput)
+                
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.searchResultCollectionView.isHidden = true
+//                    self?.view.layoutIfNeeded() // 레이아웃 강제 반영
+//                }
+                // isHidden 변경
+//                self?.view.endEditing(true)
+//                self?.searchResultCollectionView.isHidden = true
+//                print("isHidden 상태:", self?.searchResultCollectionView.isHidden ?? false)
+//                // 레이아웃 강제 업데이트
+//                self?.view.layoutIfNeeded()
             }
             .store(in: &cancellables)
         
@@ -232,8 +246,12 @@ private extension UniversityInfoViewController {
     }
     
     func noInputUpdateLayout() {
-        searchResultCollectionView.isHidden = true
-        noExistsSearchResultView.isHidden = true
+        DispatchQueue.main.async { [weak self] in
+            self?.searchResultCollectionView.isHidden = true
+            self?.noExistsSearchResultView.isHidden = true
+            
+            self?.view.layoutIfNeeded() // 레이아웃 강제 반영
+        }
     }
     
     func setupDelegate() {

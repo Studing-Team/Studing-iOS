@@ -10,11 +10,17 @@ import UIKit
 import SnapKit
 import Then
 
+enum AuthWaitCheckType {
+    case home
+    case sigup
+}
+
 final class AuthWaitCheckView: UIView {
     
     // MARK: - Properties
     
-    private var state: AuthWaitState = .summit
+    private var state: AuthWaitState
+    private var type: AuthWaitCheckType
     
     // MARK: - UI Properties
     
@@ -39,7 +45,10 @@ final class AuthWaitCheckView: UIView {
     
     // MARK: - Life Cycle
     
-    init() {
+    init(state: AuthWaitState,
+         type: AuthWaitCheckType) {
+        self.state = state
+        self.type = type
         super.init(frame: .zero)
         
         setupStyle()
@@ -84,16 +93,16 @@ private extension AuthWaitCheckView {
         }
         
         summitImageView.do {
-            $0.image = state.stateImage(step: 1)
+            $0.image = state.stateImage(step: 1, type: type)
             $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
             $0.clipsToBounds = true
         }
         
         checkImageView.do {
             if state.rawValue <= 2 {
-                $0.image = state.stateImage(step: 2)
+                $0.image = state.stateImage(step: 2, type: type)
             } else if state.rawValue <= 5 {
-                $0.image = state.stateImage(step: 3)
+                $0.image = state.stateImage(step: 3, type: type)
             }
             
             $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
@@ -102,9 +111,9 @@ private extension AuthWaitCheckView {
         
         completeImageView.do {
             if state.rawValue == 4 {
-                $0.image = state.stateImage(step: 4)
+                $0.image = state.stateImage(step: 4, type: type)
             } else {
-                $0.image = state.stateImage(step: 5)
+                $0.image = state.stateImage(step: 5, type: type)
             }
             
             $0.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
@@ -119,7 +128,6 @@ private extension AuthWaitCheckView {
             $0.addArrangedSubviews(summitImageView, summitTitleLabel)
         }
 
-        
         checkStackView.do {
             $0.axis = .vertical
             $0.distribution = .equalCentering
@@ -137,11 +145,11 @@ private extension AuthWaitCheckView {
         }
         
         lineView1.do {
-            $0.backgroundColor = state.rawValue >= 2 ? .primary50 : .black10
+            $0.backgroundColor = state.rawValue >= 2 ? .primary50 : type == .home ? .black20 : .black10
         }
         
         lineView2.do {
-            $0.backgroundColor = state.rawValue >= 4 ? .primary50 : .black10
+            $0.backgroundColor = state.rawValue >= 4 ? .primary50 : type == .home ? .black20 : .black10
         }
     }
     

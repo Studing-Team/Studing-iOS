@@ -15,11 +15,14 @@
 	</dict>
 	<key>REFRESH_TOKEN_KEY</key>
 	<string>$(REFRESH_TOKEN_KEY)</string>
+	<key>SIGNUP_INFO_KEY</key>
+	<string>$(SIGNUP_INFO_KEY)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-VariableFont_opsz,wght.ttf</string>
 		<string>Montserrat-ExtraBold.ttf</string>
 		<string>MontserratAlternates-Bold.ttf</string>
+		<string>MontserratAlternates-ExtraBold.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
@@ -42,6 +45,8 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>USER_AUTH_STATE_KEY</key>
+	<string>$(USER_AUTH_STATE_KEY)</string>
 	<key>USER_INFO_KEY</key>
 	<string>$(USER_INFO_KEY)</string>
 </dict>

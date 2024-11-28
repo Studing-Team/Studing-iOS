@@ -13,4 +13,6 @@ struct AssociationEntity: Hashable, HomeSectionData {
     let image: String
     let associationType: AssociationType?
     var isSelected: Bool
+    var unRead: Bool
+    var isRegisteredDepartment: Bool
 }

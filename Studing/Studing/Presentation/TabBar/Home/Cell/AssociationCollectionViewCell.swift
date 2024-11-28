@@ -15,8 +15,10 @@ final class AssociationCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     
     private let verticalStackView = UIStackView()
+    private let associationMainView = UIView()
     private let associationLogoImage = AFImageView()
     private let associationNameLabel = UILabel()
+    private let unReadView = UIView()
 
     // MARK: - init
     
@@ -37,8 +39,15 @@ final class AssociationCollectionViewCell: UICollectionViewCell {
 
 extension AssociationCollectionViewCell {
     func configureCell(forModel model: AssociationEntity) {
-        associationLogoImage.setImage(model.image, type: .associationLogo)
+        if model.name == "전체" {
+            associationLogoImage.image = .allAssociation
+        } else {
+            associationLogoImage.setImage(model.image, type: .associationLogo, forceReload: true)
+        }
+        
         associationNameLabel.text = model.name
+        unReadView.isHidden = model.unRead ? false : true
+
         updateSelectionState(model.isSelected)
     }
 }
@@ -47,12 +56,13 @@ extension AssociationCollectionViewCell {
 
 private extension AssociationCollectionViewCell {
     func setupStyle() {
-        
-        self.backgroundColor = .white.withAlphaComponent(0.15)
-        self.layer.borderWidth = 1
-        self.layer.borderColor =  UIColor.white.cgColor
-        self.layer.cornerRadius = 15
-        self.clipsToBounds = true
+        associationMainView.do {
+            $0.backgroundColor = .white.withAlphaComponent(0.15)
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor =  UIColor.white.cgColor
+            $0.layer.cornerRadius = 15
+            $0.clipsToBounds = true
+        }
         
         verticalStackView.do {
             $0.axis = .vertical
@@ -72,13 +82,25 @@ private extension AssociationCollectionViewCell {
             $0.textColor = .black50
             $0.textAlignment = .center
         }
+        
+        unReadView.do {
+            $0.backgroundColor = .studingRed
+            $0.layer.cornerRadius = 6
+        }
     }
     
     func setupHierarchy() {
-        self.addSubviews(verticalStackView)
+        self.addSubviews(associationMainView, unReadView)
+        associationMainView.addSubview(verticalStackView)
     }
     
     func setupLayout() {
+        
+        associationMainView.snp.makeConstraints {
+            $0.top.leading.bottom.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(2)
+        }
+        
         verticalStackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 12.5, left: 10, bottom: 12.5, right: 10))
         }
@@ -91,9 +113,15 @@ private extension AssociationCollectionViewCell {
         associationNameLabel.snp.makeConstraints {
             $0.width.equalTo(verticalStackView)
         }
+        
+        unReadView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.size.equalTo(12)
+        }
     }
     
     func updateSelectionState(_ isSelected: Bool) {
-        backgroundColor = isSelected ? .white : .white.withAlphaComponent(0.15)
+        associationMainView.backgroundColor = isSelected ? .white : .white.withAlphaComponent(0.15)
     }
 }

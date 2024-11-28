@@ -35,7 +35,7 @@ extension NoticesAPI: APIEndpoint {
         case .postBookmarkAssociationAnnounce:
             return basePath.rawValue + "/save-category"
         case .postCheckAnnouce(let noticeId):
-            return basePath.rawValue + "/view-chehck/\(noticeId)"
+            return basePath.rawValue + "/view-check/\(noticeId)"
         case .postUnreadAllAnnouce:
             return basePath.rawValue + "/unread/all"
         case .getDetailAnnounce(let noticeId):
@@ -45,7 +45,7 @@ extension NoticesAPI: APIEndpoint {
         case .postBookmarkAnnouce(let noticeId), .deleteBookmarkAnnouce(let noticeId):
             return basePath.rawValue + "/save/\(noticeId)"
         case .postCreateAnnouce:
-            return basePath.rawValue + "/save"
+            return basePath.rawValue + "/create"
         }
     }
     

@@ -14,7 +14,7 @@ final class CheckAnnounceUseCase {
         self.repository = repository
     }
     
-    func execute(noticeId: Int) async -> Result<EmptyResponse,NetworkError> {
+    func execute(noticeId: Int) async -> Result<SpecificStatusResponseDTO,NetworkError> {
         return await repository.postCheckAnnounce(noticeId: noticeId)
     }
 }

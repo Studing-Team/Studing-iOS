@@ -13,6 +13,8 @@ enum MemberAPI {
     case postSignin(LoginRequestDTO)
     case postSignup(SignupRequestDTO)
     case postCheckId(DuplicationIdRequestDTO)
+    case deleteWithDraw
+    case postReSubmit(ReSubmitRequestDTO)
 }
 
 extension MemberAPI: APIEndpoint {
@@ -28,20 +30,34 @@ extension MemberAPI: APIEndpoint {
             return basePath.rawValue + "/signup"
         case .postCheckId:
             return basePath.rawValue + "/checkid"
+        case .deleteWithDraw:
+            return basePath.rawValue + "/withdraw"
+        case .postReSubmit:
+            return basePath.rawValue + "/resubmit"
         }
     }
     
     var method: HTTPMethod {
-        return .post
+        switch self {
+        case .postSignin, .postSignup, .postCheckId, .postReSubmit:
+            return .post
+        case .deleteWithDraw:
+            return .delete
+        }
     }
     
     var headerType: HeaderType {
-        return .defaultHeader
+        switch self {
+        case .postReSubmit:
+            return .accessTokenHeader
+        default:
+            return .defaultHeader
+        }
     }
     
     var requestBodyType: RequestBodyType {
         switch self {
-        case .postSignin, .postSignup:
+        case .postSignin, .postSignup, .postReSubmit:
             return .formData
         default:
             return .json
@@ -56,6 +72,10 @@ extension MemberAPI: APIEndpoint {
             return dto
         case .postCheckId(let dto):
             return dto
+        case .postReSubmit(let dto):
+            return dto
+        default:
+            return nil
         }
     }
 }

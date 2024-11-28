@@ -15,7 +15,13 @@ enum LeftButtonType {
     case arrow
 }
 
+protocol CustomSignUpNavigationControllerDelegate: AnyObject {
+    func navigationControllerDidTapClose(_ navigationController: CustomSignUpNavigationController)
+}
+
 final class CustomSignUpNavigationController: UINavigationController {
+    
+    weak var signUpDelegate: CustomSignUpNavigationControllerDelegate?
     
     // MARK: - Properties
     private var isPopping = false
@@ -153,41 +159,54 @@ private extension CustomSignUpNavigationController {
     }
     
     @objc func backButtonTapped() {
-        popViewController(animated: true)
-        signUpStepCount -= 1
-        updateProgressBar()
-        
-        if signUpStepCount == 1 {
-            updateLeftButtonImage()
+        if viewControllers.count > 1 {
+            // 스택에 뷰가 여러 개 있을 때는 pop
+            popViewController(animated: true)
+            signUpStepCount -= 1
+            updateProgressBar()
+            
+            if signUpStepCount == 1 {
+                updateLeftButtonImage()
+            }
+        } else {
+            // 스택에 뷰가 하나만 있을 때는 close
+            signUpDelegate?.navigationControllerDidTapClose(self)
         }
     }
     
     func setupHierarchy() {
-        view.addSubviews(safeAreaView, customNavigationBar)
+//        view.addSubviews(safeAreaView, customNavigationBar)
+        view.addSubviews(safeAreaView)
+        safeAreaView.addSubviews(customNavigationBar)
         customNavigationBar.addSubviews(leftButton, naviTitleLabel, progressbarBackgroundView, progressbarView)
     }
     
     func setupLayout() {
         customNavigationBar.snp.makeConstraints {
-            $0.height.equalTo(navigationHeight)
-            $0.bottom.equalTo(view.snp.topMargin)
-            $0.horizontalEdges.equalToSuperview()
+//            $0.height.equalTo(navigationHeight)
+//            $0.bottom.equalTo(view.snp.topMargin)
+//            $0.horizontalEdges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
         
         safeAreaView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.bottom.equalTo(view.snp.topMargin)
             $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
         }
 
         leftButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+//            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(20)
+//            $0.verticalEdges.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview().inset(16)
+            $0.size.equalTo(24)
         }
         
         naviTitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(leftButton)
         }
         
         progressbarView.snp.makeConstraints {

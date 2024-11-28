@@ -16,7 +16,7 @@ struct DetailAnnouceHeaderModel: Hashable, DetailAnnouceSectionData {
     let days: String
     var favoriteCount: Int
     var bookmarkCount: Int
-    let watchCount: Int
+    var watchCount: Int
     var isFavorite: Bool
     var isBookmark: Bool
 }

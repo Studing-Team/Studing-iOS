@@ -147,13 +147,25 @@ final class UserInfoSignUpViewModel: BaseViewModel {
 }
 
 private extension UserInfoSignUpViewModel {
+//    func validateUserId(_ userId: String) -> TextFieldState {
+//        if userId.count >= 6 && userId.count <= 12 && userId.rangeOfCharacter(from: .alphanumerics) != nil {
+//            return .validSuccess(type: .userId)
+//        } else {
+//            return .invalid(type: .userId)
+//        }
+//    }
+    
     func validateUserId(_ userId: String) -> TextFieldState {
-        if userId.count >= 6 && userId.count <= 12 && userId.rangeOfCharacter(from: .alphanumerics) != nil {
+        // 한글을 제외한 모든 문자 허용 (6-12자)
+        let pattern = "^[^ㄱ-ㅎㅏ-ㅣ가-힣]{6,12}$"
+        
+        if let regex = try? NSRegularExpression(pattern: pattern),
+           let _ = regex.firstMatch(in: userId, range: NSRange(location: 0, length: userId.utf16.count)) {
             return .validSuccess(type: .userId)
-        } else {
-            return .invalid(type: .userId)
         }
+        return .invalid(type: .userId)
     }
+
     
     func validateUserPw(_ userPw: String) -> TextFieldState {
         let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,16}$"

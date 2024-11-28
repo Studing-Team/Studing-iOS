@@ -113,7 +113,7 @@ private extension MajorInfoViewModel {
         guard let majorInfoData else { return nil }
         
         let filteredData = majorInfoData.filter { majorInfo in
-            majorInfo.contains(name) // 대학교 이름에 주어진 name이 포함되는지 확인
+            majorInfo.localizedCaseInsensitiveContains(name) // 대학교 이름에 주어진 name이 포함되는지 확인
         }
         
         return SearchMajorInfoEntity(data: filteredData)

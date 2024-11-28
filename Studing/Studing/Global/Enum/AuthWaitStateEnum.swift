@@ -30,14 +30,16 @@ enum AuthWaitState: Int {
         }
     }
     
-    func stateImage(step: Int) -> UIImage {
+    func stateImage(step: Int, type: AuthWaitCheckType) -> UIImage {
+        
+        let notCheck = UIImage(resource: .notCheck).withRenderingMode(.alwaysOriginal).withTintColor(type == .home ? .black20 : .black10)
         
         switch self {
         case .summit:
             if step == 1 {
                 return UIImage(resource: .summit)
             } else {
-                return UIImage(resource: .notCheck)
+                return notCheck
             }
             
         case .checking:
@@ -46,14 +48,14 @@ enum AuthWaitState: Int {
             } else if step == 2 {
                 return UIImage(resource: .checking)
             } else {
-                return UIImage(resource: .notCheck)
+                return notCheck
             }
             
         case .checked:
             if step == 1 || step == 3 {
                 return UIImage(resource: .summit)
             } else {
-                return UIImage(resource: .notCheck)
+                return notCheck
             }
             
         case .complete:

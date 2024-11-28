@@ -131,7 +131,15 @@ private extension AuthUniversityViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if result == true {
-                    self?.coordinator?.pushAuthWaitingView()
+                    switch self?.viewModel.authType {
+                    case .signup:
+                        self?.coordinator?.pushAuthWaitingView()
+                    case .reSubmit:
+                        print("뒤로가기")
+                        self?.navigationController?.dismiss(animated: true)
+                    case .none:
+                        break
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -152,6 +160,10 @@ private extension AuthUniversityViewController {
             $0.numberOfLines = 2
         }
         
+        studentIdTitleTextField.do {
+            $0.textField.keyboardType = .numberPad
+        }
+        
         authSubTitleLabel.do {
             $0.text = StringLiterals.Authentication.universitySubTitle
             $0.font = .interBody3()
@@ -164,6 +176,9 @@ private extension AuthUniversityViewController {
             $0.layer.cornerRadius = 20
             $0.clipsToBounds = true
             $0.contentMode = .scaleAspectFill
+            $0.isUserInteractionEnabled = true
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(selectedImageTapped))
+            $0.addGestureRecognizer(tapGesture)
         }
         
         uploadBackgroundView.do {
@@ -286,6 +301,10 @@ private extension AuthUniversityViewController {
     }
     
     private func presentPHPicker() {
+        present(imagePicker, animated: true)
+    }
+    
+    @objc func selectedImageTapped() {
         present(imagePicker, animated: true)
     }
 }

@@ -31,7 +31,7 @@ final class AuthWaitingViewController: UIViewController {
     private let authWaitingTitleLabel = UILabel()
     private let authWaitingSubTitleLabel = UILabel()
     private let authBackgroundView = DashedLineBorderView()
-    private let authWaitCheckView = AuthWaitCheckView()
+    private let authWaitCheckView = AuthWaitCheckView(state: .summit, type: .sigup)
     
     private let authWaitingSubTitleLabel2 = UILabel()
     private let authWaitingSubTitleLabel3 = UILabel()

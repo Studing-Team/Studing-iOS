@@ -15,7 +15,7 @@ enum AgreeType {
     case select
 }
 
-final class ArgreeTypeView: UIView {
+final class AgreeTypeView: UIView {
 
     // MARK: - Properties
     
@@ -42,7 +42,7 @@ final class ArgreeTypeView: UIView {
     }
 }
 
-extension ArgreeTypeView {
+extension AgreeTypeView {
     func setupStyle(_ type: AgreeType) {
         backgroundView.do {
             $0.backgroundColor = type == .essential ? .black10 : .black30

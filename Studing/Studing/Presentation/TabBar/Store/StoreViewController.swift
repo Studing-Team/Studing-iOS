@@ -35,7 +35,7 @@ final class StoreViewController: UIViewController {
         self.storeViewModel = storeViewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -57,8 +57,8 @@ final class StoreViewController: UIViewController {
         configureStoreDataSource()
         bindViewModel()
 
-        let indexPath = IndexPath(item: 0, section: 0)
-        categoryCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
+//        let indexPath = IndexPath(item: 0, section: 0)
+//        categoryCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
         
         categorySelectionSubject.send(.all)
     }
@@ -274,6 +274,14 @@ extension StoreViewController: UICollectionViewDataSource {
         
         let category = CategoryType.allCases[indexPath.row]
         cell.configureCell(type: category)
+        
+        // 첫 번째 셀이면서 아직 선택된 셀이 없는 경우
+        if indexPath.item == 0 && collectionView.indexPathsForSelectedItems?.isEmpty ?? true {
+            cell.isSelected = true
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
+            categorySelectionSubject.send(category)
+        }
+        
         return cell
     }
 }

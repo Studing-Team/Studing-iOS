@@ -35,17 +35,17 @@ final class TermsOfServiceViewController: UIViewController {
     private let mainStackView = UIStackView()
     
     private let serviceContainerView = UIView()
-    private let essentialServiceAgreeTypeView = ArgreeTypeView(type: .essential)
+    private let essentialServiceAgreeTypeView = AgreeTypeView(type: .essential)
     private let serviceBoxTitleLabel = UILabel()
     private let serviceBoxButton = CheckBoxButton()
     
     private let userInfoContainerView = UIView()
-    private let essentialUserInfoAgreeTypeView = ArgreeTypeView(type: .essential)
+    private let essentialUserInfoAgreeTypeView = AgreeTypeView(type: .essential)
     private let userInfoTitleLabel = UILabel()
     private let userInfoBoxButton = CheckBoxButton()
     
     private let marketingContainerView = UIView()
-    private let selectMarketingAgreeTypeView = ArgreeTypeView(type: .select)
+    private let selectMarketingAgreeTypeView = AgreeTypeView(type: .select)
     private let marketingTitleLabel = UILabel()
     private let marketingBoxButton = CheckBoxButton()
     
@@ -133,7 +133,7 @@ private extension TermsOfServiceViewController {
         
         output.authUniversityViewAction
             .sink { [weak self] _ in
-                self?.coordinator?.pushAuthUniversityView()
+                self?.coordinator?.pushAuthUniversityView(type: .signup)
             }
             .store(in: &cancellables)
         
@@ -192,18 +192,29 @@ private extension TermsOfServiceViewController {
             $0.text = "서비스 이용약관"
             $0.font = .interBody2()
             $0.addBottomBorderWithAttributedString(underlineColor: .black50, textColor: .black50)
+            $0.isUserInteractionEnabled = true
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(serviceTermsTapped))
+            $0.addGestureRecognizer(tapGesture)
         }
         
         userInfoTitleLabel.do {
             $0.text = "개인정보 수집 및 이용동의"
             $0.font = .interBody2()
             $0.addBottomBorderWithAttributedString(underlineColor: .black50, textColor: .black50)
+            
+            $0.isUserInteractionEnabled = true
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(privacyPolicyTapped))
+            $0.addGestureRecognizer(tapGesture)
         }
         
         marketingTitleLabel.do {
             $0.text = "마케팅 정보 수신 동의"
             $0.font = .interBody2()
             $0.addBottomBorderWithAttributedString(underlineColor: .black50, textColor: .black50)
+            
+            $0.isUserInteractionEnabled = true
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(marketingTapped))
+            $0.addGestureRecognizer(tapGesture)
         }
     }
     
@@ -311,5 +322,23 @@ private extension TermsOfServiceViewController {
     
     func setupDelegate() {
         
+    }
+    
+    @objc func serviceTermsTapped() {
+        guard let url = URL(string: StringLiterals.Web.serviceTerms),
+              UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url)
+    }
+
+    @objc func privacyPolicyTapped() {
+        guard let url = URL(string: StringLiterals.Web.privacyPolicy),
+              UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url)
+    }
+    
+    @objc func marketingTapped() {
+        guard let url = URL(string: StringLiterals.Web.marketing),
+              UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url)
     }
 }

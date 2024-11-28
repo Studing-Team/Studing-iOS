@@ -84,11 +84,13 @@ private extension MajorInfoViewController {
             .sink { [weak self] results, searchName in
                 if results.isEmpty && !searchName.isEmpty { // 입력 값 O, 검색 결과 X
                     self?.updateLayout(state: .noExistsResult)
+                    self?.majorTitleTextField.statePublisher.send(.select(type: .major))
                 } else if !results.isEmpty && !searchName.isEmpty { // 입력 값 O, 검색 결과 O
                     self?.searchResultCollectionView.updateData(with: results, serachName: searchName)
                     self?.updateLayout(state: .existsResult)
                 } else { // 입력 값 X
                     self?.updateLayout(state: .noInput)
+                    self?.majorTitleTextField.statePublisher.send(.normal(type: .major))
                 }
             }
             .store(in: &cancellables)
@@ -215,8 +217,12 @@ private extension MajorInfoViewController {
     }
     
     func noInputUpdateLayout() {
-        searchResultCollectionView.isHidden = true
-        noExistsSearchResultView.isHidden = true
+        DispatchQueue.main.async { [weak self] in
+            self?.searchResultCollectionView.isHidden = true
+            self?.noExistsSearchResultView.isHidden = true
+            
+            self?.view.layoutIfNeeded() // 레이아웃 강제 반영
+        }
     }
     
     func setupDelegate() {

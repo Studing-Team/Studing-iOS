@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SignupRequestDTO: Encodable {
+struct SignupRequestDTO: Encodable, ImageUploadable {
     let loginIdentifier: String        // 가입 요청 아이디
     let password: String              // 가입요청 비밀번호
     let admissionNumber: String       // 입학년도 학번
@@ -17,4 +17,9 @@ struct SignupRequestDTO: Encodable {
     let memberDepartment: String      // 사용자 대학교 학과
     let studentCardImage: Data        // 학생증 사진
     let marketingAgreement: Bool      // 마켓팅 수신 동의 유/무
+}
+
+
+protocol ImageUploadable {
+    var studentCardImage: Data { get }
 }

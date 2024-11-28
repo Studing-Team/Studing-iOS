@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct UserInfo {
-    let userName: String
-}
+//struct UserInfo {
+//    let userName: String
+//}

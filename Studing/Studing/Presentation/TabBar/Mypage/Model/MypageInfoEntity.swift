@@ -22,5 +22,5 @@ struct MypageInfoEntity: Hashable {
     let university: String
     let major: String
     let studentId: String
-    let role: String
+    let role: UserAuth
 }

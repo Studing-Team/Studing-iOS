@@ -97,7 +97,7 @@ private extension StoreCollectionViewCell {
             $0.axis = .horizontal
             $0.spacing = 8
             $0.distribution = .fill
-            $0.alignment = .top
+            $0.alignment = .leading
         }
         
         categoryStackView.do {
@@ -120,6 +120,8 @@ private extension StoreCollectionViewCell {
             $0.numberOfLines = 1
             $0.textColor = .black50
             $0.lineBreakMode = .byTruncatingTail
+            $0.setContentHuggingPriority(.required, for: .horizontal)
+            $0.setContentCompressionResistancePriority(.required, for: .horizontal)
         }
         
         categoryLabel.do {
@@ -222,6 +224,10 @@ private extension StoreCollectionViewCell {
         
         descriptionLabel.snp.makeConstraints {
             $0.height.greaterThanOrEqualTo(0)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.width.lessThanOrEqualTo(127)
         }
     }
     

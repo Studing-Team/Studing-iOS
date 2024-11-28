@@ -10,14 +10,23 @@ import UIKit
 final class HomeCoordinator: Coordinator {
     typealias NavigationControllerType = UINavigationController
     var navigationController: UINavigationController
-    
+    weak var parentCoordinator: (any Coordinator)?
     var childCoordinators: [any Coordinator] = []
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController,
+         parentCoordinator: (any Coordinator)?
+    ) {
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
     }
 
     func start() {
+        
+        let userAuth = KeychainManager.shared.loadData(key: .userAuthState, type: String.self)
+            .flatMap { UserAuth(rawValue: $0) } ?? .unUser
+        
+        print("전달된 값:", userAuth)
+        
         let homeVM = HomeViewModel(
             associationLogoUseCase: AssociationLogoUseCase(repository: HomeRepositoryImpl()),
             unreadAssociationUseCase: UnreadAssociationUseCase(repository: HomeRepositoryImpl()),
@@ -26,7 +35,15 @@ final class HomeCoordinator: Coordinator {
             bookmarkAnnouceUseCase: BookmarkAnnounceListUseCase(repository: HomeRepositoryImpl())
         )
         
-        let homeVC = HomeViewController(homeViewModel: homeVM, coordinator: self)
+        let homeVC = HomeViewController(
+            homeViewModel: homeVM,
+            coordinator: self,
+            userAuth: userAuth
+        )
+        
+        if userAuth == .failureUser || userAuth == .unUser {
+            homeVC.hidesBottomBarWhenPushed = true
+        }
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {
             customNav.setNavigationType(.home)
@@ -84,7 +101,9 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(annouceListVC, animated: true)
     }
     
-    func pushDetailAnnouce(type: DetailAnnounceType, announceId: Int? = nil, selectedAssociationType: String? = nil) {
+    func pushDetailAnnouce(type: DetailAnnounceType, announceId: Int? = nil, selectedAssociationType: String? = nil, unReadCount: Int? = nil) {
+        
+        print("selectedAssociationType:", selectedAssociationType)
   
         let repository = NoticesRepositoryImpl()
         let viewModel: DetailAnnouceViewModel
@@ -100,8 +119,10 @@ final class HomeCoordinator: Coordinator {
         case .unreadAnnounce:
             viewModel = .createUnreadViewModel(
                 type: type,
+                selectedNoticeId: announceId,
                 selectedAssociationType: selectedAssociationType,
-                repository: repository
+                repository: repository,
+                unReadCount: unReadCount
             )
         }
         
@@ -114,9 +135,102 @@ final class HomeCoordinator: Coordinator {
         detailAnnouceVC.hidesBottomBarWhenPushed = true
         
         if let customNav = navigationController as? CustomAnnouceNavigationController {
-            customNav.setNavigationType(.detail)
+            switch type {
+            case .announce, .bookmarkAnnounce:
+                customNav.setNavigationType(.detail)
+                
+            case .unreadAnnounce:
+                customNav.setNavigationType(.unRead)
+                
+            }
         }
         
         navigationController.pushViewController(detailAnnouceVC, animated: true)
+    }
+    
+    func presentPostAnnounce() {
+        
+        let postAnnounceVM = PostAnnounceViewModel(createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()))
+        let postAnnounceVC = PostAnnounceViewController(postAnnounceViewModel: postAnnounceVM, coordinator: self)
+        
+        // 새로운 CustomAnnouceNavigationController 생성
+            let newNav = CustomAnnouceNavigationController(rootViewController: postAnnounceVC)
+            newNav.setNavigationType(.post)
+        newNav.modalPresentationStyle = .overFullScreen
+        
+        navigationController.present(newNav, animated: true)
+    }
+    
+    func pushToReSubmit() {
+        let signUpNavigationController = CustomSignUpNavigationController()
+        let signUpCoordinator = SignUpCoordinator(navigationController: signUpNavigationController)
+        
+        // Child Coordinator로 추가
+        childCoordinators.append(signUpCoordinator)
+        signUpCoordinator.parentCoordinator = self
+        signUpCoordinator.delegate = self
+        
+        // Delegate 설정
+        signUpNavigationController.signUpDelegate = self
+//        signUpCoordinator.pushAuthUniversityView(type: .reSubmit)
+        
+//        navigationController.pushViewController(signUpNavigationController, animated: true)
+        
+        
+        signUpNavigationController.modalPresentationStyle = .overFullScreen
+//        navigationController.present(signUpNavigationController, animated: true) {
+//            signUpCoordinator.pushAuthUniversityView(type: .reSubmit)
+//        }
+        
+        // present 전에 미리 화면 설정
+//        signUpCoordinator.pushAuthUniversityView(type: .reSubmit)
+        
+        // 설정된 화면과 함께 present
+        navigationController.present(signUpNavigationController, animated: true)
+        
+        signUpCoordinator.pushAuthUniversityView(type: .reSubmit)
+    }
+    
+    func pushAllReadAnnounce() {
+        let allReadAnnounceVC = AllReadAnnounceViewController(coordinator: self)
+        
+        navigationController.pushViewController(allReadAnnounceVC, animated: true)
+    }
+    
+    // Child Coordinator 정리
+    func removeChildCoordinator(_ child: any Coordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== child }
+    }
+    
+    func popToHome() {
+        // 네비게이션 스택의 뷰컨트롤러들 중에서 HomeViewController를 찾음
+        if let homeVC = navigationController.viewControllers.first(where: { $0 is HomeViewController }) {
+            // HomeViewController까지 pop
+            navigationController.popToViewController(homeVC, animated: true)
+        }
+    }
+}
+
+// Delegate 처리
+extension HomeCoordinator: SignUpCoordinatorDelegate {
+    func didSignUpFinishFlow(_ coordinator: SignUpCoordinator) {
+        // SignUp 플로우 종료 시
+        navigationController.dismiss(animated: true)
+        removeChildCoordinator(coordinator)
+        
+        // 필요한 경우 화면 갱신
+        start()
+    }
+}
+
+
+extension HomeCoordinator: CustomSignUpNavigationControllerDelegate {
+    func navigationControllerDidTapClose(_ navigationController: CustomSignUpNavigationController) {
+        navigationController.dismiss(animated: true) {
+            // Child coordinator 정리
+            if let signUpCoordinator = self.childCoordinators.first(where: { $0 is SignUpCoordinator }) as? SignUpCoordinator {
+                self.removeChildCoordinator(signUpCoordinator)
+            }
+        }
     }
 }

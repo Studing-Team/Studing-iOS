@@ -228,6 +228,8 @@ private extension TitleTextFieldView {
         }
         
         stateMessageLabel.text = state.message
+        
+        self.layoutIfNeeded()
     }
     
     func updateBorderColor(_ state: TextFieldState) {

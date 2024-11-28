@@ -15,6 +15,9 @@ enum NavigationType {
     case announce
     case bookmark
     case detail
+    case unRead
+    case post
+    case unReadToHome
 }
 
 final class CustomAnnouceNavigationController: UINavigationController {
@@ -81,7 +84,8 @@ private extension CustomAnnouceNavigationController {
         }
         
         leftButton.do {
-            $0.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+            $0.setImage(UIImage(systemName: "chevron.backward")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)),
+                        for: .normal)
             $0.tintColor = .black50
             $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         }
@@ -140,9 +144,37 @@ private extension CustomAnnouceNavigationController {
     }
     
     private func applyDetailLayout() {
-        
-        print("디테일 시작")
         // 디테일 화면용 레이아웃
+        safeAreaView.snp.remakeConstraints {
+            $0.top.equalToSuperview()
+            $0.bottom.equalTo(view.snp.topMargin)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
+        }
+        
+        customNavigationBar.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        leftButton.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.bottom.equalToSuperview().inset(16)
+            $0.size.equalTo(24)
+        }
+        
+        titleLabel.snp.remakeConstraints {
+            $0.centerX.equalToSuperview()  // 가로 중앙 정렬
+            $0.centerY.equalTo(leftButton) // leftButton과 같은 세로선상에 위치
+        }
+        
+        divider.snp.remakeConstraints {
+            $0.top.equalTo(customNavigationBar.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+    }
+    
+    private func applyPostLayout() {
         safeAreaView.snp.remakeConstraints {
             $0.bottom.equalTo(view.snp.topMargin)
             $0.horizontalEdges.equalToSuperview()
@@ -182,6 +214,7 @@ private extension CustomAnnouceNavigationController {
             navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
+            divider.isHidden = true
             leftButton.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
@@ -204,18 +237,57 @@ private extension CustomAnnouceNavigationController {
             navigationHeight = 50
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
+            leftButton.isHidden = false
             divider.isHidden = false
             setupSafeArea(navigationBarHidden: false)
             
             // detail 스타일 적용
             applyDetailStyle()
             applyDetailLayout()
+            
+        case .unRead:
+            navigationHeight = 56
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            divider.isHidden = false
+            leftButton.isHidden = false
+            setupSafeArea(navigationBarHidden: false)
+            
+            applyUnReadStyle()
+            applyDetailLayout()
+            
+        case .post:
+            navigationHeight = 56
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            divider.isHidden = false
+            leftButton.isHidden = false
+            setupSafeArea(navigationBarHidden: false)
+            
+            leftButton.setImage(UIImage(systemName: "xmark")?
+                .withConfiguration(UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)),
+                                for: .normal)
+            
+            // post 스타일 적용
+            applyPostStyle()
+            applyPostLayout()
+            
+        case .unReadToHome:
+            customNavigationBar.isHidden = true
+            safeAreaView.isHidden = true
+            divider.isHidden = true
+            leftButton.isHidden = true
+            setupSafeArea(navigationBarHidden: true)
         }
     }
     
     @objc private func backButtonTapped(_ sender: UIButton) {
         print("뒤로가기 버튼 동작")
-        self.popViewController(animated: true)
+        if currentType == .post {
+            self.dismiss(animated: true)
+        } else {
+            self.popViewController(animated: true)
+        }
     }
     
     private func applyHomeStyle() {
@@ -241,6 +313,22 @@ private extension CustomAnnouceNavigationController {
         titleLabel.textColor = .black50
         leftButton.tintColor = .black50
     }
+    
+    private func applyPostStyle() {
+        // detail 스타일 설정
+        customNavigationBar.backgroundColor = .black5
+        titleLabel.font = .interSubtitle1()
+        titleLabel.textColor = .black50
+        leftButton.tintColor = .black50
+    }
+    
+    private func applyUnReadStyle() {
+        // detail 스타일 설정
+        customNavigationBar.backgroundColor = .black5
+        titleLabel.font = .interSubtitle1()
+        titleLabel.textColor = .black50
+        leftButton.tintColor = .black50
+    }
 }
 
 // MARK: - Public Methods
@@ -257,6 +345,10 @@ extension CustomAnnouceNavigationController {
             setNavigationTitle("공지사항")
         case .home:
             setNavigationTitle("Studing")
+        case .post:
+            setNavigationTitle("공지사항 작성")
+        case .unRead, .unReadToHome:
+            setNavigationTitle("")
         }
     }
     

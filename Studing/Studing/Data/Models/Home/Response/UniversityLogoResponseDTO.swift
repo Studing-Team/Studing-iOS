@@ -14,4 +14,5 @@ struct UniversityLogoResponseDTO: Decodable {
     let collegeDepartmentName: String
     let departmentLogoImage: String?  // null이 올 수 있으므로 옵셔널
     let departmentName: String
+    let isRegisteredDepartment: Bool
 }

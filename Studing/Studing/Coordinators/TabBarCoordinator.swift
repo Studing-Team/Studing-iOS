@@ -14,17 +14,19 @@ protocol TabCoordinatorProtocol: Coordinator {
 final class TabBarCoordinator: TabCoordinatorProtocol {
     typealias NavigationControllerType = UINavigationController
     
+    weak var parentCoordinator: (any Coordinator)?
     var tabBarController: UITabBarController
     var navigationController: NavigationControllerType
     var childCoordinators: [any Coordinator] = []
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, parentCoordinator: (any Coordinator)?) {
         self.navigationController = navigationController
         self.tabBarController = CustomTabBarViewController()
-//        super.init()
+        self.parentCoordinator = parentCoordinator
     }
   
     func start() {
+        print("TabBarCoordinator 시작")
         let pages: [TabBarItemType] = [.home, .store, .mypage]
         
         let viewControllers = pages.map { createTabController($0) }
@@ -42,21 +44,26 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
         switch item {
         case .home:
             navigationController = CustomAnnouceNavigationController()
-            let homeCoordinator = HomeCoordinator(navigationController: navigationController as! CustomAnnouceNavigationController)
+            let homeCoordinator = HomeCoordinator(navigationController: navigationController as! CustomAnnouceNavigationController, parentCoordinator: self)
             childCoordinators.append(homeCoordinator)
             homeCoordinator.start()
         case .store:
             navigationController = UINavigationController()
-            let storeCoordinator = StoreCoordinator(navigationController: navigationController)
+            let storeCoordinator = StoreCoordinator(navigationController: navigationController, parentCoordinator: self)
             childCoordinators.append(storeCoordinator)
             storeCoordinator.start()
         case .mypage:
             navigationController = UINavigationController()
-            let mypageCoordinator = MypageCoordinator(navigationController: navigationController)
+            let mypageCoordinator = MypageCoordinator(navigationController: navigationController, parentCoordinator: self)
             childCoordinators.append(mypageCoordinator)
             mypageCoordinator.start()
         }
         
         return navigationController
+    }
+    
+    func cleanup() {
+        // 모든 자식 coordinator 제거
+        childCoordinators.removeAll()
     }
 }

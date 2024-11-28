@@ -16,7 +16,7 @@ final class SuccessSignUpViewController: UIViewController {
     // MARK: - Properties
     
     weak var coordinator: SignUpCoordinator?
-    
+    private var successSignUpViewModel: SuccessSignUpViewModel
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Properties
@@ -29,8 +29,10 @@ final class SuccessSignUpViewController: UIViewController {
     
     // MARK: - init
     
-    init(coordinator: SignUpCoordinator) {
+    init(coordinator: SignUpCoordinator,
+         successSignUpViewModel: SuccessSignUpViewModel) {
         self.coordinator = coordinator
+        self.successSignUpViewModel = successSignUpViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,6 +53,7 @@ final class SuccessSignUpViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupDelegate()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +64,30 @@ final class SuccessSignUpViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         print("Pop SuccessSignUpViewController")
+    }
+}
+
+// MARK: - Private Bind Extensions
+
+private extension SuccessSignUpViewController {
+    func bindViewModel() {
+        let input = SuccessSignUpViewModel.Input(
+            mainHomeButtonTap: mainHomeButton.tapPublisher
+        )
+        
+        let output = successSignUpViewModel.transform(input: input)
+        
+        output.mainHomeViewAction
+            .receive(on: DispatchQueue.main)
+            .sink { result in
+                switch result {
+                case .success:
+                    self.coordinator?.finishSignUp()
+                case .failure:
+                    break
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -93,21 +120,15 @@ private extension SuccessSignUpViewController {
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 25.0
             $0.clipsToBounds = true
-            $0.addTarget(self, action: #selector(mainViewTap), for: .touchUpInside)
         }
         
         studingTitleLabel.do {
             $0.text = "Studing"
             $0.textColor = .white
-            $0.font = .montserratExtraBold(size: 34)
+            $0.font = .montserratAlternatesExtraBold(size: 34)
         }
     }
-    
-    @objc
-    func mainViewTap() {
-        self.coordinator?.finishSignUp()
-    }
-    
+
     func setupHierarchy() {
         view.addSubviews(successTitleLabel, successSubTitleLabel, logoImage, studingTitleLabel, mainHomeButton)
     }

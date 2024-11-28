@@ -57,6 +57,8 @@ final class LoginViewController: UIViewController {
         setupLayout()
         setupDelegate()
         bindViewModel()
+        
+        setupKeyboardHandling()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,7 +76,7 @@ private extension LoginViewController {
             password: userPwTextField.textPublisher,
             signUpTap: signUpButton.tapPublisher,
             loginTap: loginButton.tapPublisher,
-            kakaoTap: kakaoButton.tapPublisher
+            askTap: kakaoButton.tapPublisher
         )
         
         let output = viewModel.transform(input: input)
@@ -96,9 +98,17 @@ private extension LoginViewController {
                 case .success:
                     self?.coordinator?.login()
                 case .failure:
-//                    self?.showError(error)
-                    break
+                    self?.showConfirmAlert(mainTitle: "잘못된 로그인 정보 입력", subTitle: "입력한 아이디와 비밀번호가\n올바르지 않습니다.", confirmTitle: "다시 시도", centerButtonHandler: nil)
                 }
+            }
+            .store(in: &cancellables)
+        
+        output.askButtonTap
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                guard let url = URL(string: StringLiterals.Web.askStuding),
+                      UIApplication.shared.canOpenURL(url) else { return }
+                UIApplication.shared.open(url, options: [:])
             }
             .store(in: &cancellables)
     }
@@ -116,7 +126,7 @@ private extension LoginViewController {
         studingTitleLabel.do {
             $0.text = "Studing"
             $0.textColor = .white
-            $0.font = .montserratExtraBold(size: 34)
+            $0.font = .montserratAlternatesExtraBold(size: 34)
         }
         
         userIdTextField.do {
@@ -134,6 +144,7 @@ private extension LoginViewController {
         
         userPwTextField.do {
             $0.attributedPlaceholder = NSAttributedString(string: "비밀번호", attributes: [.foregroundColor: UIColor.black50])
+            $0.isSecureTextEntry = true
             $0.font = .interBody1()
             $0.backgroundColor = .black10
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))

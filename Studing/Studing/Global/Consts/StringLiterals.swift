@@ -54,4 +54,12 @@ enum StringLiterals {
         static let nameTitle = "Studing"
         static let mypateTItle = "마이페이지"
     }
+    
+    enum Web {
+        static let addMajor = "https://forms.gle/mjsYrF3FSeQUjnsC7"
+        static let serviceTerms = "https://studingofficial.notion.site/11905c1258e080ee91cecfb7ff633bab"
+        static let privacyPolicy = "https://studingofficial.notion.site/11905c1258e08063bba2f82d320de454"
+        static let marketing = "https://studingofficial.notion.site/12005c1258e080dbb1c2d0a2b1c1d75e"
+        static let askStuding = "http://pf.kakao.com/_BzmZn"
+    }
 }

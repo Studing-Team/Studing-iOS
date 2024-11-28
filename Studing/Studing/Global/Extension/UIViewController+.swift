@@ -148,5 +148,52 @@ extension UIViewController {
            self.view.frame.origin.y = 0  // 화면을 원래 위치로 복원
        }
    }
+    
+    func showConfirmAlert(mainTitle: String, subTitle: String, confirmTitle: String, centerButtonHandler: (() -> Void)? = nil) {
+        
+        let customAlertViewController = CustomAlertViewController(
+            alertType: .onlyConfirm, mainTitle: mainTitle,
+            subTitle: subTitle, confirmTitle: confirmTitle,
+            centerButtonHandler: centerButtonHandler)
+        
+        customAlertViewController.modalPresentationStyle = .overFullScreen
+        present(customAlertViewController, animated: false)
+    }
+    
+    func showConfirmCancelAlert(mainTitle: String, subTitle: String, confirmTitle: String, cancelTitle: String, leftButtonHandler: (() -> Void)? = nil, rightButtonHandler: (() -> Void)? = nil) {
+        
+        let customAlertViewController = CustomAlertViewController(
+            alertType: .confirmCancel, mainTitle: mainTitle,
+            subTitle: subTitle, confirmTitle: confirmTitle, cancelTitle: cancelTitle, leftButtonHandler: leftButtonHandler , rightButtonHandler: rightButtonHandler)
+        
+        customAlertViewController.modalPresentationStyle = .overFullScreen
+        present(customAlertViewController, animated: false)
+    }
+    
+    func showBookmarkToastMessage(isBookmark: Bool) {
+        let toastView = ToastMessageView(isBookmark: isBookmark)
+        view.addSubview(toastView)
+        
+        // 위치 설정
+        toastView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(view.convertByHeightRatio(97))
+        }
+        
+        // 애니메이션
+        toastView.alpha = 0
+        UIView.animate(withDuration: 0.3) {
+            toastView.alpha = 1
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            UIView.animate(withDuration: 0.3, animations: {
+                toastView.alpha = 0
+            }, completion: { _ in
+                toastView.removeFromSuperview()
+            })
+        }
+    }
+    
 }
 
