@@ -11,11 +11,14 @@ final class StoreCoordinator: Coordinator {
     typealias NavigationControllerType = UINavigationController
     
     var navigationController: UINavigationController
-    
+    weak var parentCoordinator: (any Coordinator)?
     var childCoordinators: [any Coordinator] = []
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController,
+         parentCoordinator: (any Coordinator)?
+    ) {
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
     }
     
     func start() {

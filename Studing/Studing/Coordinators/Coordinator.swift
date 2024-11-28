@@ -11,5 +11,6 @@ protocol Coordinator: AnyObject {
     associatedtype NavigationControllerType: UINavigationController
     var navigationController: NavigationControllerType { get set }
     var childCoordinators: [any Coordinator] { get set }
+    var parentCoordinator: (any Coordinator)? { get set }
     func start()
 }

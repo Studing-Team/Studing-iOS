@@ -13,11 +13,15 @@ protocol LoginCoordinatorDelegate {
 
 final class LoginCoordinator: Coordinator {
     var navigationController: CustomSignUpNavigationController
+    weak var parentCoordinator: (any Coordinator)?
     var childCoordinators: [any Coordinator] = []
     var delegate: LoginCoordinatorDelegate?
     
-    init(navigationController: CustomSignUpNavigationController) {
+    init(navigationController: CustomSignUpNavigationController,
+         parentCoordinator: (any Coordinator)?
+    ) {
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
     }
     
     func start() {
