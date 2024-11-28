@@ -32,6 +32,10 @@ enum KeychainKey: String {
     
     case signupInfo
     
+    case userAuthState
+    
+    case userInfo
+    
     /// Info.plist에서 정의된 실제 키체인 키 값을 반환합니다.
         /// - Returns: Info.plist에 정의된 실제 키 문자열
     var value: String {
@@ -43,6 +47,10 @@ enum KeychainKey: String {
         case .fcmToken:
             return Config.fcmTokenKey
         case .signupInfo:
+            return Config.signupInfoKey
+        case .userAuthState:
+            return Config.userAuthStateKey
+        case .userInfo:
             return Config.userInfoKey
         }
     }
@@ -131,6 +139,8 @@ final class KeychainManager {
         ]
         
         SecItemDelete(query as CFDictionary)
+        
+        print("KeyChain - \(key) 삭제 완료")
     }
     
     /// 모든 토큰 관련 데이터를 키체인에서 삭제하는 메서드
@@ -180,6 +190,7 @@ extension KeychainManager {
         
         do {
             let decodedObject = try JSONDecoder().decode(T.self, from: data)
+            print("Keychain에서 \(key) 불러오기 성공")
             return decodedObject
         } catch {
             print("Keychain 디코딩 오류: \(error)")

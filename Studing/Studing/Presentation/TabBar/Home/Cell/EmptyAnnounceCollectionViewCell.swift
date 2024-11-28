@@ -10,10 +10,16 @@ import UIKit
 import SnapKit
 import Then
 
+enum EmptyAnnounceType {
+    case home
+    case list
+}
+
 final class EmptyAnnounceCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Properties
     
+    private var type: EmptyAnnounceType?
     private let infoImage = UIImageView()
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
@@ -25,11 +31,16 @@ final class EmptyAnnounceCollectionViewCell: UICollectionViewCell {
         
         setupStyle()
         setupHierarchy()
-        setupLayout()
+//        setupLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(_ type: EmptyAnnounceType) {
+        self.type = type
+        setupLayout()
     }
 }
 
@@ -66,7 +77,7 @@ private extension EmptyAnnounceCollectionViewCell {
     
     func setupLayout() {
         infoImage.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(34.86)
+            $0.top.equalToSuperview().inset(type == .home ? 34.86 : 167.36)
             $0.centerX.equalToSuperview()
             $0.size.equalTo(60)
         }
@@ -79,7 +90,7 @@ private extension EmptyAnnounceCollectionViewCell {
         subTitleLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(34.86)
+            $0.bottom.equalToSuperview().inset(type == .home ? 34.86 : 167.36)
         }
     }
 }

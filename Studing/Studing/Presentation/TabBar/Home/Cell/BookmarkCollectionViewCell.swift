@@ -84,7 +84,6 @@ private extension BookmarkCollectionViewCell {
         associationTypeView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(17.25)
             $0.leading.equalToSuperview().inset(15)
-//            $0.horizontalEdges.equalToSuperview().inset(15)
         }
         
         titleLabel.snp.makeConstraints {

@@ -49,7 +49,7 @@ final class CustomButton: UIButton {
         case .studentCard:
             layer.cornerRadius = 12
         default:
-            layer.cornerRadius = 25
+            layer.cornerRadius = 24
         }
         
         clipsToBounds = true

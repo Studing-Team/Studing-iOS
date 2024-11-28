@@ -22,7 +22,7 @@ final class LoginViewModel: BaseViewModel {
         let password: AnyPublisher<String, Never>
         let signUpTap: AnyPublisher<Void, Never>
         let loginTap: AnyPublisher<Void, Never>
-        let kakaoTap: AnyPublisher<Void, Never>
+        let askTap: AnyPublisher<Void, Never>
     }
     
     // MARK: - Output
@@ -31,6 +31,7 @@ final class LoginViewModel: BaseViewModel {
         let signUpAction: AnyPublisher<Void, Never>
         let isLoginButtonEnabled: AnyPublisher<Bool, Never>
         let loginResult: AnyPublisher<LoginResult, Never>
+        let askButtonTap: AnyPublisher<Void, Never>
     }
     
     // MARK: - Private properties
@@ -90,7 +91,8 @@ final class LoginViewModel: BaseViewModel {
         return Output(
             signUpAction: input.signUpTap,
             isLoginButtonEnabled: isLoginButtonEnabled,
-            loginResult: loginResult
+            loginResult: loginResult,
+            askButtonTap: input.askTap
         )
     }
 }
@@ -103,9 +105,25 @@ extension LoginViewModel {
         case .success(let response):
             KeychainManager.shared.save(key: .accessToken, value: response.accessToken)
             
+            let userInfo = response.memberData.toEntity()
+            
+            let userData = UserInfo(userName: userInfo.name, university: userInfo.memberUniversity, department: userInfo.memberDepartment, identifier: userInfo.loginIdentifier)
+            
+            KeychainManager.shared.saveData(key: .userAuthState, value: userInfo.role.rawValue)
+            KeychainManager.shared.saveData(key: .userInfo, value: userData)
+            
+            UserDefaults.standard.set(true, forKey: "isLogined")
+            
             return .success
         case .failure(let error):
             return .failure(error)
         }
     }
+}
+
+struct UserInfo: Codable {
+    let userName: String
+    let university: String
+    let department: String
+    let identifier: String
 }

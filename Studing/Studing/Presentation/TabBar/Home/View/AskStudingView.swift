@@ -10,7 +10,19 @@ import UIKit
 import SnapKit
 import Then
 
+enum ViewType {
+    case home
+    case list
+}
+
 final class AskStudingView: UIView {
+    
+    // MARK: - Properties
+    
+    private let type: ViewType
+    
+    // MARK: - UI Properties
+    
     private let backgroundView = UIView()
     private let askImageView = UIImageView()
     private let titleLabel = UILabel()
@@ -18,13 +30,17 @@ final class AskStudingView: UIView {
     
     // MARK: - init
     
-    init() {
+    init(type: ViewType) {
+        self.type = type
         super.init(frame: .zero)
         
         setupStyle()
         setupHierarchy()
         setupLayout()
         setupDelegate()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(askStudingTapped))
+        self.addGestureRecognizer(tapGesture)
     }
     
     required init?(coder: NSCoder) {
@@ -37,7 +53,7 @@ final class AskStudingView: UIView {
 private extension AskStudingView {
     func setupStyle() {
         backgroundView.do {
-            $0.backgroundColor = .black10
+            $0.backgroundColor = type == .home ? .white : .black10
             $0.layer.cornerRadius = 24
         }
         
@@ -88,5 +104,19 @@ private extension AskStudingView {
     func setupDelegate() {
         
     }
+    
+    @objc private func askStudingTapped() {
+        guard let url = URL(string: StringLiterals.Web.askStuding),
+              UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url)
+    }
 }
 
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+#Preview("AskStudingView") {
+    AskStudingView(type: .home)
+        .showPreview()
+}
+#endif

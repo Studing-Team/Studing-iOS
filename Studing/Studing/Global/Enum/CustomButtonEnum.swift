@@ -24,6 +24,8 @@ enum ButtonStyle {
     case retry
     case studentCard
     case showStudingHome
+    case postAnnounce
+    case home
     
     var title: String {
         switch self {
@@ -47,12 +49,16 @@ enum ButtonStyle {
             return "다시 시도"
         case .studentCard:
             return "학생증 업로드"
+        case .postAnnounce:
+            return "등록하기"
+        case .home:
+            return "홈으로 돌아가기"
         }
     }
     
     var enableBackground: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard:
+        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home:
             return .primary50
         case .showStuding:
             return .white
@@ -63,7 +69,7 @@ enum ButtonStyle {
     
     var disableBackground: UIColor {
         switch self {
-        case .next, .authentication:
+        case .next, .authentication, .postAnnounce:
             return .black20
         case .showStuding:
             return .white
@@ -76,7 +82,7 @@ enum ButtonStyle {
     
     var foregroundColor: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome:
+        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home:
             return .white
             
         case .showStuding:

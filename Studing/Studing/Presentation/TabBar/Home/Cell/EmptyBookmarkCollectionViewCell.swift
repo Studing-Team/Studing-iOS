@@ -12,6 +12,12 @@ import Then
 
 final class EmptyBookmarkCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
+    var allAnnounceButtonAction: (() -> Void)?
+    
+    // MARK: - UI Properties
+    
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
     private let allAnnouceButton = UIButton()
@@ -36,7 +42,7 @@ final class EmptyBookmarkCollectionViewCell: UICollectionViewCell {
 private extension EmptyBookmarkCollectionViewCell {
     func setupStyle() {
         
-        self.backgroundColor = .white.withAlphaComponent(0.7)
+        self.backgroundColor = .primary10//.white.withAlphaComponent(0.7)
         self.layer.borderWidth = 1
         self.layer.borderColor =  UIColor.white.cgColor
         self.layer.cornerRadius = 15
@@ -66,6 +72,7 @@ private extension EmptyBookmarkCollectionViewCell {
             $0.configuration = config
             $0.layer.cornerRadius = 22 / 2
             $0.clipsToBounds = true
+            $0.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         }
     }
     
@@ -90,5 +97,9 @@ private extension EmptyBookmarkCollectionViewCell {
             $0.width.equalTo(212)
             $0.height.equalTo(22)
         }
+    }
+    
+    @objc func buttonTapped() {
+        allAnnounceButtonAction?()
     }
 }

@@ -93,6 +93,8 @@ extension StoreCategoryCollectionViewCell {
     }
     
     func updateAppearance() {
+        print("UI 변경")
+
         if cateoryTitleLabel.text == "전체" && isSelected == true {
             contentView.applyGradient(colors: [.loginStartGradient.withFigmaStyleAlpha(1.0), .loginEndGradient.withFigmaStyleAlpha(1.0)], direction: .topRightToBottomLeft, locations: [0, 1.0])
             contentView.layer.borderWidth = 0

@@ -25,13 +25,21 @@ final class HomeViewModel: BaseViewModel {
     var sectionUpdatePublisher = PassthroughSubject<SectionType, Never>()
     var associationUpdatePublisher = PassthroughSubject<[IndexPath], Never>()
     
-    var selectedAssociationType = ""
+    var selectedAssociationType = "전체" {
+        didSet {
+            print("선택된 단체:", selectedAssociationType)
+        }
+    }
+    
+    var unReadAssociation = [String]() // 놓친 공지사항이 있는 assocation
+    var unReadCount: Int = 0
     
     // MARK: - Input
     
     struct Input {
         let associationTap: AnyPublisher<Int, Never>
         let headerRightButtonTap: AnyPublisher<SectionType, Never>
+        let postButtonTap: AnyPublisher<Void, Never>
     }
     
     // MARK: - Output
@@ -39,6 +47,7 @@ final class HomeViewModel: BaseViewModel {
     struct Output {
         let annouceHeaderText: AnyPublisher<String, Never>
         let headerRightButtonTap: AnyPublisher<HeaderButtonAction?, Never>
+        let postButtonTap: AnyPublisher<Void, Never>
     }
     
     // MARK: - Private properties
@@ -73,13 +82,16 @@ final class HomeViewModel: BaseViewModel {
                 
                 if let associationData = self.sectionDataDict[.association] as? [AssociationEntity] {
                     // 새로운 배열 생성
+                    
                     let updatedData = associationData.enumerated().map { (i, entity) in
                         // 각 엔티티의 모든 속성을 유지하면서 isSelected만 업데이트
                         AssociationEntity(
                             name: entity.name,
-                            image: entity.image, 
+                            image: entity.image,
                             associationType: entity.associationType,
-                            isSelected: (i == index)
+                            isSelected: (i == index),
+                            unRead: entity.unRead,
+                            isRegisteredDepartment: entity.isRegisteredDepartment
                         )
                     }
                     
@@ -87,12 +99,26 @@ final class HomeViewModel: BaseViewModel {
                     self.sectionUpdatePublisher.send(.association)
                     self.selectedAssociationTitle.send(updatedData[index].name)
                     
-                    if updatedData[index].associationType != nil {
-                        return updatedData[index].associationType?.typeName
+                    // guard associationData[index].isRegisteredDepartment else { return nil }
+                    if associationData[index].isRegisteredDepartment == true {
+                        if updatedData[index].associationType != nil {
+                            return updatedData[index].associationType?.typeName
+                        } else {
+                            return updatedData[index].name
+                        }
                     } else {
-                        return updatedData[index].name
+                        // 미등록 학과 선택 시
+                        self.sectionDataDict.removeValue(forKey: .missAnnouce)
+                        self.sectionDataDict[.annouce]?.removeAll()
+                        
+                        // footer 즉시 업데이트를 위해 announce 섹션 업데이트
+                        DispatchQueue.main.async {
+                            self.sectionUpdatePublisher.send(.annouce)
+                        }
+                        return nil
                     }
                 }
+                
                 return nil
             }
             .sink { [weak self] name in
@@ -138,7 +164,8 @@ final class HomeViewModel: BaseViewModel {
         
         return Output(
             annouceHeaderText: selectedAssociationTitle.eraseToAnyPublisher(),
-            headerRightButtonTap: rightButtonTap.eraseToAnyPublisher()
+            headerRightButtonTap: rightButtonTap.eraseToAnyPublisher(),
+            postButtonTap: input.postButtonTap.eraseToAnyPublisher()
         )
     }
 }
@@ -147,12 +174,16 @@ extension HomeViewModel {
     func getMissAnnouceInfo(name: String) async {
         switch await unreadAssociationAnnouceCountUseCase.execute(associationName: name) {
         case .success(let response):
+            unReadCount = response.categorieCount
+            let userName = KeychainManager.shared.loadData(key: .userInfo, type: UserInfo.self)?.userName ?? "알수없음"
             
             if response.categorieCount != 0 {
-                sectionDataDict[.missAnnouce] = [MissAnnounceEntity(userName: "상우", missAnnounceCount: response.categorieCount)]
+                sectionDataDict[.missAnnouce] = [MissAnnounceEntity(userName: userName, missAnnounceCount: response.categorieCount)]
             } else {
                 sectionDataDict.removeValue(forKey: .missAnnouce)
             }
+            
+            await getMySections()
             
         case .failure(let error):
             print("Error:", error.localizedDescription)
@@ -196,12 +227,14 @@ extension HomeViewModel {
     func getUnreadAssociationInfo() async {
         switch await unreadAssociationUseCase.execute() {
         case .success(let response):
-            let unreadAsoociation = response.categories
+            unReadAssociation = response.categories
+
         case .failure(let error):
             print("Error:", error.localizedDescription)
         }
     }
     
+    @MainActor
     func getMySections() {
         var currentSections: [SectionType] = []
 
@@ -256,22 +289,28 @@ extension HomeViewModel {
         var models: [AssociationEntity] = []
         
         models.append(
-            AssociationEntity(name: "전체", image: "", associationType: nil, isSelected: true)
+            AssociationEntity(name: "전체", image: "", associationType: nil, isSelected: true, unRead: false, isRegisteredDepartment: true)
         )
         
         models.append(
-            AssociationEntity(name: dto.universityName, image: dto.universityLogoImage, associationType: .generalStudents, isSelected: false)
+            AssociationEntity(name: dto.universityName, image: dto.universityLogoImage, associationType: .generalStudents, isSelected: false, unRead: false, isRegisteredDepartment: true)
         )
         
         models.append(
-            AssociationEntity(name: dto.collegeDepartmentName, image: dto.collegeDepartmentLogoImage, associationType: .college, isSelected: false)
+            AssociationEntity(name: dto.collegeDepartmentName, image: dto.collegeDepartmentLogoImage, associationType: .college, isSelected: false, unRead: false, isRegisteredDepartment: true)
         )
         
         models.append(
-            AssociationEntity(name: dto.departmentName, image: dto.departmentLogoImage ?? "", associationType: .major, isSelected: false)
+            AssociationEntity(name: dto.departmentName, image: dto.departmentLogoImage ?? "", associationType: .major, isSelected: false, unRead: false, isRegisteredDepartment: dto.isRegisteredDepartment)
         )
         
-        return models
+        return models.map { model in
+            var updatedModel = model
+            if unReadAssociation.contains(model.name) {
+                updatedModel.unRead = true
+            }
+            return updatedModel
+        }
     }
     
     func convertAssociationAnnounceEntity(_ data: [AnnouncementResponseDTO]) -> [AssociationAnnounceEntity] {

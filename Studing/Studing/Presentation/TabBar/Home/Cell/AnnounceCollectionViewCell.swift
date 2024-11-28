@@ -61,7 +61,7 @@ final class AnnounceCollectionViewCell: UICollectionViewCell {
 
 extension AnnounceCollectionViewCell {
     func configureCell(forModel model: AssociationAnnounceEntity) {
-        contentsImage.setImage(model.imageURL, type: .postImage)
+        contentsImage.setImage(model.imageURL, type: .postImage, forceReload: true)
         associationTypeView.configure(title: model.writerInfo, type: model.associationType)
         
         titleLabel.text = "\(model.title)"
@@ -141,7 +141,7 @@ private extension AnnounceCollectionViewCell {
         
         [favoriteInfoStackView, bookmarkInfoStackView, watchInfoStackView].forEach {
             $0.axis = .horizontal
-            $0.spacing = 3
+            $0.spacing = 5
             $0.distribution = .fill
         }
         
@@ -155,7 +155,7 @@ private extension AnnounceCollectionViewCell {
         bottomStackView.do {
             $0.addArrangedSubviews(postDayLabel, contentsInfoStackView)
             $0.axis = .horizontal
-            $0.spacing = 101
+            $0.spacing = self.convertByWidthRatio(101)
             $0.distribution = .fill
         }
         

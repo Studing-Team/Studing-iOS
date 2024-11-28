@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 extension UIView {
     
@@ -126,6 +127,7 @@ extension UIView {
         layer.sublayers?.filter { $0.name == "gradientBorder" }.forEach { $0.removeFromSuperlayer() }
     }
     
+    // firstResponder를 쉽게 찾기 위한 UIView extension
     var firstResponder: UIView? {
         if isFirstResponder {
             return self
@@ -138,5 +140,22 @@ extension UIView {
         }
         
         return nil
+    }
+}
+
+extension UIView {
+    private struct Preview: UIViewRepresentable {
+        let view: UIView
+        
+        func makeUIView(context: Context) -> UIView {
+            return view
+        }
+        
+        func updateUIView(_ uiView: UIView, context: Context) {
+        }
+    }
+    
+    func showPreview() -> some View {
+        Preview(view: self)
     }
 }

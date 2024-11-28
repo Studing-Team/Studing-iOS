@@ -62,7 +62,7 @@ extension MyInfoCollectionViewCell {
         myNameLabel.text = "\(model.userName)님"
         myUniversityLabel.text = model.university
         myMajorLabel.text = model.major
-        myStudentIdLabel.text = model.studentId
+        myStudentIdLabel.text = "\(model.studentId)학번"
     }
 }
 

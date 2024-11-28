@@ -8,6 +8,11 @@
 import Foundation
 import Combine
 
+enum AuthUniversityType {
+    case signup
+    case reSubmit
+}
+
 final class AuthUniversityViewModel: BaseViewModel {
     
 //    weak var delegate: InputStudentInfoDelegate?
@@ -33,20 +38,34 @@ final class AuthUniversityViewModel: BaseViewModel {
     
     // MARK: - Private properties
     
+    var authType: AuthUniversityType
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UseCase properties
     
-    private let signupUseCase: SignupUseCase
-    private let signupUserInfo: SignupUserInfo?
+    private var signupUseCase: SignupUseCase? = nil
+    private var signupUserInfo: SignupUserInfo? = nil
+    private var resubmitUseCase: ReSubmitUseCase? = nil
     
     // MARK: - init
     
     init(signupUseCase: SignupUseCase,
-         signupUserInfo: SignupUserInfo?
+         signupUserInfo: SignupUserInfo?,
+         authType: AuthUniversityType
     ) {
         self.signupUseCase = signupUseCase
         self.signupUserInfo = signupUserInfo
+        self.authType = authType
+    }
+    
+    init(resubmitUseCase: ReSubmitUseCase,
+         authType: AuthUniversityType) {
+        self.resubmitUseCase = resubmitUseCase
+        self.authType = authType
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Public methods
@@ -68,7 +87,7 @@ final class AuthUniversityViewModel: BaseViewModel {
             }
             .eraseToAnyPublisher()
         
-        let allStudentIdState = input.userName
+        let allStudentIdState = input.allStudentId
             .map { input in
                 input.isEmpty ? false : true
             }
@@ -76,7 +95,7 @@ final class AuthUniversityViewModel: BaseViewModel {
 
         let isNextButtonEnabled = Publishers.CombineLatest3(isSelectedImage, userNameState, allStudentIdState)
             .map { imageData, userName, allStudentId in
-                imageData && userName && allStudentId
+                return imageData && userName && allStudentId
             }
             .eraseToAnyPublisher()
         
@@ -87,17 +106,34 @@ final class AuthUniversityViewModel: BaseViewModel {
                 
                 return Future { promise in
                     Task {
-                        let result = await self.signupUser(
-                            userName: input.userName.value,
-                            studentNumber: input.allStudentId.value,
-                            image: imageData
-                        )
-                        
-                        switch result {
-                        case .success:
-                            promise(.success(true))
-                        case .failure(let error):
-                            promise(.success(false))
+                        switch self.authType {
+                        case .signup:
+                            let result = await self.signupUser(
+                                userName: input.userName.value,
+                                studentNumber: input.allStudentId.value,
+                                image: imageData
+                            )
+                            
+                            switch result {
+                            case .success:
+                                promise(.success(true))
+                            case .failure(let error):
+                                promise(.success(false))
+                            }
+                            
+                        case .reSubmit:
+                            let result = await self.reSubmit(
+                                userName: input.userName.value,
+                                studentNumber: input.allStudentId.value,
+                                image: imageData
+                            )
+                            
+                            switch result {
+                            case .success:
+                                promise(.success(true))
+                            case .failure(let error):
+                                promise(.success(false))
+                            }
                         }
                     }
                 }
@@ -120,6 +156,7 @@ extension AuthUniversityViewModel {
     func signupUser(userName: String, studentNumber: String, image: Data) async -> Result<Void, NetworkError> {
         
         guard let signupUserInfo else { return .failure(.clientError(message: "유저데이터 없음")) }
+        guard let signupUseCase else { return .failure(.clientError(message: "다시 시도하세요.")) }
         
         let requestDTO = convertToSignupRequestDTO(
             signupUserInfo: signupUserInfo,
@@ -132,6 +169,33 @@ extension AuthUniversityViewModel {
         case .success(let response):
             UserDefaults.standard.set(response.memberId, forKey: "MemberId")
             return .success(())
+        case .failure(let error):
+            print("Error:", error.localizedDescription)
+            return .failure(error)
+        }
+    }
+    
+    func reSubmit(userName: String, studentNumber: String, image: Data) async -> Result<Void, NetworkError> {
+        guard let resubmitUseCase else { return .failure(.clientError(message: "다시 시도하세요.")) }
+        
+        let requestDTO = ReSubmitRequestDTO(
+            admissionNumber: studentNumber,
+            name: userName,
+            studentCardImage: image
+        )
+        
+        switch await resubmitUseCase.execute(dto: requestDTO) {
+        case .success:
+            KeychainManager.shared.saveData(key: .userAuthState, value: UserAuth.unUser.rawValue)
+            
+            NotificationCenter.default.post(
+                            name: .userAuthDidUpdate,
+                            object: nil,
+                            userInfo: ["userAuth": UserAuth.unUser] // 필요한 데이터를 dictionary로 전달
+                        )
+            
+            return .success(())
+            
         case .failure(let error):
             print("Error:", error.localizedDescription)
             return .failure(error)

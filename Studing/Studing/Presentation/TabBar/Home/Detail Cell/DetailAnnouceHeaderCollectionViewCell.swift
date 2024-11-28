@@ -12,7 +12,7 @@ import Then
 
 final class DetailAnnouceHeaderCollectionViewCell: UICollectionViewCell {
     
-    private let associationLogoImage = UIImageView()
+    private let associationLogoImage = AFImageView()
     private let associationName = UILabel()
     private let postDayLabel = UILabel()
     private let contentInfoView = ContentInfoView()
@@ -42,7 +42,7 @@ final class DetailAnnouceHeaderCollectionViewCell: UICollectionViewCell {
 
 extension DetailAnnouceHeaderCollectionViewCell {
     func configureCell(forModel model: DetailAnnouceHeaderModel) {
-        associationLogoImage.image = UIImage(resource: .allAssociation)
+        associationLogoImage.setImage(model.image, type: .associationLogo)
         associationName.text = model.name
         postDayLabel.text = model.days
         
@@ -67,26 +67,23 @@ private extension DetailAnnouceHeaderCollectionViewCell {
             $0.alignment = .leading
         }
         
+        associationLogoImage.do {
+            $0.contentMode = .scaleAspectFit
+            $0.layer.cornerRadius = 55 / 2
+            $0.clipsToBounds = true
+        }
+        
         bottomStackView.do {
             $0.addArrangedSubviews(postDayLabel, contentInfoView)
             $0.axis = .horizontal
             $0.spacing = 35
-            $0.distribution = .fillProportionally
+            $0.distribution = .fill
+            $0.alignment = .center
         }
         
         postDayLabel.do {
             $0.font = .interCaption11()
             $0.textColor = .black30
-            $0.setContentHuggingPriority(.required, for: .horizontal) // 필요한 공간만 차지하도록 우선순위 설정
-        }
-        
-        contentInfoView.do {
-            $0.setContentHuggingPriority(.required, for: .horizontal) // 필요한 공간만 차지하도록 우선순위 설정
-        }
-
-        spacerView.do {
-            $0.backgroundColor = .clear
-            $0.setContentHuggingPriority(.defaultLow, for: .horizontal) // 낮은 우선순위로 설정해 남은 공간 차지
         }
         
         associationInfoStackView.do {
@@ -152,6 +149,7 @@ final class ContentInfoView: UIView {
     init() {
         super.init(frame: .zero)
         
+        setupStyle()
         setupHierarchy()
         setupLayout()
         setupDelegate()
@@ -160,24 +158,20 @@ final class ContentInfoView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure(type: AnnounceType) {
-        setupStyle(type)
-    }
-    
+
     func configureData( _ favoriteCount: Int, _ bookmarkCount: Int, _ watchCount: Int, _ isFavorite: Bool, _ isBookmark: Bool) {
         favoriteCountLabel.text = "\(favoriteCount)"
         bookmarkCountLabel.text = "\(bookmarkCount)"
         watchCountLabel.text = "\(watchCount)"
         
-        favoriteImage.image = UIImage(resource: isFavorite == true ? .favorite : .favorite)
-        bookmarkImage.image = UIImage(resource: isBookmark == true ? .bookmark : .bookmark)
+        favoriteImage.image = UIImage(resource: isFavorite == true ? .favorite : .unFavorite)
+        bookmarkImage.image = UIImage(resource: isBookmark == true ? .bookmark : .unBookmark)
         watchImage.image = UIImage(resource: .visibility)
     }
 }
 
 extension ContentInfoView {
-    func setupStyle(_ type: AnnounceType) {
+    func setupStyle() {
         
         [favoriteCountLabel, bookmarkCountLabel, watchCountLabel].forEach {
             $0.font = .interCaption11()
@@ -198,7 +192,7 @@ extension ContentInfoView {
         
         [favoriteInfoStackView, bookmarkInfoStackView, watchInfoStackView].forEach {
             $0.axis = .horizontal
-            $0.spacing = 3
+            $0.spacing = 5
             $0.distribution = .fill
         }
         
@@ -206,7 +200,7 @@ extension ContentInfoView {
             $0.addArrangedSubviews(favoriteInfoStackView, divider, bookmarkInfoStackView, divider2, watchInfoStackView)
             $0.axis = .horizontal
             $0.spacing = 5
-            $0.distribution = .equalCentering
+            $0.distribution = .fillProportionally
         }
         
         divider.do {
@@ -225,6 +219,16 @@ extension ContentInfoView {
     func setupLayout() {
         contentsInfoStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+    
+        divider.snp.makeConstraints {
+            $0.width.equalTo(1)
+            $0.height.equalTo(12)
+        }
+        
+        divider2.snp.makeConstraints {
+            $0.width.equalTo(1)
+            $0.height.equalTo(12)
         }
     }
     

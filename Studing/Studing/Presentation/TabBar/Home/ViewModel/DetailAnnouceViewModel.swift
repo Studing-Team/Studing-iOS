@@ -25,12 +25,15 @@ final class DetailAnnouceViewModel: BaseViewModel {
         }
     }
     
+    private var detailAnnounceType: DetailAnnounceType
+    
     // MARK: - Input
     
     struct Input {
         let likeButtonTap: AnyPublisher<Void, Never>
         let bookmarkButtonTap: AnyPublisher<Void, Never>
         let nextButtonTap: AnyPublisher<Void, Never>
+        let currentPageControlCount : AnyPublisher<Int, Never>
     }
     
     // MARK: - Output
@@ -38,6 +41,9 @@ final class DetailAnnouceViewModel: BaseViewModel {
     struct Output {
         let isFavorite: AnyPublisher<Bool, Never>
         let isBookmark: AnyPublisher<Bool, Never>
+        let bookmarkButtonResult: AnyPublisher<Bool, Never>
+        let nextButtonResult: AnyPublisher<Result<Bool, NetworkError>, Never>
+        let currentPageControlCountResult: AnyPublisher<Int, Never>
     }
     
     // MARK: - Private properties
@@ -45,6 +51,7 @@ final class DetailAnnouceViewModel: BaseViewModel {
     private var cancellables = Set<AnyCancellable>()
     private var selectedNoticeId: Int?
     private var selectedAssociationType: String?
+    var unReadCount: Int?
     
     // MARK: - UseCase properties
     
@@ -55,6 +62,7 @@ final class DetailAnnouceViewModel: BaseViewModel {
     private let deleteLikeAnnounceUseCase: DeleteLikeAnnounceUseCase
     private let bookmarkAnnounceUseCase: BookmarkAnnounceUseCase
     private let deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase
+    private let checkAnnounceUseCase: CheckAnnounceUseCase
     
     // MARK: - init
     
@@ -66,7 +74,9 @@ final class DetailAnnouceViewModel: BaseViewModel {
          bookmarkAnnounceUseCase: BookmarkAnnounceUseCase,
          deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase,
          detailAnnounceUseCase: DetailAnnounceUseCase? = nil,
-         unreadAllAnnounceUseCase: UnreadAllAnnounceUseCase? = nil
+         unreadAllAnnounceUseCase: UnreadAllAnnounceUseCase? = nil,
+         unReadCount: Int? = nil,
+         checkAnnounceUseCase: CheckAnnounceUseCase
     ) {
         self.selectedNoticeId = selectedNoticeId
         self.selectedAssociationType = selectedAssociationType
@@ -76,7 +86,9 @@ final class DetailAnnouceViewModel: BaseViewModel {
         self.deleteBookmarkAnnounceUseCase = deleteBookmarkAnnounceUseCase
         self.detailAnnounceUseCase = detailAnnounceUseCase
         self.unreadAllAnnounceUseCase = unreadAllAnnounceUseCase
-        
+        self.unReadCount = unReadCount
+        self.checkAnnounceUseCase = checkAnnounceUseCase
+        self.detailAnnounceType = type
         print("DetailAnnouceViewModel init")
     }
     
@@ -96,23 +108,29 @@ final class DetailAnnouceViewModel: BaseViewModel {
             deleteLikeAnnounceUseCase: DeleteLikeAnnounceUseCase(repository: repository),
             bookmarkAnnounceUseCase: BookmarkAnnounceUseCase(repository: repository),
             deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase(repository: repository),
-            detailAnnounceUseCase: DetailAnnounceUseCase(repository: repository)
+            detailAnnounceUseCase: DetailAnnounceUseCase(repository: repository),
+            checkAnnounceUseCase: CheckAnnounceUseCase(repository: NoticesRepositoryImpl())
         )
     }
     
     static func createUnreadViewModel(
         type: DetailAnnounceType,
+        selectedNoticeId: Int?,
         selectedAssociationType: String?,
-        repository: NoticesRepository
+        repository: NoticesRepository,
+        unReadCount: Int?
     ) -> DetailAnnouceViewModel {
         return DetailAnnouceViewModel(
             type: type,
+            selectedNoticeId: selectedNoticeId,
             selectedAssociationType: selectedAssociationType,
             likeAnnounceUseCase: LikeAnnounceUseCase(repository: repository),
             deleteLikeAnnounceUseCase: DeleteLikeAnnounceUseCase(repository: repository),
             bookmarkAnnounceUseCase: BookmarkAnnounceUseCase(repository: repository),
             deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase(repository: repository),
-            unreadAllAnnounceUseCase: UnreadAllAnnounceUseCase(repository: repository)
+            unreadAllAnnounceUseCase: UnreadAllAnnounceUseCase(repository: repository),
+            unReadCount: unReadCount,
+            checkAnnounceUseCase: CheckAnnounceUseCase(repository: NoticesRepositoryImpl())
         )
     }
 
@@ -121,9 +139,31 @@ final class DetailAnnouceViewModel: BaseViewModel {
     
     func transform(input: Input) -> Output {
         
+        let nextButtonResult = input.nextButtonTap
+            .flatMap { [weak self] _ -> AnyPublisher<Result<Bool, NetworkError>, Never> in
+                guard let self else { return Just((.failure(NetworkError.unknown))).eraseToAnyPublisher() }
+                
+                return Future { promise in
+                    Task {
+                        if self.unReadCount == 0 {
+                            promise(.success(.success(false)))
+                        }
+                        
+                        let result = await self.checkUnAnnounce()
+                        switch result {
+                        case .success:
+                            promise(.success(.success(true)))
+                        case .failure(let error):
+                            promise(.success(.failure(error)))
+                        }
+                    }
+                }.eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+        
         input.likeButtonTap
             .sink { [weak self] _ in
-                guard let self = self else { return }
+                guard let self else { return }
                 
                 Task {
                     await self.likeActionHandler()
@@ -131,15 +171,20 @@ final class DetailAnnouceViewModel: BaseViewModel {
             }
             .store(in: &cancellables)
         
-        input.bookmarkButtonTap
-            .sink { [weak self] _ in
-                guard let self = self else { return }
+        let bookmarkButtonResult = input.bookmarkButtonTap
+            .flatMap { [weak self] _ -> AnyPublisher<Bool, Never> in
+                guard let self else { return Empty().eraseToAnyPublisher() }
                 
-                Task {
-                    await self.bookmarkActionHandler()
-                }
+                return Future { promise in
+                    Task {
+                        await self.bookmarkActionHandler()
+                        
+                        let newData = self.sectionDataDict[.header]?.first as? DetailAnnouceHeaderModel
+                        promise(.success(newData?.isBookmark ?? false))
+                    }
+                }.eraseToAnyPublisher()
             }
-            .store(in: &cancellables)
+            .eraseToAnyPublisher()
         
         let isFavorite = sectionsData
             .compactMap { [weak self] _ -> Bool? in
@@ -157,8 +202,55 @@ final class DetailAnnouceViewModel: BaseViewModel {
 
         return Output(
             isFavorite: isFavorite,
-            isBookmark: isBookmark
+            isBookmark: isBookmark,
+            bookmarkButtonResult: bookmarkButtonResult,
+            nextButtonResult: nextButtonResult,
+            currentPageControlCountResult: input.currentPageControlCount
         )
+    }
+}
+
+extension DetailAnnouceViewModel {
+    
+    func initializeData() async {
+        switch detailAnnounceType {
+        case .bookmarkAnnounce, .announce:
+            await getDetailAnnounce()
+            await checkDetailAnnounce()
+        case .unreadAnnounce:
+            await postUnreadAllAnnounce()
+        }
+    }
+    
+    func checkUnAnnounce() async -> Result<Void, NetworkError> {
+        switch await checkAnnounceUseCase.execute(noticeId: announceList[currentIndex].id) {
+        case .success:
+            currentIndex += 1
+            unReadCount = (unReadCount ?? 0) - 1
+            
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func checkDetailAnnounce() async {
+        guard let selectedNoticeId else { return }
+        
+        switch await checkAnnounceUseCase.execute(noticeId: selectedNoticeId) {
+        case .success(let response):
+            switch response.status {
+            case 200:
+                print("이미 조회한 공지사항입니다.")
+            case 201:
+                print("조회 체크 성공했습니다.")
+                updateHeaderWatchData()
+            default:
+                break
+            }
+        case .failure(let error):
+            print("Error:", error.localizedDescription)
+        }
     }
 }
 
@@ -191,6 +283,7 @@ extension DetailAnnouceViewModel {
         switch result {
         case .success:
             updateHeaderBookmarkData(!headerData.isBookmark)
+
         case .failure(let error):
             print("Error:", error.localizedDescription)
         }
@@ -201,7 +294,7 @@ extension DetailAnnouceViewModel {
         guard var headerData = sectionDataDict[.header]?.first as? DetailAnnouceHeaderModel else { return }
         
         headerData.isFavorite = isFavorite
-//        headerData.favoriteCount += isFavorite ? 1 : -1
+        headerData.favoriteCount = isFavorite ? headerData.favoriteCount + 1 : headerData.favoriteCount - 1
         sectionDataDict[.header] = [headerData]
         getMySections()
     }
@@ -210,7 +303,15 @@ extension DetailAnnouceViewModel {
         guard var headerData = sectionDataDict[.header]?.first as? DetailAnnouceHeaderModel else { return }
         
         headerData.isBookmark = isBookmark
-//        headerData.favoriteCount += isBookmark ? 1 : -1
+        headerData.bookmarkCount = isBookmark ? headerData.bookmarkCount + 1 : headerData.bookmarkCount - 1
+        sectionDataDict[.header] = [headerData]
+        getMySections()
+    }
+    
+    private func updateHeaderWatchData() {
+        guard var headerData = sectionDataDict[.header]?.first as? DetailAnnouceHeaderModel else { return }
+        
+        headerData.watchCount += 1
         sectionDataDict[.header] = [headerData]
         getMySections()
     }
@@ -220,9 +321,9 @@ extension DetailAnnouceViewModel {
     
     
     func getDetailAnnounce() async {
-        guard let detailAnnounceUseCase else { return }
+        guard let detailAnnounceUseCase, let selectedNoticeId else { return }
         
-        switch await detailAnnounceUseCase.execute(noticeId: selectedNoticeId ?? 0) {
+        switch await detailAnnounceUseCase.execute(noticeId: selectedNoticeId) {
         case .success(let response):
             sectionDataDict[.header] = [response.convertToHeader()]
             
@@ -233,6 +334,19 @@ extension DetailAnnouceViewModel {
             sectionDataDict[.content] = [response.convertToContent()]
             
             getMySections()
+            
+        case .failure(let error):
+            print("Error:", error.localizedDescription)
+        }
+    }
+    
+    func postUnreadAllAnnounce() async {
+        guard let unreadAllAnnounceUseCase else { return }
+        
+        switch await unreadAllAnnounceUseCase.execute(associationName: selectedAssociationType ?? "") {
+        case .success(let response):
+            announceList = response.notices
+            updateCurrentUnreadAnnounce()
             
         case .failure(let error):
             print("Error:", error.localizedDescription)
@@ -283,24 +397,10 @@ extension DetailAnnouceViewModel {
         }
     }
     
-    func postUnreadAllAnnounce() async {
-        guard let unreadAllAnnounceUseCase else { return }
-        
-        switch await unreadAllAnnounceUseCase.execute(associationName: selectedAssociationType ?? "") {
-        case .success(let response):
-            announceList = response.notices
-
-        case .failure(let error):
-            print("Error:", error.localizedDescription)
-        }
-        
-    }
-    
-    
     private func updateCurrentUnreadAnnounce() {
         guard currentIndex < announceList.count else { return }
         let currentAnnounce = announceList[currentIndex]
-        
+        selectedNoticeId = currentAnnounce.id
         sectionDataDict[.header] = [currentAnnounce.convertToHeader()]
         
         if let imageModels = currentAnnounce.convertToImages() {

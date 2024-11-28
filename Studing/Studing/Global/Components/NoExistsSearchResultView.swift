@@ -80,6 +80,10 @@ private extension NoExistsSearchResultView {
             $0.font = .interBody3()
             $0.textColor = .black40
         }
+        
+        addInfoButton.do {
+            $0.addTarget(self, action: #selector(addInfoButtonTapped), for: .touchUpInside)
+        }
     }
     
     func setupHierarchy() {
@@ -106,5 +110,12 @@ private extension NoExistsSearchResultView {
     
     func setupDelegate() {
         
+    }
+    
+    @objc
+    func addInfoButtonTapped(_ sender: UIButton) {
+        guard let url = URL(string: StringLiterals.Web.addMajor),
+              UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url)
     }
 }

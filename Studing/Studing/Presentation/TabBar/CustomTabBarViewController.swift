@@ -100,6 +100,8 @@ final class CustomTabBarViewController: UITabBarController {
     
     private lazy var customTabBar: CustomTabBar = CustomTabBar()
     
+    private var isTabBarSetup = false
+    
     // selectedIndex가 변경될 때마다 호출되도록 override
     override var selectedIndex: Int {
         didSet {
@@ -117,21 +119,29 @@ final class CustomTabBarViewController: UITabBarController {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .clear
-        appearance.shadowImage = UIImage()
+        appearance.shadowColor = .clear
+        appearance.shadowImage = nil
         
         setValue(customTabBar, forKey: "tabBar")
         
         customTabBar.standardAppearance = appearance
         customTabBar.scrollEdgeAppearance = appearance
+        
+        setupCustomTabBar()
+        selectedIndex = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupCustomTabBar()
-        selectedIndex = 0
+//        selectedIndex = 0
+        
+        updateTabButtonAppearance()
     }
 
     private func setupCustomTabBar() {
+        
+        guard !isTabBarSetup else { return }
+        
         for type in TabBarItemType.allCases {
 
             var config = UIButton.Configuration.plain()
@@ -150,6 +160,8 @@ final class CustomTabBarViewController: UITabBarController {
 
             customTabBar.addButton(button)
         }
+        
+        isTabBarSetup = true
     }
 
     private func updateTabButtonAppearance() {
