@@ -17,6 +17,8 @@ enum Config {
             case accessToken = "ACCESS_TOKEN_KEY"
             case refreshToken = "REFRESH_TOKEN_KEY"
             case fcmToken = "FCM_TOKEN_KEY"
+            case signupInfo = "SIGNUP_INFO_KEY"
+            case userAuthState = "USER_AUTH_STATE_KEY"
             case userInfo = "USER_INFO_KEY"
         }
     }
@@ -58,9 +60,23 @@ extension Config {
         return key
     }()
     
+    static let signupInfoKey: String = {
+        guard let key = Config.infoDictionary[Keys.Keychain.signupInfo.rawValue] as? String else {
+            fatalError("⛔️SIGNUP_INFO_KEY is not set in plist for this configuration⛔️")
+        }
+        return key
+    }()
+    
+    static let userAuthStateKey: String = {
+        guard let key = Config.infoDictionary[Keys.Keychain.userAuthState.rawValue] as? String else {
+            fatalError("⛔️USER_AUTH_STATE_KEY is not set in plist for this configuration⛔️")
+        }
+        return key
+    }()
+    
     static let userInfoKey: String = {
-        guard let key = Config.infoDictionary[Keys.Keychain.fcmToken.rawValue] as? String else {
-            fatalError("⛔️FCM_TOKEN_KEY is not set in plist for this configuration⛔️")
+        guard let key = Config.infoDictionary[Keys.Keychain.userAuthState.rawValue] as? String else {
+            fatalError("⛔️USER_INFO_KEY is not set in plist for this configuration⛔️")
         }
         return key
     }()
