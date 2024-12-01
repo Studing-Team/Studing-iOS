@@ -1965,8 +1965,8 @@
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "스튜딩";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한 필요해 설정해줘";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 필요해 설정해줘";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -2000,8 +2000,8 @@
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "스튜딩";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한 필요해 설정해줘";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한 필요해 설정해줘";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
