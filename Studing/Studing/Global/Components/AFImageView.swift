@@ -48,8 +48,8 @@ final class AFImageView: UIImageView {
         imageURL = url
         
         // 캐시 확인 (forceReload가 true면 캐시 무시)
-        if !forceReload, let cachedImage = ImageCacheManager.shared.image(for: urlString) {
-            self.image = cachedImage
+        if !forceReload, let cachedImage = ImageCacheManager.shared.data(for: urlString) {
+            self.image = UIImage(data: cachedImage)
             print("🔄 Cached Image")
             return
         }
@@ -63,18 +63,17 @@ final class AFImageView: UIImageView {
             
             switch response.result {
             case .success(let data):
-                guard let image = UIImage(data: data) else {
-                    print("❌ Failed to create image from data")
-                    self.image = UIImage(resource: .dump)
+                
+                guard let downsampledData = UIImage.downsample(imageData: data, to: type.imageSize, scale: UIScreen.main.scale) else {
                     return
                 }
                 
                 // 캐시에 저장
-                ImageCacheManager.shared.setImage(image, for: urlString)
-                print("✅ Image loaded successfully")
+                ImageCacheManager.shared.setData(downsampledData, for: urlString)
+                print("✅ ImageData save successfully")
                 
                 self.alpha = 0
-                self.image = image
+                self.image = UIImage(data: downsampledData)
                 
                 UIView.animate(withDuration: 0.3) {
                     self.alpha = 1
