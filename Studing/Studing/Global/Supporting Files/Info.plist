@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ACCESS_TOKEN_KEY</key>
+	<string>$(ACCESS_TOKEN_KEY)</string>
+	<key>BASE_URL</key>
+	<string>$(BASE_URL)</string>
+	<key>FCM_TOKEN_KEY</key>
+	<string>$(FCM_TOKEN_KEY)</string>
+	<key>NAVER_MAP_KEY</key>
+	<string>$(NAVER_MAP_KEY)</string>
+	<key>NMFClientId</key>
+	<string>afg7mvwima</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>REFRESH_TOKEN_KEY</key>
+	<string>$(REFRESH_TOKEN_KEY)</string>
+	<key>SIGNUP_INFO_KEY</key>
+	<string>$(SIGNUP_INFO_KEY)</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Inter-VariableFont_opsz,wght.ttf</string>
+		<string>Montserrat-ExtraBold.ttf</string>
+		<string>MontserratAlternates-Bold.ttf</string>
+		<string>MontserratAlternates-ExtraBold.ttf</string>
+	</array>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>USER_AUTH_STATE_KEY</key>
+	<string>$(USER_AUTH_STATE_KEY)</string>
+	<key>USER_INFO_KEY</key>
+	<string>$(USER_INFO_KEY)</string>
+</dict>
+</plist>

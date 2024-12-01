@@ -1,0 +1,169 @@
+//
+//  SuccessSignUpViewController.swift
+//  Studing
+//
+//  Created by ParkJunHyuk on 9/16/24.
+//
+
+import Combine
+import UIKit
+
+import SnapKit
+import Then
+
+final class SuccessSignUpViewController: UIViewController {
+    
+    // MARK: - Properties
+    
+    weak var coordinator: SignUpCoordinator?
+    private var successSignUpViewModel: SuccessSignUpViewModel
+    private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - UI Properties
+    
+    private let successTitleLabel = UILabel()
+    private let successSubTitleLabel = UILabel()
+    private let logoImage = UIImageView()
+    private let studingTitleLabel = UILabel()
+    private let mainHomeButton = CustomButton(buttonStyle: .showStudingHome)
+    
+    // MARK: - init
+    
+    init(coordinator: SignUpCoordinator,
+         successSignUpViewModel: SuccessSignUpViewModel) {
+        self.coordinator = coordinator
+        self.successSignUpViewModel = successSignUpViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        print("Push SuccessSignUpViewController")
+        
+        view.applyGradient(colors: [.loginStartGradient, .loginEndGradient], direction: .topRightToBottomLeft, locations: [-0.2, 1.3])
+        
+        setupStyle()
+        setupHierarchy()
+        setupLayout()
+        setupDelegate()
+        bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setNavigationBar()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        print("Pop SuccessSignUpViewController")
+    }
+}
+
+// MARK: - Private Bind Extensions
+
+private extension SuccessSignUpViewController {
+    func bindViewModel() {
+        let input = SuccessSignUpViewModel.Input(
+            mainHomeButtonTap: mainHomeButton.tapPublisher
+        )
+        
+        let output = successSignUpViewModel.transform(input: input)
+        
+        output.mainHomeViewAction
+            .receive(on: DispatchQueue.main)
+            .sink { result in
+                switch result {
+                case .success:
+                    self.coordinator?.finishSignUp()
+                case .failure:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Private Extensions
+
+private extension SuccessSignUpViewController {
+    func setNavigationBar() {
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
+    func setupStyle() {
+        successTitleLabel.do {
+            $0.text = StringLiterals.Authentication.successSignUpTitle
+            $0.textColor = .white
+            $0.font = .interHeadline2()
+        }
+        
+        successSubTitleLabel.do {
+            $0.text = StringLiterals.Authentication.successSignUpSubTitle
+            $0.textColor = .white
+            $0.font = .interBody1()
+        }
+        
+        logoImage.do {
+            $0.image = UIImage(resource: .splashLogo)
+        }
+        
+        mainHomeButton.do {
+            $0.layer.borderColor = UIColor.black10.cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 25.0
+            $0.clipsToBounds = true
+        }
+        
+        studingTitleLabel.do {
+            $0.text = "Studing"
+            $0.textColor = .white
+            $0.font = .montserratAlternatesExtraBold(size: 34)
+        }
+    }
+
+    func setupHierarchy() {
+        view.addSubviews(successTitleLabel, successSubTitleLabel, logoImage, studingTitleLabel, mainHomeButton)
+    }
+    
+    func setupLayout() {
+        successTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(view.convertByHeightRatio(198))
+            $0.centerX.equalToSuperview()
+        }
+        
+        successSubTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(successTitleLabel.snp.bottom).offset(view.convertByHeightRatio(10))
+            $0.centerX.equalToSuperview()
+        }
+        
+        logoImage.snp.makeConstraints {
+            $0.top.equalTo(successSubTitleLabel.snp.bottom).offset(view.convertByHeightRatio(38))
+            $0.centerX.equalToSuperview()
+        }
+        
+        studingTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(logoImage.snp.bottom).offset(view.convertByHeightRatio(30))
+            $0.centerX.equalToSuperview()
+        }
+        
+        mainHomeButton.snp.makeConstraints {
+            $0.top.equalTo(studingTitleLabel.snp.bottom).offset(view.convertByHeightRatio(150))
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().inset(19)
+            $0.height.equalTo(60)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-4)
+        }
+    }
+    
+    func setupDelegate() {
+        
+    }
+}

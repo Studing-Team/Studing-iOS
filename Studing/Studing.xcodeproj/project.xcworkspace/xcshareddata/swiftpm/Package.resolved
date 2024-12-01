@@ -1,5 +1,5 @@
 {
-  "originHash" : "b3ea572d54ebfb7113b73a8aa96e9856666c355b50e3e70c356324f2e164d2c8",
+  "originHash" : "03c2784fed99455ae33bc7464b1774ea2f8cb542116a9275862b6bae61606e8d",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire.git",
       "state" : {
-        "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
-        "version" : "5.9.1"
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
       }
     },
     {
@@ -101,15 +101,6 @@
       }
     },
     {
-      "identity" : "moya",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Moya/Moya.git",
-      "state" : {
-        "revision" : "c263811c1f3dbf002be9bd83107f7cdc38992b26",
-        "version" : "15.0.3"
-      }
-    },
-    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
@@ -128,30 +119,30 @@
       }
     },
     {
-      "identity" : "reactiveswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ReactiveCocoa/ReactiveSwift.git",
-      "state" : {
-        "revision" : "c43bae3dac73fdd3cb906bd5a1914686ca71ed3c",
-        "version" : "6.7.0"
-      }
-    },
-    {
-      "identity" : "rxswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ReactiveX/RxSwift.git",
-      "state" : {
-        "revision" : "b06a8c8596e4c3e8e7788e08e720e3248563ce6a",
-        "version" : "6.7.1"
-      }
-    },
-    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit.git",
       "state" : {
         "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
         "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "spm-nmapsgeometry",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/navermaps/SPM-NMapsGeometry.git",
+      "state" : {
+        "revision" : "436d5e2e684f557faf5ef5862fd6633a42d7af11",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "spm-nmapsmap",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/navermaps/SPM-NMapsMap",
+      "state" : {
+        "revision" : "606cb2df9bcffcf6df62ba00d0322965a4c730e9",
+        "version" : "3.20.0"
       }
     },
     {
