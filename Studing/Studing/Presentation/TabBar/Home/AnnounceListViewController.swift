@@ -87,6 +87,8 @@ final class AnnounceListViewController: UIViewController {
         Task {
             await announceViewModel.getMyAssociationInfo()
             
+            bindViewModel()
+            
             // type에 따른 데이터 요청
             switch type {
             case .association:
@@ -110,17 +112,16 @@ final class AnnounceListViewController: UIViewController {
                 }
             }
         }
-        
-        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
-            
             customNavController.setNavigationType(type == .association ? .announce : .bookmark)
         }
+        
+        refreshAnnounceListSubject.send()
     }
 }
 
@@ -138,7 +139,10 @@ private extension AnnounceListViewController {
         var snapshot = NSDiffableDataSourceSnapshot<AnnounceSectionType, BottomSectionItem>()
         snapshot.appendSections([.annouceList])
         snapshot.appendItems(items)
-        bottomDataSource.apply(snapshot, animatingDifferences: true)
+//        bottomDataSource.apply(snapshot, animatingDifferences: true)
+        bottomDataSource.apply(snapshot, animatingDifferences: true, completion: {
+               self.bottomCollectionView.reloadData()
+           })
     }
     
     func configureDataSource() {
@@ -306,7 +310,6 @@ private extension AnnounceListViewController {
     
     @objc func handleRefresh() {
         refreshAnnounceListSubject.send()
-
     }
     
     func setupHierarchy() {

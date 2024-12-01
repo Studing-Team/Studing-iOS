@@ -157,15 +157,6 @@ extension AuthWaitingViewController {
         permissionDeniedTap.send()
     }
 
-    
-//    private func requestAuthorization() {
-//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
-//            DispatchQueue.main.async {
-//                self?.notificationButton.isSelected = granted
-//            }
-//        }
-//    }
-//    
     private func openSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
@@ -178,6 +169,11 @@ extension AuthWaitingViewController {
 
 private extension AuthWaitingViewController {
     func setNavigationBar() {
+        
+        if let customNav = navigationController as? CustomSignUpNavigationController {
+            customNav.hiddenLeftButton()
+        }
+        
         self.navigationController?.isNavigationBarHidden = false
     }
     

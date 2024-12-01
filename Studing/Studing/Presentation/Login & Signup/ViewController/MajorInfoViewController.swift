@@ -88,6 +88,7 @@ private extension MajorInfoViewController {
                 } else if !results.isEmpty && !searchName.isEmpty { // 입력 값 O, 검색 결과 O
                     self?.searchResultCollectionView.updateData(with: results, serachName: searchName)
                     self?.updateLayout(state: .existsResult)
+                    self?.majorTitleTextField.statePublisher.send(.select(type: .major))
                 } else { // 입력 값 X
                     self?.updateLayout(state: .noInput)
                     self?.majorTitleTextField.statePublisher.send(.normal(type: .major))

@@ -16,6 +16,8 @@ protocol StoreCellDelegate: AnyObject {
 
 final class StoreCollectionViewCell: UICollectionViewCell {
     
+    var indexPath: IndexPath?
+    
     var isExpanded: Bool = false {
         didSet {
             updateCategoryLayout()
@@ -27,9 +29,9 @@ final class StoreCollectionViewCell: UICollectionViewCell {
     private let categoryStackView = UIStackView()
     private let addressStackView = UIStackView()
     
-    private let expandedBenefitView = ExpandedBenefitView()
+    var expandedBenefitView = ExpandedBenefitView()
     
-    private let storeImageView = UIImageView()
+    private let storeImageView = AFImageView()
     private let titleLabel = UILabel()
     private let categoryLabel = UILabel()
     private let categoryImageView = UIImageView()
@@ -66,14 +68,39 @@ extension StoreCollectionViewCell {
         descriptionLabel.text = model.description
         addressLabel.text = model.address
         isExpanded = model.isExpanded
+        storeImageView.setImage(model.imageURL, type: .postImage)
+        
+        let benefitModel = BenefitModel(title: model.partnerContent) // benefits 배열이 StoreEntity에 있다고 가정
+        expandedBenefitView.configureData(forModel: benefitModel, storeName: model.name)
+
+        // isExpanded 설정 전에 초기 상태 설정
+        if model.isExpanded {
+            benefitButton.isHidden = true
+            benefitButton.alpha = 0
+            expandedBenefitView.isHidden = false
+            expandedBenefitView.alpha = 1
+        } else {
+            benefitButton.isHidden = false
+            benefitButton.alpha = 1
+            expandedBenefitView.isHidden = true
+            expandedBenefitView.alpha = 0
+        }
+        
+        // isExpanded를 마지막에 설정
+        isExpanded = model.isExpanded
+        
+        // 레이아웃 즉시 업데이트
+        layoutIfNeeded()
+
     }
 }
 
 private extension StoreCollectionViewCell {
     
     @objc private func benefitButtonTapped() {
-        isExpanded.toggle()
-        expandedBenefitView.configureData(forModel: BenefitModel(title: ["19시 이전 방문시, 소주 또는 맥주 1병 제공", "3만원 이상 주문시, 파인샤베트 제공", "5만원 이상 주문시, 모듬 감자튀김 제공", "영수증 리뷰 및 인스타(@sibam_official) 태그 후 업로드 시 음료 또는 면 추가 제공"]))
+        print("제휴 혜택 버튼 눌림")
+        
+        self.layoutIfNeeded()
         delegate?.expandedCellTap(self)
     }
     
@@ -227,7 +254,7 @@ private extension StoreCollectionViewCell {
         }
         
         titleLabel.snp.makeConstraints {
-            $0.width.lessThanOrEqualTo(127)
+            $0.width.lessThanOrEqualTo(160)
         }
     }
     
@@ -247,6 +274,7 @@ private extension StoreCollectionViewCell {
         }
     }
     
+    @MainActor
     func updateCategoryLayout() {
         
         self.titleLabel.numberOfLines = self.isExpanded ? 0 : 1
@@ -264,7 +292,7 @@ private extension StoreCollectionViewCell {
             }
             
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
-                self.contentView.backgroundColor = UIColor.white
+                self.contentView.backgroundColor = .white.withFigmaStyleAlpha(0.8)
                 self.benefitButton.alpha = 0
                 
                 self.benefitButton.snp.removeConstraints()
@@ -322,7 +350,6 @@ extension StoreCollectionViewCell: ClosedBenefitDelegate {
     func closedExpandedCellTap() {
         isExpanded = false
         
-//        updateCategoryLayout()
         print("닫기 버튼 눌림 Expanded:", isExpanded)
         delegate?.expandedCellTap(self)
     }

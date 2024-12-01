@@ -22,9 +22,30 @@ final class StoreCoordinator: Coordinator {
     }
     
     func start() {
-        let storeVM = StoreViewModel(partnerInfoUseCase: PartnerInfoUseCase(repository: PartnerRepositoryImpl()))
+        let storeVM = StoreViewModel(
+            partnerInfoUseCase: PartnerInfoUseCase(repository: PartnerRepositoryImpl())
+        )
         
-        let storeVC = StoreViewController(storeViewModel: storeVM)
+        let storeVC = StoreViewController(
+            storeViewModel: storeVM,
+            coordinator: self
+        )
+        
         navigationController.pushViewController(storeVC, animated: true)
+    }
+    
+    func pushStoreMap(storeData: StoreEntity) {
+        
+        let storeMapVM = StoreMapViewModel(
+            selectStoreData: storeData
+        )
+        
+        let storeMapVC = StoreMapViewController(
+            storeMapViewModel: storeMapVM,
+            coordinator: self
+        )
+        
+        storeMapVC.modalPresentationStyle = .overFullScreen
+        navigationController.present(storeMapVC, animated: true)
     }
 }

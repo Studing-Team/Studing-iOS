@@ -8,6 +8,10 @@
 	<string>$(BASE_URL)</string>
 	<key>FCM_TOKEN_KEY</key>
 	<string>$(FCM_TOKEN_KEY)</string>
+	<key>NAVER_MAP_KEY</key>
+	<string>$(NAVER_MAP_KEY)</string>
+	<key>NMFClientId</key>
+	<string>afg7mvwima</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

@@ -18,4 +18,5 @@ struct StoreEntity: Hashable {
     let latitude: Double
     let longitude: Double
     var isExpanded: Bool = false
+    let partnerContent: [String]
 }

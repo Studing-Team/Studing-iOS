@@ -324,7 +324,7 @@ private extension PostAnnounceViewController {
     
     func setupLayout() {
         scrollView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)//.inset(17)
+            $0.top.equalTo(view.safeAreaLayoutGuide)//.inset(17)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalTo(postButton.snp.top).offset(-10)
         }
@@ -481,24 +481,23 @@ extension PostAnnounceViewController: PHPickerViewControllerDelegate {
         selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
         
         results.forEach { result in
-            if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
-                result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+            if result.itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+                result.itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { [weak self] data, error in
+                    guard let imageData = data else { return }
+                    
                     DispatchQueue.main.async {
                         guard let self,
-                              let image = image as? UIImage,
-                              let imageData = image.jpegData(compressionQuality: 0.005) else { return }
+                              let downsampledData = UIImage.downsample(imageData: imageData, to: ImageType.postImage.imageSize, scale: UIScreen.main.scale) else { return }
                         
-                        // 이미지 뷰 생성 및 추가
-                        let imageView = self.createImageView(UIImage(data: imageData)!)
+                        // 데이터 처리
+                        let imageView = self.createImageView(UIImage(data: downsampledData)!)
                         self.imageStackView.addArrangedSubview(imageView)
                         
                         // 카운트 증가 및 UI 업데이트
                         self.selectedImagesCount += 1
                         self.updateSelectPhotoButton()
-                        
-                        // 이미지 데이터 저장 (필요한 경우)
-                        print("사진 용량", imageData.count)
-                        self.postAnnounceViewModel.addImageData(imageData)
+
+                        self.postAnnounceViewModel.addImageData(downsampledData)
                     }
                 }
             }

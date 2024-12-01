@@ -13,6 +13,7 @@ final class StoreViewModel: BaseViewModel {
     var storeDataSubject = CurrentValueSubject<[StoreEntity], Never>([])
     var selectedCategory = CurrentValueSubject<CategoryType, Never>(.all)
     
+    var selectStoreIndex: Int?
     private var originalStores: [StoreEntity] = []
     
     // MARK: - Input

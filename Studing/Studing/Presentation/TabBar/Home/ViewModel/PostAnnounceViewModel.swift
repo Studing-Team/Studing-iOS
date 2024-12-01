@@ -10,11 +10,7 @@ import Combine
 
 final class PostAnnounceViewModel: BaseViewModel {
     
-    private(set) var selectedImageDatas: [Data]? = [] {
-        didSet {
-            print("사진 데이터 개수:", selectedImageDatas?.count)
-        }
-    }
+    private(set) var selectedImageDatas: [Data]? = []
     
     // MARK: - Input
     

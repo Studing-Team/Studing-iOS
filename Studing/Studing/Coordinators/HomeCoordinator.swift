@@ -103,8 +103,6 @@ final class HomeCoordinator: Coordinator {
     
     func pushDetailAnnouce(type: DetailAnnounceType, announceId: Int? = nil, selectedAssociationType: String? = nil, unReadCount: Int? = nil) {
         
-        print("selectedAssociationType:", selectedAssociationType)
-  
         let repository = NoticesRepositoryImpl()
         let viewModel: DetailAnnouceViewModel
             
@@ -172,19 +170,9 @@ final class HomeCoordinator: Coordinator {
         
         // Delegate 설정
         signUpNavigationController.signUpDelegate = self
-//        signUpCoordinator.pushAuthUniversityView(type: .reSubmit)
-        
-//        navigationController.pushViewController(signUpNavigationController, animated: true)
-        
-        
+
         signUpNavigationController.modalPresentationStyle = .overFullScreen
-//        navigationController.present(signUpNavigationController, animated: true) {
-//            signUpCoordinator.pushAuthUniversityView(type: .reSubmit)
-//        }
-        
-        // present 전에 미리 화면 설정
-//        signUpCoordinator.pushAuthUniversityView(type: .reSubmit)
-        
+
         // 설정된 화면과 함께 present
         navigationController.present(signUpNavigationController, animated: true)
         
@@ -193,7 +181,7 @@ final class HomeCoordinator: Coordinator {
     
     func pushAllReadAnnounce() {
         let allReadAnnounceVC = AllReadAnnounceViewController(coordinator: self)
-        
+        navigationController.interactivePopGestureRecognizer?.isEnabled = false
         navigationController.pushViewController(allReadAnnounceVC, animated: true)
     }
     
@@ -208,6 +196,27 @@ final class HomeCoordinator: Coordinator {
             // HomeViewController까지 pop
             navigationController.popToViewController(homeVC, animated: true)
         }
+    }
+    
+    func comfirmAuthUser() {
+        // parent chain을 통해 AppCoordinator 찾아서 직접 호출
+        if let appCoordinator = findParentCoordinator(ofType: AppCoordinator.self) {
+            appCoordinator.moveToLoginFlow()
+        }
+    }
+    
+    // 특정 타입의 parent coordinator를 찾는 유틸리티 메서드
+    private func findParentCoordinator<T: Coordinator>(ofType type: T.Type) -> T? {
+        var current = parentCoordinator
+        
+        while let coordinator = current {
+            if let targetCoordinator = coordinator as? T {
+                return targetCoordinator
+            }
+            current = coordinator.parentCoordinator
+        }
+        
+        return nil
     }
 }
 

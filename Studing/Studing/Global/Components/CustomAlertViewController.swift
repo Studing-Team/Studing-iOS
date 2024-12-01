@@ -24,8 +24,8 @@ final class CustomAlertViewController: UIViewController {
     private var alertType: AlertType
     private var mainTitle: String?
     private var subTitle: String?
-    private var confirmTitle: String?
-    private var cancelTitle: String?
+    private var rightButtonTitle: String?
+    private var leftButtonTitle: String?
     private var leftButtonHandler: ButtonAction?
     private var rightButtonHandler: ButtonAction?
     private var centerButtonHandler: ButtonAction?
@@ -48,15 +48,15 @@ final class CustomAlertViewController: UIViewController {
     init(alertType: AlertType,
          mainTitle: String,
          subTitle: String,
-         confirmTitle: String,
-         cancelTitle: String,
+         rightButtonTitle: String,
+         leftButtonTitle: String,
          leftButtonHandler: ButtonAction?,
          rightButtonHandler: ButtonAction?) {
         self.alertType = alertType
         self.mainTitle = mainTitle
         self.subTitle = subTitle
-        self.confirmTitle = confirmTitle
-        self.cancelTitle = cancelTitle
+        self.rightButtonTitle = rightButtonTitle
+        self.leftButtonTitle = leftButtonTitle
         self.leftButtonHandler = leftButtonHandler
         self.rightButtonHandler = rightButtonHandler
         self.centerButtonHandler = nil
@@ -73,8 +73,8 @@ final class CustomAlertViewController: UIViewController {
         self.alertType = alertType
         self.mainTitle = mainTitle
         self.subTitle = subTitle
-        self.confirmTitle = confirmTitle
-        self.cancelTitle = nil
+        self.rightButtonTitle = confirmTitle
+        self.leftButtonTitle = nil
         self.leftButtonHandler = nil
         self.rightButtonHandler = nil
         self.centerButtonHandler = centerButtonHandler
@@ -120,7 +120,7 @@ private extension CustomAlertViewController {
         titleStackView.do {
             $0.axis = .vertical
             $0.spacing = 15
-            $0.distribution = .fill
+            $0.distribution = .fillProportionally
         }
         
         mainTitleLabel.do {
@@ -139,7 +139,7 @@ private extension CustomAlertViewController {
         }
         
         leftButton.do {
-            $0.setTitle(confirmTitle, for: .normal) // 버튼의 제목 설정
+            $0.setTitle(leftButtonTitle, for: .normal) // 버튼의 제목 설정
             $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
             $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
             $0.backgroundColor = .black20 // 배경색 설정
@@ -147,7 +147,7 @@ private extension CustomAlertViewController {
         }
         
         rightButton.do {
-            $0.setTitle(cancelTitle, for: .normal) // 버튼의 제목 설정
+            $0.setTitle(rightButtonTitle, for: .normal) // 버튼의 제목 설정
             $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
             $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
             $0.backgroundColor = .primary50 // 배경색 설정
@@ -155,7 +155,7 @@ private extension CustomAlertViewController {
         }
         
         centerButton.do {
-            $0.setTitle(confirmTitle, for: .normal) // 버튼의 제목 설정
+            $0.setTitle(rightButtonTitle, for: .normal) // 버튼의 제목 설정
             $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
             $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
             $0.backgroundColor = .primary50 // 배경색 설정
@@ -189,12 +189,14 @@ private extension CustomAlertViewController {
         titleStackView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(20)
             $0.centerX.equalToSuperview()
+            $0.height.equalTo(70)
         }
         
         bottomStackView.snp.makeConstraints {
             $0.top.equalTo(titleStackView.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(20)
+            $0.height.equalTo(38)
         }
         
         [leftButton, rightButton, centerButton].forEach {

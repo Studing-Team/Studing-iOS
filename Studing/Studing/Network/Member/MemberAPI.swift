@@ -48,7 +48,7 @@ extension MemberAPI: APIEndpoint {
     
     var headerType: HeaderType {
         switch self {
-        case .postReSubmit:
+        case .postReSubmit, .deleteWithDraw:
             return .accessTokenHeader
         default:
             return .defaultHeader

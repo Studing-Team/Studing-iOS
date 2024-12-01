@@ -88,7 +88,12 @@ private extension WithDrawViewController {
         
         output.withDrawButtonResult
             .sink { [weak self] _ in
-                self?.showConfirmCancelAlert(mainTitle: "잠깐만요", subTitle: "모든 안내사항을 확인해주세요.\n탈퇴를 진행할까요?", confirmTitle: "네", cancelTitle: "아니요", leftButtonHandler: {
+                self?.showConfirmCancelAlert(
+                    mainTitle: "잠깐만요",
+                    subTitle: "모든 안내사항을 확인해주세요.\n탈퇴를 진행할까요?",
+                    rightButtonTitle: "아니요",
+                    leftButtonTitle: "탈퇴하기",
+                    leftButtonHandler: {
                     self?.comfirmButtonTappend.send()
                 })
             }
@@ -98,7 +103,16 @@ private extension WithDrawViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if result {
-                    self?.coordinator?.removeAuthUser()
+                    // 1. 현재 present된 ViewController가 CustomAlertViewController인지 확인
+                    if let presentedVC = self?.presentedViewController as? CustomAlertViewController {
+                        // 2. CustomAlertViewController dismiss
+                        presentedVC.dismiss(animated: false) { [weak self] in
+                            // 3. dismiss 완료 후 removeAuthUser 호출
+                            if result {
+                                self?.coordinator?.removeAuthUser()
+                            }
+                        }
+                    }
                 }
             }
             .store(in: &cancellables)
