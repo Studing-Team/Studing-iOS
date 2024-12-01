@@ -54,7 +54,7 @@ final class AllReadAnnounceViewController: UIViewController {
         
         if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
             customNavController.setNavigationType(.unReadToHome)
-
+//            customNavController.interactivePopGestureRecognizer?.isEnabled = false
         }
     }
 }

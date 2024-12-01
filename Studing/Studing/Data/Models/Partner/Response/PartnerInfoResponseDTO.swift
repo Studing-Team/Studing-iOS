@@ -31,6 +31,10 @@ extension PartnerInfoResponseData {
 
 extension PartnerInfoResponseDTO {
     func converToStoreEntity() -> StoreEntity {
+        let benefits = partnerContent.components(separatedBy: "\n")
+           .map { $0.trimmingCharacters(in: .whitespaces) }
+           .filter { !$0.isEmpty }
+        
         return StoreEntity(
             storeId: id,
             name: partnerName,
@@ -39,7 +43,8 @@ extension PartnerInfoResponseDTO {
             address: partnerAddress,
             imageURL: partnerLogo,
             latitude: latitude,
-            longitude: longitude
+            longitude: longitude,
+            partnerContent: benefits
         )
     }
     

@@ -66,6 +66,7 @@ final class LoginViewModel: BaseViewModel {
             .map { username, password in
                 !username.isEmpty && !password.isEmpty
             }
+            .prepend(false)
             .eraseToAnyPublisher()
         
         let loginResult = input.loginTap

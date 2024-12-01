@@ -117,7 +117,7 @@ final class AuthUniversityViewModel: BaseViewModel {
                             switch result {
                             case .success:
                                 promise(.success(true))
-                            case .failure(let error):
+                            case .failure:
                                 promise(.success(false))
                             }
                             
@@ -131,7 +131,7 @@ final class AuthUniversityViewModel: BaseViewModel {
                             switch result {
                             case .success:
                                 promise(.success(true))
-                            case .failure(let error):
+                            case .failure:
                                 promise(.success(false))
                             }
                         }
@@ -179,7 +179,7 @@ extension AuthUniversityViewModel {
         guard let resubmitUseCase else { return .failure(.clientError(message: "다시 시도하세요.")) }
         
         let requestDTO = ReSubmitRequestDTO(
-            admissionNumber: studentNumber,
+            studentNumber: studentNumber,
             name: userName,
             studentCardImage: image
         )

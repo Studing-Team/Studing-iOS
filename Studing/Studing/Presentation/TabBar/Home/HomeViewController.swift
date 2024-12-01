@@ -92,6 +92,10 @@ final class HomeViewController: UIViewController {
         print("HomeViewController viewWillAppear")
         
         if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+            customNavController.interactivePopGestureRecognizer?.isEnabled = true
+        }
+        
+        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
             customNavController.setNavigationType(.home)
         }
         
@@ -100,9 +104,11 @@ final class HomeViewController: UIViewController {
             Task {
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask {
-                        await self.homeViewModel.getMissAnnouceInfo(name: self.homeViewModel.selectedAssociationType)
+                        await self.homeViewModel.getMissAnnouceInfo(name: "전체")
                         await self.homeViewModel.getUnreadAssociationInfo()
                         await self.homeViewModel.getMyAssociationInfo()
+                        await self.homeViewModel.getAnnouceInfo(name: self.homeViewModel.selectedAssociationType)
+                        await self.homeViewModel.getMyBookmarkInfo()
                     }
                 }
                 
@@ -188,16 +194,26 @@ final class HomeViewController: UIViewController {
         if let userAuth = notification.userInfo?["userAuth"] as? UserAuth {
             // userAuth 업데이트 처리
             print("업데이트 받은 데이터:", userAuth)
+            
+            let oldAuth = self.userAuth
             self.userAuth = userAuth
             
-            switch userAuth {
-            case .collegeUser, .departmentUser, .universityUser, .successUser:
-                Task {
-                    await homeViewModel.getMissAnnouceInfo(name: homeViewModel.selectedAssociationType)
-                    self.homeViewModel.getMySections()
+            KeychainManager.shared.saveData(key: .userAuthState, value: userAuth.rawValue)
+            
+            // 이전 상태가 unUser나 failureUser였고, 새로운 상태가 그 외의 상태로 변경된 경우
+            if (oldAuth == .unUser || oldAuth == .failureUser) &&
+                (userAuth != .unUser && userAuth != .failureUser) {
+                coordinator?.comfirmAuthUser()
+            } else {
+                switch userAuth {
+                case .collegeUser, .departmentUser, .universityUser, .successUser:
+                    Task {
+                        await homeViewModel.getMissAnnouceInfo(name: homeViewModel.selectedAssociationType)
+                        self.homeViewModel.getMySections()
+                    }
+                case .failureUser, .unUser:
+                    updateUnUserAuthView()
                 }
-            case .failureUser, .unUser:
-                updateUnUserAuthView()
             }
         }
     }
@@ -642,7 +658,7 @@ extension HomeViewController: UICollectionViewDelegate {
         
         switch sectionType {
         case .missAnnouce:
-            self.coordinator?.pushDetailAnnouce(type: .unreadAnnounce, selectedAssociationType: homeViewModel.selectedAssociationType, unReadCount: homeViewModel.unReadCount)
+            self.coordinator?.pushDetailAnnouce(type: .unreadAnnounce, selectedAssociationType: "전체", unReadCount: homeViewModel.unReadCount)
             
         case .association:
             selectedAssociationSubject.send(indexPath.row)
@@ -661,6 +677,12 @@ extension HomeViewController: UICollectionViewDelegate {
                 coordinator?.pushDetailAnnouce(type: .announce, announceId: entity.announceId)
             }
 
+        case .bookmark:
+            guard let data = homeViewModel.sectionDataDict[.bookmark] else { return }
+            guard let entity = data[indexPath.row] as? BookmarkAnnounceEntity else { return }
+            
+            coordinator?.pushDetailAnnouce(type: .bookmarkAnnounce, announceId: entity.bookmarkId)
+            
         default:
             break
         }
@@ -886,14 +908,11 @@ private extension HomeViewController {
         switch sectionType {
         case .association:
             newItems = items.compactMap { $0 as? AssociationEntity }
+            
         case .missAnnouce:
             newItems = items.compactMap { $0 as? MissAnnounceEntity }
+            
         case .annouce:
-//            if items.isEmpty {
-//                newItems = [EmptyAnnonuceModel()]
-//            } else {
-//                newItems = items.compactMap { $0 as? AssociationAnnounceEntity }
-//            }
             // isRegistered 체크
             let isRegistered = (homeViewModel.sectionDataDict[.association] as? [AssociationEntity])?
                 .first(where: { $0.isSelected })?
@@ -912,8 +931,10 @@ private extension HomeViewController {
                 .first(where: { $0 is PageFooterView }) as? PageFooterView {
                 footer.configure(pageNumber: isRegistered ? items.count : 0, type: .home)
             }
+            
         case .bookmark:
             newItems = items.compactMap { $0 as? BookmarkAnnounceEntity }
+            
         case .emptyBookmark:
             newItems = [EmptyBookmarkModel()]
         }
@@ -925,7 +946,7 @@ private extension HomeViewController {
         snapshot.appendItems(newItems, toSection: sectionType)
         
         // 변경된 내용만 반영 (애니메이션을 통해)
-        dataSource.apply(snapshot, animatingDifferences: false)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 

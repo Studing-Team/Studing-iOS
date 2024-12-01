@@ -82,7 +82,8 @@ private extension LoginViewController {
         let output = viewModel.transform(input: input)
         
         output.isLoginButtonEnabled
-            .assign(to: \.isEnabled, on: loginButton)
+            .map { $0 ? ButtonState.activate : ButtonState.deactivate }
+            .assign(to: \.buttonState, on: loginButton)
             .store(in: &cancellables)
         
         output.signUpAction

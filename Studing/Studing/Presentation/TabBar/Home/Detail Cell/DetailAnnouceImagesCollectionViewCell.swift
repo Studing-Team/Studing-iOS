@@ -50,7 +50,7 @@ private extension DetailAnnouceImagesCollectionViewCell {
     func setupLayout() {
         contentImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-            $0.size.equalTo(convertByWidthRatio(335))
+//            $0.size.equalTo(convertByWidthRatio(335))
         }
     }
 }

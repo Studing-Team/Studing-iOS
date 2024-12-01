@@ -123,6 +123,10 @@ final class CustomSignUpNavigationController: UINavigationController {
         updateLeftButtonImage()
         updateProgressBar()
     }
+    
+    func hiddenLeftButton() {
+        self.leftButton.isHidden = true
+    }
 }
 
 // MARK: - Private Extensions

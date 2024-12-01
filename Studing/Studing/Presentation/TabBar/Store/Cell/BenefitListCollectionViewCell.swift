@@ -31,7 +31,7 @@ final class BenefitListCollectionViewCell: UICollectionViewCell {
 
 extension BenefitListCollectionViewCell {
     func configureCell(title: String) {
-        titleLabel.text = "• \(title)"
+        titleLabel.text = "\(title)"
     }
 }
 

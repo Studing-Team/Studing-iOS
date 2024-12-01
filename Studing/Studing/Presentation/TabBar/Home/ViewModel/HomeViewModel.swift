@@ -108,13 +108,16 @@ final class HomeViewModel: BaseViewModel {
                         }
                     } else {
                         // 미등록 학과 선택 시
-                        self.sectionDataDict.removeValue(forKey: .missAnnouce)
                         self.sectionDataDict[.annouce]?.removeAll()
                         
                         // footer 즉시 업데이트를 위해 announce 섹션 업데이트
                         DispatchQueue.main.async {
                             self.sectionUpdatePublisher.send(.annouce)
                         }
+                        Task {
+                            await self.getMySections()
+                        }
+                        
                         return nil
                     }
                 }
@@ -128,10 +131,12 @@ final class HomeViewModel: BaseViewModel {
                 Task {
                     await withTaskGroup(of: Void.self) { group in
                         group.addTask { await self.getAnnouceInfo(name: name) }
-                        group.addTask { await self.getMissAnnouceInfo(name: name) }
+                        group.addTask { await self.getMissAnnouceInfo(name: "전체") }
                     }
                     
-                    self.sectionUpdatePublisher.send(.missAnnouce)
+                    if name == "전체" {
+                        self.sectionUpdatePublisher.send(.missAnnouce)
+                    }
                     self.sectionUpdatePublisher.send(.annouce)
                 }
             }
@@ -171,14 +176,15 @@ final class HomeViewModel: BaseViewModel {
 }
 
 extension HomeViewModel {
+    /// 놓친 공지사항 개수
     func getMissAnnouceInfo(name: String) async {
-        switch await unreadAssociationAnnouceCountUseCase.execute(associationName: name) {
+        switch await unreadAssociationAnnouceCountUseCase.execute(associationName: "전체") {
         case .success(let response):
             unReadCount = response.categorieCount
             let userName = KeychainManager.shared.loadData(key: .userInfo, type: UserInfo.self)?.userName ?? "알수없음"
             
-            if response.categorieCount != 0 {
-                sectionDataDict[.missAnnouce] = [MissAnnounceEntity(userName: userName, missAnnounceCount: response.categorieCount)]
+            if unReadCount != 0 {
+                sectionDataDict[.missAnnouce] = [MissAnnounceEntity(userName: userName, missAnnounceCount: unReadCount)]
             } else {
                 sectionDataDict.removeValue(forKey: .missAnnouce)
             }
@@ -240,7 +246,6 @@ extension HomeViewModel {
 
         print("🔍 섹션 구성 시작")
         for type in SectionType.allCases {
-            
             switch type {
             case .bookmark :
                 if let bookmarkItems = sectionDataDict[type], !bookmarkItems.isEmpty {

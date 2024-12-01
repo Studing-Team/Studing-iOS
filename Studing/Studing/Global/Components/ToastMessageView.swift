@@ -50,7 +50,7 @@ private extension ToastMessageView {
         }
         
         toastMessageLabel.do {
-            $0.text = isBookmark == true ? "저장한 공지사항에 추가했어요 ⭐" : "저장한 공지사항에 취소했어요 ⭐"
+            $0.text = isBookmark == true ? "저장한 공지사항에 추가했어요 ⭐" : "저장한 공지사항을 취소했어요 ⭐"
             $0.font = .interCaption12()
             $0.textColor = .white
         }

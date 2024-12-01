@@ -70,8 +70,6 @@ extension SceneDelegate {
         case .success(let response):
             let entity = response.toEntity()
             
-            KeychainManager.shared.saveData(key: .userAuthState, value: entity.role.rawValue)
-            
             NotificationCenter.default.post(
                             name: .userAuthDidUpdate,
                             object: nil,

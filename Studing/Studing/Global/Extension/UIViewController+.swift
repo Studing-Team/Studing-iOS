@@ -160,11 +160,11 @@ extension UIViewController {
         present(customAlertViewController, animated: false)
     }
     
-    func showConfirmCancelAlert(mainTitle: String, subTitle: String, confirmTitle: String, cancelTitle: String, leftButtonHandler: (() -> Void)? = nil, rightButtonHandler: (() -> Void)? = nil) {
+    func showConfirmCancelAlert(mainTitle: String, subTitle: String, rightButtonTitle: String, leftButtonTitle: String, leftButtonHandler: (() -> Void)? = nil, rightButtonHandler: (() -> Void)? = nil) {
         
         let customAlertViewController = CustomAlertViewController(
             alertType: .confirmCancel, mainTitle: mainTitle,
-            subTitle: subTitle, confirmTitle: confirmTitle, cancelTitle: cancelTitle, leftButtonHandler: leftButtonHandler , rightButtonHandler: rightButtonHandler)
+            subTitle: subTitle, rightButtonTitle: rightButtonTitle, leftButtonTitle: leftButtonTitle, leftButtonHandler: leftButtonHandler , rightButtonHandler: rightButtonHandler)
         
         customAlertViewController.modalPresentationStyle = .overFullScreen
         present(customAlertViewController, animated: false)

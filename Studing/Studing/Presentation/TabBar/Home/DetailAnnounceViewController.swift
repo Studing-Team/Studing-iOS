@@ -30,11 +30,7 @@ final class DetailAnnounceViewController: UIViewController {
     
     weak var coordinator: HomeCoordinator?
     
-    private var collectionHeight: CGFloat = 0 {
-        didSet {
-            updateLayout()
-        }
-    }
+    private var collectionHeight: CGFloat = 0
     
     private var chagneHeight = false
     
@@ -96,6 +92,7 @@ final class DetailAnnounceViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        /// 놓친 공지사항 관련 메서드
         if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
             customNavController.setNavigationType(type == .unreadAnnounce ? .unRead : .detail)
             
@@ -103,29 +100,6 @@ final class DetailAnnounceViewController: UIViewController {
                 customNavController.setNavigationTitle("\(detailAnnouceViewModel.unReadCount ?? 0)개 남음")
             }
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        print("size 높이:", collectionView.contentSize.height)
-        print("frame 높이:", collectionView.frame.height)
-        
-        if collectionView.contentSize.height > collectionView.frame.height && !chagneHeight {
-            collectionHeight = max(collectionView.contentSize.height, collectionHeight)
-            chagneHeight = true
-        }
-    }
-    
-    func updateLayout() {
-        contentView.snp.remakeConstraints {
-            $0.edges.equalTo(scrollView.contentLayoutGuide)
-            $0.width.equalTo(scrollView.frameLayoutGuide)  // 가로 스크롤 방지
-            $0.bottom.equalToSuperview().inset(30)
-            $0.height.equalTo(collectionHeight - 40)
-        }
-        
-        view.layoutIfNeeded()
     }
 }
 
@@ -147,6 +121,13 @@ private extension DetailAnnounceViewController {
             .sink { [weak self] sectionTypes in
                 // 섹션 타입이 업데이트되면 스냅샷 업데이트
                 self?.applySnapshot()
+                
+                if sectionTypes?.firstIndex(where: { $0 == .images }) == nil {
+                    DispatchQueue.main.async {
+                       self?.imageCountView.isHidden = true
+                       self?.imageCountLabel.isHidden = true
+                   }
+                }
             }
             .store(in: &cancellables)
         
@@ -190,7 +171,7 @@ private extension DetailAnnounceViewController {
                     } else {
                         self.coordinator?.pushAllReadAnnounce()
                     }
-                case .failure(let error):
+                case .failure:
                     break
                 }
             }
@@ -298,16 +279,16 @@ private extension DetailAnnounceViewController {
             $0.bottom.equalTo(bookmarkButton.snp.centerY)
         }
         
-        scrollView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 50, right: 0)
         
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.frameLayoutGuide)  // 가로 스크롤 방지
-            $0.height.equalTo(80 + 355 + 44 + 85)
         }
         
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+            $0.height.equalTo(80 + 355 + 44)
         }
         
         imageCountView.snp.makeConstraints {
@@ -331,7 +312,6 @@ private extension DetailAnnounceViewController {
         case .announce, .bookmarkAnnounce:
             bookmarkButton.snp.makeConstraints {
                 $0.horizontalEdges.equalToSuperview().inset(15)
-//                $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(6)
                 $0.bottom.equalToSuperview().inset(34)
                 $0.height.equalTo(48)
             }
@@ -355,10 +335,34 @@ private extension DetailAnnounceViewController {
     }
     
     func setupDelegate() {
-
+        
     }
 }
 
+extension DetailAnnounceViewController: ContentCellDelegate {
+    func contentCell(_ cell: DetailAnnouceContentCollectionViewCell, didUpdateHeight height: CGFloat) {
+        
+        print("입력 받은 height", height)
+        
+        var imageHeight = 355
+        
+        let isImagesEmpty = detailAnnouceViewModel.sectionDataDict[.images]?.isEmpty ?? false
+        if isImagesEmpty {
+            imageHeight = 0
+        }
+        
+        let baseHeight = 80 + 44 + 16 + 10
+        let totalHeight = baseHeight + imageHeight + Int(height)
+        
+        print("변경된 높이:", totalHeight)
+        collectionView.snp.updateConstraints {
+            $0.edges.equalToSuperview()
+            $0.height.equalTo(totalHeight)
+        }
+
+        view.layoutIfNeeded()
+    }
+}
 
 private extension DetailAnnounceViewController {
     func setupCollectionView() {
@@ -495,7 +499,7 @@ private extension DetailAnnounceViewController {
         // Group 정의
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),  // 섹션 너비의 100%
-            heightDimension: .fractionalHeight(1.0)       // 높이만 고정
+            heightDimension: .fractionalHeight(1.0) // 높이만 고정
         )
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
@@ -536,7 +540,7 @@ private extension DetailAnnounceViewController {
                 
             case .content:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailAnnouceContentCollectionViewCell.className, for: indexPath) as! DetailAnnouceContentCollectionViewCell
-                
+                cell.delegate = self
                 if let model = item as? DetailAnnouceContentModel {
                     cell.configureCell(forModel: model)
                 }
@@ -576,7 +580,6 @@ private extension DetailAnnounceViewController {
             
             return nil
         }
-        
     }
     
     private func applySnapshot() {
@@ -597,14 +600,21 @@ private extension DetailAnnounceViewController {
                 snapshot.appendItems(annouceHeaderItems, toSection: section)
                 
             case .images:
-                guard let items = detailAnnouceViewModel.sectionDataDict[section] else { return }
-                let annouceImageItems = items.compactMap { $0 as? DetailAnnouceImageModel }
+                guard let items = detailAnnouceViewModel.sectionDataDict[section],
+                      !items.isEmpty else {
+                    DispatchQueue.main.async {
+                        self.imageCountView.isHidden = true
+                        self.imageCountLabel.isHidden = true
+                    }
+                    return
+                }
                 
                 DispatchQueue.main.async {
-                    self.imageCountView.isHidden = annouceImageItems.isEmpty ? true : false
-                    self.imageCountLabel.isHidden = annouceImageItems.isEmpty ? true : false
+                    self.imageCountView.isHidden = false
+                    self.imageCountLabel.isHidden = false
                 }
-
+                
+                let annouceImageItems = items.compactMap { $0 as? DetailAnnouceImageModel }
                 snapshot.appendItems(annouceImageItems, toSection: section)
                 
             case .content:

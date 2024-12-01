@@ -21,26 +21,11 @@ final class AnnounceCollectionViewCell: UICollectionViewCell {
     private let contentsLabel = UILabel()
     
     private let postDayLabel = UILabel()
-    
-    private let favoriteCount = UILabel()
-    private let bookmarkCount = UILabel()
-    private let watchCount = UILabel()
-    
-    private let favoriteImage = UIImageView()
-    private let bookmarkImage = UIImageView()
-    private let watchImage = UIImageView()
-    
-    private let favoriteInfoStackView = UIStackView()
-    private let bookmarkInfoStackView = UIStackView()
-    private let watchInfoStackView = UIStackView()
-    private let contentsInfoStackView = UIStackView()
-    
+    private let contentInfoView = ContentInfoView()
+
     private let contentsStackView = UIStackView()
     private let postStackView = UIStackView()
     private let bottomStackView = UIStackView()
-    
-    private let divider = UIView()
-    private let divider2 = UIView()
     
     // MARK: - init
     
@@ -68,13 +53,7 @@ extension AnnounceCollectionViewCell {
         contentsLabel.text = "\(model.contents)"
         postDayLabel.text = "\(model.days)"
         
-        favoriteCount.text = "\(model.favoriteCount)"
-        bookmarkCount.text = "\(model.bookmarkCount)"
-        watchCount.text = "\(model.watchCount)"
-        
-        favoriteImage.image = UIImage(resource: model.isFavorite == true ? .favorite : .unFavorite)
-        bookmarkImage.image = UIImage(resource: model.isBookmark == true ? .bookmark : .unBookmark)
-        watchImage.image = UIImage(resource: .visibility)
+        contentInfoView.configureData(model.favoriteCount, model.bookmarkCount, model.watchCount, model.isFavorite, model.isBookmark)
     }
 }
 
@@ -112,51 +91,12 @@ private extension AnnounceCollectionViewCell {
             $0.textColor = .black30
         }
         
-        divider.do {
-            $0.backgroundColor = .black30
-        }
-        
-        divider2.do {
-            $0.backgroundColor = .black30
-        }
-        
-        contentsImage.addSubview(associationTypeView)
-        
-        [favoriteCount, bookmarkCount, watchCount].forEach {
-            $0.font = .interCaption11()
-            $0.textColor = .black30
-        }
-        
-        favoriteInfoStackView.do {
-            $0.addArrangedSubviews(favoriteImage, favoriteCount)
-        }
-        
-        bookmarkInfoStackView.do {
-            $0.addArrangedSubviews(bookmarkImage, bookmarkCount)
-        }
-        
-        watchInfoStackView.do {
-            $0.addArrangedSubviews(watchImage, watchCount)
-        }
-        
-        [favoriteInfoStackView, bookmarkInfoStackView, watchInfoStackView].forEach {
-            $0.axis = .horizontal
-            $0.spacing = 5
-            $0.distribution = .fill
-        }
-        
-        contentsInfoStackView.do {
-            $0.addArrangedSubviews(favoriteInfoStackView, divider, bookmarkInfoStackView, divider2, watchInfoStackView)
-            $0.axis = .horizontal
-            $0.spacing = 5
-            $0.distribution = .fillProportionally
-        }
-        
         bottomStackView.do {
-            $0.addArrangedSubviews(postDayLabel, contentsInfoStackView)
+            $0.addArrangedSubviews(postDayLabel, UIView(), contentInfoView)
             $0.axis = .horizontal
-            $0.spacing = self.convertByWidthRatio(101)
+            $0.spacing = 0
             $0.distribution = .fill
+            $0.alignment = .center
         }
         
         contentsStackView.do {
@@ -177,6 +117,7 @@ private extension AnnounceCollectionViewCell {
     
     func setupHierarchy() {
         self.addSubviews(contentsStackView)
+        contentsImage.addSubview(associationTypeView)
     }
     
     func setupLayout() {
@@ -201,14 +142,14 @@ private extension AnnounceCollectionViewCell {
             $0.height.equalTo(34)
         }
         
-        divider.snp.makeConstraints {
-            $0.width.equalTo(1)
-            $0.height.equalTo(12)
-        }
-        
-        divider2.snp.makeConstraints {
-            $0.width.equalTo(1)
-            $0.height.equalTo(12)
-        }
+//        divider.snp.makeConstraints {
+//            $0.width.equalTo(1)
+//            $0.height.equalTo(12)
+//        }
+//        
+//        divider2.snp.makeConstraints {
+//            $0.width.equalTo(1)
+//            $0.height.equalTo(12)
+//        }
     }
 }

@@ -27,26 +27,11 @@ final class AnnounceListCollectionViewCell: UICollectionViewCell {
     private let contentsLabel = UILabel()
     
     private let postDayLabel = UILabel()
-    
-    private let favoriteCount = UILabel()
-    private let bookmarkCount = UILabel()
-    private let watchCount = UILabel()
-    
-    private let favoriteImage = UIImageView()
-    private let bookmarkImage = UIImageView()
-    private let watchImage = UIImageView()
-    
-    private let favoriteInfoStackView = UIStackView()
-    private let bookmarkInfoStackView = UIStackView()
-    private let watchInfoStackView = UIStackView()
-    private let contentsInfoStackView = UIStackView()
+    private let contentInfoView = ContentInfoView()
     
     private let contentsStackView = UIStackView()
     private let postStackView = UIStackView()
     private let bottomStackView = UIStackView()
-    
-    private let divider = UIView()
-    private let divider2 = UIView()
     
     // MARK: - init
     
@@ -70,7 +55,7 @@ extension AnnounceListCollectionViewCell {
         
         selectedAnnounceType = .anthoer
         
-//        // 기존 뷰들 제거
+        // 기존 뷰들 제거
         self.subviews.forEach { $0.removeFromSuperview() }
         
         // 필요한 뷰들 추가 및 설정
@@ -82,13 +67,7 @@ extension AnnounceListCollectionViewCell {
         contentsLabel.text = "\(model.contents)"
         
         postDayLabel.text = "\(model.days)"
-        
-        favoriteCount.text = "\(model.favoriteCount)"
-        bookmarkCount.text = "\(model.bookmarkCount)"
-        watchCount.text = "\(model.watchCount)"
-        
-        changeContentInfo(isFavorite: model.isFavorite, isBookmark: model.isBookmark)
-        watchImage.image = UIImage(resource: .visibility)
+        contentInfoView.configureData(model.favoriteCount, model.bookmarkCount, model.watchCount, model.isFavorite, model.isBookmark)
         
         announceTypeView.configure(type: model.type)
     }
@@ -97,7 +76,7 @@ extension AnnounceListCollectionViewCell {
         
         selectedAnnounceType = .all
         
-//        // 기존 뷰들 제거
+        // 기존 뷰들 제거
         self.subviews.forEach { $0.removeFromSuperview() }
         
         // 필요한 뷰들 추가 및 설정
@@ -109,20 +88,9 @@ extension AnnounceListCollectionViewCell {
         contentsLabel.text = "\(model.contents)"
         
         postDayLabel.text = "\(model.days)"
-        
-        favoriteCount.text = "\(model.favoriteCount)"
-        bookmarkCount.text = "\(model.bookmarkCount)"
-        watchCount.text = "\(model.watchCount)"
-        
-        changeContentInfo(isFavorite: model.isFavorite, isBookmark: model.isBookmark)
-        watchImage.image = UIImage(resource: .visibility)
-        
+        contentInfoView.configureData(model.favoriteCount, model.bookmarkCount, model.watchCount, model.isFavorite, model.isBookmark)
+
         associationTypeView.configure(title: model.writerInfo, type: model.associationType)
-    }
-    
-    private func changeContentInfo(isFavorite: Bool, isBookmark: Bool) {
-        favoriteImage.image = UIImage(resource: isFavorite == true ? .favorite : .unFavorite)
-        bookmarkImage.image = UIImage(resource: isBookmark == true ? .bookmark : .unBookmark)
     }
 }
 
@@ -158,50 +126,13 @@ private extension AnnounceListCollectionViewCell {
             $0.font = .interCaption11()
             $0.textColor = .black30
         }
-        
-        divider.do {
-            $0.backgroundColor = .black30
-        }
-        
-        divider2.do {
-            $0.backgroundColor = .black30
-        }
-        
-        [favoriteCount, bookmarkCount, watchCount].forEach {
-            $0.font = .interCaption11()
-            $0.textColor = .black30
-        }
-        
-        favoriteInfoStackView.do {
-            $0.addArrangedSubviews(favoriteImage, favoriteCount)
-        }
-        
-        bookmarkInfoStackView.do {
-            $0.addArrangedSubviews(bookmarkImage, bookmarkCount)
-        }
-        
-        watchInfoStackView.do {
-            $0.addArrangedSubviews(watchImage, watchCount)
-        }
-        
-        [favoriteInfoStackView, bookmarkInfoStackView, watchInfoStackView].forEach {
-            $0.axis = .horizontal
-            $0.spacing = 3
-            $0.distribution = .fill
-        }
-        
-        contentsInfoStackView.do {
-            $0.addArrangedSubviews(favoriteInfoStackView, divider, bookmarkInfoStackView, divider2, watchInfoStackView)
-            $0.axis = .horizontal
-            $0.spacing = 5
-            $0.distribution = .fillProportionally
-        }
-        
+    
         bottomStackView.do {
-            $0.addArrangedSubviews(postDayLabel, contentsInfoStackView)
+            $0.addArrangedSubviews(postDayLabel, UIView(), contentInfoView)
             $0.axis = .horizontal
-            $0.spacing = 101
+            $0.spacing = 0
             $0.distribution = .fill
+            $0.alignment = .center
         }
         
         postStackView.do {
@@ -271,21 +202,5 @@ private extension AnnounceListCollectionViewCell {
         contentsLabel.snp.makeConstraints {
             $0.height.equalTo(37)
         }
-        
-        divider.snp.makeConstraints {
-            $0.width.equalTo(1)
-            $0.height.equalTo(10)
-        }
-        
-        divider2.snp.makeConstraints {
-            $0.width.equalTo(1)
-            $0.height.equalTo(10)
-        }
-        
-//        [favoriteImage, bookmarkImage, watchImage].forEach {
-//            $0.snp.makeConstraints{
-//                $0.size.equalTo(16)
-//            }
-//        }
     }
 }

@@ -10,7 +10,14 @@ import UIKit
 import SnapKit
 import Then
 
+protocol ContentCellDelegate: AnyObject {
+    func contentCell(_ cell: DetailAnnouceContentCollectionViewCell, didUpdateHeight height: CGFloat)
+}
+
+
 final class DetailAnnouceContentCollectionViewCell: UICollectionViewCell {
+    
+    weak var delegate: ContentCellDelegate?
     
     private let annouceTypeView = AnnounceTypeView()
     private let contentTitleLabel = UILabel()
@@ -38,7 +45,18 @@ extension DetailAnnouceContentCollectionViewCell {
         contentTitleLabel.text = model.title
         contentTextView.text = model.content
         
-        annouceTypeView.configure(type: .annouce)
+        annouceTypeView.configure(type: model.type)
+        
+        layoutIfNeeded()
+        let contentHeight = contentTextView.contentSize.height
+        let annouceTypeViewHeight = annouceTypeView.bounds.height
+        let contentTitleHeight = contentTitleLabel.bounds.height
+        
+        print(contentHeight,annouceTypeViewHeight,contentTitleHeight)
+        
+        let cellHeight = self.bounds.height
+        print(cellHeight)
+        delegate?.contentCell(self, didUpdateHeight: contentHeight + annouceTypeViewHeight + contentTitleHeight)
     }
 }
 
@@ -67,19 +85,19 @@ private extension DetailAnnouceContentCollectionViewCell {
     func setupLayout() {
         annouceTypeView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(16)
-            $0.leading.equalToSuperview()//.inset(20)
+            $0.leading.equalToSuperview()
             $0.height.equalTo(20)
         }
         
         contentTitleLabel.snp.makeConstraints {
             $0.top.equalTo(annouceTypeView.snp.bottom).offset(10)
-            $0.horizontalEdges.equalToSuperview()//.inset(20)
+            $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(55)
         }
         
         contentTextView.snp.makeConstraints {
             $0.top.equalTo(contentTitleLabel.snp.bottom).offset(1)
-            $0.horizontalEdges.equalToSuperview()//.inset(20)
+            $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().inset(24)
         }
     }

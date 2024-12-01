@@ -11,15 +11,21 @@ import UIKit
 import SnapKit
 import Then
 
+import NMapsMap
+
 final class StoreViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let storeViewModel: StoreViewModel
+    weak var coordinator: StoreCoordinator?
+    
+    private var storeDataSource: UICollectionViewDiffableDataSource<Int, StoreEntity>!
+    
+    // MARK: - Combine Publishers Properties
+    
     private let categorySelectionSubject = PassthroughSubject<CategoryType, Never>()
     private let searchTextSubject = PassthroughSubject<String, Never>()
-   
-    private var storeDataSource: UICollectionViewDiffableDataSource<Int, StoreEntity>!
-    private let storeViewModel: StoreViewModel
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -31,14 +37,17 @@ final class StoreViewController: UIViewController {
     
     // MARK: - init
     
-    init(storeViewModel: StoreViewModel) {
+    init(storeViewModel: StoreViewModel,
+         coordinator: StoreCoordinator) {
         self.storeViewModel = storeViewModel
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
         
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -215,6 +224,9 @@ private extension StoreViewController {
                         
             cell.configureCell(forModel: item)
             cell.delegate = self
+            cell.expandedBenefitView.mapDelegate = self
+            
+//            cell.expandedBenefitView.configureData(forModel: BenefitModel(title: [item.partnerContent]), storeName: item.name)
             return cell
         }
     }
@@ -259,8 +271,29 @@ extension StoreViewController: UICollectionViewDelegateFlowLayout {
 
 extension StoreViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let category = CategoryType.allCases[indexPath.row]
-        categorySelectionSubject.send(category)
+        if collectionView == categoryCollectionView {
+            let category = CategoryType.allCases[indexPath.row]
+            categorySelectionSubject.send(category)
+            
+        } else if collectionView == storeCollectionView {
+            var snapshot = storeDataSource.snapshot()
+            var items = snapshot.itemIdentifiers
+
+            // 선택된 셀만 토글
+            items[indexPath.item].isExpanded.toggle()
+            
+            snapshot = NSDiffableDataSourceSnapshot<Int, StoreEntity>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(items)
+            
+            self.storeDataSource.apply(snapshot, animatingDifferences: true)
+
+            self.storeCollectionView.scrollToItem(
+                at: indexPath,
+                at: .centeredVertically,
+                animated: true
+            )
+        }
     }
 }
 
@@ -297,7 +330,7 @@ extension StoreViewController: StoreCellDelegate {
 
         // 선택된 셀만 토글
         items[indexPath.item].isExpanded.toggle()
-
+    
         snapshot = NSDiffableDataSourceSnapshot<Int, StoreEntity>()
         snapshot.appendSections([0])
         snapshot.appendItems(items)
@@ -309,12 +342,22 @@ extension StoreViewController: StoreCellDelegate {
             at: .centeredVertically,
             animated: true
         )
-        
     }
 }
 
 extension StoreViewController: CustomSearchBarViewDelegate {
     func searchBar(_ searchBar: CustomSearchBarView, textDidChange text: String) {
         searchTextSubject.send(text)
+    }
+}
+
+extension StoreViewController: ShowStoreMapDelegate {
+    func showStoreMap(storeName: String) {
+        
+        if let index = storeViewModel.storeDataSubject.value.firstIndex(where: { $0.name == storeName }) {
+            print("선택된 인덱스:", index)
+            
+            self.coordinator?.pushStoreMap(storeData: storeViewModel.storeDataSubject.value[index])
+        }
     }
 }
