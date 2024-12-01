@@ -11,6 +11,7 @@ enum Config {
     enum Keys {
         enum Plist {
             static let baseURL = "BASE_URL"
+            static let naverMap = "NAVER_MAP_KEY"
         }
         
         enum Keychain: String {
@@ -77,6 +78,13 @@ extension Config {
     static let userInfoKey: String = {
         guard let key = Config.infoDictionary[Keys.Keychain.userAuthState.rawValue] as? String else {
             fatalError("⛔️USER_INFO_KEY is not set in plist for this configuration⛔️")
+        }
+        return key
+    }()
+    
+    static let naverMapKey: String = {
+        guard let key = Config.infoDictionary[Keys.Plist.naverMap] as? String else {
+            fatalError("⛔️NAVER_MAP_KEY is not set in plist for this configuration⛔️")
         }
         return key
     }()
