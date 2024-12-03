@@ -66,9 +66,6 @@ final class StoreViewController: UIViewController {
         configureStoreDataSource()
         bindViewModel()
 
-//        let indexPath = IndexPath(item: 0, section: 0)
-//        categoryCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: .top)
-        
         categorySelectionSubject.send(.all)
     }
     
@@ -226,7 +223,6 @@ private extension StoreViewController {
             cell.delegate = self
             cell.expandedBenefitView.mapDelegate = self
             
-//            cell.expandedBenefitView.configureData(forModel: BenefitModel(title: [item.partnerContent]), storeName: item.name)
             return cell
         }
     }
@@ -325,6 +321,8 @@ extension StoreViewController: StoreCellDelegate {
     func expandedCellTap(_ cell: StoreCollectionViewCell) {
         guard let indexPath = storeCollectionView.indexPath(for: cell) else { return }
         
+        AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.viewContent)
+        
         var snapshot = storeDataSource.snapshot()
         var items = snapshot.itemIdentifiers
 
@@ -356,6 +354,8 @@ extension StoreViewController: ShowStoreMapDelegate {
         
         if let index = storeViewModel.storeDataSubject.value.firstIndex(where: { $0.name == storeName }) {
             print("선택된 인덱스:", index)
+            
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.viewLocation)
             
             self.coordinator?.pushStoreMap(storeData: storeViewModel.storeDataSubject.value[index])
         }

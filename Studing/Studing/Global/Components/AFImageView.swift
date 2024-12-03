@@ -37,7 +37,7 @@ final class AFImageView: UIImageView {
         guard let urlString = urlString, !urlString.isEmpty,
               let url = URL(string: urlString) else {
             print("❌ URL empty or invalid, setting default image")
-            self.image = type == .associationLogo ? UIImage(resource: .unAssociation) : UIImage(resource: .dump)
+            self.image = type == .associationLogo ? UIImage(resource: .unAssociation) : UIImage(resource: .defaultPost)
             return
         }
         

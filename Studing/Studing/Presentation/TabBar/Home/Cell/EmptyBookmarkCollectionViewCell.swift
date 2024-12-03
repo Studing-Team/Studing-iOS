@@ -100,6 +100,8 @@ private extension EmptyBookmarkCollectionViewCell {
     }
     
     @objc func buttonTapped() {
+        AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.nextNoticeListSave)
+        
         allAnnounceButtonAction?()
     }
 }

@@ -80,7 +80,6 @@ private extension EmptyBookmarkListCollectionViewCell {
         subTitle.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
-//            $0.bottom.equalToSuperview().inset(167.86))
         }
     }
 }

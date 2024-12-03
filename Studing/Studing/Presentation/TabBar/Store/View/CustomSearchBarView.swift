@@ -92,10 +92,16 @@ extension CustomSearchBarView {
     }
     
     func setupDelegate() {
-
+        textField.delegate = self
     }
     
     @objc private func textFieldDidChange() {
         delegate?.searchBar(self, textDidChange: textField.text ?? "")
+    }
+}
+
+extension CustomSearchBarView: UITextFieldDelegate{
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.search)
     }
 }

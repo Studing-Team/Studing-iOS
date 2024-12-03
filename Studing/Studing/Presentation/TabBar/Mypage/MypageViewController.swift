@@ -28,8 +28,6 @@ final class MypageViewController: UIViewController {
     
     // MARK: - UI Properties
     
-    private let studingHeaderView = StudingHeaderView(type: .mypage)
-    
     private lazy var collectionView: UICollectionView = {
         return UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     }()
@@ -61,6 +59,18 @@ final class MypageViewController: UIViewController {
         bindViewModel()
         
         viewDidLoadSubject.send(())
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    
+        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+            customNavController.interactivePopGestureRecognizer?.isEnabled = true
+        }
+        
+        if let customNav = self.navigationController as? CustomAnnouceNavigationController {
+            customNav.setNavigationType(.myPage)
+        }
     }
 }
 
@@ -116,7 +126,7 @@ private extension MypageViewController {
 
 private extension MypageViewController {
     func setNavigationBar() {
-        self.navigationController?.isNavigationBarHidden = true
+//        self.navigationController?.isNavigationBarHidden = true
     }
     
     func setupStyle() {
@@ -124,18 +134,12 @@ private extension MypageViewController {
     }
     
     func setupHierarchy() {
-        view.addSubviews(studingHeaderView, collectionView)
+        view.addSubviews(collectionView)
     }
     
     func setupLayout() {
-        studingHeaderView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(56)
-        }
-        
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(studingHeaderView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }

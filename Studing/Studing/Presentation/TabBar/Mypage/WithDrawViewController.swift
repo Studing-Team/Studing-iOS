@@ -62,6 +62,14 @@ final class WithDrawViewController: UIViewController {
         setupDelegate()
         bindViewModel()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+            customNavController.interactivePopGestureRecognizer?.isEnabled = true
+        }
+    }
 }
 
 // MARK: - Private Bind Extensions
@@ -123,13 +131,13 @@ private extension WithDrawViewController {
 
 private extension WithDrawViewController {
     func setupStyle() {
-        backbutton.do {
-            $0.setTitleColor(.black50, for: .normal)
-            $0.setImage(UIImage(systemName: "chevron.backward")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)),
-                        for: .normal)
-            $0.tintColor = .black50
-            $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        }
+//        backbutton.do {
+//            $0.setTitleColor(.black50, for: .normal)
+//            $0.setImage(UIImage(systemName: "chevron.backward")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)),
+//                        for: .normal)
+//            $0.tintColor = .black50
+//            $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+//        }
         
         titleLabel.do {
             $0.text = "탈퇴하기"
@@ -172,17 +180,19 @@ private extension WithDrawViewController {
     }
     
     func setupHierarchy() {
-        view.addSubviews(backbutton, titleLabel, subTitleLabel, drawInfoStackView, cancelButton, withDrawButton)
+//        view.addSubviews(backbutton, titleLabel, subTitleLabel, drawInfoStackView, cancelButton, withDrawButton)
+        view.addSubviews(titleLabel, subTitleLabel, drawInfoStackView, cancelButton, withDrawButton)
     }
     
     func setupLayout() {
-        backbutton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
-            $0.leading.equalToSuperview().inset(20)
-        }
+//        backbutton.snp.makeConstraints {
+//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
+//            $0.leading.equalToSuperview().inset(20)
+//        }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(backbutton.snp.bottom).offset(50)
+//            $0.top.equalTo(backbutton.snp.bottom).offset(50)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
             $0.centerX.equalToSuperview()
         }
         

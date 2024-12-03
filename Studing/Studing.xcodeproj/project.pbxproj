@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F13600D2CFD86FF0043F765 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3F13600C2CFD86FF0043F765 /* AmplitudeSwift */; };
+		3F13600F2CFD8FC80043F765 /* AmplitudeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F13600E2CFD8FC80043F765 /* AmplitudeManager.swift */; };
+		3F1360112CFD93170043F765 /* AnalyticsEventLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1360102CFD93170043F765 /* AnalyticsEventLiterals.swift */; };
 		3F162B822C9D92B300DF2E1C /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B812C9D92B300DF2E1C /* Color.xcassets */; };
 		3F162B842C9D987300DF2E1C /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */; };
 		3F162B872C9DA70700DF2E1C /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B862C9DA70600DF2E1C /* Montserrat-ExtraBold.ttf */; };
@@ -30,7 +33,7 @@
 		3F17398C2CC0861D00DE8859 /* CustomTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17398B2CC0861C00DE8859 /* CustomTabBarViewController.swift */; };
 		3F1CE0442CEDDA8A00981EDF /* AnnounceTagButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1CE0432CEDDA8A00981EDF /* AnnounceTagButton.swift */; };
 		3F1F1F782CA27720006DFD76 /* StepCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F772CA27720006DFD76 /* StepCountView.swift */; };
-		3F1F1F7C2CA3B859006DFD76 /* CusomSignUpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */; };
+		3F1F1F7C2CA3B859006DFD76 /* CustomSignUpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7B2CA3B858006DFD76 /* CustomSignUpNavigationController.swift */; };
 		3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */; };
 		3F1F1F802CA3F4CF006DFD76 /* MajorInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1F1F7F2CA3F4CF006DFD76 /* MajorInfoViewModel.swift */; };
 		3F25A3592C96A676006E2715 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3582C96A676006E2715 /* UIView+.swift */; };
@@ -43,7 +46,6 @@
 		3F25A36D2C96D34D006E2715 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A36C2C96D34D006E2715 /* BaseViewModel.swift */; };
 		3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */; };
 		3F25A3712C96D4D9006E2715 /* UserInfoSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3702C96D4D9006E2715 /* UserInfoSignUpViewController.swift */; };
-		3F31B3DD2CC1590C00EE92D6 /* StudingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F31B3DC2CC1590C00EE92D6 /* StudingHeaderView.swift */; };
 		3F31B3DF2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F31B3DE2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf */; };
 		3F31B3E12CC1625D00EE92D6 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F31B3E02CC1625D00EE92D6 /* UIColor+.swift */; };
 		3F31B3E42CC1635300EE92D6 /* AnnounceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F31B3E32CC1635300EE92D6 /* AnnounceModel.swift */; };
@@ -266,6 +268,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F13600E2CFD8FC80043F765 /* AmplitudeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplitudeManager.swift; sourceTree = "<group>"; };
+		3F1360102CFD93170043F765 /* AnalyticsEventLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEventLiterals.swift; sourceTree = "<group>"; };
 		3F162B812C9D92B300DF2E1C /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		3F162B862C9DA70600DF2E1C /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -289,7 +293,7 @@
 		3F17398B2CC0861C00DE8859 /* CustomTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarViewController.swift; sourceTree = "<group>"; };
 		3F1CE0432CEDDA8A00981EDF /* AnnounceTagButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceTagButton.swift; sourceTree = "<group>"; };
 		3F1F1F772CA27720006DFD76 /* StepCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountView.swift; sourceTree = "<group>"; };
-		3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CusomSignUpNavigationController.swift; sourceTree = "<group>"; };
+		3F1F1F7B2CA3B858006DFD76 /* CustomSignUpNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSignUpNavigationController.swift; sourceTree = "<group>"; };
 		3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeLiterals.swift; sourceTree = "<group>"; };
 		3F1F1F7F2CA3F4CF006DFD76 /* MajorInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MajorInfoViewModel.swift; sourceTree = "<group>"; };
 		3F25A3582C96A676006E2715 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
@@ -302,7 +306,6 @@
 		3F25A36C2C96D34D006E2715 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCoordinator.swift; sourceTree = "<group>"; };
 		3F25A3702C96D4D9006E2715 /* UserInfoSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoSignUpViewController.swift; sourceTree = "<group>"; };
-		3F31B3DC2CC1590C00EE92D6 /* StudingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudingHeaderView.swift; sourceTree = "<group>"; };
 		3F31B3DE2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Bold.ttf"; sourceTree = "<group>"; };
 		3F31B3E02CC1625D00EE92D6 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		3F31B3E32CC1635300EE92D6 /* AnnounceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceModel.swift; sourceTree = "<group>"; };
@@ -519,6 +522,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F13600D2CFD86FF0043F765 /* AmplitudeSwift in Frameworks */,
 				3FB0FCE32CFC57DB0034EA3F /* Alamofire in Frameworks */,
 				3F39926E2C82C9080045CF1E /* Then in Frameworks */,
 				3FDEE9E32C970A7A00633C93 /* SnapKit in Frameworks */,
@@ -629,6 +633,7 @@
 				3F25A35B2C96A76E006E2715 /* StringLiterals.swift */,
 				3F162B882C9DA71B00DF2E1C /* FontLiterals.swift */,
 				3F1F1F7D2CA3D902006DFD76 /* SizeLiterals.swift */,
+				3F1360102CFD93170043F765 /* AnalyticsEventLiterals.swift */,
 			);
 			path = Consts;
 			sourceTree = "<group>";
@@ -640,7 +645,7 @@
 				3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */,
 				3F5960292CA0EE5F00688FE3 /* CustomButton.swift */,
 				3F1F1F772CA27720006DFD76 /* StepCountView.swift */,
-				3F1F1F7B2CA3B858006DFD76 /* CusomSignUpNavigationController.swift */,
+				3F1F1F7B2CA3B858006DFD76 /* CustomSignUpNavigationController.swift */,
 				3F82C32E2CAE936600492EEE /* NoExistsSearchResultView.swift */,
 				3F82C3342CAE946400492EEE /* SearchResultCollectionView.swift */,
 				3F82C3362CAE948300492EEE /* SearchResultCollectionViewCell.swift */,
@@ -651,6 +656,7 @@
 				3F54D9E22CE4CE4900314B46 /* AFImageView.swift */,
 				3F8D00532CEF0F2500083C22 /* CustomAlertViewController.swift */,
 				3FE4035D2CF633EF0078F36A /* ToastMessageView.swift */,
+				3F13600E2CFD8FC80043F765 /* AmplitudeManager.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -714,7 +720,6 @@
 		3F31B3DB2CC158F700EE92D6 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				3F31B3DC2CC1590C00EE92D6 /* StudingHeaderView.swift */,
 				3FE043362CC6A00600B55EAA /* AnnounceTypeView.swift */,
 				3F54D9DA2CE3BA3700314B46 /* AssociationTypeView.swift */,
 				3F54DA1B2CE59BCB00314B46 /* AskStudingView.swift */,
@@ -1475,6 +1480,7 @@
 				3FDEE9E22C970A7A00633C93 /* SnapKit */,
 				3FE403882CF851F50078F36A /* NMapsMap */,
 				3FB0FCE22CFC57DB0034EA3F /* Alamofire */,
+				3F13600C2CFD86FF0043F765 /* AmplitudeSwift */,
 			);
 			productName = Studing;
 			productReference = 3F3992552C82C8E40045CF1E /* Studing.app */;
@@ -1532,6 +1538,7 @@
 				3F3992772C82C9FA0045CF1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3FE403872CF851F50078F36A /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 				3FB0FCE12CFC57DB0034EA3F /* XCRemoteSwiftPackageReference "Alamofire" */,
+				3F13600B2CFD86FE0043F765 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 			);
 			productRefGroup = 3F3992562C82C8E40045CF1E /* Products */;
 			projectDirPath = "";
@@ -1674,7 +1681,6 @@
 				3FE403662CF840550078F36A /* AllReadAnnounceViewController.swift in Sources */,
 				3F3CFDB42C9742C900DC9F9A /* SuccessSignUpViewController.swift in Sources */,
 				3FE043012CC626E600B55EAA /* SectionBackgroundView.swift in Sources */,
-				3F31B3DD2CC1590C00EE92D6 /* StudingHeaderView.swift in Sources */,
 				3F54D96C2CE10B8900314B46 /* Config.swift in Sources */,
 				3FE042FE2CC5E05100B55EAA /* MypageHeaderCollectionReusableView.swift in Sources */,
 				3FF2E9182CF557990098F0D2 /* WithDrawUseCase.swift in Sources */,
@@ -1682,6 +1688,7 @@
 				3F54D9F12CE4D41F00314B46 /* AllAssociationAnnouceListResponseDTO.swift in Sources */,
 				3F17396E2CBE495200DE8859 /* AuthUniversityViewModel.swift in Sources */,
 				3F54D9932CE19D6400314B46 /* UnreadAssocationAnnouceCountResponseDTO.swift in Sources */,
+				3F13600F2CFD8FC80043F765 /* AmplitudeManager.swift in Sources */,
 				3F92633E2CE5CF5B00ADC1EB /* NotificationsAPI.swift in Sources */,
 				3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */,
 				3F54DA162CE4F50900314B46 /* AllAnnounceEntity.swift in Sources */,
@@ -1720,7 +1727,7 @@
 				3FD4B8FE2CDA0A4000308E08 /* DetailAnnouceImagesCollectionViewCell.swift in Sources */,
 				3F9DC8A82CB4ECA900850136 /* StudentIdInputCollectionCell.swift in Sources */,
 				3FB203512CC5C47D003F381D /* EmptyBookmarkModel.swift in Sources */,
-				3F1F1F7C2CA3B859006DFD76 /* CusomSignUpNavigationController.swift in Sources */,
+				3F1F1F7C2CA3B859006DFD76 /* CustomSignUpNavigationController.swift in Sources */,
 				3F54D9CB2CE3676D00314B46 /* MypageInfoResponseDTO.swift in Sources */,
 				3F25A3662C96D058006E2715 /* LoginCoordinator.swift in Sources */,
 				3FFCFEEE2CE0D72E009D07A6 /* NetworkResult.swift in Sources */,
@@ -1797,6 +1804,7 @@
 				3F54DA1C2CE59BCB00314B46 /* AskStudingView.swift in Sources */,
 				3F54DA0D2CE4DF8300314B46 /* DeleteLikeAnnounceUseCase.swift in Sources */,
 				3F1739762CC0103D00DE8859 /* TabBarItemEnum.swift in Sources */,
+				3F1360112CFD93170043F765 /* AnalyticsEventLiterals.swift in Sources */,
 				3F54DA092CE4DEF700314B46 /* DetailAnnounceUseCase.swift in Sources */,
 				3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */,
 				3F3A69372CE85764006334C3 /* SuccessSignUpViewModel.swift in Sources */,
@@ -2101,6 +2109,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3F13600B2CFD86FE0043F765 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		3F39926C2C82C9080045CF1E /* XCRemoteSwiftPackageReference "Then" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then.git";
@@ -2144,6 +2160,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3F13600C2CFD86FF0043F765 /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F13600B2CFD86FE0043F765 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
+		};
 		3F39926D2C82C9080045CF1E /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3F39926C2C82C9080045CF1E /* XCRemoteSwiftPackageReference "Then" */;

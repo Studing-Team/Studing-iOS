@@ -430,7 +430,7 @@ extension AnnounceListViewController: UICollectionViewDelegate {
         
         switch collectionView {
         case topCollectionView:
-//            let data = announceViewModel.associationsSubject.value[indexPath.row]
+
             selectedAssociationIndexSubject.send(indexPath.row)
             
         case bottomCollectionView:
@@ -444,10 +444,15 @@ extension AnnounceListViewController: UICollectionViewDelegate {
                 
                 coordinator?.pushDetailAnnouce(type: .announce, announceId: data.announceId)
                 
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.detailNotice)
+                
             case .allAnnounce:
                 let data = announceViewModel.allAnnouncesSubject.value[indexPath.row]
                 
                 coordinator?.pushDetailAnnouce(type: .announce, announceId: data.announceId)
+                
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.detailNotice)
+                
             case .bookmark:
                 
                 let data = announceViewModel.bookmarkListSubject.value[indexPath.row]

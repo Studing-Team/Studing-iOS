@@ -83,6 +83,8 @@ final class HomeViewModel: BaseViewModel {
                 if let associationData = self.sectionDataDict[.association] as? [AssociationEntity] {
                     // 새로운 배열 생성
                     
+                    amplitudeEvent(category: associationData[index].associationType?.typeName ?? "전체")
+                    
                     let updatedData = associationData.enumerated().map { (i, entity) in
                         // 각 엔티티의 모든 속성을 유지하면서 isSelected만 업데이트
                         AssociationEntity(
@@ -151,6 +153,8 @@ final class HomeViewModel: BaseViewModel {
                 
                 switch type {
                 case .annouce:
+                    AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.noticeList)
+                    
                     let associationType = (self.sectionDataDict[.association] as? [AssociationEntity])?
                         .first(where: { $0.isSelected })?
                         .associationType
@@ -160,6 +164,8 @@ final class HomeViewModel: BaseViewModel {
                     return HeaderButtonAction(type: type, associationName: selectAssociationName)
                     
                 case .bookmark:
+                    AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.saveList)
+                    
                     return HeaderButtonAction(type: type, associationName: nil)
                     
                 default:
@@ -167,11 +173,41 @@ final class HomeViewModel: BaseViewModel {
                 }
             }
         
+        let postButtonTapResult = input.postButtonTap
+            .handleEvents(receiveOutput: { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.postNotice)
+            })
+            .eraseToAnyPublisher()
+        
         return Output(
             annouceHeaderText: selectedAssociationTitle.eraseToAnyPublisher(),
             headerRightButtonTap: rightButtonTap.eraseToAnyPublisher(),
-            postButtonTap: input.postButtonTap.eraseToAnyPublisher()
+            postButtonTap: postButtonTapResult
         )
+    }
+    
+    func amplitudeEvent(category: String) {
+        
+        enum NoticeCategory: String {
+            case all = "전체"
+            case university = "총학생회"
+            case college = "단과대"
+            case department = "학과"
+        }
+        
+        // String을 NoticeCategory로 변환
+        guard let noticeCategory = NoticeCategory(rawValue: category) else { return }
+        
+        switch noticeCategory {
+        case .all:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.categoryAll)
+        case .university:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.categoryUniversity)
+        case .college:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.categoryCollege)
+        case .department:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.categoryDepartment)
+        }
     }
 }
 
