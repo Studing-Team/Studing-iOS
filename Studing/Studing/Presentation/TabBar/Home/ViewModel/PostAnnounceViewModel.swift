@@ -44,9 +44,17 @@ final class PostAnnounceViewModel: BaseViewModel {
     
     func transform(input: Input) -> Output {
         
+        let selectImageButtonResult = input.selectImageButtonTap
+            .handleEvents(receiveOutput: { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeCreate.addPhoto)
+            })
+            .eraseToAnyPublisher()
+    
         let createResult = input.createAnnounceButtonTap
             .combineLatest(input.titleText, input.contentText, input.tagButtonText)
             .map { (_, title, content, type) in
+                
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeCreate.upload)
                 
                 return (title, content, type.title)
             }
@@ -89,7 +97,7 @@ final class PostAnnounceViewModel: BaseViewModel {
             .eraseToAnyPublisher()
         
         return Output(isEnableCreateButton: isEnableButton,
-                      selectImageButtonTap: input.selectImageButtonTap,
+                      selectImageButtonTap: selectImageButtonResult,
                       createAnnounceResult: createResult
         )
     }

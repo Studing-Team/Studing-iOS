@@ -106,6 +106,8 @@ private extension AskStudingView {
     }
     
     @objc private func askStudingTapped() {
+        AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.contactKakao)
+        
         guard let url = URL(string: StringLiterals.Web.askStuding),
               UIApplication.shared.canOpenURL(url) else { return }
         UIApplication.shared.open(url)

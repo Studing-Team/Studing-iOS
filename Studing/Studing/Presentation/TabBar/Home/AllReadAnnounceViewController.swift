@@ -35,7 +35,6 @@ final class AllReadAnnounceViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -114,6 +113,8 @@ private extension AllReadAnnounceViewController {
     
     @objc private func backToHome() {
         self.coordinator?.popToHome()
+        
+        AmplitudeManager.shared.trackEvent(AnalyticsEvent.UnreadNotice.complete)
     }
     
     func setupDelegate() {

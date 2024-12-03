@@ -12,6 +12,7 @@ enum Config {
         enum Plist {
             static let baseURL = "BASE_URL"
             static let naverMap = "NAVER_MAP_KEY"
+            static let amplitude = "AMPLITUDE_KEY"
         }
         
         enum Keychain: String {
@@ -85,6 +86,13 @@ extension Config {
     static let naverMapKey: String = {
         guard let key = Config.infoDictionary[Keys.Plist.naverMap] as? String else {
             fatalError("⛔️NAVER_MAP_KEY is not set in plist for this configuration⛔️")
+        }
+        return key
+    }()
+    
+    static let amplitudeKey: String = {
+        guard let key = Config.infoDictionary[Keys.Plist.amplitude] as? String else {
+            fatalError("⛔️AMPLITUDE_KEY is not set in plist for this configuration⛔️")
         }
         return key
     }()

@@ -71,12 +71,18 @@ final class StudentIdViewModel: BaseViewModel {
             }
             .prepend(false)
             .eraseToAnyPublisher()
+        
+        let nextTapResult = input.nextTap
+            .handleEvents(receiveOutput:  { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.nextStep4)
+            })
+            .eraseToAnyPublisher()
  
         return Output(
             selectedStudentId: selectedStudentId,
             shouldHideCollectionView: shouldHideCollectionView,
             isNextButtonEnabled: isNextButtonEnabled,
-            TermsOfServiceViewAction: input.nextTap
+            TermsOfServiceViewAction: nextTapResult
         )
     }
 }

@@ -31,7 +31,6 @@ final class HomeViewController: UIViewController {
     // MARK: - UI Properties
     
     private let refreshControl = UIRefreshControl()
-    private let studingHeaderView = StudingHeaderView(type: .home)
     
     private lazy var unUserAuthView: UnUserAuthView? = {
         switch userAuth {
@@ -660,6 +659,8 @@ extension HomeViewController: UICollectionViewDelegate {
         case .missAnnouce:
             self.coordinator?.pushDetailAnnouce(type: .unreadAnnounce, selectedAssociationType: "전체", unReadCount: homeViewModel.unReadCount)
             
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.unreadNotice)
+            
         case .association:
             selectedAssociationSubject.send(indexPath.row)
             
@@ -673,6 +674,8 @@ extension HomeViewController: UICollectionViewDelegate {
             if isRegistered && !(homeViewModel.sectionDataDict[.annouce]?.isEmpty ?? true)  {
                 guard let data = homeViewModel.sectionDataDict[.annouce] else { return }
                 guard let entity = data[indexPath.row] as? AssociationAnnounceEntity else { return }
+                
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.detailNotice)
                 
                 coordinator?.pushDetailAnnouce(type: .announce, announceId: entity.announceId)
             }

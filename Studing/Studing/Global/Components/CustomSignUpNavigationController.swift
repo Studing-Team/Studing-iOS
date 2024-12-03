@@ -179,7 +179,6 @@ private extension CustomSignUpNavigationController {
     }
     
     func setupHierarchy() {
-//        view.addSubviews(safeAreaView, customNavigationBar)
         view.addSubviews(safeAreaView)
         safeAreaView.addSubviews(customNavigationBar)
         customNavigationBar.addSubviews(leftButton, naviTitleLabel, progressbarBackgroundView, progressbarView)
@@ -187,9 +186,6 @@ private extension CustomSignUpNavigationController {
     
     func setupLayout() {
         customNavigationBar.snp.makeConstraints {
-//            $0.height.equalTo(navigationHeight)
-//            $0.bottom.equalTo(view.snp.topMargin)
-//            $0.horizontalEdges.equalToSuperview()
             $0.edges.equalToSuperview()
         }
         
@@ -197,13 +193,10 @@ private extension CustomSignUpNavigationController {
             $0.top.equalToSuperview()
             $0.bottom.equalTo(view.snp.topMargin)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(navigationHeight)
         }
 
         leftButton.snp.makeConstraints {
-//            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(20)
-//            $0.verticalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().inset(16)
             $0.size.equalTo(24)
         }

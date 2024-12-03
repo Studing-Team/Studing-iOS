@@ -140,6 +140,9 @@ final class DetailAnnouceViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         
         let nextButtonResult = input.nextButtonTap
+            .handleEvents(receiveOutput: { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.UnreadNotice.nextNotice)
+            })
             .flatMap { [weak self] _ -> AnyPublisher<Result<Bool, NetworkError>, Never> in
                 guard let self else { return Just((.failure(NetworkError.unknown))).eraseToAnyPublisher() }
                 
@@ -163,6 +166,15 @@ final class DetailAnnouceViewModel: BaseViewModel {
             .eraseToAnyPublisher()
         
         input.likeButtonTap
+            .handleEvents(receiveOutput: { _ in
+                switch self.detailAnnounceType {
+                case .announce, .bookmarkAnnounce:
+                    AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeDetail.likePost)
+                    
+                case .unreadAnnounce:
+                    AmplitudeManager.shared.trackEvent(AnalyticsEvent.UnreadNotice.likePost)
+                }
+            })
             .sink { [weak self] _ in
                 guard let self else { return }
                 
@@ -173,9 +185,18 @@ final class DetailAnnouceViewModel: BaseViewModel {
             .store(in: &cancellables)
         
         let bookmarkButtonResult = input.bookmarkButtonTap
+            .handleEvents(receiveOutput: { _ in
+                switch self.detailAnnounceType {
+                case .announce, .bookmarkAnnounce:
+                    AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeDetail.savePost)
+                    
+                case .unreadAnnounce:
+                    AmplitudeManager.shared.trackEvent(AnalyticsEvent.UnreadNotice.savePost)
+                }
+            })
             .flatMap { [weak self] _ -> AnyPublisher<Bool, Never> in
                 guard let self else { return Empty().eraseToAnyPublisher() }
-                
+
                 return Future { promise in
                     Task {
                         await self.bookmarkActionHandler()

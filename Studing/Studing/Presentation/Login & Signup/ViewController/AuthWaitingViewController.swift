@@ -85,6 +85,7 @@ private extension AuthWaitingViewController {
         
         let input = AuthWaitingViewModel.Input(
             showStudingTap: showStudingButton.tapPublisher,
+            notificationTap: notificationButton.tapPublisher,
             permissionGrantedTap: permissionGrantedTap.eraseToAnyPublisher(),
             permissionDeniedTap: permissionDeniedTap.eraseToAnyPublisher()
         )
@@ -97,11 +98,9 @@ private extension AuthWaitingViewController {
             }
             .store(in: &cancellables)
         
-        notificationButton.tapPublisher
+        output.notificationTapAction
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                
-                print("동작")
                 self?.requestNotificationPermission()
             }
             .store(in: &cancellables)

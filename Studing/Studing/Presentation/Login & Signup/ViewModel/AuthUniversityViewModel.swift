@@ -73,6 +73,9 @@ final class AuthUniversityViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         
         let openImagePicker = input.studentCardTap
+            .handleEvents(receiveOutput:  { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.nextStep6Upload)
+            })
             .eraseToAnyPublisher()
         
         let isSelectedImage = input.selectedImageData

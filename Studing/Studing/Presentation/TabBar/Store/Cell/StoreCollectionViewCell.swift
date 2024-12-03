@@ -68,7 +68,7 @@ extension StoreCollectionViewCell {
         descriptionLabel.text = model.description
         addressLabel.text = model.address
         isExpanded = model.isExpanded
-        storeImageView.setImage(model.imageURL, type: .postImage)
+        storeImageView.setImage(model.imageURL, type: .postSmallImage)
         
         let benefitModel = BenefitModel(title: model.partnerContent) // benefits 배열이 StoreEntity에 있다고 가정
         expandedBenefitView.configureData(forModel: benefitModel, storeName: model.name)
@@ -157,7 +157,7 @@ private extension StoreCollectionViewCell {
         }
         
         storeImageView.do {
-            $0.image = UIImage(resource: .dumpstore)
+            $0.image = UIImage(resource: .defaultPostSmall)
             $0.contentMode = .scaleAspectFill
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 8

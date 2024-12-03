@@ -130,10 +130,12 @@ final class UserInfoSignUpViewModel: BaseViewModel {
             .eraseToAnyPublisher()
         
         let nextButtonTap = input.nextTap
-            .map { [weak self] _ in
+            .handleEvents(receiveOutput: { [weak self] _ in
                 self?.delegate?.didSubmitUserId(input.userId.value)
                 self?.delegate?.didSubmitPassword(input.userPw.value)
-            }
+                
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.nextStep1)
+            })
             .eraseToAnyPublisher()
         
         return Output(

@@ -77,11 +77,17 @@ final class UniversityInfoViewModel: BaseViewModel {
             .prepend(false)
             .eraseToAnyPublisher()
         
+        let nextTapResult = input.nextTap
+            .handleEvents(receiveOutput:  { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.nextStep2)
+            })
+            .eraseToAnyPublisher()
+        
         return Output(
             searchUnivsersityResult: universityNamesPublisher,
             selectUniversity: input.selectUniversityName,
             isEnableButton: isEnableButton,
-            majorInfoViewAction: input.nextTap
+            majorInfoViewAction: nextTapResult
         )
     }
 }

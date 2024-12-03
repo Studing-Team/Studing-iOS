@@ -57,6 +57,8 @@ final class WithDrawViewModel: BaseViewModel {
                             KeychainManager.shared.delete(key: .signupInfo)
                             KeychainManager.shared.delete(key: .fcmToken)
                             
+                            AmplitudeManager.shared.trackEvent(AnalyticsEvent.MyPage.signoutComplete)
+                            
                             promise(.success(true))
                         case .failure:
                             promise(.success(false))

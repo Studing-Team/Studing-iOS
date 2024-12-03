@@ -53,8 +53,8 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
             childCoordinators.append(storeCoordinator)
             storeCoordinator.start()
         case .mypage:
-            navigationController = UINavigationController()
-            let mypageCoordinator = MypageCoordinator(navigationController: navigationController, parentCoordinator: self)
+            navigationController = CustomAnnouceNavigationController()
+            let mypageCoordinator = MypageCoordinator(navigationController: navigationController as! CustomAnnouceNavigationController, parentCoordinator: self)
             childCoordinators.append(mypageCoordinator)
             mypageCoordinator.start()
         }
