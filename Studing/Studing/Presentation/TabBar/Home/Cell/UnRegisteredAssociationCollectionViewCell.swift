@@ -116,6 +116,17 @@ private extension UnRegisteredAssociationCollectionViewCell {
     }
     
     @objc func buttonTapped() {
+        switch type {
+        case .home:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Home.registerForm)
+            
+        case .list:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.registerForm)
+            
+        default:
+            break
+        }
+        
         guard let url = URL(string: StringLiterals.Web.addMajor),
               UIApplication.shared.canOpenURL(url) else { return }
         UIApplication.shared.open(url)

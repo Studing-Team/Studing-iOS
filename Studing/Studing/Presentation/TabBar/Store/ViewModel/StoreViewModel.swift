@@ -47,6 +47,7 @@ final class StoreViewModel: BaseViewModel {
                 guard let self = self else { return Empty().eraseToAnyPublisher() }
                 
                 selectedCategory.send(category)
+                amplitudeEvent(category: category)
                 
                 return Future { promise in
                     Task {
@@ -110,5 +111,24 @@ extension StoreViewModel {
         }
         
         storeDataSubject.send(searchNameFilterStores)
+    }
+    
+    private func amplitudeEvent(category: CategoryType) {
+        switch category {
+        case .all:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.categoryAll)
+        case .restaurant:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.categoryFood)
+        case .coffee:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.categoryCafe)
+        case .bar:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.categoryDrink)
+        case .exercise:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.categoryGym)
+        case .health:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.categoryHospital)
+        case .culture:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Store.categoryCulture)
+        }
     }
 }

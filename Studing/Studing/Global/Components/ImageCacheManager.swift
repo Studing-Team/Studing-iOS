@@ -11,6 +11,7 @@ import UIKit
 enum ImageType {
     case associationLogo
     case postImage
+    case postSmallImage
     
     var imageSize: CGSize {
         switch self {
@@ -18,6 +19,8 @@ enum ImageType {
             return CGSize(width: SizeLiterals.Screen.screenWidth * 55 / 375, height: SizeLiterals.Screen.screenHeight * 55 / 812)
         case .postImage:
             return CGSize(width: SizeLiterals.Screen.screenWidth * 335 / 375, height: SizeLiterals.Screen.screenHeight * 335 / 812)
+        case .postSmallImage:
+            return CGSize(width: SizeLiterals.Screen.screenWidth * 83 / 375, height: SizeLiterals.Screen.screenHeight * 83 / 812)
         }
     }
 }

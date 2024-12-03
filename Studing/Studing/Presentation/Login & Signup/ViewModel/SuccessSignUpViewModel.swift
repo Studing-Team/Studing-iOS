@@ -42,7 +42,9 @@ final class SuccessSignUpViewModel: BaseViewModel {
         
         let loginResult = input.mainHomeButtonTap
             .flatMap { [weak self] _ -> AnyPublisher<LoginResult, Never> in
-                print("버튼 눌림")
+                
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.end)
+                
                 guard let self, let signupUserInfo else { print("데이터 없음"); return
                     Just(.failure(.clientError(message: ""))).eraseToAnyPublisher() }
                 

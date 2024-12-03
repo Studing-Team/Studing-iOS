@@ -22,9 +22,14 @@ final class MypageCoordinator: Coordinator {
     }
     
     func start() {
-        let mypageVM = MypageViewModel(mypageUseCase: MypageUseCase(repository: HomeRepositoryImpl()))
+        let mypageVM = MypageViewModel(
+            mypageUseCase: MypageUseCase(repository: HomeRepositoryImpl())
+        )
         
-        let mypageVC = MypageViewController(mypageViewModel: mypageVM, coordinator: self)
+        let mypageVC = MypageViewController(
+            mypageViewModel: mypageVM,
+            coordinator: self
+        )
         
         navigationController.pushViewController(mypageVC, animated: true)
     }
@@ -36,7 +41,12 @@ final class MypageCoordinator: Coordinator {
             withDrawViewModel: withDrawVM, coordinator: self
         )
         
+        if let customNav = self.navigationController as? CustomAnnouceNavigationController {
+            customNav.setNavigationType(.leftButton)
+        }
+        
         withDrawVC.hidesBottomBarWhenPushed = true
+        navigationController.interactivePopGestureRecognizer?.isEnabled = true
         navigationController.pushViewController(withDrawVC, animated: true)
     }
     

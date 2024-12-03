@@ -112,6 +112,11 @@ final class TermsOfServiceViewModel: BaseViewModel {
             }
             .eraseToAnyPublisher()
 
+        let nextTapResult = input.nextTap
+            .handleEvents(receiveOutput:  { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.nextStep5)
+            })
+            .eraseToAnyPublisher()
 
         return Output(
             allCheckBoxTap: isAllCheckBoxSubject.eraseToAnyPublisher(),
@@ -119,7 +124,7 @@ final class TermsOfServiceViewModel: BaseViewModel {
             userInfoBoxTap: isUserInfoSubject.eraseToAnyPublisher(),
             marketingBoxTap: isMarketingSubject.eraseToAnyPublisher(),
             isNextButtonEnabled: isNextButtonEnabled,
-            authUniversityViewAction: input.nextTap
+            authUniversityViewAction: nextTapResult
         )
     }
     

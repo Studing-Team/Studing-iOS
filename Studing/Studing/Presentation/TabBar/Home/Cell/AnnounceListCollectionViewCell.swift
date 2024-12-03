@@ -62,7 +62,7 @@ extension AnnounceListCollectionViewCell {
         setupHierarchy()
         setupLayout()
         
-        contentsImage.setImage(model.imageUrl, type: .postImage)
+        contentsImage.setImage(model.imageUrl, type: .postSmallImage)
         titleLabel.text = "\(model.title)"
         contentsLabel.text = "\(model.contents)"
         
@@ -83,7 +83,7 @@ extension AnnounceListCollectionViewCell {
         setupHierarchy()
         setupLayout()
         
-        contentsImage.setImage(model.imageUrl, type: .postImage)
+        contentsImage.setImage(model.imageUrl, type: .postSmallImage)
         titleLabel.text = "\(model.title)"
         contentsLabel.text = "\(model.contents)"
         

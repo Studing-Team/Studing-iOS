@@ -14,6 +14,7 @@ final class AuthWaitingViewModel: BaseViewModel {
     
     struct Input {
         let showStudingTap: AnyPublisher<Void, Never>
+        let notificationTap: AnyPublisher<Void, Never>
         let permissionGrantedTap: AnyPublisher<Void, Never>
         let permissionDeniedTap: AnyPublisher<Void, Never>
     }
@@ -22,6 +23,7 @@ final class AuthWaitingViewModel: BaseViewModel {
     
     struct Output {
         let showStudingViewAction: AnyPublisher<Void, Never>
+        let notificationTapAction: AnyPublisher<Void, Never>
         let permissionGrantedResult: AnyPublisher<Void, Never>
         let permissionDeniedResult: AnyPublisher<Void, Never>
     }
@@ -39,6 +41,19 @@ final class AuthWaitingViewModel: BaseViewModel {
     // MARK: - Public methods
     
     func transform(input: Input) -> Output {
+        
+        let notificationTapResult = input.notificationTap
+            .handleEvents(receiveOutput:  { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.alarm)
+            })
+            .eraseToAnyPublisher()
+        
+        let showStudingTapResult = input.showStudingTap
+            .handleEvents(receiveOutput:  { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.start)
+            })
+            .eraseToAnyPublisher()
+        
         let permissionGrantedResult = input.permissionGrantedTap
             .flatMap { [weak self] _ -> AnyPublisher<Void, Never> in
                 guard let self else { return Just(()).eraseToAnyPublisher() }
@@ -62,7 +77,8 @@ final class AuthWaitingViewModel: BaseViewModel {
             .eraseToAnyPublisher()
         
         return Output(
-            showStudingViewAction: input.showStudingTap,
+            showStudingViewAction: showStudingTapResult,
+            notificationTapAction: notificationTapResult,
             permissionGrantedResult: permissionGrantedResult,
             permissionDeniedResult: input.permissionDeniedTap
         )

@@ -78,6 +78,8 @@ final class AnnounceListViewModel: BaseViewModel {
                 let tapAssocation = associationsSubject.value[index]
                 selectedAssociationSubject.send(tapAssocation.associationType?.typeName ?? "전체")
                 
+                amplitudeEvent(category: tapAssocation.associationType?.typeName ?? "전체")
+                
                 let updateData = associationsSubject.value.enumerated().map { (i, entity) in
                     AssociationEntity(
                         name: entity.name,
@@ -248,6 +250,30 @@ extension AnnounceListViewModel {
         case .failure(let error):
             print("Error:", error.localizedDescription)
             return .failure(error)
+        }
+    }
+
+    func amplitudeEvent(category: String) {
+        
+        enum NoticeCategory: String {
+            case all = "전체"
+            case university = "총학생회"
+            case college = "단과대"
+            case department = "학과"
+        }
+        
+        // String을 NoticeCategory로 변환
+        guard let noticeCategory = NoticeCategory(rawValue: category) else { return }
+        
+        switch noticeCategory {
+        case .all:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.categoryAll)
+        case .university:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.categoryUniversity)
+        case .college:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.categoryCollege)
+        case .department:
+            AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeList.categoryDepartment)
         }
     }
 }

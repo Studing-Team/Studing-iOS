@@ -45,7 +45,7 @@ final class CustomTabBar: UITabBar {
         tabStackView.do {
             $0.axis = .horizontal
             $0.distribution = .fillEqually
-            $0.spacing = 42
+            $0.spacing = self.convertByWidthRatio(33)
             $0.alignment = .center
         }
     }
@@ -59,7 +59,8 @@ final class CustomTabBar: UITabBar {
     private func setupLayout() {
         containerView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(11)
-            $0.bottom.equalToSuperview().inset(28)
+//            $0.bottom.equalToSuperview().inset(28)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
             $0.height.equalTo(70)
         }
         

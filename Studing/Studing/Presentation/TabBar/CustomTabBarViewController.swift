@@ -9,7 +9,7 @@ import UIKit
 
 final class CustomTabBarViewController: UITabBarController {
     
-    private lazy var customTabBar: CustomTabBar = CustomTabBar()
+    private lazy var customTabBar: CustomTabBar = CustomTabBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 70))
     
     private var isTabBarSetup = false
     
@@ -37,10 +37,21 @@ final class CustomTabBarViewController: UITabBarController {
         setValue(customTabBar, forKey: "tabBar")
         
         view.addSubview(customTabBar)
-        
+
         customTabBar.standardAppearance = appearance
         customTabBar.scrollEdgeAppearance = appearance
 
+        
+//        var tabFrame = tabBar.frame
+//        tabFrame.size.height = 98  // 70 + 28
+//        tabFrame.origin.y = view.frame.size.height - 98
+//        tabBar.frame = tabFrame
+        
+//        tabBar.items?.forEach { item in
+//            item.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        }
+        
+        
         setupCustomTabBar()
         selectedIndex = 0
     }
@@ -50,6 +61,19 @@ final class CustomTabBarViewController: UITabBarController {
         
         updateTabButtonAppearance()
     }
+    
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        
+//        var tabFrame = tabBar.frame
+//        tabFrame.size.height = 98  // 70 + 28
+//        tabFrame.origin.y = view.frame.size.height - 98
+//        tabBar.frame = tabFrame
+//        
+//        tabBar.items?.forEach { item in
+//            item.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        }
+//    }
 
     private func setupCustomTabBar() {
         
@@ -71,11 +95,6 @@ final class CustomTabBarViewController: UITabBarController {
             button.tag = type.itemTag()
             button.tintColor = .black20
             
-            // 버튼 width 설정
-            button.snp.makeConstraints {
-                $0.width.equalTo(80)  // 원하는 너비로 조정
-            }
-
             customTabBar.addButton(button)
         }
         

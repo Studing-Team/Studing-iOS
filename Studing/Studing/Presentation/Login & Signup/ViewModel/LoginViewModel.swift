@@ -69,6 +69,18 @@ final class LoginViewModel: BaseViewModel {
             .prepend(false)
             .eraseToAnyPublisher()
         
+        let signUpTapResult = input.signUpTap
+            .handleEvents(receiveOutput: { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.Login.signup)
+            })
+            .eraseToAnyPublisher()
+        
+        let askTapResult = input.askTap
+            .handleEvents(receiveOutput: { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.Login.askStuding)
+            })
+            .eraseToAnyPublisher()
+        
         let loginResult = input.loginTap
             .flatMap { [weak self] _ -> AnyPublisher<LoginResult, Never> in
                 
@@ -80,6 +92,9 @@ final class LoginViewModel: BaseViewModel {
                         
                         switch result {
                         case .success:
+                            
+                            AmplitudeManager.shared.trackEvent(AnalyticsEvent.Login.login)
+                            
                             promise(.success(.success))
                         case .failure(let error):
                             promise(.success(.failure(error)))
@@ -90,10 +105,10 @@ final class LoginViewModel: BaseViewModel {
             .eraseToAnyPublisher()
         
         return Output(
-            signUpAction: input.signUpTap,
+            signUpAction: signUpTapResult,
             isLoginButtonEnabled: isLoginButtonEnabled,
             loginResult: loginResult,
-            askButtonTap: input.askTap
+            askButtonTap: askTapResult
         )
     }
 }

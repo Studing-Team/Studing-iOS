@@ -67,7 +67,6 @@ final class MajorInfoViewModel: BaseViewModel {
         
         let isEnableButton = Publishers.CombineLatest(input.majorName, input.selectMajorName)
             .map { (majorName, selectedName) in
-                
                 if !majorName.isEmpty && majorName == selectedName {
                     self.delegate?.didSubmitMajor(majorName)
                     return true
@@ -78,11 +77,17 @@ final class MajorInfoViewModel: BaseViewModel {
             .prepend(false)
             .eraseToAnyPublisher()
         
+        let nextTapResult = input.nextTap
+            .handleEvents(receiveOutput:  { _ in
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.SignUp.nextStep3)
+            })
+            .eraseToAnyPublisher()
+        
         return Output(
             searchMajorResult: majorNamesPublisher,
             selectUniversity: input.selectMajorName,
             isEnableButton: isEnableButton,
-            TermsOfServiceViewAction: input.nextTap
+            TermsOfServiceViewAction: nextTapResult
         )
     }
 }

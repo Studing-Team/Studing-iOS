@@ -108,6 +108,7 @@ private extension MyInfoCollectionViewCell {
         myProfileImage.snp.makeConstraints {
             $0.top.equalToSuperview().offset(25)
             $0.centerX.equalToSuperview()
+            $0.size.equalTo(80)
         }
         
         myNameLabel.snp.makeConstraints {

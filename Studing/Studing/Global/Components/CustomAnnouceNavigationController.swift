@@ -18,6 +18,8 @@ enum NavigationType {
     case unRead
     case post
     case unReadToHome
+    case myPage
+    case leftButton
 }
 
 final class CustomAnnouceNavigationController: UINavigationController {
@@ -35,6 +37,7 @@ final class CustomAnnouceNavigationController: UINavigationController {
     
     private let customNavigationBar = UIView()
     private let leftButton = UIButton()
+    private let rightButton = UIButton()
     private let titleLabel = UILabel()
     private let safeAreaView: UIView = UIView()
     private let divider = UIView()
@@ -90,6 +93,13 @@ private extension CustomAnnouceNavigationController {
             $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         }
         
+        rightButton.do {
+            $0.setImage(UIImage(resource: .alarm), for: .normal)
+            $0.contentMode = .scaleAspectFit
+            $0.tintColor = .black50
+            $0.isHidden = true
+        }
+        
         divider.do {
             $0.backgroundColor = .black10
         }
@@ -98,7 +108,7 @@ private extension CustomAnnouceNavigationController {
     func setupHierarchy() {
         view.addSubviews(safeAreaView)
         safeAreaView.addSubviews(customNavigationBar, divider)
-        customNavigationBar.addSubviews(leftButton, titleLabel)
+        customNavigationBar.addSubviews(leftButton, titleLabel, rightButton)
     }
     
     private func applyHomeLayout() {
@@ -132,7 +142,6 @@ private extension CustomAnnouceNavigationController {
         
         leftButton.snp.remakeConstraints {
             $0.leading.equalToSuperview().offset(16)
-            //            $0.centerY.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-8)
             $0.size.equalTo(24)
         }
@@ -140,6 +149,11 @@ private extension CustomAnnouceNavigationController {
         titleLabel.snp.remakeConstraints {
             $0.leading.equalTo(leftButton.snp.trailing).offset(10)
             $0.centerY.equalTo(leftButton)
+        }
+        
+        rightButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
     
@@ -203,6 +217,47 @@ private extension CustomAnnouceNavigationController {
         }
     }
     
+    private func applyMypageLayout() {
+        safeAreaView.snp.remakeConstraints {
+            $0.bottom.equalTo(view.snp.topMargin)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
+        }
+        
+        customNavigationBar.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        titleLabel.snp.remakeConstraints {
+            $0.leading.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview()
+        }
+        
+        rightButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
+        }
+    }
+    
+    private func applyLeftButtonLayout() {
+        safeAreaView.snp.remakeConstraints {
+            $0.top.equalToSuperview()
+            $0.bottom.equalTo(view.snp.topMargin)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
+        }
+        
+        customNavigationBar.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        leftButton.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.bottom.equalToSuperview().inset(16)
+            $0.size.equalTo(24)
+        }
+    }
+    
     private func setupLayout() {
         // 초기 레이아웃 설정
         updateNavigationVisibility()
@@ -216,6 +271,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = true
             leftButton.isHidden = true
+            rightButton.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             applyHomeStyle()
@@ -227,6 +283,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = true
             leftButton.isHidden = false
+            rightButton.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             // announce 스타일 적용
@@ -239,6 +296,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             leftButton.isHidden = false
             divider.isHidden = false
+            rightButton.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             // detail 스타일 적용
@@ -251,6 +309,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = false
             leftButton.isHidden = false
+            rightButton.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             applyUnReadStyle()
@@ -262,6 +321,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = false
             leftButton.isHidden = false
+            rightButton.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             leftButton.setImage(UIImage(systemName: "xmark")?
@@ -277,7 +337,32 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = true
             divider.isHidden = true
             leftButton.isHidden = true
+            rightButton.isHidden = true
             setupSafeArea(navigationBarHidden: true)
+            
+        case .myPage:
+            navigationHeight = 56
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            divider.isHidden = true
+            leftButton.isHidden = true
+            rightButton.isHidden = false
+            setupSafeArea(navigationBarHidden: false)
+            
+            applyMypageStyle()
+            applyMypageLayout()
+            
+        case .leftButton:
+            navigationHeight = 56
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            divider.isHidden = true
+            leftButton.isHidden = false
+            rightButton.isHidden = true
+            setupSafeArea(navigationBarHidden: false)
+            
+            applyLeftButtontyle()
+            applyLeftButtonLayout()
         }
     }
     
@@ -286,6 +371,10 @@ private extension CustomAnnouceNavigationController {
         if currentType == .post {
             self.dismiss(animated: true)
         } else {
+            if currentType == .unRead {
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.UnreadNotice.back)
+            }
+            
             self.popViewController(animated: true)
         }
     }
@@ -329,6 +418,20 @@ private extension CustomAnnouceNavigationController {
         titleLabel.textColor = .black50
         leftButton.tintColor = .black50
     }
+    
+    private func applyMypageStyle() {
+        // detail 스타일 설정
+        customNavigationBar.backgroundColor = .clear
+        titleLabel.font = .interSubtitle1()
+        titleLabel.textColor = .black50
+        leftButton.tintColor = .black50
+    }
+    
+    private func applyLeftButtontyle() {
+        // detail 스타일 설정
+        customNavigationBar.backgroundColor = .black5
+        leftButton.tintColor = .black50
+    }
 }
 
 // MARK: - Public Methods
@@ -347,7 +450,9 @@ extension CustomAnnouceNavigationController {
             setNavigationTitle("Studing")
         case .post:
             setNavigationTitle("공지사항 작성")
-        case .unRead, .unReadToHome:
+        case .myPage:
+            setNavigationTitle("마이페이지")
+        case .unRead, .unReadToHome, .leftButton:
             setNavigationTitle("")
         }
     }

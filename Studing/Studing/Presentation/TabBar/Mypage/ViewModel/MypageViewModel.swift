@@ -88,6 +88,8 @@ final class MypageViewModel: BaseViewModel {
                 KeychainManager.shared.delete(key: .fcmToken)
                 UserDefaults.standard.set(false, forKey: "isLogined")
                 
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.MyPage.logoutComplete)
+                
                 return true
             }
             .eraseToAnyPublisher()
@@ -107,16 +109,29 @@ final class MypageViewModel: BaseViewModel {
         switch section {
         case .useInfo:
             switch index {
-            case 1: navigationEventSubject.send(.notice)
-            case 2: navigationEventSubject.send(.serviceCenter)
-            case 3: navigationEventSubject.send(.privacyPolicy)
+            case 1: 
+                navigationEventSubject.send(.notice)
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.MyPage.contact)
+                
+            case 2:
+                navigationEventSubject.send(.serviceCenter)
+                
+            case 3:
+                navigationEventSubject.send(.privacyPolicy)
+                
             default: break
             }
             
         case .etc:
             switch index {
-            case 0: navigationEventSubject.send(.logout)
-            case 1: navigationEventSubject.send(.withDraw)
+            case 0: 
+                navigationEventSubject.send(.logout)
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.MyPage.logout)
+                
+            case 1:
+                navigationEventSubject.send(.withDraw)
+                AmplitudeManager.shared.trackEvent(AnalyticsEvent.MyPage.signout)
+                
             default: break
             }
             
