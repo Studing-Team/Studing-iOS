@@ -8,17 +8,6 @@
 import Foundation
 import Combine
 
-enum MypageNavigationType {
-       case userInfo           // 회원 정보
-       case serviceCenter     // 고객센터
-       case notice           // 공지사항
-       case version          // 버전 정보
-       case terms           // 이용약관
-       case privacyPolicy   // 개인정보 처리방침
-       case logout          // 로그아웃
-       case withDraw      // 회원탈퇴
-   }
-
 final class MypageViewModel: BaseViewModel {
     
     // MARK: - Combine Publishers Properties

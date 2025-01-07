@@ -10,54 +10,6 @@ import UIKit
 import SnapKit
 import Then
 
-enum CategoryType: CaseIterable {
-    case all
-    case restaurant
-    case coffee
-    case bar
-    case exercise
-    case health
-    case culture
-    
-    var title: String {
-        switch self {
-        case .all:
-            return "전체"
-        case .restaurant:
-            return "음식점"
-        case .coffee:
-            return "카페"
-        case .culture:
-            return "문화"
-        case .health:
-            return "병원"
-        case .bar:
-            return "주점"
-        case .exercise:
-            return "운동"
-        }
-    }
-    
-    var icon: UIImage? {
-        switch self {
-        case .all:
-            return nil
-        case .restaurant:
-            return UIImage(resource: .restaurant)
-        case .coffee:
-            return UIImage(resource: .coffee)
-        case .culture:
-            return UIImage(resource: .culture)
-        case .health:
-            return UIImage(resource: .health)
-        case .bar:
-            return UIImage(resource: .bar)
-        case .exercise:
-            return UIImage(resource: .exercise)
-        }
-    }
-}
-
 final class StoreCategoryCollectionViewCell: UICollectionViewCell {
     
     override var isSelected: Bool {
