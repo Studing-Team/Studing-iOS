@@ -122,7 +122,7 @@ private extension AuthWaitingViewController {
     }
 }
 
-extension AuthWaitingViewController {
+extension AuthWaitingViewController: UNUserNotificationCenterDelegate {
     private func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             if let error = error {
@@ -274,6 +274,6 @@ private extension AuthWaitingViewController {
     }
     
     func setupDelegate() {
-        
+        UNUserNotificationCenter.current().delegate = self
     }
 }

@@ -15,7 +15,6 @@
 		3F162B872C9DA70700DF2E1C /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B862C9DA70600DF2E1C /* Montserrat-ExtraBold.ttf */; };
 		3F162B892C9DA71B00DF2E1C /* FontLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F162B882C9DA71B00DF2E1C /* FontLiterals.swift */; };
 		3F162B8B2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B8A2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf */; };
-		3F162B8D2C9DBA0D00DF2E1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */; };
 		3F17396A2CBE43E100DE8859 /* AuthWaitingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1739692CBE43E100DE8859 /* AuthWaitingViewController.swift */; };
 		3F17396C2CBE442E00DE8859 /* CustomButtonEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17396B2CBE442E00DE8859 /* CustomButtonEnum.swift */; };
 		3F17396E2CBE495200DE8859 /* AuthUniversityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F17396D2CBE495200DE8859 /* AuthUniversityViewModel.swift */; };
@@ -158,7 +157,7 @@
 		3F54DA1E2CE5C39600314B46 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */; };
 		3F57612F2CC78F8E0039AC11 /* AllAssociationAnnounceListEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F57612E2CC78F8E0039AC11 /* AllAssociationAnnounceListEntity.swift */; };
 		3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5960292CA0EE5F00688FE3 /* CustomButton.swift */; };
-		3F59602D2CA13E8F00688FE3 /* TextFieldEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */; };
+		3F59602D2CA13E8F00688FE3 /* TextFieldStateEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602C2CA13E8F00688FE3 /* TextFieldStateEnum.swift */; };
 		3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602E2CA1422100688FE3 /* UIStackView+.swift */; };
 		3F5F93512CED6BDE00B74BBB /* PostAnnounceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F93502CED6BDE00B74BBB /* PostAnnounceViewController.swift */; };
 		3F5F93532CED814C00B74BBB /* PostAnnounceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F93522CED814C00B74BBB /* PostAnnounceViewModel.swift */; };
@@ -255,6 +254,11 @@
 		3FFCFEF12CE0D7F3009D07A6 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFCFEF02CE0D7F3009D07A6 /* APIEndpoint.swift */; };
 		3FFCFEF32CE0D822009D07A6 /* MemberAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFCFEF22CE0D822009D07A6 /* MemberAPI.swift */; };
 		3FFCFEF52CE0DF0A009D07A6 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFCFEF42CE0DF0A009D07A6 /* KeychainManager.swift */; };
+		3FFF992A2D0AD49100EEBB70 /* TextFieldInputTypeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF99292D0AD49100EEBB70 /* TextFieldInputTypeEnum.swift */; };
+		3FFF992C2D0ADA5F00EEBB70 /* MypageNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF992B2D0ADA5F00EEBB70 /* MypageNavigationType.swift */; };
+		3FFF992F2D0ADB3D00EEBB70 /* CategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF992E2D0ADB3D00EEBB70 /* CategoryType.swift */; };
+		3FFF99312D0ADD4300EEBB70 /* SerachResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF99302D0ADD4300EEBB70 /* SerachResultType.swift */; };
+		3FFF99332D26991600EEBB70 /* DeepLinkNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF99322D26991600EEBB70 /* DeepLinkNavigator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -275,7 +279,6 @@
 		3F162B862C9DA70600DF2E1C /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
 		3F162B882C9DA71B00DF2E1C /* FontLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontLiterals.swift; sourceTree = "<group>"; };
 		3F162B8A2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-VariableFont_opsz,wght.ttf"; sourceTree = "<group>"; };
-		3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F1739692CBE43E100DE8859 /* AuthWaitingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthWaitingViewController.swift; sourceTree = "<group>"; };
 		3F17396B2CBE442E00DE8859 /* CustomButtonEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonEnum.swift; sourceTree = "<group>"; };
 		3F17396D2CBE495200DE8859 /* AuthUniversityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthUniversityViewModel.swift; sourceTree = "<group>"; };
@@ -420,7 +423,7 @@
 		3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3F57612E2CC78F8E0039AC11 /* AllAssociationAnnounceListEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllAssociationAnnounceListEntity.swift; sourceTree = "<group>"; };
 		3F5960292CA0EE5F00688FE3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
-		3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldEnum.swift; sourceTree = "<group>"; };
+		3F59602C2CA13E8F00688FE3 /* TextFieldStateEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStateEnum.swift; sourceTree = "<group>"; };
 		3F59602E2CA1422100688FE3 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
 		3F5F93502CED6BDE00B74BBB /* PostAnnounceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAnnounceViewController.swift; sourceTree = "<group>"; };
 		3F5F93522CED814C00B74BBB /* PostAnnounceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAnnounceViewModel.swift; sourceTree = "<group>"; };
@@ -515,6 +518,13 @@
 		3FFCFEF02CE0D7F3009D07A6 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		3FFCFEF22CE0D822009D07A6 /* MemberAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberAPI.swift; sourceTree = "<group>"; };
 		3FFCFEF42CE0DF0A009D07A6 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		3FFF99292D0AD49100EEBB70 /* TextFieldInputTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldInputTypeEnum.swift; sourceTree = "<group>"; };
+		3FFF992B2D0ADA5F00EEBB70 /* MypageNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageNavigationType.swift; sourceTree = "<group>"; };
+		3FFF992E2D0ADB3D00EEBB70 /* CategoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryType.swift; sourceTree = "<group>"; };
+		3FFF99302D0ADD4300EEBB70 /* SerachResultType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerachResultType.swift; sourceTree = "<group>"; };
+		3FFF99322D26991600EEBB70 /* DeepLinkNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkNavigator.swift; sourceTree = "<group>"; };
+		3FFF99342D27B62F00EEBB70 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		3FFF99352D27B65400EEBB70 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -573,7 +583,7 @@
 		3F1739822CC01C8C00DE8859 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				3FD4B9092CDB8F7500308E08 /* Model */,
+				3FFF992D2D0ADAFE00EEBB70 /* Enum */,
 				3FD4B9142CDC509700308E08 /* Cell */,
 				3F92634D2CE6F62D00ADC1EB /* View */,
 				3F92634C2CE6F60400ADC1EB /* ViewModel */,
@@ -657,6 +667,7 @@
 				3F8D00532CEF0F2500083C22 /* CustomAlertViewController.swift */,
 				3FE4035D2CF633EF0078F36A /* ToastMessageView.swift */,
 				3F13600E2CFD8FC80043F765 /* AmplitudeManager.swift */,
+				3FFF99322D26991600EEBB70 /* DeepLinkNavigator.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -805,7 +816,6 @@
 				3F39927B2C82D22A0045CF1E /* Network */,
 				3F25A3602C96CF14006E2715 /* Coordinators */,
 				3F39927C2C82D2300045CF1E /* Presentation */,
-				3F162B8C2C9DBA0D00DF2E1C /* LaunchScreen.storyboard */,
 			);
 			path = Studing;
 			sourceTree = "<group>";
@@ -863,6 +873,8 @@
 				3F162B852C9DA69F00DF2E1C /* Fonts */,
 				3F3992612C82C8E60045CF1E /* Assets.xcassets */,
 				3F162B812C9D92B300DF2E1C /* Color.xcassets */,
+				3FFF99342D27B62F00EEBB70 /* Debug.xcconfig */,
+				3FFF99352D27B65400EEBB70 /* Release.xcconfig */,
 				3F54D96A2CE10B7F00314B46 /* Config.xcconfig */,
 				3F54D96B2CE10B8900314B46 /* Config.swift */,
 				3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */,
@@ -1144,11 +1156,13 @@
 		3F59602B2CA13E8200688FE3 /* Enum */ = {
 			isa = PBXGroup;
 			children = (
-				3F59602C2CA13E8F00688FE3 /* TextFieldEnum.swift */,
+				3F59602C2CA13E8F00688FE3 /* TextFieldStateEnum.swift */,
+				3FFF99292D0AD49100EEBB70 /* TextFieldInputTypeEnum.swift */,
 				3F17396B2CBE442E00DE8859 /* CustomButtonEnum.swift */,
 				3F1739732CBF571F00DE8859 /* AuthWaitStateEnum.swift */,
 				3F1739752CC0103D00DE8859 /* TabBarItemEnum.swift */,
 				3F3A69342CE85533006334C3 /* UserAuthEnum.swift */,
+				3FFF99302D0ADD4300EEBB70 /* SerachResultType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1276,13 +1290,6 @@
 			path = "Detail Cell";
 			sourceTree = "<group>";
 		};
-		3FD4B9092CDB8F7500308E08 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		3FD4B9142CDC509700308E08 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1340,6 +1347,7 @@
 			isa = PBXGroup;
 			children = (
 				3FE0432D2CC6631100B55EAA /* MyPageType.swift */,
+				3FFF992B2D0ADA5F00EEBB70 /* MypageNavigationType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1368,12 +1376,12 @@
 			isa = PBXGroup;
 			children = (
 				3FFCFEE72CE0D3B9009D07A6 /* Repositories */,
-				3FFCFEE22CE0D38E009D07A6 /* Models */,
+				3FFCFEE22CE0D38E009D07A6 /* DTO */,
 			);
 			path = Data;
 			sourceTree = "<group>";
 		};
-		3FFCFEE22CE0D38E009D07A6 /* Models */ = {
+		3FFCFEE22CE0D38E009D07A6 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
 				3F9263582CE7505100ADC1EB /* Partner */,
@@ -1383,7 +1391,7 @@
 				3F54D9832CE19A4B00314B46 /* UniversityData */,
 				3F54D9782CE1968F00314B46 /* Member */,
 			);
-			path = Models;
+			path = DTO;
 			sourceTree = "<group>";
 		};
 		3FFCFEE32CE0D394009D07A6 /* Entities */ = {
@@ -1456,6 +1464,14 @@
 				3FFCFEF22CE0D822009D07A6 /* MemberAPI.swift */,
 			);
 			path = Member;
+			sourceTree = "<group>";
+		};
+		3FFF992D2D0ADAFE00EEBB70 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				3FFF992E2D0ADB3D00EEBB70 /* CategoryType.swift */,
+			);
+			path = Enum;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1560,7 +1576,6 @@
 				3F8D00562CF463C400083C22 /* MontserratAlternates-ExtraBold.ttf in Resources */,
 				3F162B872C9DA70700DF2E1C /* Montserrat-ExtraBold.ttf in Resources */,
 				3F162B8B2C9DAACC00DF2E1C /* Inter-VariableFont_opsz,wght.ttf in Resources */,
-				3F162B8D2C9DBA0D00DF2E1C /* LaunchScreen.storyboard in Resources */,
 				3F162B822C9D92B300DF2E1C /* Color.xcassets in Resources */,
 				3F54DA1E2CE5C39600314B46 /* GoogleService-Info.plist in Resources */,
 			);
@@ -1616,6 +1631,7 @@
 				3FE403912CF85F340078F36A /* StoreMapViewModel.swift in Sources */,
 				3F8D00542CEF0F2500083C22 /* CustomAlertViewController.swift in Sources */,
 				3F705EE02CF8CB820055C7EC /* ContentInfoView.swift in Sources */,
+				3FFF992A2D0AD49100EEBB70 /* TextFieldInputTypeEnum.swift in Sources */,
 				3F31B3ED2CC21EF200EE92D6 /* AnnounceCollectionViewCell.swift in Sources */,
 				3F54D99A2CE1A02300314B46 /* AssociationAnnounceEntity.swift in Sources */,
 				3F31B3EF2CC23D3400EE92D6 /* BookmarkCollectionViewCell.swift in Sources */,
@@ -1648,6 +1664,7 @@
 				3F31B3E92CC16C1500EE92D6 /* MissAnnounceCollectionViewCell.swift in Sources */,
 				3F17396A2CBE43E100DE8859 /* AuthWaitingViewController.swift in Sources */,
 				3F17397E2CC017F800DE8859 /* StoreCoordinator.swift in Sources */,
+				3FFF99332D26991600EEBB70 /* DeepLinkNavigator.swift in Sources */,
 				3FEA675B2CB8BEF500675805 /* UILabel+.swift in Sources */,
 				3F82C32F2CAE936600492EEE /* NoExistsSearchResultView.swift in Sources */,
 				3F1F1F802CA3F4CF006DFD76 /* MajorInfoViewModel.swift in Sources */,
@@ -1665,6 +1682,7 @@
 				3F54DA0F2CE4DF9E00314B46 /* BookmarkAnnounceUseCase.swift in Sources */,
 				3FB203492CC5C409003F381D /* AssociationEntity.swift in Sources */,
 				3F9263442CE5D08F00ADC1EB /* NotificationRepositoryImpl.swift in Sources */,
+				3FFF992C2D0ADA5F00EEBB70 /* MypageNavigationType.swift in Sources */,
 				3F54DA1A2CE5958B00314B46 /* EmptyBookmarkListCollectionViewCell.swift in Sources */,
 				3FF2E9142CF4E5330098F0D2 /* DrawInfoView.swift in Sources */,
 				3FB2034D2CC5C435003F381D /* MissAnnounceEntity.swift in Sources */,
@@ -1771,6 +1789,7 @@
 				3F1739802CC0187B00DE8859 /* MypageCoordinator.swift in Sources */,
 				3F25A36A2C96D11A006E2715 /* LoginViewModel.swift in Sources */,
 				3F54D9A22CE1B2E000314B46 /* APIClient.swift in Sources */,
+				3FFF992F2D0ADB3D00EEBB70 /* CategoryType.swift in Sources */,
 				3FFCFEF12CE0D7F3009D07A6 /* APIEndpoint.swift in Sources */,
 				3F82C3352CAE946400492EEE /* SearchResultCollectionView.swift in Sources */,
 				3F54D9D52CE36D6500314B46 /* RecentAnnounceUseCase.swift in Sources */,
@@ -1779,7 +1798,7 @@
 				3F3CFDB92C97BCF800DC9F9A /* Combine+.swift in Sources */,
 				3F54D9E32CE4CE4900314B46 /* AFImageView.swift in Sources */,
 				3FE043352CC696A600B55EAA /* AnnounceListCollectionViewCell.swift in Sources */,
-				3F59602D2CA13E8F00688FE3 /* TextFieldEnum.swift in Sources */,
+				3F59602D2CA13E8F00688FE3 /* TextFieldStateEnum.swift in Sources */,
 				3F54D9E62CE4D09700314B46 /* AllAnnounceListUseCase.swift in Sources */,
 				3FE4038D2CF859700078F36A /* StoreInfoView.swift in Sources */,
 				3FD4B8FC2CDA03C500308E08 /* DetailAnnouceHeaderCollectionViewCell.swift in Sources */,
@@ -1807,6 +1826,7 @@
 				3F1360112CFD93170043F765 /* AnalyticsEventLiterals.swift in Sources */,
 				3F54DA092CE4DEF700314B46 /* DetailAnnounceUseCase.swift in Sources */,
 				3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */,
+				3FFF99312D0ADD4300EEBB70 /* SerachResultType.swift in Sources */,
 				3F3A69372CE85764006334C3 /* SuccessSignUpViewModel.swift in Sources */,
 				3F1739852CC01CAB00DE8859 /* HomeViewController.swift in Sources */,
 				3FFCFEF32CE0D822009D07A6 /* MemberAPI.swift in Sources */,
@@ -1837,7 +1857,7 @@
 /* Begin XCBuildConfiguration section */
 		3F3992672C82C8E60045CF1E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F54D96A2CE10B7F00314B46 /* Config.xcconfig */;
+			baseConfigurationReference = 3FFF99342D27B62F00EEBB70 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1889,7 +1909,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Studing/Supporting Files/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1902,7 +1922,7 @@
 		};
 		3F3992682C82C8E60045CF1E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F54D96A2CE10B7F00314B46 /* Config.xcconfig */;
+			baseConfigurationReference = 3FFF99352D27B65400EEBB70 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1948,7 +1968,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Studing/Supporting Files/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -1960,7 +1980,7 @@
 		};
 		3F39926A2C82C8E60045CF1E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F54D96A2CE10B7F00314B46 /* Config.xcconfig */;
+			baseConfigurationReference = 3FFF99342D27B62F00EEBB70 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1999,7 +2019,7 @@
 		};
 		3F39926B2C82C8E60045CF1E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F54D96A2CE10B7F00314B46 /* Config.xcconfig */;
+			baseConfigurationReference = 3FFF99352D27B65400EEBB70 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2038,7 +2058,7 @@
 		};
 		3F3CFDCF2C9827D200DC9F9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F54D96A2CE10B7F00314B46 /* Config.xcconfig */;
+			baseConfigurationReference = 3FFF99342D27B62F00EEBB70 /* Debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -2058,7 +2078,7 @@
 		};
 		3F3CFDD02C9827D200DC9F9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F54D96A2CE10B7F00314B46 /* Config.xcconfig */;
+			baseConfigurationReference = 3FFF99352D27B65400EEBB70 /* Release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;

@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 전체 네비게이션 바에 적용
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
-
+        
         return true
     }
 
@@ -88,26 +88,21 @@ extension AppDelegate: MessagingDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
-    // Foreground 상태에서 알림 받았을 때
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-        let userInfo = notification.request.content.userInfo
-
-        print(userInfo)
-        
-        completionHandler([[.banner, .badge, .sound]])
-    }
-    
+//    // Foreground 상태에서 알림 받았을 때
+//    func userNotificationCenter(_ center: UNUserNotificationCenter,
+//                                willPresent notification: UNNotification,
+//                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        let userInfo = notification.request.content.userInfo
+//        decodeUserInfo(userInfo)
+//        completionHandler([[.banner, .badge, .sound]])
+//    }
+//    
     // 푸시메세지를 받았을 떄
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        
-        print(userInfo)
-        
+//        DeeplinkManager.shared.handlePushNotification(userInfo)
         completionHandler()
     }
 }
