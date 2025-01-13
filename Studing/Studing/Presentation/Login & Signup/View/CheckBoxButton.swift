@@ -32,6 +32,8 @@ enum CheckBoxState {
 
 final class CheckBoxButton: UIButton {
     
+    var onTap: ((CheckBoxState) -> Void)?
+    
     private let checkedImageView = UIImageView()
     private let backgroundView = UIView()
     
@@ -44,24 +46,14 @@ final class CheckBoxButton: UIButton {
     init(state: CheckBoxState = .unchecked) {
         self.checkBoxState = state
         super.init(frame: .zero)
+        
         setupButton()
+        setupAction()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-
-//    init() {
-//        super.init(frame: .zero)
-//        setupStyle()
-//        setupHierarchy()
-//        setupLayout()
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     func updateButtonState(_ isSeleted: Bool) {
         if isSeleted == false {
@@ -98,34 +90,14 @@ extension CheckBoxButton {
         
         self.configuration = config
     }
-//    func setupStyle() {
-//        backgroundView.do {
-//            $0.backgroundColor = .white
-//            $0.layer.borderWidth = 1
-//            $0.layer.borderColor = UIColor.black30.cgColor
-//            $0.layer.cornerRadius = 2
-//        }
-//        
-//        checkedImageView.do {
-//            $0.image = UIImage(systemName: "checkmark")
-//            $0.tintColor = .white
-//        }
-//    }
-//    
-//    func setupHierarchy() {
-//        addSubviews(backgroundView)
-//        backgroundView.addSubview(checkedImageView)
-//    }
-//    
-//    func setupLayout() {
-//        backgroundView.snp.makeConstraints {
-//            $0.edges.equalToSuperview()
-//            $0.width.equalTo(convertByWidthRatio(20))
-//            $0.height.equalTo(convertByHeightRatio(20))
-//        }
-//        
-//        checkedImageView.snp.makeConstraints {
-//            $0.center.equalToSuperview()
-//        }
-//    }
+    
+    private func setupAction() {
+        addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func buttonTapped() {
+        // 상태를 토글하고 이벤트 전달
+        checkBoxState = checkBoxState == .checked ? .unchecked : .checked
+        onTap?(checkBoxState)  // 현재 상태를 함께 전달
+    }
 }
