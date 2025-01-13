@@ -17,6 +17,7 @@ enum NavigationType {
     case detail
     case unRead
     case post
+    case firstServed
     case unReadToHome
     case myPage
     case leftButton
@@ -315,7 +316,7 @@ private extension CustomAnnouceNavigationController {
             applyUnReadStyle()
             applyDetailLayout()
             
-        case .post:
+        case .post, .firstServed:
             navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
@@ -368,7 +369,7 @@ private extension CustomAnnouceNavigationController {
     
     @objc private func backButtonTapped(_ sender: UIButton) {
         print("뒤로가기 버튼 동작")
-        if currentType == .post {
+        if currentType == .post || currentType == .firstServed {
             self.dismiss(animated: true)
         } else {
             if currentType == .unRead {
@@ -450,6 +451,8 @@ extension CustomAnnouceNavigationController {
             setNavigationTitle("Studing")
         case .post:
             setNavigationTitle("공지사항 작성")
+        case .firstServed:
+            setNavigationTitle("선착순 이벤트 등록")
         case .myPage:
             setNavigationTitle("마이페이지")
         case .unRead, .unReadToHome, .leftButton:

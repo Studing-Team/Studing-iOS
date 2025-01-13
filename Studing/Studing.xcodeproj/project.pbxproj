@@ -162,6 +162,18 @@
 		3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602E2CA1422100688FE3 /* UIStackView+.swift */; };
 		3F5F93512CED6BDE00B74BBB /* PostAnnounceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F93502CED6BDE00B74BBB /* PostAnnounceViewController.swift */; };
 		3F5F93532CED814C00B74BBB /* PostAnnounceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F93522CED814C00B74BBB /* PostAnnounceViewModel.swift */; };
+		3F6992D12D2FC2E900A3CF9F /* PersonContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992D02D2FC2E900A3CF9F /* PersonContentView.swift */; };
+		3F6992D62D30E49300A3CF9F /* PostModalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992D52D30E49300A3CF9F /* PostModalSectionView.swift */; };
+		3F6992D82D30E59F00A3CF9F /* PostModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992D72D30E59F00A3CF9F /* PostModalView.swift */; };
+		3F6992DA2D322E2600A3CF9F /* AnimationTapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992D92D322E2600A3CF9F /* AnimationTapGestureRecognizer.swift */; };
+		3F6992DC2D3265FE00A3CF9F /* TitleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992DB2D3265FE00A3CF9F /* TitleType.swift */; };
+		3F6992DE2D32667700A3CF9F /* PostType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992DD2D32667700A3CF9F /* PostType.swift */; };
+		3F6992E02D3266A700A3CF9F /* PeriodSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992DF2D3266A700A3CF9F /* PeriodSettingView.swift */; };
+		3F6992E42D3369F000A3CF9F /* BaseSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E32D3369F000A3CF9F /* BaseSheetViewController.swift */; };
+		3F6992E62D336A8D00A3CF9F /* SingleButtonSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E52D336A8D00A3CF9F /* SingleButtonSheetViewController.swift */; };
+		3F6992E82D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E72D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift */; };
+		3F6992EA2D33876800A3CF9F /* CalendarModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E92D33876800A3CF9F /* CalendarModalViewController.swift */; };
+		3F6992EC2D33971100A3CF9F /* TimePickerModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992EB2D33971100A3CF9F /* TimePickerModalViewController.swift */; };
 		3F6AB78C2CBE3C77006D1A29 /* DashedLineBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6AB78B2CBE3C77006D1A29 /* DashedLineBorderView.swift */; };
 		3F705EE02CF8CB820055C7EC /* ContentInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F705EDF2CF8CB820055C7EC /* ContentInfoView.swift */; };
 		3F705EE22CF9DE680055C7EC /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F705EE12CF9DE680055C7EC /* UIImage+.swift */; };
@@ -255,6 +267,8 @@
 		3FFCFEF12CE0D7F3009D07A6 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFCFEF02CE0D7F3009D07A6 /* APIEndpoint.swift */; };
 		3FFCFEF32CE0D822009D07A6 /* MemberAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFCFEF22CE0D822009D07A6 /* MemberAPI.swift */; };
 		3FFCFEF52CE0DF0A009D07A6 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFCFEF42CE0DF0A009D07A6 /* KeychainManager.swift */; };
+		3FFF99372D2E1EA700EEBB70 /* PeriodContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF99362D2E1EA700EEBB70 /* PeriodContentView.swift */; };
+		3FFF99392D2E201D00EEBB70 /* TitleSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF99382D2E201D00EEBB70 /* TitleSectionHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -424,6 +438,18 @@
 		3F59602E2CA1422100688FE3 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
 		3F5F93502CED6BDE00B74BBB /* PostAnnounceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAnnounceViewController.swift; sourceTree = "<group>"; };
 		3F5F93522CED814C00B74BBB /* PostAnnounceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAnnounceViewModel.swift; sourceTree = "<group>"; };
+		3F6992D02D2FC2E900A3CF9F /* PersonContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonContentView.swift; sourceTree = "<group>"; };
+		3F6992D52D30E49300A3CF9F /* PostModalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModalSectionView.swift; sourceTree = "<group>"; };
+		3F6992D72D30E59F00A3CF9F /* PostModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModalView.swift; sourceTree = "<group>"; };
+		3F6992D92D322E2600A3CF9F /* AnimationTapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationTapGestureRecognizer.swift; sourceTree = "<group>"; };
+		3F6992DB2D3265FE00A3CF9F /* TitleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleType.swift; sourceTree = "<group>"; };
+		3F6992DD2D32667700A3CF9F /* PostType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostType.swift; sourceTree = "<group>"; };
+		3F6992DF2D3266A700A3CF9F /* PeriodSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodSettingView.swift; sourceTree = "<group>"; };
+		3F6992E32D3369F000A3CF9F /* BaseSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSheetViewController.swift; sourceTree = "<group>"; };
+		3F6992E52D336A8D00A3CF9F /* SingleButtonSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonSheetViewController.swift; sourceTree = "<group>"; };
+		3F6992E72D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSelectTypeModalViewController.swift; sourceTree = "<group>"; };
+		3F6992E92D33876800A3CF9F /* CalendarModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModalViewController.swift; sourceTree = "<group>"; };
+		3F6992EB2D33971100A3CF9F /* TimePickerModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePickerModalViewController.swift; sourceTree = "<group>"; };
 		3F6AB78B2CBE3C77006D1A29 /* DashedLineBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashedLineBorderView.swift; sourceTree = "<group>"; };
 		3F705EDF2CF8CB820055C7EC /* ContentInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInfoView.swift; sourceTree = "<group>"; };
 		3F705EE12CF9DE680055C7EC /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
@@ -515,6 +541,8 @@
 		3FFCFEF02CE0D7F3009D07A6 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		3FFCFEF22CE0D822009D07A6 /* MemberAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberAPI.swift; sourceTree = "<group>"; };
 		3FFCFEF42CE0DF0A009D07A6 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		3FFF99362D2E1EA700EEBB70 /* PeriodContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodContentView.swift; sourceTree = "<group>"; };
+		3FFF99382D2E201D00EEBB70 /* TitleSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleSectionHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -641,6 +669,7 @@
 		3F25A35D2C96A825006E2715 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				3F6992D42D30E47C00A3CF9F /* Modal */,
 				3F25A35E2C96A85E006E2715 /* TitleTextFieldView.swift */,
 				3F162B832C9D987300DF2E1C /* LaunchScreenViewController.swift */,
 				3F5960292CA0EE5F00688FE3 /* CustomButton.swift */,
@@ -657,6 +686,7 @@
 				3F8D00532CEF0F2500083C22 /* CustomAlertViewController.swift */,
 				3FE4035D2CF633EF0078F36A /* ToastMessageView.swift */,
 				3F13600E2CFD8FC80043F765 /* AmplitudeManager.swift */,
+				3F6992D92D322E2600A3CF9F /* AnimationTapGestureRecognizer.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -727,6 +757,10 @@
 				3F1CE0432CEDDA8A00981EDF /* AnnounceTagButton.swift */,
 				3F8D00512CEED35500083C22 /* PageIndicatorView.swift */,
 				3F705EDF2CF8CB820055C7EC /* ContentInfoView.swift */,
+				3FFF99362D2E1EA700EEBB70 /* PeriodContentView.swift */,
+				3FFF99382D2E201D00EEBB70 /* TitleSectionHeaderView.swift */,
+				3F6992D02D2FC2E900A3CF9F /* PersonContentView.swift */,
+				3F6992DF2D3266A700A3CF9F /* PeriodSettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1153,6 +1187,20 @@
 			path = Enum;
 			sourceTree = "<group>";
 		};
+		3F6992D42D30E47C00A3CF9F /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+				3F6992D52D30E49300A3CF9F /* PostModalSectionView.swift */,
+				3F6992D72D30E59F00A3CF9F /* PostModalView.swift */,
+				3F6992E32D3369F000A3CF9F /* BaseSheetViewController.swift */,
+				3F6992E52D336A8D00A3CF9F /* SingleButtonSheetViewController.swift */,
+				3F6992E72D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift */,
+				3F6992E92D33876800A3CF9F /* CalendarModalViewController.swift */,
+				3F6992EB2D33971100A3CF9F /* TimePickerModalViewController.swift */,
+			);
+			path = Modal;
+			sourceTree = "<group>";
+		};
 		3F92633C2CE5CF4B00ADC1EB /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -1350,6 +1398,8 @@
 				3FE043302CC6654200B55EAA /* SectionType.swift */,
 				3FE043382CC7673E00B55EAA /* AnnounceType.swift */,
 				3F54D9DC2CE3BA6200314B46 /* AssociationType.swift */,
+				3F6992DB2D3265FE00A3CF9F /* TitleType.swift */,
+				3F6992DD2D32667700A3CF9F /* PostType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1525,11 +1575,12 @@
 			};
 			buildConfigurationList = 3F3992502C82C8E40045CF1E /* Build configuration list for PBXProject "Studing" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 3F39924C2C82C8E40045CF1E;
 			packageReferences = (
@@ -1589,7 +1640,9 @@
 				3F54D9A02CE1AFEA00314B46 /* BookmarkAnnounceEntity.swift in Sources */,
 				3F54D9C42CE269FD00314B46 /* SignUpStore.swift in Sources */,
 				3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */,
+				3F6992EC2D33971100A3CF9F /* TimePickerModalViewController.swift in Sources */,
 				3F3CFDB02C9733A100DC9F9A /* TermsOfServiceViewController.swift in Sources */,
+				3F6992D62D30E49300A3CF9F /* PostModalSectionView.swift in Sources */,
 				3F82C3312CAE93B700492EEE /* StudentIdViewController.swift in Sources */,
 				3FD4B9042CDA17FE00308E08 /* DetailAnnouceHeaderModel.swift in Sources */,
 				3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */,
@@ -1621,8 +1674,10 @@
 				3F31B3EF2CC23D3400EE92D6 /* BookmarkCollectionViewCell.swift in Sources */,
 				3FD4B8F72CD9E29500308E08 /* BookmarkListCollectionViewCell.swift in Sources */,
 				3FD4B91A2CDCCA6100308E08 /* ExpandedBenefitView.swift in Sources */,
+				3F6992DA2D322E2600A3CF9F /* AnimationTapGestureRecognizer.swift in Sources */,
 				3FF2E9122CF4E3D70098F0D2 /* WithDrawViewController.swift in Sources */,
 				3F54DA132CE4E03600314B46 /* CreateAnnounceUseCase.swift in Sources */,
+				3FFF99372D2E1EA700EEBB70 /* PeriodContentView.swift in Sources */,
 				3F54D9C92CE3650400314B46 /* HomeRepositoryProtocol.swift in Sources */,
 				3F1739782CC0117300DE8859 /* TabBarCoordinator.swift in Sources */,
 				3F54DA112CE4E00300314B46 /* DeleteBookmarkAnnounceUseCase.swift in Sources */,
@@ -1671,6 +1726,7 @@
 				3F1739722CBEB45F00DE8859 /* AuthWaitCheckView.swift in Sources */,
 				3F54D96E2CE1148F00314B46 /* HeaderType.swift in Sources */,
 				3F9263502CE6F6F400ADC1EB /* PartnerAPI.swift in Sources */,
+				3F6992EA2D33876800A3CF9F /* CalendarModalViewController.swift in Sources */,
 				3F39925D2C82C8E40045CF1E /* LoginViewController.swift in Sources */,
 				3FD4B9062CDA180C00308E08 /* DetailAnnouceImageModel.swift in Sources */,
 				3FE0432E2CC6631100B55EAA /* MyPageType.swift in Sources */,
@@ -1692,6 +1748,7 @@
 				3F92633E2CE5CF5B00ADC1EB /* NotificationsAPI.swift in Sources */,
 				3F1F1F7E2CA3D902006DFD76 /* SizeLiterals.swift in Sources */,
 				3F54DA162CE4F50900314B46 /* AllAnnounceEntity.swift in Sources */,
+				3F6992DE2D32667700A3CF9F /* PostType.swift in Sources */,
 				3F3A69352CE85533006334C3 /* UserAuthEnum.swift in Sources */,
 				3F5F93532CED814C00B74BBB /* PostAnnounceViewModel.swift in Sources */,
 				3FD4B91C2CDCD5BB00308E08 /* BenefitListCollectionViewCell.swift in Sources */,
@@ -1706,10 +1763,12 @@
 				3F54D9772CE190ED00314B46 /* NoticesAPI.swift in Sources */,
 				3F54D97A2CE196E000314B46 /* LoginRequestDTO.swift in Sources */,
 				3F54D9AB2CE1C23D00314B46 /* SignupUseCase.swift in Sources */,
+				3F6992DC2D3265FE00A3CF9F /* TitleType.swift in Sources */,
 				3F54DA052CE4DE3800314B46 /* CheckAnnounceUseCase.swift in Sources */,
 				3F3CFDAE2C97326000DC9F9A /* MajorInfoViewController.swift in Sources */,
 				3F54D9D12CE36CAE00314B46 /* UnreadAssociationUseCase.swift in Sources */,
 				3F25A3642C96D001006E2715 /* AppCoordinator.swift in Sources */,
+				3F6992E42D3369F000A3CF9F /* BaseSheetViewController.swift in Sources */,
 				3F54D9F92CE4D77D00314B46 /* UnreadAllAnnounceListResponseDTO.swift in Sources */,
 				3F9263552CE74FD800ADC1EB /* PartnerInfoUseCase.swift in Sources */,
 				3F17398C2CC0861D00DE8859 /* CustomTabBarViewController.swift in Sources */,
@@ -1738,6 +1797,7 @@
 				3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */,
 				3F82C33D2CAE94E000492EEE /* MajorInfoModel.swift in Sources */,
 				3F54D9EF2CE4D3E900314B46 /* AllAssociationAnnounceRequestDTO.swift in Sources */,
+				3F6992D12D2FC2E900A3CF9F /* PersonContentView.swift in Sources */,
 				3FE4038B2CF858230078F36A /* StoreMapViewController.swift in Sources */,
 				3F31B3E42CC1635300EE92D6 /* AnnounceModel.swift in Sources */,
 				3F54D9A62CE1BEAE00314B46 /* CheckDuplicateIdUseCase.swift in Sources */,
@@ -1791,12 +1851,14 @@
 				3FB2034B2CC5C41A003F381D /* AssociationAnnounceModel.swift in Sources */,
 				3FE403622CF715480078F36A /* ReSubmitUseCase.swift in Sources */,
 				3F54D98C2CE19C2A00314B46 /* UniversityLogoResponseDTO.swift in Sources */,
+				3F6992E62D336A8D00A3CF9F /* SingleButtonSheetViewController.swift in Sources */,
 				3FE042FA2CC5D38F00B55EAA /* MyInfoCollectionViewCell.swift in Sources */,
 				3FF2E91A2CF5AD230098F0D2 /* UnRegisteredAssociationCollectionViewCell.swift in Sources */,
 				3F54D9EC2CE4D2AB00314B46 /* AllAnnounceListResponseDTO.swift in Sources */,
 				3F25A3712C96D4D9006E2715 /* UserInfoSignUpViewController.swift in Sources */,
 				3F3CFDBE2C97C47100DC9F9A /* UserInfo.swift in Sources */,
 				3F1739742CBF571F00DE8859 /* AuthWaitStateEnum.swift in Sources */,
+				3F6992D82D30E59F00A3CF9F /* PostModalView.swift in Sources */,
 				3FD4B9082CDA18CE00308E08 /* DetailAnnouceContentModel.swift in Sources */,
 				3F1F1F782CA27720006DFD76 /* StepCountView.swift in Sources */,
 				3F54DA072CE4DEA000314B46 /* UnreadAllAnnounceUseCase.swift in Sources */,
@@ -1810,9 +1872,12 @@
 				3F3A69372CE85764006334C3 /* SuccessSignUpViewModel.swift in Sources */,
 				3F1739852CC01CAB00DE8859 /* HomeViewController.swift in Sources */,
 				3FFCFEF32CE0D822009D07A6 /* MemberAPI.swift in Sources */,
+				3F6992E82D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift in Sources */,
 				3FD4B90D2CDB907800308E08 /* CustomSearchBarView.swift in Sources */,
+				3FFF99392D2E201D00EEBB70 /* TitleSectionHeaderView.swift in Sources */,
 				3F17397C2CC0139000DE8859 /* HomeCoordinator.swift in Sources */,
 				3FE042F82CC5CF9400B55EAA /* MypageViewModel.swift in Sources */,
+				3F6992E02D3266A700A3CF9F /* PeriodSettingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

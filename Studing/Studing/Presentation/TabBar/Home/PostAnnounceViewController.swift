@@ -14,6 +14,8 @@ import Then
 
 final class PostAnnounceViewController: UIViewController {
     
+    private let selectedDateSubject = PassthroughSubject<DateComponents, Never>()
+    
     // MARK: - Properties
     
     // 선택된 이미지의 identifier를 저장할 배열 추가
@@ -28,8 +30,12 @@ final class PostAnnounceViewController: UIViewController {
     
     // 높이 제약조건을 저장할 프로퍼티
     private var textViewHeightConstraint: Constraint?
+    
+    private var type: PostType
 
     // MARK: - UI Properties
+    
+    private let dateView = UICalendarView()
     
     private let scrollView = UIScrollView()
     private let contentStackView = UIStackView()
@@ -52,6 +58,14 @@ final class PostAnnounceViewController: UIViewController {
     private let announceTagView = UIButton()
     private let eventTagView = UIButton()
     
+    private let periodSectionView = UIStackView()
+    private var periodViewHeader: TitleSectionHeaderView
+    private let periodContentView = PeriodContentView()
+    
+    private let personSectionView = UIStackView()
+    private let personViewHeader = TitleSectionHeaderView(type: .personNumber)
+    private let personContentView = PersonContentView()
+    
     private let selectPhotoButton = UIButton()
     
     private let announceButton = AnnounceTagButton(buttonStyle: .announce)
@@ -69,9 +83,13 @@ final class PostAnnounceViewController: UIViewController {
     // MARK: - init
     
     init(postAnnounceViewModel: PostAnnounceViewModel,
-         coordinator: HomeCoordinator) {
+         coordinator: HomeCoordinator,
+         type: PostType
+    ) {
         self.postAnnounceViewModel = postAnnounceViewModel
         self.coordinator = coordinator
+        self.type = type
+        self.periodViewHeader = TitleSectionHeaderView(type: .period(type: type))
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -97,6 +115,7 @@ final class PostAnnounceViewController: UIViewController {
         setupLayout()
         setupDelegate()
         bindViewModel()
+        setupBindings()
         
         NotificationCenter.default.addObserver(
             self,
@@ -178,13 +197,31 @@ private extension PostAnnounceViewController {
             }
             .store(in: &cancellables)
     }
+    
+    func setupBindings() {
+        periodViewHeader.onCheckBoxStateChanged = { [weak self] state in
+            switch state {
+            case .checked:
+                self?.showSomething()
+            case .unchecked:
+                self?.hideSomething()
+            }
+        }
+    }
+    
+    func showSomething() {
+        self.periodContentView.isHidden = false
+    }
+    
+    func hideSomething() {
+        self.periodContentView.isHidden = true
+    }
 }
 
 // MARK: - Private Extensions
 
 private extension PostAnnounceViewController {
     func setupStyle() {
-        
         scrollView.do {
             $0.showsVerticalScrollIndicator = false
             $0.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
@@ -192,6 +229,7 @@ private extension PostAnnounceViewController {
         
         contentStackView.do {
             $0.axis = .vertical
+            $0.distribution = .fill
             $0.spacing = 20
         }
         
@@ -261,6 +299,18 @@ private extension PostAnnounceViewController {
             $0.alignment = .leading
         }
         
+        periodSectionView.do {
+            $0.axis = .vertical
+            $0.spacing = 12
+            $0.distribution = .fill
+        }
+        
+        personSectionView.do {
+            $0.axis = .vertical
+            $0.spacing = 10
+            $0.distribution = .fill
+        }
+        
         [textFieldHeader, textViewHeader, tagViewHeader].forEach {
             $0.font = .interSubtitle2()
             $0.textColor = .black40
@@ -295,6 +345,10 @@ private extension PostAnnounceViewController {
             $0.textColor = .black30
         }
         
+        periodContentView.do {
+            $0.isHidden = type == .firstServed ? false : true
+        }
+        
         announceButton.addTarget(self, action: #selector(tagButtonTapped(_:)), for: .touchUpInside)
         eventButton.addTarget(self, action: #selector(tagButtonTapped(_:)), for: .touchUpInside)
     }
@@ -306,7 +360,10 @@ private extension PostAnnounceViewController {
         contentStackView.addArrangedSubviews(imageScrollView,
                                              titleSectionView,
                                              textSectionView,
-                                             tagSectionView)
+                                             tagSectionView,
+                                             periodSectionView,
+                                             personSectionView
+        )
         
         imageScrollView.addSubview(imageStackView)
         
@@ -317,6 +374,12 @@ private extension PostAnnounceViewController {
         textSectionView.addArrangedSubviews(textViewHeader, contentTextView)
         
         tagSectionView.addArrangedSubviews(tagViewHeader, tagStackView)
+        
+        periodSectionView.addArrangedSubviews(periodViewHeader, periodContentView)
+        
+        if type == .firstServed {
+            personSectionView.addArrangedSubviews(personViewHeader, personContentView)
+        }
         
         contentTextView.addSubview(placeholderLabel)
         tagStackView.addArrangedSubviews(announceButton, eventButton)
@@ -330,7 +393,7 @@ private extension PostAnnounceViewController {
         }
         
         contentStackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
             $0.width.equalToSuperview()
         }
         
@@ -377,14 +440,19 @@ private extension PostAnnounceViewController {
             $0.width.equalTo(69)
             $0.height.equalTo(28)
         }
-
+        
         contentTextView.snp.makeConstraints {
             $0.height.greaterThanOrEqualTo(minimumTextViewHeight)
         }
+
+        periodContentView.snp.makeConstraints {
+            $0.height.equalTo(84)
+        }
         
-        tagStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-            $0.width.equalTo(56 + 8 + 69)
+        if type == .firstServed {
+            personContentView.snp.makeConstraints {
+                $0.height.equalTo(36)
+            }
         }
     }
     
@@ -398,7 +466,7 @@ private extension PostAnnounceViewController {
     }
     
     func setupDelegate() {
-
+        periodContentView.delegate = self
     }
     
     func presentPHPicker() {
@@ -551,5 +619,13 @@ extension PostAnnounceViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         placeholderLabel.isHidden = !textView.text.isEmpty
+    }
+}
+
+extension PostAnnounceViewController: ContentViewDelegate {
+    func contentView(_ contentView: UIView, didTapAction value: Any) {
+        if let type = value as? PeriodType {
+            coordinator?.presentCalendarModal(type: type)
+        }
     }
 }

@@ -12,7 +12,12 @@ enum ButtonState {
     case deactivate
 }
 
-enum ButtonStyle {
+enum CloseType {
+    case gray
+    case blue
+}
+
+enum ButtonStyle: Equatable {
     case next
     case login
     case registerUniverstiy
@@ -26,6 +31,11 @@ enum ButtonStyle {
     case showStudingHome
     case postAnnounce
     case home
+    case close(type: CloseType)
+    case startDay
+    case endDay
+    case startTime
+    case endTime
     
     var title: String {
         switch self {
@@ -53,17 +63,33 @@ enum ButtonStyle {
             return "등록하기"
         case .home:
             return "홈으로 돌아가기"
+        case .close:
+            return "닫기"
+        case .startDay:
+            return "시작 날짜 선택"
+        case .endDay:
+            return "종료 날짜 선택"
+        case .startTime:
+            return "시작 시간 선택"
+        case .endTime:
+            return "종료 시간 선택"
         }
     }
     
     var enableBackground: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home:
+        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home, .startDay, .endDay, .startTime, .endTime:
             return .primary50
         case .showStuding:
             return .white
         case .showStudingHome:
             return .white.withAlphaComponent(0.1)
+        case .close(let type):
+            if type == .blue {
+                return .primary50
+            } else {
+                return .black20
+            }
         }
     }
     
@@ -82,7 +108,7 @@ enum ButtonStyle {
     
     var foregroundColor: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home:
+        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home, .close, .startDay, .endDay, .startTime, .endTime:
             return .white
             
         case .showStuding:

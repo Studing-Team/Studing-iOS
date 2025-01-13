@@ -251,12 +251,6 @@ private extension HomeViewController {
             }
             .store(in: &cancellables)
         
-        output.postButtonTap
-            .sink { [weak self] _ in
-                self?.coordinator?.presentPostAnnounce()
-            }
-            .store(in: &cancellables)
-        
         homeViewModel.sectionsData
             .sink { [weak self] sectionTypes in
                 // 섹션 타입이 업데이트되면 스냅샷 업데이트
@@ -311,7 +305,8 @@ private extension HomeViewController {
             setupRefreshControl()
             setupDelegate()
             bindViewModel()
-        
+            setupAnimation()
+            
             Task {
                 await fetchInitialData()
             }
@@ -1026,6 +1021,31 @@ private extension HomeViewController {
                 $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(16)
             }
         }
+    }
+    
+    func setupAnimation() {
+        // TouchDown: 눌렀을 때
+        self.postButton.addTarget(self, action: #selector(animateTouchDown), for: .touchDown)
+        
+        // TouchUp, TouchCancel: 손을 뗐을 때
+        self.postButton.addTarget(self, action: #selector(animateTouchUp), for: [.touchUpInside, .touchCancel, .touchDragExit])
+    }
+    
+    @objc private func animateTouchDown() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.postButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            self.postButton.backgroundColor = .primary50.darken(by: 0.15)
+        })
+    }
+    
+    @objc private func animateTouchUp() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.postButton.transform = .identity
+            self.postButton.backgroundColor = .primary50
+            
+        }, completion: { _ in
+            self.coordinator?.presentPostSection()
+        })
     }
     
     func setupRefreshControl() {

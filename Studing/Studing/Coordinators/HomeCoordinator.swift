@@ -145,18 +145,77 @@ final class HomeCoordinator: Coordinator {
         
         navigationController.pushViewController(detailAnnouceVC, animated: true)
     }
-    
-    func presentPostAnnounce() {
-        
+
+    func presentPostAnnounce(type: PostType) {
         let postAnnounceVM = PostAnnounceViewModel(createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()))
-        let postAnnounceVC = PostAnnounceViewController(postAnnounceViewModel: postAnnounceVM, coordinator: self)
+        let postAnnounceVC = PostAnnounceViewController(postAnnounceViewModel: postAnnounceVM, coordinator: self, type: type)
         
         // 새로운 CustomAnnouceNavigationController 생성
-            let newNav = CustomAnnouceNavigationController(rootViewController: postAnnounceVC)
-            newNav.setNavigationType(.post)
+        let newNav = CustomAnnouceNavigationController(rootViewController: postAnnounceVC)
+        newNav.setNavigationType(type == .announce ? .post : .firstServed)
         newNav.modalPresentationStyle = .overFullScreen
         
         navigationController.present(newNav, animated: true)
+    }
+    
+    func presentPostSection() {
+        let postSelectTypeModalVC = PostSelectTypeModalViewController(
+            coordinator: self,
+            firstSectionTap: {
+                self.presentPostAnnounce(type: .firstServed)
+            },
+            announceSectionTap: {
+                self.presentPostAnnounce(type: .announce)
+            }
+        )
+
+        if let sheet = postSelectTypeModalVC.sheetPresentationController {
+            sheet.detents = [
+                .custom { _ in
+                    return 283 * (UIScreen.main.bounds.height / 812)
+                }
+            ]
+            
+            postSelectTypeModalVC.view.backgroundColor = .clear
+            postSelectTypeModalVC.modalPresentationStyle = .pageSheet
+        }
+        navigationController.present(postSelectTypeModalVC, animated: true)
+    }
+    
+    func presentCalendarModal(type: PeriodType) {
+        guard let topMostVC = navigationController.presentedViewController else { return }
+        
+        var calendarModalVC: UIViewController
+        
+        switch type {
+        case .startDay:
+            calendarModalVC = CalendarModalViewController(type: .start)
+            
+        case .startTime:
+            calendarModalVC = TimePickerModalViewController(type: .start)
+            
+        case .endDay:
+            calendarModalVC = CalendarModalViewController(type: .end)
+            
+        case .endTime:
+            calendarModalVC = TimePickerModalViewController(type: .end)
+        }
+        
+        if let sheet = calendarModalVC.sheetPresentationController {
+            sheet.detents = [
+                .custom { _ in
+                    switch type {
+                    case .startDay, .endDay:
+                        return 411 * (UIScreen.main.bounds.height / 812)
+                    case .startTime, .endTime:
+                        return 300 * (UIScreen.main.bounds.height / 812)
+                    }
+                }
+            ]
+        }
+        
+        calendarModalVC.modalPresentationStyle = .pageSheet
+        topMostVC.present(calendarModalVC, animated: true)
     }
     
     func pushToReSubmit() {
