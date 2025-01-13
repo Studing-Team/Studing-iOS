@@ -26,7 +26,7 @@ final class HomeCoordinator: Coordinator {
 
     func start() {
         
-        DeepLinkNavigator.shared.setActiveCoordinator(self)
+//        DeepLinkNavigator.shared.setActiveCoordinator(self)
         
         let userAuth = KeychainManager.shared.loadData(key: .userAuthState, type: String.self)
             .flatMap { UserAuth(rawValue: $0) } ?? .unUser
@@ -56,6 +56,8 @@ final class HomeCoordinator: Coordinator {
         }
         
         navigationController.pushViewController(homeVC, animated: true)
+        
+        DeepLinkNavigator.shared.setActiveCoordinator(self)
     }
     
     func pushAnnouceList(_ associationName: String) {

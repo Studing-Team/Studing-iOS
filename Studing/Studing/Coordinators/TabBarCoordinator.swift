@@ -34,14 +34,14 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
     func start() {
         print("TabBarCoordinator 시작")
         
-        DeepLinkNavigator.shared.setActiveCoordinator(self)
-        
         let pages: [TabBarItemType] = [.home, .store, .mypage]
         
         let viewControllers = pages.map { createTabController($0) }
                 
         tabBarController.viewControllers = viewControllers
         navigationController.setViewControllers([tabBarController], animated: false)
+        
+        DeepLinkNavigator.shared.setActiveCoordinator(self)
     }
 
     func createTabController(_ item: TabBarItemType) -> UINavigationController {

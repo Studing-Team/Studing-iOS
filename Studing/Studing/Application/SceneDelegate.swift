@@ -92,9 +92,21 @@ extension SceneDelegate {
 }
 
 extension SceneDelegate: UNUserNotificationCenterDelegate {
+    // Foreground 상태에서 알림 받았을 때 - 알림 표시만 설정
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                              willPresent notification: UNNotification,
+                              withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        completionHandler([[.banner, .badge, .sound]])
+    }
+
+    // 알림 탭했을 때의 실제 동작 처리
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        print("SceneDelegate 푸시 메세지를 받았습니다.")
+        
         let userInfo = response.notification.request.content.userInfo
         decodeUserInfo(userInfo)
 
