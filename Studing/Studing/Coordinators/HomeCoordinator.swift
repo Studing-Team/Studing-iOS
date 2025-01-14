@@ -19,8 +19,14 @@ final class HomeCoordinator: Coordinator {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
     }
+    
+    deinit {
+        DeepLinkNavigator.shared.removeCoordinator(self)
+    }
 
     func start() {
+        
+//        DeepLinkNavigator.shared.setActiveCoordinator(self)
         
         let userAuth = KeychainManager.shared.loadData(key: .userAuthState, type: String.self)
             .flatMap { UserAuth(rawValue: $0) } ?? .unUser
@@ -50,6 +56,8 @@ final class HomeCoordinator: Coordinator {
         }
         
         navigationController.pushViewController(homeVC, animated: true)
+        
+        DeepLinkNavigator.shared.setActiveCoordinator(self)
     }
     
     func pushAnnouceList(_ associationName: String) {
@@ -241,5 +249,22 @@ extension HomeCoordinator: CustomSignUpNavigationControllerDelegate {
                 self.removeChildCoordinator(signUpCoordinator)
             }
         }
+    }
+}
+
+extension HomeCoordinator: DeepLinkCoordinator {
+    func navigate(to destination: DeepLinkDestination, data: Any?) -> Bool {
+        switch destination {
+        case .notice(let id):
+            print("🚀 Deep Link 선택: \(String(describing: id)) 공지사항")
+            pushDetailAnnouce(type: .announce, announceId: id)
+            return true
+        default:
+            return false
+        }
+    }
+    
+    func coordinatorType() -> CoordinatorType {
+        return .home
     }
 }

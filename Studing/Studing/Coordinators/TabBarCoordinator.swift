@@ -19,21 +19,29 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
     var navigationController: NavigationControllerType
     var childCoordinators: [any Coordinator] = []
     
-    init(navigationController: UINavigationController, parentCoordinator: (any Coordinator)?) {
+    init(navigationController: UINavigationController,
+        parentCoordinator: (any Coordinator)?)
+    {
         self.navigationController = navigationController
         self.tabBarController = CustomTabBarViewController()
         self.parentCoordinator = parentCoordinator
     }
+    
+    deinit {
+        DeepLinkNavigator.shared.removeCoordinator(self)
+    }
   
     func start() {
         print("TabBarCoordinator 시작")
+        
         let pages: [TabBarItemType] = [.home, .store, .mypage]
         
         let viewControllers = pages.map { createTabController($0) }
                 
         tabBarController.viewControllers = viewControllers
         navigationController.setViewControllers([tabBarController], animated: false)
-
+        
+        DeepLinkNavigator.shared.setActiveCoordinator(self)
     }
 
     func createTabController(_ item: TabBarItemType) -> UINavigationController {
@@ -65,5 +73,21 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
     func cleanup() {
         // 모든 자식 coordinator 제거
         childCoordinators.removeAll()
+    }
+}
+
+extension TabBarCoordinator: DeepLinkCoordinator {
+    func navigate(to destination: DeepLinkDestination, data: Any?) -> Bool {
+        switch destination {
+        case .notice(let id):
+            tabBarController.selectedIndex = TabBarItemType.home.rawValue
+            return true
+        default:
+            return false
+        }
+    }
+    
+    func coordinatorType() -> CoordinatorType {
+        return .tabbar
     }
 }

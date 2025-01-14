@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,6 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        UNUserNotificationCenter.current().delegate = self
+        
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let navigationController = CustomSignUpNavigationController()
@@ -25,6 +28,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.overrideUserInterfaceStyle = .light
         self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
+        
+        if let userInfo = connectionOptions.notificationResponse?.notification.request.content.userInfo {
+            if let destination = DeepLinkDestination(pushPayload: userInfo) {
+                DeepLinkNavigator.shared.handle(destination: destination)
+            }
+        }
         
         appCoordinator?.start()
     }
@@ -71,13 +80,51 @@ extension SceneDelegate {
             let entity = response.toEntity()
             
             NotificationCenter.default.post(
-                            name: .userAuthDidUpdate,
-                            object: nil,
-                            userInfo: ["userAuth": entity.role] // 필요한 데이터를 dictionary로 전달
-                        )
+                name: .userAuthDidUpdate,
+                object: nil,
+                userInfo: ["userAuth": entity.role] // 필요한 데이터를 dictionary로 전달
+            )
             
         case .failure:
             break
+        }
+    }
+}
+
+extension SceneDelegate: UNUserNotificationCenterDelegate {
+    // Foreground 상태에서 알림 받았을 때 - 알림 표시만 설정
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                              willPresent notification: UNNotification,
+                              withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        completionHandler([[.banner, .badge, .sound]])
+    }
+
+    // 알림 탭했을 때의 실제 동작 처리
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        print("SceneDelegate 푸시 메세지를 받았습니다.")
+        
+        let userInfo = response.notification.request.content.userInfo
+        decodeUserInfo(userInfo)
+
+        if let destination = DeepLinkDestination(pushPayload: userInfo) {
+            DeepLinkNavigator.shared.handle(destination: destination)
+        }
+
+        completionHandler()
+    }
+    
+    func decodeUserInfo(_ userInfo: [AnyHashable: Any]) {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: userInfo, options: [])
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Decoded JSON: \(jsonString)")
+            }
+        } catch {
+            print("Error decoding userInfo: \(error)")
         }
     }
 }

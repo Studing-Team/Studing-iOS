@@ -10,29 +10,6 @@ import UIKit
 import SnapKit
 import Then
 
-enum SerachResultType {
-    case university
-    case major
-    
-    var title: String {
-        switch self {
-        case .university:
-            return StringLiterals.Title.noExistsSerachUniversity
-        case .major:
-            return StringLiterals.Title.noExistsSerachMajor
-        }
-    }
-    
-    var subTitle: String {
-        switch self {
-        case .university:
-            return StringLiterals.SubTitle.noExistsSerachUniversity
-        case .major:
-            return StringLiterals.SubTitle.noExistsSerachMajor
-        }
-    }
-}
-
 final class NoExistsSearchResultView: UIView {
     
     // MARK: - Properties
