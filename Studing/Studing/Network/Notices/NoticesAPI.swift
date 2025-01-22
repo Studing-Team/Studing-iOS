@@ -19,6 +19,8 @@ enum NoticesAPI {
     case postBookmarkAnnouce(noticeId: Int)
     case deleteBookmarkAnnouce(noticeId: Int)
     case postCreateAnnouce(CreateAnnounceRequestDTO)
+    case editPostAnnounce(noticeId: Int, CreateAnnounceRequestDTO)
+    case deletePostAnnounce(noticeId: Int)
 }
 
 extension NoticesAPI: APIEndpoint {
@@ -46,6 +48,8 @@ extension NoticesAPI: APIEndpoint {
             return basePath.rawValue + "/save/\(noticeId)"
         case .postCreateAnnouce:
             return basePath.rawValue + "/create"
+        case .editPostAnnounce(let noticeId, _), .deletePostAnnounce(let noticeId):
+            return basePath.rawValue + "/\(noticeId)"
         }
     }
     
@@ -55,8 +59,10 @@ extension NoticesAPI: APIEndpoint {
             return .get
         case .postAllAssociationAnnounce, .postBookmarkAssociationAnnounce, .postCheckAnnouce, .postUnreadAllAnnouce, .postLikeAnnouce, .postBookmarkAnnouce, .postCreateAnnouce:
             return .post
-        case .deleteLikeAnnouce, .deleteBookmarkAnnouce:
+        case .deleteLikeAnnouce, .deleteBookmarkAnnouce, .deletePostAnnounce:
             return .delete
+        case .editPostAnnounce:
+            return .put
         }
     }
     
@@ -66,7 +72,7 @@ extension NoticesAPI: APIEndpoint {
     
     var requestBodyType: RequestBodyType {
         switch self {
-        case .postCreateAnnouce:
+        case .postCreateAnnouce, .editPostAnnounce:
             return .formData
         default:
             return .json
@@ -82,6 +88,8 @@ extension NoticesAPI: APIEndpoint {
         case .postUnreadAllAnnouce(let dto):
             return dto
         case .postCreateAnnouce(let dto):
+            return dto
+        case .editPostAnnounce(_, let dto):
             return dto
         default:
             return nil

@@ -52,5 +52,11 @@ final class NoticesRepositoryImpl: NoticesRepository {
         return await NetworkManager.shared.request(NoticesAPI.postCreateAnnouce(dto))
     }
     
+    func editPostAnnounce(noticeId: Int, dto: CreateAnnounceRequestDTO) async -> Result<EmptyResponse, NetworkError> {
+        return await NetworkManager.shared.request(NoticesAPI.editPostAnnounce(noticeId: noticeId, dto))
+    }
     
+    func deletePostAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError> {
+        return await NetworkManager.shared.request(NoticesAPI.deletePostAnnounce(noticeId: noticeId))
+    }
 }
