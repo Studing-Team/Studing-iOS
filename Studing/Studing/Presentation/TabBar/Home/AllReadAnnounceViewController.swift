@@ -51,7 +51,7 @@ final class AllReadAnnounceViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.setNavigationType(.unReadToHome)
 //            customNavController.interactivePopGestureRecognizer?.isEnabled = false
         }

@@ -117,7 +117,7 @@ final class AnnounceListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.setNavigationType(type == .association ? .announce : .bookmark)
         }
         
