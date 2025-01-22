@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "editMenu.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
