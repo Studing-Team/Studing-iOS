@@ -92,6 +92,7 @@ final class CustomAlertViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .black.withAlphaComponent(0.65)
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cancelAction)))
         
         setupStyle()
         setupHierarchy()
@@ -125,6 +126,7 @@ private extension CustomAlertViewController {
         
         mainTitleLabel.do {
             $0.text = mainTitle
+            $0.numberOfLines = 0
             $0.textColor = .black50
             $0.font = .interSubtitle1()
             $0.textAlignment = .center
@@ -183,13 +185,12 @@ private extension CustomAlertViewController {
         alertBackgroundView.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(38)
-            $0.height.equalTo(175)
         }
         
         titleStackView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(20)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(70)
         }
         
         bottomStackView.snp.makeConstraints {
@@ -225,7 +226,7 @@ private extension CustomAlertViewController {
         }
     }
     
-    func cancelAction() {
+    @objc func cancelAction() {
         dismiss(animated: false)
     }
 }
