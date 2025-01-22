@@ -25,9 +25,6 @@ final class HomeCoordinator: Coordinator {
     }
 
     func start() {
-        
-//        DeepLinkNavigator.shared.setActiveCoordinator(self)
-        
         let userAuth = KeychainManager.shared.loadData(key: .userAuthState, type: String.self)
             .flatMap { UserAuth(rawValue: $0) } ?? .unUser
         
@@ -51,7 +48,7 @@ final class HomeCoordinator: Coordinator {
             homeVC.hidesBottomBarWhenPushed = true
         }
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.home)
         }
         
@@ -77,7 +74,7 @@ final class HomeCoordinator: Coordinator {
         
         annouceListVC.hidesBottomBarWhenPushed = true
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.announce)
         }
         
@@ -101,7 +98,7 @@ final class HomeCoordinator: Coordinator {
         
         annouceListVC.hidesBottomBarWhenPushed = true
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.announce)
             customNav.setNavigationTitle("저장한 공지사항을 확인해요")
         }
@@ -140,31 +137,52 @@ final class HomeCoordinator: Coordinator {
         
         detailAnnouceVC.hidesBottomBarWhenPushed = true
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             switch type {
             case .announce, .bookmarkAnnounce:
-                customNav.setNavigationType(.detail)
+                customNav.setNavigationType(.detail(isAuthor: false))
                 
             case .unreadAnnounce:
-                customNav.setNavigationType(.unRead)
-                
+                customNav.setNavigationType(.unRead(isAuthor: false))
             }
         }
         
         navigationController.pushViewController(detailAnnouceVC, animated: true)
     }
     
-    func presentPostAnnounce() {
+    func presentPostAnnounce(type: PostType, noticeId: Int? = nil, content: EditAnnounceContent? = nil) {
         
-        let postAnnounceVM = PostAnnounceViewModel(createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()))
-        let postAnnounceVC = PostAnnounceViewController(postAnnounceViewModel: postAnnounceVM, coordinator: self)
+        var postAnnounceVM: PostAnnounceViewModel
+        
+        switch type {
+        case .create:
+            postAnnounceVM =  PostAnnounceViewModel(
+                createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()),
+                type: .create
+            )
+        case .edit:
+            postAnnounceVM =  PostAnnounceViewModel(
+                editAnnounceUseCase: EditPostAnnounceUseCase(repository: NoticesRepositoryImpl()),
+                type: .edit
+            )
+        }
+        
+        let postAnnounceVC = PostAnnounceViewController(
+            type: type,
+            postAnnounceViewModel: postAnnounceVM,
+            coordinator: self
+        )
         
         // 새로운 CustomAnnouceNavigationController 생성
-            let newNav = CustomAnnouceNavigationController(rootViewController: postAnnounceVC)
-            newNav.setNavigationType(.post)
+        let newNav = CustomAnnounceNavigationController(rootViewController: postAnnounceVC)
+        newNav.setNavigationType(type == .create ? .post : .editPost)
         newNav.modalPresentationStyle = .overFullScreen
         
         navigationController.present(newNav, animated: true)
+        
+        if let content, let noticeId {
+            postAnnounceVM.editContent(noticeId: noticeId, content: content)
+        }
     }
     
     func pushToReSubmit() {
