@@ -26,12 +26,17 @@ final class DetailAnnouceViewModel: BaseViewModel {
     }
     
     private var detailAnnounceType: DetailAnnounceType
+    var announceContent: DetailAnnounceResponseDTO?
+    private let errorSubject = PassthroughSubject<NetworkError, Never>()
+    private var authorToContentSubject = PassthroughSubject<Bool, Never>()
     
     // MARK: - Input
     
     struct Input {
+        let viewLifeCycleEventAction: AnyPublisher<ViewLifeCycleEvent, Never>
         let likeButtonTap: AnyPublisher<Void, Never>
         let bookmarkButtonTap: AnyPublisher<Void, Never>
+        let deleteButtonTap: AnyPublisher<Void, Never>
         let nextButtonTap: AnyPublisher<Void, Never>
         let currentPageControlCount : AnyPublisher<Int, Never>
     }
@@ -39,11 +44,14 @@ final class DetailAnnouceViewModel: BaseViewModel {
     // MARK: - Output
     
     struct Output {
+        let viewLifeCycleEventResult: AnyPublisher<Bool, NetworkError>
         let isFavorite: AnyPublisher<Bool, Never>
         let isBookmark: AnyPublisher<Bool, Never>
         let bookmarkButtonResult: AnyPublisher<Bool, Never>
         let nextButtonResult: AnyPublisher<Result<Bool, NetworkError>, Never>
         let currentPageControlCountResult: AnyPublisher<Int, Never>
+        let deleteResult: AnyPublisher<Bool, NetworkError>
+        let authorResult: AnyPublisher<Bool, Never>
     }
     
     // MARK: - Private properties
@@ -64,6 +72,9 @@ final class DetailAnnouceViewModel: BaseViewModel {
     private let deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase
     private let checkAnnounceUseCase: CheckAnnounceUseCase
     
+    private let editPostAnnounceUseCase: EditPostAnnounceUseCase?
+    private let deletePostAnnounceUseCase: DeletePostAnnounceUseCase?
+    
     // MARK: - init
     
     init(type: DetailAnnounceType,
@@ -76,7 +87,9 @@ final class DetailAnnouceViewModel: BaseViewModel {
          detailAnnounceUseCase: DetailAnnounceUseCase? = nil,
          unreadAllAnnounceUseCase: UnreadAllAnnounceUseCase? = nil,
          unReadCount: Int? = nil,
-         checkAnnounceUseCase: CheckAnnounceUseCase
+         checkAnnounceUseCase: CheckAnnounceUseCase,
+         editPostAnnounceUseCase: EditPostAnnounceUseCase? = nil,
+         deletePostAnnounceUseCase: DeletePostAnnounceUseCase? = nil
     ) {
         self.selectedNoticeId = selectedNoticeId
         self.selectedAssociationType = selectedAssociationType
@@ -89,6 +102,9 @@ final class DetailAnnouceViewModel: BaseViewModel {
         self.unReadCount = unReadCount
         self.checkAnnounceUseCase = checkAnnounceUseCase
         self.detailAnnounceType = type
+        self.editPostAnnounceUseCase = editPostAnnounceUseCase
+        self.deletePostAnnounceUseCase = deletePostAnnounceUseCase
+        
         print("DetailAnnouceViewModel init")
     }
     
@@ -101,16 +117,36 @@ final class DetailAnnouceViewModel: BaseViewModel {
         selectedNoticeId: Int?,
         repository: NoticesRepository
     ) -> DetailAnnouceViewModel {
-        return DetailAnnouceViewModel(
-            type: type,
-            selectedNoticeId: selectedNoticeId,
-            likeAnnounceUseCase: LikeAnnounceUseCase(repository: repository),
-            deleteLikeAnnounceUseCase: DeleteLikeAnnounceUseCase(repository: repository),
-            bookmarkAnnounceUseCase: BookmarkAnnounceUseCase(repository: repository),
-            deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase(repository: repository),
-            detailAnnounceUseCase: DetailAnnounceUseCase(repository: repository),
-            checkAnnounceUseCase: CheckAnnounceUseCase(repository: NoticesRepositoryImpl())
-        )
+        
+        let currentUserAuth = KeychainManager.shared.loadData(key: .userAuthState, type: String.self)
+            .flatMap { UserAuth(rawValue: $0) } ?? .unUser
+        
+        switch currentUserAuth {
+        case .collegeUser, .departmentUser, .universityUser:
+            return DetailAnnouceViewModel(
+                type: type,
+                selectedNoticeId: selectedNoticeId,
+                likeAnnounceUseCase: LikeAnnounceUseCase(repository: repository),
+                deleteLikeAnnounceUseCase: DeleteLikeAnnounceUseCase(repository: repository),
+                bookmarkAnnounceUseCase: BookmarkAnnounceUseCase(repository: repository),
+                deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase(repository: repository),
+                detailAnnounceUseCase: DetailAnnounceUseCase(repository: repository),
+                checkAnnounceUseCase: CheckAnnounceUseCase(repository: repository),
+                editPostAnnounceUseCase: EditPostAnnounceUseCase(repository: repository),
+                deletePostAnnounceUseCase: DeletePostAnnounceUseCase(repository: repository)
+            )
+        default:
+            return DetailAnnouceViewModel(
+                type: type,
+                selectedNoticeId: selectedNoticeId,
+                likeAnnounceUseCase: LikeAnnounceUseCase(repository: repository),
+                deleteLikeAnnounceUseCase: DeleteLikeAnnounceUseCase(repository: repository),
+                bookmarkAnnounceUseCase: BookmarkAnnounceUseCase(repository: repository),
+                deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase(repository: repository),
+                detailAnnounceUseCase: DetailAnnounceUseCase(repository: repository),
+                checkAnnounceUseCase: CheckAnnounceUseCase(repository: repository)
+            )
+        }
     }
     
     static func createUnreadViewModel(
@@ -134,10 +170,34 @@ final class DetailAnnouceViewModel: BaseViewModel {
         )
     }
 
-    
     // MARK: - Public methods
     
     func transform(input: Input) -> Output {
+        let viewLifeCycleEventResult = input.viewLifeCycleEventAction
+            .flatMap { [weak self] _ -> AnyPublisher<Bool, NetworkError> in
+                guard let self else { return Empty().eraseToAnyPublisher() }
+                
+                return Future<Bool, NetworkError> { promise in
+                    Task {
+                        do {
+                            switch self.detailAnnounceType {
+                            case .bookmarkAnnounce, .announce:
+                                try await self.getDetailAnnounce()
+                                try await self.checkDetailAnnounce()
+                                
+                            case .unreadAnnounce:
+                                try await self.postUnreadAllAnnounce()
+                            }
+                            
+                            promise(.success(true))
+                        } catch {
+                            promise(.failure(.serverError)) // 실패를 Bool로 처리
+                        }
+                    }
+                }
+                .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
         
         let nextButtonResult = input.nextButtonTap
             .handleEvents(receiveOutput: { _ in
@@ -184,6 +244,31 @@ final class DetailAnnouceViewModel: BaseViewModel {
             }
             .store(in: &cancellables)
         
+        let deleteResult = input.deleteButtonTap
+            .flatMap { [weak self] _ -> AnyPublisher<Bool, NetworkError> in
+                guard let self else { return Empty().eraseToAnyPublisher() }
+
+                return Future<Bool, NetworkError> { promise in
+                    Task {
+                        do {
+                            let _ = try await self.deletePostAnnounce(self.selectedNoticeId)
+                            
+                            promise(.success(true))
+                        } catch let error {
+                            promise(.failure(error as! NetworkError))
+                        }
+                    }
+                }
+                .catch { error in
+                    self.errorSubject.send(error)  // 에러 발생시 에러 스트림으로 전달
+                    return Just(false)
+                        .setFailureType(to: NetworkError.self)
+                }
+                .eraseToAnyPublisher()
+            }
+            .first()
+            .eraseToAnyPublisher()
+        
         let bookmarkButtonResult = input.bookmarkButtonTap
             .handleEvents(receiveOutput: { _ in
                 switch self.detailAnnounceType {
@@ -223,27 +308,25 @@ final class DetailAnnouceViewModel: BaseViewModel {
             .eraseToAnyPublisher()
 
         return Output(
+            viewLifeCycleEventResult: viewLifeCycleEventResult,
             isFavorite: isFavorite,
             isBookmark: isBookmark,
             bookmarkButtonResult: bookmarkButtonResult,
             nextButtonResult: nextButtonResult,
-            currentPageControlCountResult: input.currentPageControlCount
+            currentPageControlCountResult: input.currentPageControlCount,
+            deleteResult: deleteResult, 
+            authorResult: authorToContentSubject.eraseToAnyPublisher()
         )
     }
 }
 
 extension DetailAnnouceViewModel {
-    
-    func initializeData() async {
-        switch detailAnnounceType {
-        case .bookmarkAnnounce, .announce:
-            await getDetailAnnounce()
-            await checkDetailAnnounce()
-        case .unreadAnnounce:
-            await postUnreadAllAnnounce()
-        }
+    func selectNoticeId() -> Int? {
+        return selectedNoticeId
     }
-    
+}
+
+extension DetailAnnouceViewModel {
     func checkUnAnnounce() async -> Result<Void, NetworkError> {
         switch await checkAnnounceUseCase.execute(noticeId: announceList[currentIndex].id) {
         case .success:
@@ -256,7 +339,7 @@ extension DetailAnnouceViewModel {
         }
     }
     
-    func checkDetailAnnounce() async {
+    func checkDetailAnnounce() async throws {
         guard let selectedNoticeId else { return }
         
         switch await checkAnnounceUseCase.execute(noticeId: selectedNoticeId) {
@@ -338,12 +421,17 @@ extension DetailAnnouceViewModel {
         getMySections()
     }
     
-    func getDetailAnnounce() async {
+    func getDetailAnnounce() async throws {
         guard let detailAnnounceUseCase, let selectedNoticeId else { return }
         
         switch await detailAnnounceUseCase.execute(noticeId: selectedNoticeId) {
         case .success(let response):
             sectionDataDict[.header] = [response.convertToHeader()]
+            
+            authorToContentSubject.send(response.isAuthor)
+            announceContent = response
+            
+            print("로드된 데이터:", announceContent!)
             
             if let imageModels = response.convertToImages() {
                 sectionDataDict[.images] = imageModels  // 배열 그대로 할당
@@ -358,7 +446,7 @@ extension DetailAnnouceViewModel {
         }
     }
     
-    func postUnreadAllAnnounce() async {
+    func postUnreadAllAnnounce() async throws {
         guard let unreadAllAnnounceUseCase else { return }
         
         switch await unreadAllAnnounceUseCase.execute(associationName: selectedAssociationType ?? "") {
@@ -415,6 +503,29 @@ extension DetailAnnouceViewModel {
         }
     }
     
+    func editPostAnnounce(_ noticeId: Int?) async -> Result<Void, NetworkError>  {
+        guard let noticeId else { return .failure(.clientError(message: "데이터 없음")) }
+        
+        switch await deleteBookmarkAnnounceUseCase.execute(noticeId: noticeId) {
+        case .success:
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    
+    func deletePostAnnounce(_ noticeId: Int?) async throws -> Result<Void, NetworkError>  {
+        guard let noticeId, let deletePostAnnounceUseCase else { return .failure(.clientError(message: "데이터 없음")) }
+        
+        switch await deletePostAnnounceUseCase.execute(noticeId: noticeId) {
+        case .success:
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     private func updateCurrentUnreadAnnounce() {
         guard currentIndex < announceList.count else { return }
         let currentAnnounce = announceList[currentIndex]
@@ -427,6 +538,8 @@ extension DetailAnnouceViewModel {
         sectionDataDict[.content] = [currentAnnounce.convertToContent()]
         
 //        selectedNoticeId = currentAnnounce.id  // 현재 공지사항의 ID 업데이트
+        
+        authorToContentSubject.send(currentAnnounce.isAuthor)
         getMySections()
     }
     

@@ -12,14 +12,37 @@ import PhotosUI
 import SnapKit
 import Then
 
-final class PostAnnounceViewController: UIViewController {
+enum PostType {
+    case create
+    case edit
+}
+
+final class PostAnnounceViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
-    // 선택된 이미지의 identifier를 저장할 배열 추가
-    private var selectedAssetIdentifiers: [String] = []
+    private let type: PostType
     
-    private var selectedImagesCount = 0
+    // 선택된 이미지의 identifier를 저장할 배열 추가
+    private var selectedAssetIdentifiers: [String] = [] {
+        didSet {
+            print(selectedAssetIdentifiers.count)
+            print(selectedAssetIdentifiers)
+        }
+    }
+    
+    private var selectedImagesCount = 0 {
+        didSet {
+            print(selectedImagesCount)
+        }
+    }
+    
+    private var originImagesCount = 0 {
+        didSet {
+            print(originImagesCount)
+        }
+    }
+    
     private var postAnnounceViewModel: PostAnnounceViewModel
     weak var coordinator: HomeCoordinator?
     
@@ -57,21 +80,29 @@ final class PostAnnounceViewController: UIViewController {
     private let announceButton = AnnounceTagButton(buttonStyle: .announce)
     private let eventButton = AnnounceTagButton(buttonStyle: .event)
     
-    private let postButton = CustomButton(buttonStyle: .postAnnounce)
+    private let postButton: CustomButton
     
     // MARK: - Combine Publishers Properties
 
+    private let titleSubject = PassthroughSubject<String, Never>()
+    private let contentSubject = PassthroughSubject<String, Never>()
     private let tagButtonSubject = PassthroughSubject<TagStyle, Never>()
     private let selectedImageDataSubject = CurrentValueSubject<[Data]?, Never>(nil)
+    private let viewLifeCycleSubject = PassthroughSubject<ViewLifeCycleEvent, Never>()
     
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - init
     
-    init(postAnnounceViewModel: PostAnnounceViewModel,
-         coordinator: HomeCoordinator) {
+    init(
+        type: PostType,
+        postAnnounceViewModel: PostAnnounceViewModel,
+        coordinator: HomeCoordinator
+    ) {
+        self.type = type
         self.postAnnounceViewModel = postAnnounceViewModel
         self.coordinator = coordinator
+        self.postButton = type == .create ? CustomButton(buttonStyle: .postAnnounce) : CustomButton(buttonStyle: .editAnnounce)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -87,8 +118,7 @@ final class PostAnnounceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("Push PostAnnounceViewController")
+
         self.view.backgroundColor = .black5
         
         hideKeyboard()
@@ -111,6 +141,26 @@ final class PostAnnounceViewController: UIViewController {
             name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
+        
+        print("PostAnnounceViewController viewDidLoad")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if case .edit = type {
+            viewLifeCycleSubject.send(.viewWillAppear)
+        }
+        
+        print("PostAnnounceViewController viewWillAppear")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if case .edit = type {
+            NotificationCenter.default.post(name: Notification.Name("EditPostViewDismissed"), object: nil)
+        }
     }
     
     @objc private func closeButtonTapped() {
@@ -141,19 +191,54 @@ final class PostAnnounceViewController: UIViewController {
         scrollView.contentInset.bottom = 0
         scrollView.verticalScrollIndicatorInsets.bottom = 0
     }
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        titleSubject.send(textField.text ?? "")
+    }
 }
 
 private extension PostAnnounceViewController {
     func bindViewModel() {
         let input = PostAnnounceViewModel.Input(
+            viewLifeCycleEventAction: viewLifeCycleSubject.eraseToAnyPublisher(),
             selectImageButtonTap: selectPhotoButton.tapPublisher,
-            createAnnounceButtonTap: postButton.tapPublisher, 
-            titleText: titleTextField.textPublisher, 
-            contentText: contentTextView.textPublisher, 
+            bottomButtonTap: postButton.tapPublisher,
+            titleText: titleSubject.eraseToAnyPublisher(),
+            contentText: contentSubject.eraseToAnyPublisher(),
             tagButtonText: tagButtonSubject.eraseToAnyPublisher()
         )
         
         let output = postAnnounceViewModel.transform(input: input)
+        
+        /// type 이 edit 일때
+        output.viewLifeCycleEventResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] content in
+                
+                guard let self else { return }
+                
+                self.titleTextField.text = content.title
+                self.contentTextView.text = content.content
+                
+                self.titleSubject.send(content.title)
+                self.contentSubject.send(content.content)
+                
+                self.placeholderLabel.isHidden = true
+                
+                if content.tag == "공지" {
+                    self.announceButton.buttonState = .select
+                    self.tagButtonSubject.send(.announce)
+                    
+                } else {
+                    self.eventButton.buttonState = .select
+                    self.tagButtonSubject.send(.event)
+                }
+                
+                if let imageURL = content.image {
+                    loadImageData(urls: imageURL)
+                }
+            }
+            .store(in: &cancellables)
         
         output.isEnableCreateButton
             .map { $0 ? ButtonState.activate : ButtonState.deactivate }
@@ -162,7 +247,9 @@ private extension PostAnnounceViewController {
         
         output.selectImageButtonTap
             .sink { [weak self] _ in
-                self?.presentPHPicker()
+                guard let self else { return }
+                
+                self.presentPHPicker(type: self.type)
             }
             .store(in: &cancellables)
         
@@ -170,13 +257,32 @@ private extension PostAnnounceViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if result {
-                    if let customNavController = self?.navigationController as? CustomAnnouceNavigationController {
-                        // CustomAnnouceNavigationController인 경우
+                    if case .edit = self?.type {
+                        ToastMessageManager.showToastMessage(toastType: .editCompletion)
+                    }
+                    
+                    if let customNavController = self?.navigationController as? CustomAnnounceNavigationController {
                         customNavController.dismiss(animated: true)
                     }
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    @MainActor
+    func loadImageData(urls: [String]) {
+        for url in urls {
+            let imageData = ImageCacheManager.shared.data(for: url)
+            
+            let imageView = self.createImageView(UIImage(data: imageData!)!)
+            self.postAnnounceViewModel.addImageData(imageData!)
+            self.imageStackView.addArrangedSubview(imageView)
+            
+            self.selectedImagesCount += 1
+            self.originImagesCount += 1
+        }
+
+        self.updateSelectPhotoButton()
     }
 }
 
@@ -214,6 +320,7 @@ private extension PostAnnounceViewController {
             $0.layer.cornerRadius = 10
             $0.layer.borderColor = UIColor.black10.cgColor
             $0.layer.borderWidth = 1
+            $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         }
 
         contentTextView.do {
@@ -398,12 +505,12 @@ private extension PostAnnounceViewController {
     }
     
     func setupDelegate() {
-
+        contentTextView.delegate = self
     }
     
-    func presentPHPicker() {
+    func presentPHPicker(type: PostType) {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
-        configuration.selectionLimit = 10
+        configuration.selectionLimit = type == .edit ? 10 - originImagesCount : 10
         configuration.filter = .images
         configuration.selection = .ordered
         configuration.preselectedAssetIdentifiers = selectedAssetIdentifiers // 현재 표시 중인 이미지들의 identifier만 전달
@@ -451,11 +558,22 @@ private extension PostAnnounceViewController {
         
         // 삭제할 이미지의 인덱스 찾기
         if let index = imageStackView.arrangedSubviews.firstIndex(of: containerView) {
-            let identifierIndex = index - 1  // selectPhotoButton을 고려한 인덱스 조정
-            if identifierIndex >= 0 && identifierIndex < selectedAssetIdentifiers.count {
-                // identifier 배열에서도 제거
-                selectedAssetIdentifiers.remove(at: identifierIndex)
+            let identifierIndex = index
+            print("몇번째 제거?", identifierIndex)
+            if identifierIndex > originImagesCount { // 새로 추가한 사진에 관한 삭제
+                if identifierIndex >= 0 && identifierIndex - originImagesCount >= 0 {
+                    // identifier 배열에서도 제거
+                    print("제거", identifierIndex - originImagesCount - 1)
+                    selectedAssetIdentifiers.remove(at: identifierIndex - originImagesCount - 1)
+                }
+            } else { // 기존 사진에 대한 관한 삭제
+                if identifierIndex >= 0 {
+                    // identifier 배열에서도 제거
+//                    selectedAssetIdentifiers.remove(at: identifierIndex)
+                    originImagesCount -= 1
+                }
             }
+        
             postAnnounceViewModel.removeImageData(at: index - 1)
         }
 
@@ -476,30 +594,68 @@ private extension PostAnnounceViewController {
 
 extension PostAnnounceViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
         
+        picker.dismiss(animated: true)
+            
         selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
         
-        results.forEach { result in
-            if result.itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-                result.itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { [weak self] data, error in
-                    guard let imageData = data else { return }
-                    
-                    DispatchQueue.main.async {
-                        guard let self,
-                              let downsampledData = UIImage.downsample(imageData: imageData, to: ImageType.postImage.imageSize, scale: UIScreen.main.scale) else { return }
-                        
-                        // 데이터 처리
-                        let imageView = self.createImageView(UIImage(data: downsampledData)!)
-                        self.imageStackView.addArrangedSubview(imageView)
-                        
-                        // 카운트 증가 및 UI 업데이트
-                        self.selectedImagesCount += 1
-                        self.updateSelectPhotoButton()
-
-                        self.postAnnounceViewModel.addImageData(downsampledData)
+        // Task의 타입을 명시적으로 지정
+        let tasks: [Task<(Int, Data?), Error>] = results.enumerated().map { index, result in
+            Task.init(priority: .userInitiated) {
+                guard result.itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) else {
+                    return (index, nil)
+                }
+                
+                let (data, _) = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data?, Error?), Error>) in
+                    result.itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { data, error in
+                        if let error = error {
+                            continuation.resume(throwing: error)
+                            return
+                        }
+                        continuation.resume(returning: (data, nil))
                     }
                 }
+                
+                return (index, data)
+            }
+        }
+        
+        // 모든 이미지 로딩이 완료될 때까지 대기
+        Task {
+            var orderedImages: [(Int, Data)] = []
+            
+            for task in tasks {
+                do {
+                    let result = try await task.value
+                    let (index, imageData) = result
+
+                    guard let data = imageData else { continue }
+                    orderedImages.append((index, data))
+                } catch {
+                    print("Error loading image: \(error)")
+                    continue
+                }
+            }
+            
+            // 인덱스 순서대로 정렬
+            orderedImages.sort { $0.0 < $1.0 }
+            
+            // UI 업데이트는 메인 스레드에서 수행
+            await MainActor.run {
+                for (_, imageData) in orderedImages {
+                    guard let downsampledData = UIImage.downsample(
+                        imageData: imageData,
+                        to: ImageType.postImage.imageSize,
+                        scale: UIScreen.main.scale
+                    ) else { continue }
+                    
+                    let imageView = createImageView(UIImage(data: downsampledData)!)
+                    imageStackView.addArrangedSubview(imageView)
+                    selectedImagesCount += 1
+                    postAnnounceViewModel.addImageData(downsampledData)
+                }
+                
+                updateSelectPhotoButton()
             }
         }
     }
@@ -508,6 +664,8 @@ extension PostAnnounceViewController: PHPickerViewControllerDelegate {
 extension PostAnnounceViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textView.text.isEmpty
+        
+        contentSubject.send(textView.text)
         
         // 텍스트뷰 크기 조절
         let size = CGSize(width: textView.frame.width, height: .infinity)

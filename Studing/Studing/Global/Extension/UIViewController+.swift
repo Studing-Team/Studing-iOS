@@ -169,9 +169,13 @@ extension UIViewController {
         customAlertViewController.modalPresentationStyle = .overFullScreen
         present(customAlertViewController, animated: false)
     }
-    
-    func showBookmarkToastMessage(isBookmark: Bool) {
-        let toastView = ToastMessageView(isBookmark: isBookmark)
+}
+
+// MARK: - ToastMessage Extension
+
+extension UIViewController {
+    func showToastMessage(toastType: ToastType) {
+        let toastView = ToastMessageView(type: toastType)
         view.addSubview(toastView)
         
         // 위치 설정
@@ -194,6 +198,4 @@ extension UIViewController {
             })
         }
     }
-    
 }
-

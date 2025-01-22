@@ -11,6 +11,11 @@ import UIKit
 import SnapKit
 import Then
 
+enum ViewLifeCycleEvent {
+    case viewDidLoad
+    case viewWillAppear
+}
+
 enum DetailAnnounceType {
     case bookmarkAnnounce
     case announce
@@ -19,14 +24,20 @@ enum DetailAnnounceType {
 
 final class DetailAnnounceViewController: UIViewController {
     
+    // MARK: - Combine Properties
+    
+    private let nextbuttonTapSubject = PassthroughSubject<Void, Never>()
+    private let currentImagePageSubject = PassthroughSubject<Int, Never>()
+    private let deleteuttonTappedSubject = PassthroughSubject<Void, Never>()
+    private let viewLifeCycleSubject = PassthroughSubject<ViewLifeCycleEvent, Never>()
+    
+    private var cancellables = Set<AnyCancellable>()
+    
     // MARK: - Properties
     
     private var type: DetailAnnounceType
     private let detailAnnouceViewModel: DetailAnnouceViewModel
     private var dataSource: UICollectionViewDiffableDataSource<DetailAnnouceSectionType, AnyHashable>!
-    private var currentImagePageSubject = PassthroughSubject<Int, Never>()
-    
-    private var cancellables = Set<AnyCancellable>()
     
     weak var coordinator: HomeCoordinator?
     
@@ -83,35 +94,95 @@ final class DetailAnnounceViewController: UIViewController {
         setupLayout(type)
         setupDelegate()
         bindViewModel()
+        observeDotMenuButton()
         
-        Task {
-            await detailAnnouceViewModel.initializeData()
-        }
+        print("DetailAnnounceViewController viewDidLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        print("DetailAnnounceViewController viewWillAppear")
+        viewLifeCycleSubject.send(.viewWillAppear)
+        
         /// 놓친 공지사항 관련 메서드
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
-            customNavController.setNavigationType(type == .unreadAnnounce ? .unRead : .detail)
-            
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             if type == .unreadAnnounce {
                 customNavController.setNavigationTitle("\(detailAnnouceViewModel.unReadCount ?? 0)개 남음")
             }
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        
+        print("DetailAnnounceViewController viewWillDisappear")
+        cancellables.removeAll()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        
+        print("DetailAnnounceViewController deinit")
     }
 }
 
 // MARK: - Private Extensions
 
 private extension DetailAnnounceViewController {
+    func observeDotMenuButton() {
+        guard let navigationController = self.navigationController as? CustomAnnounceNavigationController else { return }
+        
+        navigationController.menuButtonTapped
+            .sink { [weak self] type in
+                guard let self else { return }
+                
+                switch type {
+                case .edit:
+                    
+                    guard let content = self.detailAnnouceViewModel.announceContent else { return }
+                    guard let noticeId = self.detailAnnouceViewModel.selectNoticeId() else { return }
+
+                    let dto = EditAnnounceContent(noticeId: noticeId, title: content.title, image: content.images, content: content.content, tag: content.tag)
+                    
+                    NotificationCenter.default.addObserver(
+                        self,
+                        selector: #selector(handleDismiss),
+                        name: Notification.Name("EditPostViewDismissed"),
+                        object: nil)
+                    
+                    self.coordinator?.presentPostAnnounce(type: .edit, noticeId: noticeId, content: dto)
+                    
+                case .delete:
+                    self.handleDotMenuButtonTap()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    @objc func handleDismiss() {
+        viewLifeCycleSubject.send(.viewWillAppear)
+    }
+    
+    func handleDotMenuButtonTap() {
+        self.showConfirmCancelAlert(
+            mainTitle: "공지사항 삭제",
+            subTitle: "해당 공지사항을 삭제하시겠습니까?",
+            rightButtonTitle: "삭제하기",
+            leftButtonTitle: "취소",
+            rightButtonHandler: {
+                self.deleteuttonTappedSubject.send()
+            }
+        )
+    }
     
     func bindViewModel() {
         let input = DetailAnnouceViewModel.Input(
-            likeButtonTap: likeButton.tapPublisher, 
+            viewLifeCycleEventAction: viewLifeCycleSubject.eraseToAnyPublisher(),
+            likeButtonTap: likeButton.tapPublisher,
             bookmarkButtonTap: bookmarkButton.tapPublisher,
-            nextButtonTap: nextButton.tapPublisher,
+            deleteButtonTap: deleteuttonTappedSubject.eraseToAnyPublisher(),
+            nextButtonTap: nextbuttonTapSubject.eraseToAnyPublisher(),
             currentPageControlCount: currentImagePageSubject.eraseToAnyPublisher()
         )
         
@@ -127,6 +198,33 @@ private extension DetailAnnounceViewController {
                        self?.imageCountView.isHidden = true
                        self?.imageCountLabel.isHidden = true
                    }
+                }
+            }
+            .store(in: &cancellables)
+        
+        output.viewLifeCycleEventResult
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    // 에러 처리
+                    print("Error: \(error)")
+                }
+            }, receiveValue: { result in
+                // 결과 처리
+                print("결과: \(result)")
+            })
+            .store(in: &cancellables)
+        
+        output.authorResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                guard let self else { return }
+ 
+                if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
+                    customNavController.addDotMenu(result)
                 }
             }
             .store(in: &cancellables)
@@ -149,7 +247,7 @@ private extension DetailAnnounceViewController {
         output.bookmarkButtonResult
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isBookmark in
-                self?.showBookmarkToastMessage(isBookmark: isBookmark)
+                self?.showToastMessage(toastType: .bookmark(isBookmark: isBookmark))
             }
             .store(in: &cancellables)
         
@@ -161,10 +259,8 @@ private extension DetailAnnounceViewController {
                 switch result {
                 case .success(let response):
                     if response == true {
-                        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
-                            customNavController.setNavigationType(type == .unreadAnnounce ? .unRead : .detail)
-                            
-                            if type == .unreadAnnounce {
+                        if type == .unreadAnnounce {
+                            if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
                                 customNavController.setNavigationTitle("\(detailAnnouceViewModel.unReadCount ?? 0)개 남음")
                             }
                         }
@@ -186,6 +282,36 @@ private extension DetailAnnounceViewController {
                     self.imageCountLabel.text = "\(self.currentImagePage + 1)/\(itemCount)"
                 }
             }
+            .store(in: &cancellables)
+        
+        output.deleteResult
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
+                switch completion {
+                case .finished:
+                    if let presentedVC = self.presentedViewController as? CustomAlertViewController {
+                        presentedVC.dismiss(animated: false)
+                    }
+                    
+                case .failure(_):
+                    if let presentedVC = self.presentedViewController as? CustomAlertViewController {
+                        presentedVC.dismiss(animated: false)
+                    }
+                }
+            }, receiveValue: { [weak self] result in
+                guard let self else { return }
+                switch self.type {
+                case .announce, .bookmarkAnnounce:
+                    ToastMessageManager.showToastMessage(toastType: .deleteAnnounce)
+                    
+                    if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
+                        customNavController.popViewController(animated: true)
+                    }
+                case .unreadAnnounce:
+                    nextbuttonTapSubject.send()
+                }
+            })
             .store(in: &cancellables)
     }
     
@@ -244,6 +370,7 @@ private extension DetailAnnounceViewController {
                 $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
                 $0.backgroundColor = .primary50 // 배경색 설정
                 $0.layer.cornerRadius = 24
+                $0.addTarget(self, action: #selector(nextbuttonTap), for: .touchUpInside)
             }
             
             bookmarkButton.do {
@@ -256,6 +383,10 @@ private extension DetailAnnounceViewController {
                 $0.layer.borderWidth = 1
             }
         }
+    }
+    
+    @objc func nextbuttonTap() {
+        nextbuttonTapSubject.send()
     }
     
     func setupHierarchy(_ type: DetailAnnounceType) {
