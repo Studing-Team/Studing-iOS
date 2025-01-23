@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum DetailAnnouceSectionType: CaseIterable {
+enum DetailAnnouceSectionType: Hashable, CaseIterable {
     case header
     case images
     case content

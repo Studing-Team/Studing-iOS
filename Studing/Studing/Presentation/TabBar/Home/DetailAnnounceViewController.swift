@@ -87,7 +87,6 @@ final class DetailAnnounceViewController: UIViewController {
         
         setupCollectionView()
         configureDataSource()
-        applySnapshot()
         
         setupStyle()
         setupHierarchy(type)

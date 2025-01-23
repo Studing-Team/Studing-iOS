@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3F039BB42D40B94F0041FC6E /* MenuType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F039BB32D40B94F0041FC6E /* MenuType.swift */; };
+		3F039BB62D40E5800041FC6E /* LoadImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F039BB52D40E5800041FC6E /* LoadImageManager.swift */; };
 		3F13600D2CFD86FF0043F765 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3F13600C2CFD86FF0043F765 /* AmplitudeSwift */; };
 		3F13600F2CFD8FC80043F765 /* AmplitudeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F13600E2CFD8FC80043F765 /* AmplitudeManager.swift */; };
 		3F1360112CFD93170043F765 /* AnalyticsEventLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1360102CFD93170043F765 /* AnalyticsEventLiterals.swift */; };
@@ -279,6 +280,7 @@
 
 /* Begin PBXFileReference section */
 		3F039BB32D40B94F0041FC6E /* MenuType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuType.swift; sourceTree = "<group>"; };
+		3F039BB52D40E5800041FC6E /* LoadImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadImageManager.swift; sourceTree = "<group>"; };
 		3F13600E2CFD8FC80043F765 /* AmplitudeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplitudeManager.swift; sourceTree = "<group>"; };
 		3F1360102CFD93170043F765 /* AnalyticsEventLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEventLiterals.swift; sourceTree = "<group>"; };
 		3F162B812C9D92B300DF2E1C /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
@@ -682,6 +684,7 @@
 				3FFF99322D26991600EEBB70 /* DeepLinkNavigator.swift */,
 				3F6992F12D36A18500A3CF9F /* CustomMenuViewController.swift */,
 				3F6992F52D3D467E00A3CF9F /* ToastMessageManager.swift */,
+				3F039BB52D40E5800041FC6E /* LoadImageManager.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1778,6 +1781,7 @@
 				3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */,
 				3F82C33D2CAE94E000492EEE /* MajorInfoModel.swift in Sources */,
 				3F54D9EF2CE4D3E900314B46 /* AllAssociationAnnounceRequestDTO.swift in Sources */,
+				3F039BB62D40E5800041FC6E /* LoadImageManager.swift in Sources */,
 				3FE4038B2CF858230078F36A /* StoreMapViewController.swift in Sources */,
 				3F31B3E42CC1635300EE92D6 /* AnnounceModel.swift in Sources */,
 				3F54D9A62CE1BEAE00314B46 /* CheckDuplicateIdUseCase.swift in Sources */,

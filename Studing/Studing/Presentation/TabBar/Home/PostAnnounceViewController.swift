@@ -235,7 +235,9 @@ private extension PostAnnounceViewController {
                 }
                 
                 if let imageURL = content.image {
-                    loadImageData(urls: imageURL)
+                    Task {
+                        await self.loadImageData(urls: imageURL)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -270,18 +272,61 @@ private extension PostAnnounceViewController {
     }
     
     @MainActor
-    func loadImageData(urls: [String]) {
-        for url in urls {
-            let imageData = ImageCacheManager.shared.data(for: url)
+    func loadImageData(urls: [String]) async {
+        
+        // 결과를 저장할 배열 - 옵셔널 래핑 제거
+        var results: [(index: Int, view: UIView, data: Data)] = []
+        
+        await withTaskGroup(of: (Int, UIView?, Data?)?.self) { group in
+            // 인덱스와 함께 태스크 생성
+            for (index, url) in urls.enumerated() {
+                group.addTask {
+                    if let cachedData = ImageCacheManager.shared.data(for: url) {
+                        if let image = UIImage(data: cachedData) {
+                            let imageView = await self.createImageView(image)
+                            return (index, imageView, cachedData)
+                        }
+                    }
+
+                    if let loadedImage = await LoadImageManager.shared.loadImage(url: url, type: .postSmallImage),
+                       let imageData = loadedImage.pngData() {
+                        let imageView = await self.createImageView(loadedImage)
+                        return (index, imageView, imageData)
+                    }
+                    return nil
+                }
+            }
             
-            let imageView = self.createImageView(UIImage(data: imageData!)!)
-            self.postAnnounceViewModel.addImageData(imageData!)
-            self.imageStackView.addArrangedSubview(imageView)
+            // 결과 수집 - 성공한 경우만 배열에 추가
+            for await result in group {
+                if let (index, imageView, imageData) = result,
+                   let validImageView = imageView,
+                   let validImageData = imageData {
+                    results.append((index: index, view: validImageView, data: validImageData))
+                } else {
+                    print("이미지 로드 실패")
+                }
+            }
+        }
+        
+        // withTaskGroup 종료 이후에 UI 업데이트
+        await updateUI(with: results)
+    }
+    
+    
+    @MainActor
+    private func updateUI(with results: [(index: Int, view: UIView, data: Data)]) async {
+        // 인덱스로 정렬 후 UI 업데이트
+        results.sorted { $0.index < $1.index }.forEach { result in
+            self.postAnnounceViewModel.addImageData(result.data)
+            self.imageStackView.addArrangedSubview(result.view)
             
             self.selectedImagesCount += 1
             self.originImagesCount += 1
+            
+            self.imageStackView.layoutIfNeeded()
         }
-
+        
         self.updateSelectPhotoButton()
     }
 }
@@ -569,7 +614,6 @@ private extension PostAnnounceViewController {
             } else { // 기존 사진에 대한 관한 삭제
                 if identifierIndex >= 0 {
                     // identifier 배열에서도 제거
-//                    selectedAssetIdentifiers.remove(at: identifierIndex)
                     originImagesCount -= 1
                 }
             }
