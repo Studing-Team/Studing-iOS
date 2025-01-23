@@ -105,7 +105,7 @@ private extension LoginViewController {
                         confirmTitle: "다시 시도",
                         centerButtonHandler: {
                             AmplitudeManager.shared.trackEvent(AnalyticsEvent.Login.askStuding)
-                            self?.dismiss(animated: true)
+                            self?.dismiss(animated: false)
                     })
                 }
             }

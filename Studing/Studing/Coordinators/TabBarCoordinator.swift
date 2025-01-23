@@ -51,8 +51,8 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
         
         switch item {
         case .home:
-            navigationController = CustomAnnouceNavigationController()
-            let homeCoordinator = HomeCoordinator(navigationController: navigationController as! CustomAnnouceNavigationController, parentCoordinator: self)
+            navigationController = CustomAnnounceNavigationController()
+            let homeCoordinator = HomeCoordinator(navigationController: navigationController as! CustomAnnounceNavigationController, parentCoordinator: self)
             childCoordinators.append(homeCoordinator)
             homeCoordinator.start()
         case .store:
@@ -61,8 +61,8 @@ final class TabBarCoordinator: TabCoordinatorProtocol {
             childCoordinators.append(storeCoordinator)
             storeCoordinator.start()
         case .mypage:
-            navigationController = CustomAnnouceNavigationController()
-            let mypageCoordinator = MypageCoordinator(navigationController: navigationController as! CustomAnnouceNavigationController, parentCoordinator: self)
+            navigationController = CustomAnnounceNavigationController()
+            let mypageCoordinator = MypageCoordinator(navigationController: navigationController as! CustomAnnounceNavigationController, parentCoordinator: self)
             childCoordinators.append(mypageCoordinator)
             mypageCoordinator.start()
         }

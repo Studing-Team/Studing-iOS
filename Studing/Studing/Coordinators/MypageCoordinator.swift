@@ -41,7 +41,7 @@ final class MypageCoordinator: Coordinator {
             withDrawViewModel: withDrawVM, coordinator: self
         )
         
-        if let customNav = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNav = self.navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.leftButton)
         }
         

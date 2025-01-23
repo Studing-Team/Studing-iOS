@@ -19,4 +19,5 @@ struct DetailAnnouceHeaderModel: Hashable, DetailAnnouceSectionData {
     var watchCount: Int
     var isFavorite: Bool
     var isBookmark: Bool
+    var isAuthor: Bool
 }

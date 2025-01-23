@@ -1,43 +1,51 @@
 //
-//  CustomAnnouceNavigationController.swift
+//  CustomAnnounceNavigationController.swift
 //  Studing
 //
 //  Created by ParkJunHyuk on 10/30/24.
 //
 
+import Combine
 import UIKit
 
 import SnapKit
 import Then
 
-enum NavigationType {
+enum NavigationType: Equatable {
     case home
     case announce
     case bookmark
-    case detail
-    case unRead
+    case detail(isAuthor: Bool)
+    case unRead(isAuthor: Bool)
     case post
+    case editPost
     case unReadToHome
     case myPage
     case leftButton
 }
 
-final class CustomAnnouceNavigationController: UINavigationController {
+final class CustomAnnounceNavigationController: UINavigationController {
     
     // MARK: - Properties
     
+    let menuButtonTapped = PassthroughSubject<MenuType, Never>()
+    
+    private var currentUserAuth: UserAuth?
     private var navigationHeight: CGFloat = 0
     private var currentType: NavigationType = .home {
         didSet {
             updateNavigationVisibility()
         }
     }
+    private var menuView: CustomMenuView?
     
     // MARK: - UI Properties
     
     private let customNavigationBar = UIView()
     private let leftButton = UIButton()
-    private let rightButton = UIButton()
+    private let rightButtonSectionStackView = UIStackView()
+    private let alarmButton = UIButton()
+    private let dotMenuButton = UIButton()
     private let titleLabel = UILabel()
     private let safeAreaView: UIView = UIView()
     private let divider = UIView()
@@ -51,10 +59,13 @@ final class CustomAnnouceNavigationController: UINavigationController {
         setupStyle()
         setupHierarchy()
         setupLayout()
+        
+        currentUserAuth = KeychainManager.shared.loadData(key: .userAuthState, type: String.self)
+            .flatMap { UserAuth(rawValue: $0) } ?? .unUser
     }
 }
 
-private extension CustomAnnouceNavigationController {
+private extension CustomAnnounceNavigationController {
     
     /// DefaultNavigationBar를 hidden 시켜주는 함수
     func hideDefaultNavigationBar() {
@@ -93,11 +104,22 @@ private extension CustomAnnouceNavigationController {
             $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         }
         
-        rightButton.do {
-            $0.setImage(UIImage(resource: .alarm), for: .normal)
-            $0.contentMode = .scaleAspectFit
-            $0.tintColor = .black50
-            $0.isHidden = true
+        rightButtonSectionStackView.do {
+            $0.axis = .horizontal
+            $0.alignment = .trailing
+            $0.spacing = 12
+        }
+        
+        alarmButton.do {
+            $0.setImage(UIImage(resource: .unSelectAlram), for: .normal)
+            $0.setImage(UIImage(resource: .selectAlarm), for: .selected)
+            $0.addTarget(self, action: #selector(toggleAlarmButton(_:)), for: .touchUpInside)
+        }
+        
+        dotMenuButton.do {
+            $0.setImage(UIImage(resource: .unSelectDotMenu), for: .normal)
+            $0.setImage(UIImage(resource: .selectDotMenu), for: .selected)
+            $0.addTarget(self, action: #selector(toggleDotMenuButton(_:)), for: .touchUpInside)
         }
         
         divider.do {
@@ -105,10 +127,130 @@ private extension CustomAnnouceNavigationController {
         }
     }
     
+    func setupDelegate() {
+        guard let menuView else { return }
+        
+        menuView.delegate = self
+    }
+
+    // 버튼 상태를 토글하는 메서드
+    @objc private func toggleAlarmButton(_ sender: UIButton) {
+        sender.isSelected.toggle() // selected 상태를 반전
+    }
+
+    @objc private func toggleDotMenuButton(_ sender: UIButton) {
+        sender.isSelected.toggle() // selected 상태를 반전
+        
+        // 메뉴가 표시되지 않으면 새로 생성하고, 이미 표시되고 있으면 숨김
+        if menuView == nil {
+            showMenu()
+        } else {
+            hideMenu()
+        }
+    }
+    
+    private func showMenu() {
+        let menuVC = CustomMenuView()
+        
+        // 메뉴의 초기 상태 설정
+        menuVC.alpha = 0
+        menuVC.transform = CGAffineTransform(scaleX: 1, y: 0.8)
+        
+        // 메뉴 뷰를 현재 뷰에 추가
+        view.addSubview(menuVC)
+        
+        // 메뉴의 위치와 크기 설정
+        menuVC.snp.makeConstraints {
+            $0.top.equalTo(dotMenuButton.snp.bottom).offset(10)
+            $0.trailing.equalToSuperview().inset(15)
+            $0.width.equalTo(169)
+            $0.height.equalTo(82)
+        }
+        
+        UIView.animate(
+            withDuration: 0.5, // 애니메이션 시간
+            delay: 0, // 지연 시간
+            usingSpringWithDamping: 0.6, // 스프링 감쇠 비율 (낮을수록 탄성이 강함)
+            initialSpringVelocity: 1, // 초기 속도 (값이 클수록 더 튀는 효과)
+            options: [.curveEaseOut], // 애니메이션 옵션
+            animations: {
+                menuVC.alpha = 1 // 투명도 복원
+                menuVC.transform = .identity // 원래 크기로 복원
+            },
+            completion: nil
+        )
+        // 메뉴 뷰를 변수에 저장
+        menuView = menuVC
+        setupDelegate()
+    }
+    
+    private func hideMenu(type: MenuType? = nil) {
+        guard let menuVC = menuView else { return }
+        
+        // 애니메이션으로 메뉴 숨기기
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 1,
+            options: [.curveEaseIn],
+            animations: {
+                menuVC.transform = CGAffineTransform(scaleX: 1, y: 0.8) // Y축으로 접히는 효과
+                menuVC.alpha = 0 // 투명하게 설정
+            },
+            completion: { [weak self] _ in
+                menuVC.removeFromSuperview()
+                self?.menuView = nil // 메뉴 숨김 후 상태 초기화
+                
+                if let type {
+                    self?.menuButtonTapped.send(type)
+                }
+            }
+        )
+    }
+    
+    
+    // TODO: - 1차 스프린트 알람 관련 기능 추가 시 해당 주석 삭제
+    
+    func applyRightButtonSection(_ isAuthor: Bool) {
+        switch currentUserAuth {
+        case .collegeUser, .departmentUser, .universityUser:
+//            addAlarmButton()
+            addDotMenuButton(isAuthor)
+            
+        case .successUser:
+//            addAlarmButton()
+            break
+        default:
+            break
+        }
+    }
+    
+    func addAlarmButton() {
+        resetStackView(rightButtonSectionStackView)
+        rightButtonSectionStackView.addArrangedSubview(alarmButton)
+    }
+    
+    func addDotMenuButton(_ isAuthor: Bool) {
+        resetStackView(rightButtonSectionStackView)
+        
+        if isAuthor {
+            rightButtonSectionStackView.addArrangedSubviews(dotMenuButton)
+        }
+    }
+    
+    func resetStackView(_ stackView: UIStackView) {
+        // 기존 arrangedSubviews 제거
+        stackView.arrangedSubviews.forEach { subview in
+            stackView.removeArrangedSubview(subview)
+            subview.removeFromSuperview() // 스택뷰에서 완전히 제거
+        }
+    }
+    
     func setupHierarchy() {
         view.addSubviews(safeAreaView)
         safeAreaView.addSubviews(customNavigationBar, divider)
-        customNavigationBar.addSubviews(leftButton, titleLabel, rightButton)
+        customNavigationBar.addSubviews(leftButton, titleLabel, rightButtonSectionStackView)
     }
     
     private func applyHomeLayout() {
@@ -151,7 +293,7 @@ private extension CustomAnnouceNavigationController {
             $0.centerY.equalTo(leftButton)
         }
         
-        rightButton.snp.makeConstraints {
+        rightButtonSectionStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
         }
@@ -160,7 +302,7 @@ private extension CustomAnnouceNavigationController {
     private func applyDetailLayout() {
         // 디테일 화면용 레이아웃
         safeAreaView.snp.remakeConstraints {
-            $0.top.equalToSuperview()
+//            $0.top.equalToSuperview()
             $0.bottom.equalTo(view.snp.topMargin)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(navigationHeight)
@@ -185,6 +327,19 @@ private extension CustomAnnouceNavigationController {
             $0.top.equalTo(customNavigationBar.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(1)
+        }
+        
+        rightButtonSectionStackView.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel)
+            $0.trailing.equalToSuperview().inset(20)
+        }
+        
+        alarmButton.snp.makeConstraints {
+            $0.size.equalTo(24)
+        }
+        
+        dotMenuButton.snp.makeConstraints {
+            $0.size.equalTo(24)
         }
     }
     
@@ -233,7 +388,7 @@ private extension CustomAnnouceNavigationController {
             $0.centerY.equalToSuperview()
         }
         
-        rightButton.snp.makeConstraints {
+        rightButtonSectionStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
         }
@@ -271,7 +426,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = true
             leftButton.isHidden = true
-            rightButton.isHidden = true
+            rightButtonSectionStackView.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             applyHomeStyle()
@@ -283,45 +438,49 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = true
             leftButton.isHidden = false
-            rightButton.isHidden = true
+            rightButtonSectionStackView.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             // announce 스타일 적용
             applyAnnounceStyle()
             applyDefaultLayout()
             
-        case .detail:
-            navigationHeight = 50
+        case .detail(let isAuthor):
+            navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
             leftButton.isHidden = false
             divider.isHidden = false
-            rightButton.isHidden = true
+            rightButtonSectionStackView.isHidden = false
             setupSafeArea(navigationBarHidden: false)
             
             // detail 스타일 적용
             applyDetailStyle()
             applyDetailLayout()
             
-        case .unRead:
+            applyRightButtonSection(isAuthor)
+//            applyRightButtonSection()
+            
+        case .unRead(let isAuthor):
             navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
             divider.isHidden = false
             leftButton.isHidden = false
-            rightButton.isHidden = true
+            rightButtonSectionStackView.isHidden = false
             setupSafeArea(navigationBarHidden: false)
             
             applyUnReadStyle()
             applyDetailLayout()
+            applyRightButtonSection(isAuthor)
             
-        case .post:
+        case .post, .editPost:
             navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
             divider.isHidden = false
             leftButton.isHidden = false
-            rightButton.isHidden = true
+            rightButtonSectionStackView.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             leftButton.setImage(UIImage(systemName: "xmark")?
@@ -337,7 +496,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = true
             divider.isHidden = true
             leftButton.isHidden = true
-            rightButton.isHidden = true
+            rightButtonSectionStackView.isHidden = true
             setupSafeArea(navigationBarHidden: true)
             
         case .myPage:
@@ -346,7 +505,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = true
             leftButton.isHidden = true
-            rightButton.isHidden = false
+            rightButtonSectionStackView.isHidden = false
             setupSafeArea(navigationBarHidden: false)
             
             applyMypageStyle()
@@ -358,7 +517,7 @@ private extension CustomAnnouceNavigationController {
             safeAreaView.isHidden = false
             divider.isHidden = true
             leftButton.isHidden = false
-            rightButton.isHidden = true
+            rightButtonSectionStackView.isHidden = true
             setupSafeArea(navigationBarHidden: false)
             
             applyLeftButtontyle()
@@ -368,11 +527,15 @@ private extension CustomAnnouceNavigationController {
     
     @objc private func backButtonTapped(_ sender: UIButton) {
         print("뒤로가기 버튼 동작")
-        if currentType == .post {
+        if currentType == .post || currentType == .editPost {
             self.dismiss(animated: true)
         } else {
-            if currentType == .unRead {
+            if case .unRead = currentType {
                 AmplitudeManager.shared.trackEvent(AnalyticsEvent.UnreadNotice.back)
+            }
+            
+            if menuView != nil {
+                hideMenu()
             }
             
             self.popViewController(animated: true)
@@ -434,8 +597,9 @@ private extension CustomAnnouceNavigationController {
     }
 }
 
-// MARK: - Public Methods
-extension CustomAnnouceNavigationController {
+// MARK: - Public Extension
+
+extension CustomAnnounceNavigationController {
     func setNavigationType(_ type: NavigationType) {
         currentType = type
         
@@ -450,6 +614,8 @@ extension CustomAnnouceNavigationController {
             setNavigationTitle("Studing")
         case .post:
             setNavigationTitle("공지사항 작성")
+        case .editPost:
+            setNavigationTitle("공지사항 수정")
         case .myPage:
             setNavigationTitle("마이페이지")
         case .unRead, .unReadToHome, .leftButton:
@@ -459,5 +625,19 @@ extension CustomAnnouceNavigationController {
     
     func setNavigationTitle(_ title: String) {
         titleLabel.text = title
+    }
+    
+    func addDotMenu(_ isAuthor: Bool) {
+        addDotMenuButton(isAuthor)
+    }
+}
+
+// MARK: - Public Delegate Extension
+
+extension CustomAnnounceNavigationController: MenuButtonActionDelegate {
+    func menuButtonTapAction(type: MenuType) {
+        self.dotMenuButton.isSelected.toggle()
+        
+        hideMenu(type: type)
     }
 }

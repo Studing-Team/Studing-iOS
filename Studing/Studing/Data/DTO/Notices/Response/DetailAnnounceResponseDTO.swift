@@ -21,6 +21,7 @@ struct DetailAnnounceResponseDTO: Decodable {
     let images: [String]?
     let saveCheck: Bool
     let likeCheck: Bool
+    let isAuthor: Bool
 }
 
 extension DetailAnnounceResponseDTO {
@@ -33,7 +34,8 @@ extension DetailAnnounceResponseDTO {
             bookmarkCount: saveCount,
             watchCount: readCount,
             isFavorite: likeCheck,
-            isBookmark: saveCheck)
+            isBookmark: saveCheck,
+            isAuthor: isAuthor)
     }
     
     func convertToContent() -> DetailAnnouceContentModel {

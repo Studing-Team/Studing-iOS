@@ -78,6 +78,9 @@ enum ButtonStyle {
     /// 등록하기 버튼
     case postAnnounce
     
+    /// 게시글 수정하기 버튼
+    case editAnnounce
+    
     /// 홈으로 돌아가기 버튼
     case home
     
@@ -110,6 +113,8 @@ enum ButtonStyle {
             return "등록하기"
         case .home:
             return "홈으로 돌아가기"
+        case .editAnnounce:
+            return "수정하기"
         }
     }
     
@@ -118,7 +123,7 @@ enum ButtonStyle {
     /// - Returns: 버튼이 활성 상태일 때 적용될 배경색(`UIColor`)입니다.
     var enableBackground: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home:
+        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard, .postAnnounce, .editAnnounce, .home:
             return .primary50
         case .showStuding:
             return .white
@@ -148,7 +153,7 @@ enum ButtonStyle {
     /// - Returns: 버튼 상태에 맞는 색상(`UIColor`)입니다.
     var foregroundColor: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home:
+        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .editAnnounce, .home:
             return .white
             
         case .showStuding:

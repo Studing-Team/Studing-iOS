@@ -90,11 +90,11 @@ final class HomeViewController: UIViewController {
         
         print("HomeViewController viewWillAppear")
         
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.interactivePopGestureRecognizer?.isEnabled = true
         }
         
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.setNavigationType(.home)
         }
         
@@ -253,7 +253,7 @@ private extension HomeViewController {
         
         output.postButtonTap
             .sink { [weak self] _ in
-                self?.coordinator?.presentPostAnnounce()
+                self?.coordinator?.presentPostAnnounce(type: .create)
             }
             .store(in: &cancellables)
         

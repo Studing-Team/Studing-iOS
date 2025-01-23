@@ -64,11 +64,11 @@ final class MypageViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.interactivePopGestureRecognizer?.isEnabled = true
         }
         
-        if let customNav = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNav = self.navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.myPage)
         }
     }
