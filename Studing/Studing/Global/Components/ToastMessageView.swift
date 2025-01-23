@@ -10,11 +10,28 @@ import UIKit
 import SnapKit
 import Then
 
+enum ToastType: Equatable {
+    case bookmark(isBookmark: Bool)
+    case deleteAnnounce
+    case editCompletion
+    
+    var title: String {
+        switch self {
+        case .bookmark(let isBookmark):
+            return isBookmark ? "저장한 공지사항에 추가했어요 ⭐" : "저장한 공지사항을 취소했어요 ⭐"
+        case .deleteAnnounce:
+            return "공지사항 삭제 완료 ❎"
+        case .editCompletion:
+            return "✏️ 공지사항 수정완료"
+        }
+    }
+}
+
 final class ToastMessageView: UIView {
     
     // MARK: - Properties
     
-    private var isBookmark: Bool
+    private var messageType: ToastType
     
     // MARK: - UI Properties
     
@@ -23,8 +40,8 @@ final class ToastMessageView: UIView {
     
     // MARK: - Life Cycle
     
-    init(isBookmark: Bool) {
-        self.isBookmark = isBookmark
+    init(type: ToastType) {
+        self.messageType = type
         super.init(frame: .zero)
         
         setupStyle()
@@ -50,7 +67,7 @@ private extension ToastMessageView {
         }
         
         toastMessageLabel.do {
-            $0.text = isBookmark == true ? "저장한 공지사항에 추가했어요 ⭐" : "저장한 공지사항을 취소했어요 ⭐"
+            $0.text = messageType.title
             $0.font = .interCaption12()
             $0.textColor = .white
         }
@@ -63,7 +80,6 @@ private extension ToastMessageView {
     
     func setupLayout() {
         backgroundView.snp.makeConstraints {
-            $0.width.equalTo(206)
             $0.height.equalTo(27)
             $0.center.equalToSuperview()
         }

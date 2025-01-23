@@ -19,9 +19,12 @@ final class HomeCoordinator: Coordinator {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
     }
+    
+    deinit {
+        DeepLinkNavigator.shared.removeCoordinator(self)
+    }
 
     func start() {
-        
         let userAuth = KeychainManager.shared.loadData(key: .userAuthState, type: String.self)
             .flatMap { UserAuth(rawValue: $0) } ?? .unUser
         
@@ -45,11 +48,13 @@ final class HomeCoordinator: Coordinator {
             homeVC.hidesBottomBarWhenPushed = true
         }
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.home)
         }
         
         navigationController.pushViewController(homeVC, animated: true)
+        
+        DeepLinkNavigator.shared.setActiveCoordinator(self)
     }
     
     func pushAnnouceList(_ associationName: String) {
@@ -69,7 +74,7 @@ final class HomeCoordinator: Coordinator {
         
         annouceListVC.hidesBottomBarWhenPushed = true
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.announce)
         }
         
@@ -93,7 +98,7 @@ final class HomeCoordinator: Coordinator {
         
         annouceListVC.hidesBottomBarWhenPushed = true
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             customNav.setNavigationType(.announce)
             customNav.setNavigationTitle("저장한 공지사항을 확인해요")
         }
@@ -132,19 +137,19 @@ final class HomeCoordinator: Coordinator {
         
         detailAnnouceVC.hidesBottomBarWhenPushed = true
         
-        if let customNav = navigationController as? CustomAnnouceNavigationController {
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
             switch type {
             case .announce, .bookmarkAnnounce:
-                customNav.setNavigationType(.detail)
+                customNav.setNavigationType(.detail(isAuthor: false))
                 
             case .unreadAnnounce:
-                customNav.setNavigationType(.unRead)
-                
+                customNav.setNavigationType(.unRead(isAuthor: false))
             }
         }
         
         navigationController.pushViewController(detailAnnouceVC, animated: true)
     }
+<<<<<<< HEAD
 
     func presentPostAnnounce(type: PostType) {
         let postAnnounceVM = PostAnnounceViewModel(createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()))
@@ -153,9 +158,42 @@ final class HomeCoordinator: Coordinator {
         // 새로운 CustomAnnouceNavigationController 생성
         let newNav = CustomAnnouceNavigationController(rootViewController: postAnnounceVC)
         newNav.setNavigationType(type == .announce ? .post : .firstServed)
+=======
+    
+    func presentPostAnnounce(type: PostType, noticeId: Int? = nil, content: EditAnnounceContent? = nil) {
+        
+        var postAnnounceVM: PostAnnounceViewModel
+        
+        switch type {
+        case .create:
+            postAnnounceVM =  PostAnnounceViewModel(
+                createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()),
+                type: .create
+            )
+        case .edit:
+            postAnnounceVM =  PostAnnounceViewModel(
+                editAnnounceUseCase: EditPostAnnounceUseCase(repository: NoticesRepositoryImpl()),
+                type: .edit
+            )
+        }
+        
+        let postAnnounceVC = PostAnnounceViewController(
+            type: type,
+            postAnnounceViewModel: postAnnounceVM,
+            coordinator: self
+        )
+        
+        // 새로운 CustomAnnouceNavigationController 생성
+        let newNav = CustomAnnounceNavigationController(rootViewController: postAnnounceVC)
+        newNav.setNavigationType(type == .create ? .post : .editPost)
+>>>>>>> origin/develop
         newNav.modalPresentationStyle = .overFullScreen
         
         navigationController.present(newNav, animated: true)
+        
+        if let content, let noticeId {
+            postAnnounceVM.editContent(noticeId: noticeId, content: content)
+        }
     }
     
     func presentPostSection() {
@@ -300,5 +338,22 @@ extension HomeCoordinator: CustomSignUpNavigationControllerDelegate {
                 self.removeChildCoordinator(signUpCoordinator)
             }
         }
+    }
+}
+
+extension HomeCoordinator: DeepLinkCoordinator {
+    func navigate(to destination: DeepLinkDestination, data: Any?) -> Bool {
+        switch destination {
+        case .notice(let id):
+            print("🚀 Deep Link 선택: \(String(describing: id)) 공지사항")
+            pushDetailAnnouce(type: .announce, announceId: id)
+            return true
+        default:
+            return false
+        }
+    }
+    
+    func coordinatorType() -> CoordinatorType {
+        return .home
     }
 }

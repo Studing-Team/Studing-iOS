@@ -90,11 +90,11 @@ final class HomeViewController: UIViewController {
         
         print("HomeViewController viewWillAppear")
         
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.interactivePopGestureRecognizer?.isEnabled = true
         }
         
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.setNavigationType(.home)
         }
         
@@ -251,6 +251,15 @@ private extension HomeViewController {
             }
             .store(in: &cancellables)
         
+<<<<<<< HEAD
+=======
+        output.postButtonTap
+            .sink { [weak self] _ in
+                self?.coordinator?.presentPostAnnounce(type: .create)
+            }
+            .store(in: &cancellables)
+        
+>>>>>>> origin/develop
         homeViewModel.sectionsData
             .sink { [weak self] sectionTypes in
                 // 섹션 타입이 업데이트되면 스냅샷 업데이트

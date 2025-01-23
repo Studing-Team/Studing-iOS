@@ -1,5 +1,5 @@
 //
-//  DetailAnnounceResponseDTO.swift
+//  UnreadAllAnnounceListResponseDTO.swift
 //  Studing
 //
 //  Created by ParkJunHyuk on 11/13/24.
@@ -7,7 +7,11 @@
 
 import Foundation
 
-struct DetailAnnounceResponseDTO: Decodable {
+struct UnreadAllAnnounceListResponseData: Decodable {
+    let notices: [UnreadAllAnnounceListResponseDTO]
+}
+
+struct UnreadAllAnnounceListResponseDTO: Decodable {
     let id: Int
     let title: String
     let content: String
@@ -15,15 +19,16 @@ struct DetailAnnounceResponseDTO: Decodable {
     let saveCount: Int
     let readCount: Int
     let createdAt: String
-    let logoImage: String
     let affilitionName: String
+    let logoImage: String
     let tag: String
     let images: [String]?
     let saveCheck: Bool
     let likeCheck: Bool
+    let isAuthor: Bool
 }
 
-extension DetailAnnounceResponseDTO {
+extension UnreadAllAnnounceListResponseDTO {
     func convertToHeader() -> DetailAnnouceHeaderModel {
         return DetailAnnouceHeaderModel(
             name: affilitionName,
@@ -32,8 +37,10 @@ extension DetailAnnounceResponseDTO {
             favoriteCount: likeCount,
             bookmarkCount: saveCount,
             watchCount: readCount,
-            isFavorite: likeCheck,
-            isBookmark: saveCheck)
+            isFavorite: likeCheck, 
+            isBookmark: saveCheck, 
+            isAuthor: isAuthor
+        )
     }
     
     func convertToContent() -> DetailAnnouceContentModel {

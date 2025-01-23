@@ -41,10 +41,14 @@ final class LoginViewModel: BaseViewModel {
     private var cancellables = Set<AnyCancellable>()
     
     private let signInUseCase: SignInUseCase
+    private let notificationTokenUseCase: NotificationTokenUseCase
     
-    init(signInUseCase: SignInUseCase
+    init(
+        signInUseCase: SignInUseCase,
+        notificationTokenUseCase: NotificationTokenUseCase
     ) {
         self.signInUseCase = signInUseCase
+        self.notificationTokenUseCase = notificationTokenUseCase
     }
     
     // MARK: - Public methods
@@ -131,6 +135,15 @@ extension LoginViewModel {
             UserDefaults.standard.set(true, forKey: "isLogined")
             
             return .success
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func saveNotificationToken(_ memberId: Int) async -> Result<Void, NetworkError> {
+        switch await notificationTokenUseCase.execute(memberId: memberId) {
+        case .success:
+            return .success(())
         case .failure(let error):
             return .failure(error)
         }

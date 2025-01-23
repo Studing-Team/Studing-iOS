@@ -66,7 +66,7 @@ final class WithDrawViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let customNavController = self.navigationController as? CustomAnnouceNavigationController {
+        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
             customNavController.interactivePopGestureRecognizer?.isEnabled = true
         }
     }
@@ -86,7 +86,7 @@ private extension WithDrawViewController {
         
         output.cancelButtonResult
             .sink { [weak self] _ in
-                if let customNavController = self?.navigationController as? CustomAnnouceNavigationController {
+                if let customNavController = self?.navigationController as? CustomAnnounceNavigationController {
                     customNavController.popViewController(animated: true)
                 } else {
                     self?.navigationController?.popViewController(animated: true)

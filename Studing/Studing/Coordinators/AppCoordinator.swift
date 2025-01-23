@@ -21,7 +21,7 @@ final class AppCoordinator: Coordinator {
     func start() {
         showLaunchScreen()
     }
-
+    
     private func showLaunchScreen() {
         let launchScreenVC = LaunchScreenViewController(coordinator: self)
         navigationController.setViewControllers([launchScreenVC], animated: false)
@@ -47,14 +47,14 @@ final class AppCoordinator: Coordinator {
             })
         }
     }
-
+    
     func showLoginFlow() {
         let loginCoordinator = LoginCoordinator(navigationController: navigationController, parentCoordinator: self)
         childCoordinators.append(loginCoordinator)
         loginCoordinator.delegate = self
         loginCoordinator.start()
     }
-
+    
     func showTabBarFlow() {
         navigationController.viewControllers.removeAll()
         
@@ -68,10 +68,24 @@ final class AppCoordinator: Coordinator {
         // 애니메이션과 함께 LoginFlow로 전환
         UIView.transition(with: self.navigationController.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
             tabBarCoordinator.start()
-        }, completion: { _ in
-            
+        }, completion: { [weak self] _ in
+//            guard let self = self else { return }
+//                        
+            // 딜리게이트 설정
+//            DeepLinkManager.shared.delegate = self
         })
     }
+    
+//    func handleDeepLink(type: DeepLinkType) {
+//        switch type {
+//        case .notice(let id):
+//            if let tabBarCoordinator = childCoordinators.first(where: { $0 is TabBarCoordinator }) as? TabBarCoordinator {
+//                tabBarCoordinator.handleDeepLink(type: .notice(id: id))
+//            }
+//        case .verification:
+//            break
+//        }
+//    }
 }
 
 extension AppCoordinator {
@@ -105,3 +119,9 @@ extension AppCoordinator: LoginCoordinatorDelegate {
         showTabBarFlow()
     }
 }
+
+//extension AppCoordinator: DeepLinkManagerDelegate {
+//    func receiveDeepLink(type: DeepLinkType) {
+//        handleDeepLink(type: type)
+//    }
+//}

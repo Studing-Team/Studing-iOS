@@ -7,29 +7,90 @@
 
 import UIKit
 
+/// `ButtonState` 열거형은 버튼의 활성 상태를 정의합니다.
+///
+/// - Cases:
+///   - activate: 버튼이 활성화된 상태를 나타냅니다.
+///   - deactivate: 버튼이 비활성화된 상태를 나타냅니다.
 enum ButtonState {
     case activate
     case deactivate
 }
 
+<<<<<<< HEAD
 enum CloseType {
     case gray
     case blue
 }
 
 enum ButtonStyle: Equatable {
+=======
+/// `ButtonStyle` 열거형은 버튼 스타일을 정의하며, 각 스타일에 따라 버튼의 제목,
+/// 배경색, 활성 상태 및 비활성 상태를 설정합니다.
+///
+/// ## 열거형의 각 케이스
+///   - next: "다음" 버튼입니다.
+///   - login: "로그인" 버튼입니다.
+///   - registerUniverstiy: "우리 학교 등록하기" 버튼입니다.
+///   - registerMajor: "우리 학과 등록하기" 버튼입니다.
+///   - authentication: "인증하기" 버튼입니다.
+///   - notification: "알림 받기" 버튼입니다.
+///   - showStuding: "스튜딩 시작하기" 버튼입니다.
+///   - duplicate: "중복확인" 버튼입니다.
+///   - retry: "다시 시도" 버튼입니다.
+///   - studentCard: "학생증 업로드" 버튼입니다.
+///   - postAnnounce: "등록하기" 버튼입니다.
+///   - home: "홈으로 돌아가기" 버튼입니다.
+///   - showStudingHome: "스튜딩 시작하기" 버튼으로, 일부 투명도가 적용됩니다.
+///
+/// - Properties:
+///   - title: 버튼 스타일에 맞게 설정되는 제목 문자열.
+///   - enableBackground: 버튼이 활성화 상태일 때 적용될 배경색.
+///   - disableBackground: 버튼이 비활성화 상태일 때 적용될 배경색.
+///   - foregroundColor: 버튼의 글자색 설정을 정의합니다.
+enum ButtonStyle {
+    
+    /// 다음 버튼
+>>>>>>> origin/develop
     case next
+    
+    /// 로그인 버튼
     case login
+    
+    /// 우리 학교 등록하기 버튼
     case registerUniverstiy
+    
+    /// 우리 학과 등록하기 버튼
     case registerMajor
+    
+    /// 인증하기 버튼
     case authentication
+    
+    /// 알림 받기 버튼
     case notification
+    
+    /// 스튜딩 시작하기 버튼
     case showStuding
+    
+    /// 중복확인 버튼
     case duplicate
+    
+    /// 다시 시도 버튼
     case retry
+    
+    /// 학생증 업로드 버튼
     case studentCard
+    
+    /// 스튜딩 시작하기 버튼(Home 으로 이동)
     case showStudingHome
+    
+    /// 등록하기 버튼
     case postAnnounce
+    
+    /// 게시글 수정하기 버튼
+    case editAnnounce
+    
+    /// 홈으로 돌아가기 버튼
     case home
     case close(type: CloseType)
     case startDay
@@ -37,6 +98,9 @@ enum ButtonStyle: Equatable {
     case startTime
     case endTime
     
+    /// 버튼 제목을 반환합니다.
+    ///
+    /// - Returns: 버튼 스타일에 따라 적절한 제목 문자열(`String`)을 반환합니다.
     var title: String {
         switch self {
         case .next:
@@ -63,6 +127,7 @@ enum ButtonStyle: Equatable {
             return "등록하기"
         case .home:
             return "홈으로 돌아가기"
+<<<<<<< HEAD
         case .close:
             return "닫기"
         case .startDay:
@@ -73,12 +138,23 @@ enum ButtonStyle: Equatable {
             return "시작 시간 선택"
         case .endTime:
             return "종료 시간 선택"
+=======
+        case .editAnnounce:
+            return "수정하기"
+>>>>>>> origin/develop
         }
     }
     
+    /// 버튼이 활성 상태일 때 배경색을 반환합니다.
+    ///
+    /// - Returns: 버튼이 활성 상태일 때 적용될 배경색(`UIColor`)입니다.
     var enableBackground: UIColor {
         switch self {
+<<<<<<< HEAD
         case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home, .startDay, .endDay, .startTime, .endTime:
+=======
+        case .next, .login, .registerUniverstiy, .registerMajor ,.authentication,  .notification, .duplicate, .retry, .studentCard, .postAnnounce, .editAnnounce, .home:
+>>>>>>> origin/develop
             return .primary50
         case .showStuding:
             return .white
@@ -93,6 +169,9 @@ enum ButtonStyle: Equatable {
         }
     }
     
+    /// 버튼이 비활성 상태일 때 배경색을 반환합니다.
+    ///
+    /// - Returns: 버튼이 비활성화 상태일 때 적용될 배경색(`UIColor`)입니다.
     var disableBackground: UIColor {
         switch self {
         case .next, .authentication, .postAnnounce:
@@ -106,9 +185,16 @@ enum ButtonStyle: Equatable {
         }
     }
     
+    /// 버튼의 글자 색상을 반환합니다.
+    ///
+    /// - Returns: 버튼 상태에 맞는 색상(`UIColor`)입니다.
     var foregroundColor: UIColor {
         switch self {
+<<<<<<< HEAD
         case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home, .close, .startDay, .endDay, .startTime, .endTime:
+=======
+        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .editAnnounce, .home:
+>>>>>>> origin/develop
             return .white
             
         case .showStuding:

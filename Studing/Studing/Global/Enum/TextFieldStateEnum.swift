@@ -1,5 +1,5 @@
 //
-//  TextFieldEnum.swift
+//  TextFieldStateEnum.swift
 //  Studing
 //
 //  Created by ParkJunHyuk on 9/23/24.
@@ -7,14 +7,53 @@
 
 import UIKit
 
+/// `TextFieldState` 열거형은 텍스트 필드의 다양한 상태와 그에 따른 시각적 피드백을 관리합니다.
+/// 각 상태는 일반(.normal), 선택(.select), 유효성 검사 성공(.validSuccess), 성공(.success),
+/// 중복(.duplicate), 유효하지 않음(.invalid)으로 구성되며,
+/// 각 상태에 따른 색상, 테두리 색상, 사용자 메시지를 제공합니다.
+///
+/// - Note: 각 상태는 TextFieldInputType을 연관값으로 가지며, 이를 통해 텍스트 필드의 용도에 따른 세부적인 처리가 가능합니다.
+///
+/// ## 열거형의 각 케이스
+///  - `normal`: 기본 상태를 나타냅니다.
+///  - `select`: 텍스트 필드가 선택된 상태를 나타냅니다.
+///  - `validSuccess`: 입력값이 유효성 검사를 통과한 상태를 나타냅니다.
+///  - `success`: 전체적인 검증이 성공한 상태를 나타냅니다.
+///  - `duplicate`: 입력값이 중복된 상태를 나타냅니다.
+///  - `invalid`: 입력값이 유효하지 않은 상태를 나타냅니다.
+///
+/// ## 주요 프로퍼티
+///  - `color`: 각 상태에 따른 텍스트 필드의 색상을 반환합니다.
+///  - `borderColor`: 각 상태에 따른 테두리 색상을 반환합니다.
+///  - `message`: 각 상태에 따른 사용자 안내 메시지를 반환합니다.
+///
 enum TextFieldState {
+    
+    /// 기본 상태
+    /// - Parameter type: 텍스트 필드의 입력 타입
     case normal(type: TextFieldInputType)
+    
+    /// 선택된 상태
+    /// - Parameter type: 텍스트 필드의 입력 타입
     case select(type: TextFieldInputType)
+    
+    /// 유효성 검사 성공 상태
+    /// - Parameter type: 텍스트 필드의 입력 타입
     case validSuccess(type: TextFieldInputType)
+    
+    /// 성공 상태
+    /// - Parameter type: 텍스트 필드의 입력 타입
     case success(type: TextFieldInputType)
+    
+    /// 중복된 값 상태
+    /// - Parameter type: 텍스트 필드의 입력 타입
     case duplicate(type: TextFieldInputType)
+    
+    /// 유효하지 않은 상태
+    /// - Parameter type: 텍스트 필드의 입력 타입
     case invalid(type: TextFieldInputType)
     
+    /// 텍스트 필드의 색상을 결정하는 계산 프로퍼티
     var color: UIColor {
         switch self {
         case .normal:
@@ -33,6 +72,7 @@ enum TextFieldState {
         }
     }
     
+    /// 테두리 색상을 결정하는 계산 프로퍼티
     var borderColor: CGColor {
         switch self {
         case .normal:
@@ -51,17 +91,11 @@ enum TextFieldState {
         }
     }
     
+    /// 상태에 따른 메시지를 반환하는 계산 프로퍼티
     var message: String {
         switch self {
-        case .normal(let type):
-            switch type {
-//            case .university:
-//                return "현재 등록된 학교만 보여드려요!"
-//            case .major:
-//                return  "현재 등록된 학과만 보여드려요!"
-            default:
-                return ""
-            }
+        case .normal:
+            return ""
         case .success(let type):
             switch type {
             case .userId:
@@ -106,59 +140,6 @@ enum TextFieldState {
             }
         default:
             return ""
-        }
-    }
-}
-
-enum TextFieldInputType {
-    case userId
-    case userPw
-    case confirmPw
-    case userName
-    case studentId
-    case university
-    case major
-    case allStudentId
-    
-    var title: String {
-        switch self {
-        case .userId:
-            return "아이디(최대 12자)"
-        case .userPw:
-            return "비밀번호"
-        case .confirmPw:
-            return "비밀번호 확인"
-        case .userName:
-            return "이름"
-        case .studentId:
-            return "학번"
-        case .university:
-            return "대학교"
-        case .major:
-            return "전공학과"
-        case .allStudentId:
-            return "전체 학번"
-        }
-    }
-    
-    var placeholder: String {
-        switch self {
-        case .userId:
-            return "ex. studing24"
-        case .userPw:
-            return "8자리 이상 입력해주세요"
-        case .confirmPw:
-            return "비밀번호를 다시 한 번 확인할게요"
-        case .userName:
-            return "이름을 입력해주세요"
-        case .studentId:
-            return "학번을 선택해주세요"
-        case .university:
-            return "대학교를 입력해주세요"
-        case .major:
-            return "학과를 입력해주세요"
-        case .allStudentId:
-            return "ex. 202021234"
         }
     }
 }

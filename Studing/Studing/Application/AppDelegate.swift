@@ -20,9 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseApp.configure()
         
-        // 앱 실행 시 사용자에게 알림 허용 권한
-        UNUserNotificationCenter.current().delegate = self
-        
         // UNUserNotificationCenterDelegate 를 구현한 메서드 실행
         application.registerForRemoteNotifications()
         
@@ -44,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 전체 네비게이션 바에 적용
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
-
+        
         return true
     }
 
@@ -83,32 +80,6 @@ extension AppDelegate: MessagingDelegate {
         if let fcmToken {
             let _ = KeychainManager.shared.save(key: .fcmToken, value: fcmToken)
         }
-    }
-}
-
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    
-    // Foreground 상태에서 알림 받았을 때
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-        let userInfo = notification.request.content.userInfo
-
-        print(userInfo)
-        
-        completionHandler([[.banner, .badge, .sound]])
-    }
-    
-    // 푸시메세지를 받았을 떄
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
-        let userInfo = response.notification.request.content.userInfo
-        
-        print(userInfo)
-        
-        completionHandler()
     }
 }
 

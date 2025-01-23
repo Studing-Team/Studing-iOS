@@ -137,6 +137,12 @@ enum TagButtonState {
 
 final class AnnounceTagButton: UIButton {
    var buttonStyle: TagStyle
+    
+    override var isSelected: Bool {
+        didSet {
+            buttonState = isSelected ? .select : .notSelct
+        }
+    }
    
    var buttonState: TagButtonState = .notSelct {
        didSet {
