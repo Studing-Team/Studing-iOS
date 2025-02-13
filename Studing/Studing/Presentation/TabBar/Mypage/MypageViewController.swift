@@ -178,8 +178,8 @@ private extension MypageViewController {
             self.showConfirmCancelAlert(
                 mainTitle: "로그아웃",
                 subTitle: "로그아웃 하시겠습니까?",
-                rightButtonTitle: "확인",
-                leftButtonTitle: "취소",
+                leftButtonStyle: .cancel,
+                rightButtonStyle: .confirm(type: .normal),
                 rightButtonHandler: {
                     self.comfirmButtonTappend.send()
                 })

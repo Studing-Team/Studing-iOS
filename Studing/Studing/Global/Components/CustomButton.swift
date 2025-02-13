@@ -40,11 +40,11 @@ final class CustomButton: UIButton {
             [.font: buttonStyle == .studentCard ? UIFont.interBody2() : UIFont.interSubtitle2()]
         ))
         config.attributedTitle = titleString
-        config.baseBackgroundColor = buttonStyle.disableBackground
+        config.baseBackgroundColor = buttonState == .deactivate ? buttonStyle.disableBackground : buttonStyle.enableBackground
         config.baseForegroundColor = buttonStyle.foregroundColor
         config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
         
-        originalColor = buttonStyle.disableBackground
+        originalColor = buttonState == .deactivate ? buttonStyle.disableBackground : buttonStyle.enableBackground
         
         self.configuration = config
         
@@ -53,8 +53,10 @@ final class CustomButton: UIButton {
             layer.cornerRadius =  18
         case .studentCard:
             layer.cornerRadius = 12
-        case .close, .startDay, .endDay, .startTime, .endTime:
+        case .close, .startDay, .endDay, .startTime, .endTime, .myRanking, .alarmDay, .alarmTime:
             layer.cornerRadius = 10
+        case .cancel, .confirm, .delete, .retry:
+            layer.cornerRadius = 8
         default:
             layer.cornerRadius = 24
         }
