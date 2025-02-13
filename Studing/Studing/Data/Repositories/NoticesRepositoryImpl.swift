@@ -28,8 +28,11 @@ final class NoticesRepositoryImpl: NoticesRepository {
         return await NetworkManager.shared.request(NoticesAPI.postUnreadAllAnnouce(UnreadAllAnnounceListRequestDTO(categorie: associationName)))
     }
     
-    func getDetailAnnounce(noticeId: Int) async -> Result<DetailAnnounceResponseDTO, NetworkError> {
-        return await NetworkManager.shared.request(NoticesAPI.getDetailAnnounce(noticeId: noticeId))
+    func getDetailAnnounce(noticeId: Int) async throws -> DetailAnnounceEntity {
+        
+        let response: DetailAnnounceResponseDTO = try await NetworkManager.shared.request(NoticesAPI.getDetailAnnounce(noticeId: noticeId)).get()
+        
+        return response.toEntity()
     }
     
     func postLikeAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError> {
@@ -48,8 +51,11 @@ final class NoticesRepositoryImpl: NoticesRepository {
         return await NetworkManager.shared.request(NoticesAPI.deleteBookmarkAnnouce(noticeId: noticeId))
     }
     
-    func postCreateAnnounce(dto: CreateAnnounceRequestDTO) async -> Result<EmptyResponse, NetworkError> {
-        return await NetworkManager.shared.request(NoticesAPI.postCreateAnnouce(dto))
+    func postCreateAnnounce(dto: CreateAnnounceRequestDTO) async throws -> EmptyResponse {
+        
+        let response: EmptyResponse = try await NetworkManager.shared.request(NoticesAPI.postCreateAnnouce(dto)).get()
+        
+        return response
     }
     
     func editPostAnnounce(noticeId: Int, dto: CreateAnnounceRequestDTO) async -> Result<EmptyResponse, NetworkError> {
@@ -58,5 +64,19 @@ final class NoticesRepositoryImpl: NoticesRepository {
     
     func deletePostAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError> {
         return await NetworkManager.shared.request(NoticesAPI.deletePostAnnounce(noticeId: noticeId))
+    }
+    
+    func postRegistFirstCome(noticeId: Int) async throws -> EmptyResponse {
+        
+        let response: EmptyResponse = try await NetworkManager.shared.request(NoticesAPI.postRegistFirstCome(noticeId: noticeId)).get()
+        
+        return response
+    }
+    
+    func getFirstComeRankings(noticeId: Int) async throws -> FirstComeRankingsResponseData {
+        
+        let response: FirstComeRankingsResponseData = try await NetworkManager.shared.request(NoticesAPI.getFirstComeRankings(noticeId: noticeId)).get()
+        
+        return response
     }
 }

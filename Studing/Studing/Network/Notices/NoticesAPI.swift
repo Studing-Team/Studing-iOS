@@ -21,6 +21,8 @@ enum NoticesAPI {
     case postCreateAnnouce(CreateAnnounceRequestDTO)
     case editPostAnnounce(noticeId: Int, CreateAnnounceRequestDTO)
     case deletePostAnnounce(noticeId: Int)
+    case postRegistFirstCome(noticeId: Int)
+    case getFirstComeRankings(noticeId: Int)
 }
 
 extension NoticesAPI: APIEndpoint {
@@ -50,14 +52,18 @@ extension NoticesAPI: APIEndpoint {
             return basePath.rawValue + "/create"
         case .editPostAnnounce(let noticeId, _), .deletePostAnnounce(let noticeId):
             return basePath.rawValue + "/\(noticeId)"
+        case .postRegistFirstCome(let noticeId):
+            return basePath.rawValue + "/first-come/\(noticeId)"
+        case .getFirstComeRankings(let noticeId):
+            return basePath.rawValue + "/first-come/rankings/\(noticeId)"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getAllAnnounce, .getDetailAnnounce:
+        case .getAllAnnounce, .getDetailAnnounce, .getFirstComeRankings:
             return .get
-        case .postAllAssociationAnnounce, .postBookmarkAssociationAnnounce, .postCheckAnnouce, .postUnreadAllAnnouce, .postLikeAnnouce, .postBookmarkAnnouce, .postCreateAnnouce:
+        case .postAllAssociationAnnounce, .postBookmarkAssociationAnnounce, .postCheckAnnouce, .postUnreadAllAnnouce, .postLikeAnnouce, .postBookmarkAnnouce, .postCreateAnnouce, .postRegistFirstCome:
             return .post
         case .deleteLikeAnnouce, .deleteBookmarkAnnouce, .deletePostAnnounce:
             return .delete

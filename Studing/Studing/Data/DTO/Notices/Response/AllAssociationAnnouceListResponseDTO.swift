@@ -64,7 +64,7 @@ extension AllAssociationAnnouceListResponseDTO {
     
     func convertToAnnounceType(type: String) -> AnnounceType {
         if type == "공지" {
-            return .annouce
+            return .announce
         } else {
             return .event
         }

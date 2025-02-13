@@ -26,11 +26,18 @@ struct UnreadAllAnnounceListResponseDTO: Decodable {
     let saveCheck: Bool
     let likeCheck: Bool
     let isAuthor: Bool
+    let startTime: String?
+    let endTime: String?
+    let isFirstComeNotice: Bool
+    let isFirstComeApplied: Bool
+    let alarmTime: String?
 }
 
 extension UnreadAllAnnounceListResponseDTO {
-    func convertToHeader() -> DetailAnnouceHeaderModel {
-        return DetailAnnouceHeaderModel(
+    func convertToHeader() -> BaseDetailAnnounceHeaderModel {
+        return BaseDetailAnnounceHeaderModel(
+            // TODO: - 놓친 공지사항 API 수정 후 해당 DTO 도 변경 (type 은 수정)
+            type: .basic,
             name: affilitionName,
             image: logoImage,
             days: createdAt.formatDate(from: createdAt),
@@ -45,7 +52,7 @@ extension UnreadAllAnnounceListResponseDTO {
     
     func convertToContent() -> DetailAnnouceContentModel {
         return DetailAnnouceContentModel(
-            type: tag == "공지" ? .annouce : .event,
+            type: tag == "공지" ? .announce : .event,
             title: title,
             content: content
         )
@@ -53,5 +60,19 @@ extension UnreadAllAnnounceListResponseDTO {
     
     func convertToImages() -> [DetailAnnouceImageModel]? {
         return images?.compactMap{ DetailAnnouceImageModel(image: $0) }
+    }
+
+    func convertToDateComponents(alarmTime: String?, components: Set<Calendar.Component>) -> DateComponents? {
+        guard let alarmTime else { return nil }
+        
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        inputFormatter.locale = Locale(identifier: "ko_KR")
+        inputFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        
+        guard let date = inputFormatter.date(from: alarmTime) else { return nil }
+        
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.dateComponents(components, from: date)
     }
 }
