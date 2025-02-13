@@ -28,8 +28,6 @@ final class DetailAnnouceContentCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .black5
-        
         setupStyle()
         setupHierarchy()
         setupLayout()
@@ -48,6 +46,8 @@ extension DetailAnnouceContentCollectionViewCell {
         annouceTypeView.configure(type: model.type)
         
         layoutIfNeeded()
+        contentTextView.sizeToFit()
+        
         let contentHeight = contentTextView.contentSize.height
         let annouceTypeViewHeight = annouceTypeView.bounds.height
         let contentTitleHeight = contentTitleLabel.bounds.height
@@ -56,7 +56,7 @@ extension DetailAnnouceContentCollectionViewCell {
         
         let cellHeight = self.bounds.height
         print(cellHeight)
-        delegate?.contentCell(self, didUpdateHeight: contentHeight + annouceTypeViewHeight + contentTitleHeight)
+        delegate?.contentCell(self, didUpdateHeight: contentHeight)
     }
 }
 
@@ -74,7 +74,9 @@ private extension DetailAnnouceContentCollectionViewCell {
             $0.backgroundColor = .black5
             $0.font = .interBody2()
             $0.isEditable = false
-            $0.isScrollEnabled = true
+            $0.isScrollEnabled = false
+            $0.textContainerInset = .zero
+            $0.textContainer.lineFragmentPadding = 0
         }
     }
     
@@ -96,7 +98,7 @@ private extension DetailAnnouceContentCollectionViewCell {
         }
         
         contentTextView.snp.makeConstraints {
-            $0.top.equalTo(contentTitleLabel.snp.bottom).offset(1)
+            $0.top.equalTo(contentTitleLabel.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().inset(24)
         }

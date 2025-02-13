@@ -16,10 +16,10 @@ final class PostModalView: UIView {
     
     private let titleLabel = UILabel()
     private let contentStackView = UIStackView()
-    private let postFirstSectionView = PostModalSectionView(type: .firstServed)
+    private let postFirstSectionView = PostModalSectionView(type: .firstCome)
     private let postSectionView = PostModalSectionView(type: .announce)
     
-    // MARK: - Life Cycle
+    // MARK: - Init
     
     init() {
         super.init(frame: .zero)

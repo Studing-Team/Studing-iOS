@@ -159,3 +159,98 @@ extension UIView {
         Preview(view: self)
     }
 }
+
+extension UIView {
+    func addBorder(edges: [UIRectEdge], color: UIColor, width: CGFloat = 1.0, cornerRadius: CGFloat = 15.0, corners: UIRectCorner = []) {
+        // 기존 레이어 제거
+        layer.sublayers?.filter { $0.name == "BorderLayer" }.forEach { $0.removeFromSuperlayer() }
+        
+        // 코너 라운딩을 위한 경로 생성
+        let roundedPath = UIBezierPath(roundedRect: bounds,
+                                     byRoundingCorners: corners,
+                                     cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+        
+        // 테두리를 위한 쉐이프 레이어
+        let borderLayer = CAShapeLayer()
+        borderLayer.name = "BorderLayer"
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = color.cgColor
+        borderLayer.lineWidth = width
+        
+        // 각 엣지별로 경로 생성
+        let path = CGMutablePath()
+        
+        if edges.contains(.top) {
+            path.addLines(between: [
+                CGPoint(x: cornerRadius, y: 0),
+                CGPoint(x: bounds.width - cornerRadius, y: 0)
+            ])
+        }
+        
+        if edges.contains(.right) {
+            path.addLines(between: [
+                CGPoint(x: bounds.width, y: cornerRadius),
+                CGPoint(x: bounds.width, y: bounds.height - cornerRadius)
+            ])
+        }
+        
+        if edges.contains(.bottom) {
+            path.addLines(between: [
+                CGPoint(x: bounds.width - cornerRadius, y: bounds.height),
+                CGPoint(x: cornerRadius, y: bounds.height)
+            ])
+        }
+        
+        if edges.contains(.left) {
+            path.addLines(between: [
+                CGPoint(x: 0, y: bounds.height - cornerRadius),
+                CGPoint(x: 0, y: cornerRadius)
+            ])
+        }
+        
+        // 코너 부분 처리
+        if cornerRadius > 0 && !corners.isEmpty {
+            if corners.contains(.topLeft) && edges.contains(.top) && edges.contains(.left) {
+                path.addArc(center: CGPoint(x: cornerRadius, y: cornerRadius),
+                           radius: cornerRadius,
+                           startAngle: .pi,
+                           endAngle: 3 * .pi / 2,
+                           clockwise: false)
+            }
+            
+            if corners.contains(.topRight) && edges.contains(.top) && edges.contains(.right) {
+                path.addArc(center: CGPoint(x: bounds.width - cornerRadius, y: cornerRadius),
+                           radius: cornerRadius,
+                           startAngle: 3 * .pi / 2,
+                           endAngle: 0,
+                           clockwise: false)
+            }
+            
+            if corners.contains(.bottomRight) && edges.contains(.bottom) && edges.contains(.right) {
+                path.addArc(center: CGPoint(x: bounds.width - cornerRadius, y: bounds.height - cornerRadius),
+                           radius: cornerRadius,
+                           startAngle: 0,
+                           endAngle: .pi / 2,
+                           clockwise: false)
+            }
+            
+            if corners.contains(.bottomLeft) && edges.contains(.bottom) && edges.contains(.left) {
+                path.addArc(center: CGPoint(x: cornerRadius, y: bounds.height - cornerRadius),
+                           radius: cornerRadius,
+                           startAngle: .pi / 2,
+                           endAngle: .pi,
+                           clockwise: false)
+            }
+        }
+        
+        borderLayer.path = path
+        layer.addSublayer(borderLayer)
+        
+        // 클리핑 마스크 적용
+        if cornerRadius > 0 && !corners.isEmpty {
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = roundedPath.cgPath
+            layer.mask = maskLayer
+        }
+    }
+}

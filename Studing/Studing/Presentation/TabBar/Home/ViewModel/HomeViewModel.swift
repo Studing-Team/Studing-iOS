@@ -101,7 +101,6 @@ final class HomeViewModel: BaseViewModel {
                     self.sectionUpdatePublisher.send(.association)
                     self.selectedAssociationTitle.send(updatedData[index].name)
                     
-                    // guard associationData[index].isRegisteredDepartment else { return nil }
                     if associationData[index].isRegisteredDepartment == true {
                         if updatedData[index].associationType != nil {
                             return updatedData[index].associationType?.typeName
@@ -247,12 +246,15 @@ extension HomeViewModel {
         switch await recentAnnouceUseCase.execute(associationName: name) {
         case .success(let response):
             let convertData = convertAssociationAnnounceEntity(response.notices)
+            
+            // TODO: - Thread 12: EXC_BAD_ACCESS (code=1, address=0x8000000000000028)
             sectionDataDict[.annouce] = convertData
             
         case .failure(let error):
             print("Error:", error.localizedDescription)
         }
     }
+    
 
     func getMyBookmarkInfo() async {
         switch await bookmarkAnnouceUseCase.execute() {

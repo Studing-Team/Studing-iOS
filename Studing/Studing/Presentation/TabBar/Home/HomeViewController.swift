@@ -251,15 +251,13 @@ private extension HomeViewController {
             }
             .store(in: &cancellables)
         
-<<<<<<< HEAD
-=======
         output.postButtonTap
             .sink { [weak self] _ in
-                self?.coordinator?.presentPostAnnounce(type: .create)
+//                self?.coordinator?.presentPostAnnounce(postType: .edit, postOptionType: .announce)
+                self?.coordinator?.presentPostSection()
             }
             .store(in: &cancellables)
-        
->>>>>>> origin/develop
+
         homeViewModel.sectionsData
             .sink { [weak self] sectionTypes in
                 // 섹션 타입이 업데이트되면 스냅샷 업데이트

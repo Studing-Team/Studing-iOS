@@ -12,6 +12,8 @@ import Then
 
 final class ContentInfoView: UIView {
     
+    // MARK: - UI Properties
+    
     private let contentsStackView = UIStackView()
     
     private let favoriteCountLabel = UILabel()
@@ -27,11 +29,10 @@ final class ContentInfoView: UIView {
     private let watchInfoStackView = UIStackView()
     private let contentsInfoStackView = UIStackView()
     
-//    private let divider = UILabel()
-//    private let divider2 = UILabel()
-    
     private let divider = UIView()
     private let divider2 = UIView()
+    
+    // MARK: - init
     
     init() {
         super.init(frame: .zero)
@@ -60,17 +61,14 @@ final class ContentInfoView: UIView {
 extension ContentInfoView {
     func setupStyle() {
         favoriteImage.do {
-//            $0.backgroundColor = .yellow
             $0.contentMode = .scaleAspectFit
         }
         
         bookmarkImage.do {
-//            $0.backgroundColor = .yellow
             $0.contentMode = .scaleAspectFit
         }
         
         watchImage.do {
-//            $0.backgroundColor = .yellow
             $0.contentMode = .scaleAspectFit
         }
         
@@ -82,24 +80,20 @@ extension ContentInfoView {
         favoriteInfoStackView.do {
             $0.addArrangedSubviews(favoriteImage, favoriteCountLabel)
             $0.axis = .horizontal
-            $0.alignment = .center
         }
         
         bookmarkInfoStackView.do {
             $0.addArrangedSubviews(bookmarkImage, bookmarkCountLabel)
             $0.axis = .horizontal
-            $0.alignment = .center
         }
         
         watchInfoStackView.do {
             $0.addArrangedSubviews(watchImage, watchCountLabel)
             $0.axis = .horizontal
-            $0.alignment = .center
         }
         
         [favoriteInfoStackView, bookmarkInfoStackView, watchInfoStackView].forEach {
             $0.axis = .horizontal
-            $0.spacing = 1
             $0.distribution = .fill
         }
         
@@ -107,21 +101,10 @@ extension ContentInfoView {
             $0.addArrangedSubviews(favoriteInfoStackView, divider, bookmarkInfoStackView, divider2, watchInfoStackView)
             $0.axis = .horizontal
             $0.spacing = 5
-            $0.distribution = .fill
-            $0.alignment = .center
+            $0.alignment = .trailing
         }
         
-        divider.do {
-//            $0.text = "|"
-//            $0.textColor = .black30
-//            $0.font = .interCaption10()
-            $0.backgroundColor = .black30
-        }
-        
-        divider2.do {
-//            $0.text = "|"
-//            $0.textColor = .black30
-//            $0.font = .interCaption10()
+        [divider, divider2].forEach {
             $0.backgroundColor = .black30
         }
     }
@@ -141,28 +124,13 @@ extension ContentInfoView {
                 $0.width.equalTo(16)
             }
         }
-        
-//        favoriteImage.snp.makeConstraints {
-//            $0.width.equalTo(5)
-//        }
-//        bookmarkImage.snp.makeConstraints {
-//            $0.width.equalTo(5)
-//        }
-//
-//        watchImage.snp.makeConstraints {
-//            $0.width.equalTo(5)
-//        }
     
-        divider.snp.makeConstraints {
-            $0.width.equalTo(1)
-            $0.height.equalTo(10)
-            $0.centerY.equalToSuperview()
-        }
-
-        divider2.snp.makeConstraints {
-            $0.width.equalTo(1)
-            $0.height.equalTo(10)
-            $0.centerY.equalToSuperview()
+        [divider, divider2].forEach {
+            $0.snp.makeConstraints {
+                $0.width.equalTo(0.7)
+                $0.centerY.equalToSuperview()
+                $0.verticalEdges.equalToSuperview().inset(3)
+            }
         }
     }
     

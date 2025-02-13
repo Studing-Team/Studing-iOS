@@ -16,11 +16,11 @@ final class TitleSectionHeaderView: UIView {
     
     private let type: TitleType
     
-    private var postType: PostType {
+    private var postType: PostDisplayType {
         if isAnnounceType {
             return .announce
         } else {
-            return .firstServed
+            return .firstCome
         }
     }
     
@@ -85,7 +85,7 @@ private extension TitleSectionHeaderView {
 
         if isAnnounceType {
             addSubviews(checkBoxButton, periodTitleLabel)
-        } else if postType == .firstServed && type == .personNumber {
+        } else if postType == .firstCome && type == .personNumber {
             addSubview(rightSubTitleLabel)
         }
     }
@@ -105,7 +105,7 @@ private extension TitleSectionHeaderView {
         // announce 타입일 때만 추가 레이아웃
         if isAnnounceType {
             setupPeriodLayout()
-        } else if postType == .firstServed && type == .personNumber {
+        } else if postType == .firstCome && type == .personNumber {
             setupPersonLayout()
         }
     }
@@ -145,3 +145,4 @@ import SwiftUI
         .showPreview()
 }
 #endif
+

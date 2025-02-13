@@ -27,6 +27,9 @@ final class PeriodContentView: UIView {
     
     weak var delegate: ContentViewDelegate?
     
+    private let dateFormatter = DateFormatter()
+    private let timeFormatter = DateFormatter()
+    
     // MARK: - UI Properties
     
     private let startTitleLabel = UILabel()
@@ -46,10 +49,25 @@ final class PeriodContentView: UIView {
         setupHierarchy()
         setupLayout()
         setupDelegate()
+//        setupTodayAndTimeLabel()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // 각 PeriodSettingView 값을 설정하는 메서드들
+    func setPeriod(type: PeriodType, text: String) {
+        switch type {
+        case .startDay:
+            startPeriodDayView.bindingTitle(title: text)
+        case .endDay:
+            endPeriodDayView.bindingTitle(title: text)
+        case .startTime:
+            startPeriodTimeView.bindingTitle(title: text)
+        case .endTime:
+            endPeriodTimeView.bindingTitle(title: text)
+        }
     }
 }
 
@@ -67,6 +85,15 @@ private extension PeriodContentView {
             $0.textColor = .black40
             $0.text = "종료 시간"
             $0.font = .interBody1()
+        }
+        
+        dateFormatter.do {
+            $0.dateFormat = "yyyy년 M월 d일"
+            $0.locale = Locale(identifier: "ko_KR")
+        }
+        
+        timeFormatter.do {
+            $0.dateFormat = "HH:mm"
         }
         
         setupGesture(for: startPeriodDayView, periodType: .startDay)
@@ -144,6 +171,20 @@ private extension PeriodContentView {
     
     func setupDelegate() {
         
+    }
+    
+    func setupTodayAndTimeLabel() {
+        let today = dateFormatter.string(from: Date())
+        
+        let defaultTime = "09:00"
+        
+        [startPeriodDayView, endPeriodDayView].forEach {
+            $0.bindingTitle(title: today)
+        }
+        
+        [startPeriodTimeView, endPeriodTimeView].forEach {
+            $0.bindingTitle(title: defaultTime)
+        }
     }
 }
 

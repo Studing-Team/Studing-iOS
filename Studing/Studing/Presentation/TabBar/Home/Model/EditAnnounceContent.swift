@@ -13,4 +13,8 @@ struct EditAnnounceContent {
     let image: [String]?
     let content: String
     let tag: String
+    let startDay: DateComponents?
+    let startTime: DateComponents?
+    let endDay: DateComponents?
+    let endTime: DateComponents?
 }

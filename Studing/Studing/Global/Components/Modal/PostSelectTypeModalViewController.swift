@@ -23,7 +23,7 @@ final class PostSelectTypeModalViewController: SingleButtonSheetViewController {
     
     private let titleLabel = UILabel()
     private let postSectionStackView = UIStackView()
-    private let postFirstSectionView = PostModalSectionView(type: .firstServed)
+    private let postFirstSectionView = PostModalSectionView(type: .firstCome)
     private let postAnnounceSectionView = PostModalSectionView(type: .announce)
         
     // MARK: - Init

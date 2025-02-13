@@ -18,6 +18,8 @@ final class UnUserAuthView: UIView {
         buttonTapPublisher.eraseToAnyPublisher()
     }
     
+    // MARK: - UI Properties
+    
     private let userAuth: UserAuth
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()

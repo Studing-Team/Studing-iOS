@@ -9,8 +9,9 @@ import Foundation
 
 protocol DetailAnnouceSectionData {}
 
-struct DetailAnnouceHeaderModel: Hashable, DetailAnnouceSectionData {
+struct BaseDetailAnnounceHeaderModel: Hashable, DetailAnnouceSectionData {
     let id = UUID()
+    let type: PostOptionType
     let name: String
     let image: String
     let days: String
@@ -19,5 +20,21 @@ struct DetailAnnouceHeaderModel: Hashable, DetailAnnouceSectionData {
     var watchCount: Int
     var isFavorite: Bool
     var isBookmark: Bool
-    var isAuthor: Bool
+    let isAuthor: Bool
+//    let isAlarm: Bool
+//    let alarmTime: DateComponents?
+}
+
+struct DetailAnnouncePeriodHeaderModel: Hashable, DetailAnnouceSectionData {
+    var base: BaseDetailAnnounceHeaderModel
+    let startTime: String
+    let endTime: String
+}
+
+struct DetailAnnounceFirstComeHeaderModel: Hashable, DetailAnnouceSectionData {
+    var base: BaseDetailAnnounceHeaderModel
+    let startTime: String
+    let endTime: String
+    var isFirstComeApplied: Bool
+    var firstComeButtonState: FirstComeState
 }

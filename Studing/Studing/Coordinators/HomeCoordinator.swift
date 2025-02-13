@@ -12,6 +12,8 @@ final class HomeCoordinator: Coordinator {
     var navigationController: UINavigationController
     weak var parentCoordinator: (any Coordinator)?
     var childCoordinators: [any Coordinator] = []
+
+    private var currentPostAnnounceVM: PostAnnounceViewModel?
     
     init(navigationController: UINavigationController,
          parentCoordinator: (any Coordinator)?
@@ -136,57 +138,42 @@ final class HomeCoordinator: Coordinator {
         )
         
         detailAnnouceVC.hidesBottomBarWhenPushed = true
-        
-        if let customNav = navigationController as? CustomAnnounceNavigationController {
-            switch type {
-            case .announce, .bookmarkAnnounce:
-                customNav.setNavigationType(.detail(isAuthor: false))
-                
-            case .unreadAnnounce:
-                customNav.setNavigationType(.unRead(isAuthor: false))
-            }
-        }
-        
         navigationController.pushViewController(detailAnnouceVC, animated: true)
     }
-<<<<<<< HEAD
 
-    func presentPostAnnounce(type: PostType) {
-        let postAnnounceVM = PostAnnounceViewModel(createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()))
-        let postAnnounceVC = PostAnnounceViewController(postAnnounceViewModel: postAnnounceVM, coordinator: self, type: type)
-        
-        // 새로운 CustomAnnouceNavigationController 생성
-        let newNav = CustomAnnouceNavigationController(rootViewController: postAnnounceVC)
-        newNav.setNavigationType(type == .announce ? .post : .firstServed)
-=======
-    
-    func presentPostAnnounce(type: PostType, noticeId: Int? = nil, content: EditAnnounceContent? = nil) {
-        
-        var postAnnounceVM: PostAnnounceViewModel
-        
-        switch type {
+    func presentPostAnnounce(postType: PostType,
+                             postDisplayType: PostDisplayType,
+                             noticeId: Int? = nil,
+                             content: EditAnnounceContent? = nil
+    ) {
+        switch postType {
         case .create:
-            postAnnounceVM =  PostAnnounceViewModel(
+            self.currentPostAnnounceVM =  PostAnnounceViewModel(
                 createAnnounceUseCase: CreateAnnounceUseCase(repository: NoticesRepositoryImpl()),
-                type: .create
+                type: .create,
+                postOptionType: postDisplayType == .announce ? .basic : .firstCome
             )
+            
         case .edit:
-            postAnnounceVM =  PostAnnounceViewModel(
+            self.currentPostAnnounceVM =  PostAnnounceViewModel(
                 editAnnounceUseCase: EditPostAnnounceUseCase(repository: NoticesRepositoryImpl()),
-                type: .edit
+                type: .edit, 
+                postOptionType: postDisplayType == .announce ? .basic : .firstCome
             )
         }
+
+        guard let postAnnounceVM = self.currentPostAnnounceVM else { return }
         
         let postAnnounceVC = PostAnnounceViewController(
-            type: type,
+            postType: postType,
+            postDisplayType: postDisplayType,
             postAnnounceViewModel: postAnnounceVM,
             coordinator: self
         )
         
         // 새로운 CustomAnnouceNavigationController 생성
         let newNav = CustomAnnounceNavigationController(rootViewController: postAnnounceVC)
-        newNav.setNavigationType(type == .create ? .post : .editPost)
->>>>>>> origin/develop
+        newNav.setNavigationType(postDisplayType == .announce ? .post : .firstCome)
         newNav.modalPresentationStyle = .overFullScreen
         
         navigationController.present(newNav, animated: true)
@@ -200,10 +187,10 @@ final class HomeCoordinator: Coordinator {
         let postSelectTypeModalVC = PostSelectTypeModalViewController(
             coordinator: self,
             firstSectionTap: {
-                self.presentPostAnnounce(type: .firstServed)
+                self.presentPostAnnounce(postType: .create, postDisplayType: .firstCome)
             },
             announceSectionTap: {
-                self.presentPostAnnounce(type: .announce)
+                self.presentPostAnnounce(postType: .create, postDisplayType: .announce)
             }
         )
 
@@ -215,28 +202,40 @@ final class HomeCoordinator: Coordinator {
             ]
             
             postSelectTypeModalVC.view.backgroundColor = .clear
-            postSelectTypeModalVC.modalPresentationStyle = .pageSheet
+            postSelectTypeModalVC.modalPresentationStyle = .overFullScreen//.pageSheet//.overFullScreen
         }
         navigationController.present(postSelectTypeModalVC, animated: true)
     }
     
     func presentCalendarModal(type: PeriodType) {
         guard let topMostVC = navigationController.presentedViewController else { return }
-        
+        guard let postAnnounceVM = self.currentPostAnnounceVM else { return }
         var calendarModalVC: UIViewController
         
         switch type {
         case .startDay:
-            calendarModalVC = CalendarModalViewController(type: .start)
+            calendarModalVC = CalendarModalViewController(
+                type: .start, 
+                viewModel: postAnnounceVM
+            )
             
         case .startTime:
-            calendarModalVC = TimePickerModalViewController(type: .start)
+            calendarModalVC = TimePickerModalViewController(
+                type: .start, 
+                viewModel: postAnnounceVM
+            )
             
         case .endDay:
-            calendarModalVC = CalendarModalViewController(type: .end)
+            calendarModalVC = CalendarModalViewController(
+                type: .end, 
+                viewModel: postAnnounceVM
+            )
             
         case .endTime:
-            calendarModalVC = TimePickerModalViewController(type: .end)
+            calendarModalVC = TimePickerModalViewController(
+                type: .end, 
+                viewModel: postAnnounceVM
+            )
         }
         
         if let sheet = calendarModalVC.sheetPresentationController {
@@ -254,6 +253,46 @@ final class HomeCoordinator: Coordinator {
         
         calendarModalVC.modalPresentationStyle = .pageSheet
         topMostVC.present(calendarModalVC, animated: true)
+    }
+    
+    func presentFirstComeRankMoal(noticeId: Int) {
+        
+        let firstComeModalVM = FirstComeModalViewModel(noticeId: noticeId, firstComeRankingsUseCase: FirstComeRankingsUseCase(repository: NoticesRepositoryImpl()))
+        
+        let firstComeModalVC = FirstComeModalViewController(firstComeModalViewModel: firstComeModalVM)
+        
+        if let sheet = firstComeModalVC.sheetPresentationController {
+            sheet.detents = [
+                .custom { _ in
+                    return 609 * (UIScreen.main.bounds.height / 812)
+                }
+            ]
+        }
+        
+        firstComeModalVC.modalPresentationStyle = .pageSheet
+        navigationController.present(firstComeModalVC, animated: true)
+    }
+    
+    func presentAnnounceAlarmSetting(noticeId: Int, alarmData: AlarmSettingData) {
+        
+        let announceAlarmSettingVM = AnnounceAlarmSettingViewModel(
+            noticeId: noticeId,
+            alarmData: alarmData
+        )
+        
+        let announceAlarmSettingVC = AnnounceAlarmSettingViewController(
+            announceAlarmSettingViewModel: announceAlarmSettingVM)
+        
+        announceAlarmSettingVC.modalPresentationStyle = .overFullScreen
+        navigationController.present(announceAlarmSettingVC, animated: false)
+    }
+    
+    func presentDetailImagePageView(index: Int, imageUrls: [String]) {
+        
+        let imagePageVC = ImagePageViewController(index: index, imageUrls: imageUrls)
+        imagePageVC.modalPresentationStyle = .overFullScreen
+        
+        navigationController.present(imagePageVC, animated: false)
     }
     
     func pushToReSubmit() {

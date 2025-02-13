@@ -12,18 +12,14 @@ import PhotosUI
 import SnapKit
 import Then
 
-enum PostType {
-    case create
-    case edit
-}
-
 final class PostAnnounceViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
     
     private let selectedDateSubject = PassthroughSubject<DateComponents, Never>()
     
     // MARK: - Properties
     
-    private let type: PostType
+    private let postType: PostType
+    private let postDisplayType: PostDisplayType
     
     // 선택된 이미지의 identifier를 저장할 배열 추가
     private var selectedAssetIdentifiers: [String] = [] {
@@ -53,8 +49,6 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
     
     // 높이 제약조건을 저장할 프로퍼티
     private var textViewHeightConstraint: Constraint?
-    
-    private var type: PostType
 
     // MARK: - UI Properties
     
@@ -108,26 +102,19 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
     
     // MARK: - init
     
-<<<<<<< HEAD
-    init(postAnnounceViewModel: PostAnnounceViewModel,
-         coordinator: HomeCoordinator,
-         type: PostType
-    ) {
-        self.postAnnounceViewModel = postAnnounceViewModel
-        self.coordinator = coordinator
-        self.type = type
-        self.periodViewHeader = TitleSectionHeaderView(type: .period(type: type))
-=======
     init(
-        type: PostType,
+        postType: PostType,
+        postDisplayType: PostDisplayType,
         postAnnounceViewModel: PostAnnounceViewModel,
         coordinator: HomeCoordinator
     ) {
-        self.type = type
+        self.postType = postType
+        self.postDisplayType = postDisplayType
         self.postAnnounceViewModel = postAnnounceViewModel
         self.coordinator = coordinator
-        self.postButton = type == .create ? CustomButton(buttonStyle: .postAnnounce) : CustomButton(buttonStyle: .editAnnounce)
->>>>>>> origin/develop
+        self.postButton = postType == .create ? CustomButton(buttonStyle: .postAnnounce) : CustomButton(buttonStyle: .editAnnounce)
+        self.periodViewHeader = TitleSectionHeaderView(type: .period(type: postDisplayType))
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -174,7 +161,7 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if case .edit = type {
+        if case .edit = postType {
             viewLifeCycleSubject.send(.viewWillAppear)
         }
         
@@ -184,7 +171,7 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if case .edit = type {
+        if case .edit = postType {
             NotificationCenter.default.post(name: Notification.Name("EditPostViewDismissed"), object: nil)
         }
     }
@@ -231,7 +218,9 @@ private extension PostAnnounceViewController {
             bottomButtonTap: postButton.tapPublisher,
             titleText: titleSubject.eraseToAnyPublisher(),
             contentText: contentSubject.eraseToAnyPublisher(),
-            tagButtonText: tagButtonSubject.eraseToAnyPublisher()
+            tagButtonText: tagButtonSubject.eraseToAnyPublisher(),
+            firstComeNumber: postDisplayType == .firstCome ?
+                personContentView.textPublisher.eraseToAnyPublisher() : nil
         )
         
         let output = postAnnounceViewModel.transform(input: input)
@@ -265,6 +254,15 @@ private extension PostAnnounceViewController {
                         await self.loadImageData(urls: imageURL)
                     }
                 }
+                
+                if let startDay = content.startDay, let startTime = content.startTime, let endDay =  content.endDay, let endTime = content.endTime {
+                    postAnnounceViewModel.startTimeSubject.send(startTime)
+                    postAnnounceViewModel.endTimeSubject.send(endTime)
+                    postAnnounceViewModel.startDaySubject.send(startDay)
+                    postAnnounceViewModel.endDaySubject.send(endDay)
+                    
+                    postAnnounceViewModel.changePostAnnounceOptionType(optionType: .period)
+                }
             }
             .store(in: &cancellables)
         
@@ -277,7 +275,7 @@ private extension PostAnnounceViewController {
             .sink { [weak self] _ in
                 guard let self else { return }
                 
-                self.presentPHPicker(type: self.type)
+                self.presentPHPicker(type: self.postType)
             }
             .store(in: &cancellables)
         
@@ -285,7 +283,7 @@ private extension PostAnnounceViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if result {
-                    if case .edit = self?.type {
+                    if case .edit = self?.postType {
                         ToastMessageManager.showToastMessage(toastType: .editCompletion)
                     }
                     
@@ -295,16 +293,45 @@ private extension PostAnnounceViewController {
                 }
             }
             .store(in: &cancellables)
+        
+        output.startDayResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] startDay in
+                self?.periodContentView.setPeriod(type: .startDay, text: startDay)
+            }
+            .store(in: &cancellables)
+        
+        output.startTimeResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] startTime in
+                self?.periodContentView.setPeriod(type: .startTime, text: startTime)
+            }
+            .store(in: &cancellables)
+        
+        output.endDayResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] endDay in
+                self?.periodContentView.setPeriod(type: .endDay, text: endDay)
+            }
+            .store(in: &cancellables)
+        
+        output.endTimeResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] endTime in
+                self?.periodContentView.setPeriod(type: .endTime, text: endTime)
+            }
+            .store(in: &cancellables)
     }
     
-<<<<<<< HEAD
     func setupBindings() {
         periodViewHeader.onCheckBoxStateChanged = { [weak self] state in
             switch state {
             case .checked:
                 self?.showSomething()
+                self?.postAnnounceViewModel.changePostAnnounceOptionType(optionType: .period)
             case .unchecked:
                 self?.hideSomething()
+                self?.postAnnounceViewModel.changePostAnnounceOptionType(optionType: .basic)
             }
         }
     }
@@ -315,7 +342,8 @@ private extension PostAnnounceViewController {
     
     func hideSomething() {
         self.periodContentView.isHidden = true
-=======
+    }
+    
     @MainActor
     func loadImageData(urls: [String]) async {
         
@@ -373,7 +401,6 @@ private extension PostAnnounceViewController {
         }
         
         self.updateSelectPhotoButton()
->>>>>>> origin/develop
     }
 }
 
@@ -506,7 +533,7 @@ private extension PostAnnounceViewController {
         }
         
         periodContentView.do {
-            $0.isHidden = type == .firstServed ? false : true
+            $0.isHidden = postDisplayType == .firstCome ? false : true
         }
         
         announceButton.addTarget(self, action: #selector(tagButtonTapped(_:)), for: .touchUpInside)
@@ -537,7 +564,7 @@ private extension PostAnnounceViewController {
         
         periodSectionView.addArrangedSubviews(periodViewHeader, periodContentView)
         
-        if type == .firstServed {
+        if postDisplayType == .firstCome {
             personSectionView.addArrangedSubviews(personViewHeader, personContentView)
         }
         
@@ -547,7 +574,7 @@ private extension PostAnnounceViewController {
     
     func setupLayout() {
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)//.inset(17)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalTo(postButton.snp.top).offset(-10)
         }
@@ -609,7 +636,7 @@ private extension PostAnnounceViewController {
             $0.height.equalTo(84)
         }
         
-        if type == .firstServed {
+        if postDisplayType == .firstCome {
             personContentView.snp.makeConstraints {
                 $0.height.equalTo(36)
             }
@@ -626,11 +653,8 @@ private extension PostAnnounceViewController {
     }
     
     func setupDelegate() {
-<<<<<<< HEAD
         periodContentView.delegate = self
-=======
         contentTextView.delegate = self
->>>>>>> origin/develop
     }
     
     func presentPHPicker(type: PostType) {

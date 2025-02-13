@@ -10,9 +10,16 @@ import UIKit
 import SnapKit
 import Then
 
+protocol ImageTappableDelegate: AnyObject {
+    func didTapImageView(index: Int)
+}
+
 final class DetailAnnouceImagesCollectionViewCell: UICollectionViewCell {
     
     private let contentImageView = AFImageView()
+    private var index: Int?
+    
+    weak var delegate: ImageTappableDelegate?
     
     // MARK: - init
     
@@ -30,8 +37,9 @@ final class DetailAnnouceImagesCollectionViewCell: UICollectionViewCell {
 }
 
 extension DetailAnnouceImagesCollectionViewCell {
-    func configureCell(forModel model: DetailAnnouceImageModel) {
+    func configureCell(forModel model: DetailAnnouceImageModel, index: Int) {
         contentImageView.setImage(model.image, type: .postImage)
+        self.index = index
     }
 }
 
@@ -40,6 +48,8 @@ private extension DetailAnnouceImagesCollectionViewCell {
         contentImageView.do {
             $0.contentMode = .scaleAspectFill
             $0.clipsToBounds = true
+            $0.isUserInteractionEnabled = true
+            $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapImageView(_:))))
         }
     }
     
@@ -50,7 +60,11 @@ private extension DetailAnnouceImagesCollectionViewCell {
     func setupLayout() {
         contentImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-//            $0.size.equalTo(convertByWidthRatio(335))
         }
+    }
+    
+    @objc func didTapImageView(_ sender: UITapGestureRecognizer) {
+        guard let index else { return }
+        delegate?.didTapImageView(index: index)
     }
 }

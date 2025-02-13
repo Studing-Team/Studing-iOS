@@ -78,7 +78,7 @@ private extension PeriodSettingView {
         
         titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview().inset(8)
+//            $0.horizontalEdges.equalToSuperview().inset(8)
         }
     }
     

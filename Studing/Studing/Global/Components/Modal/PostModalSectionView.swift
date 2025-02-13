@@ -10,9 +10,25 @@ import UIKit
 import SnapKit
 import Then
 
+enum PostDisplayType {
+    case announce
+    case firstCome
+    
+    var title: String {
+        switch self {
+        case .announce:
+            return "일반 공지사항 작성하기"
+        case .firstCome:
+            return "선착순 이벤트 등록하기"
+        }
+    }
+}
+
 final class PostModalSectionView: UIView, TappableView {
     
-    private let type: PostType
+    // MARK: - Properties
+    
+    private let type: PostDisplayType
 
     // MARK: - UI Properties
     
@@ -20,9 +36,9 @@ final class PostModalSectionView: UIView, TappableView {
     private let titleLabel = UILabel()
     private let rightImageView = UIImageView()
     
-    // MARK: - Life Cycle
+    // MARK: - Init
     
-    init(type: PostType) {
+    init(type: PostDisplayType) {
         self.type = type
         super.init(frame: .zero)
         
@@ -86,7 +102,7 @@ private extension PostModalSectionView {
 import SwiftUI
 
 #Preview("PostModalSectionView") {
-    PostModalSectionView(type: .firstServed)
+    PostModalSectionView(type: .announce)
         .showPreview()
 }
 #endif
