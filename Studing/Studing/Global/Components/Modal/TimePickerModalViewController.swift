@@ -21,16 +21,22 @@ final class TimePickerModalViewController: SingleButtonSheetViewController {
     
     private var type: PostPickerType
     private var buttonSttyle: ButtonStyle
+    private weak var viewModel: PostAnnounceViewModel?
     
     // MARK: - UI Properties
     
+    private let modalTitle = UILabel()
     private let timePickerView = CustomTimePickerView()
         
     // MARK: - Init
         
-    init(type: PostPickerType) {
+    init(
+        type: PostPickerType,
+        viewModel: PostAnnounceViewModel
+    ) {
         self.type = type
-        
+        self.viewModel = viewModel
+
         switch type {
         case .start:
             buttonSttyle = .startTime
@@ -41,14 +47,14 @@ final class TimePickerModalViewController: SingleButtonSheetViewController {
         super.init(
             buttonStyle: buttonSttyle
         )
-        
-        self.bindingBottomButtonAction(action: { [weak self] in
-            self?.dismiss(animated: true)
-        })
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        print("TimePickerModalViewController deinit")
     }
     
     // MARK: - Life Cycle
@@ -60,6 +66,31 @@ final class TimePickerModalViewController: SingleButtonSheetViewController {
         setupHierarchy()
         setupLayout()
         setupDelegate()
+        setupbottomButtonAction()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let initialTime: DateComponents?
+        
+        switch type {
+        case .start:
+            initialTime = viewModel?.startTimeSubject.value
+
+        case .end:
+            initialTime = viewModel?.endTimeSubject.value
+        }
+        
+        if let initialTime, let hour = initialTime.hour, let minute = initialTime.minute {
+            
+            let firstIndex: Int = hour > 12 ? 1 : 0
+            let secondIndex: Int = hour > 12 ? hour % 12 : hour
+            
+            timePickerView.selectRow(firstIndex, inComponent: 0, animated: false)
+            timePickerView.selectRow(secondIndex, inComponent: 1, animated: false)
+            timePickerView.selectRow(minute, inComponent: 2, animated: false)
+        }
     }
 }
 
@@ -67,7 +98,11 @@ final class TimePickerModalViewController: SingleButtonSheetViewController {
 
 private extension TimePickerModalViewController {
     func setupStyle() {
-        
+        modalTitle.do {
+            $0.text = "시간 선택"
+            $0.font = .interSubtitle2()
+            $0.textColor = .black50
+        }
     }
     
     func setupHierarchy() {
@@ -76,27 +111,44 @@ private extension TimePickerModalViewController {
     
     func setupLayout() {
         timePickerView.snp.makeConstraints {
-            $0.center.equalToSuperview()
+//            $0.top.equalTo(modalTitle.snp.bottom).offset(16)
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(60)
         }
     }
     
     func setupDelegate() {
         
     }
+    
+    func setupbottomButtonAction() {
+        self.bindingBottomButtonAction(action: { [weak self] in
+            
+            guard let self else { return }
+            switch self.type {
+            case .start:
+                self.viewModel?.startTimeSubject.send(self.timePickerView.selectedTimeComponents())
+            case .end:
+                self.viewModel?.endTimeSubject.send(self.timePickerView.selectedTimeComponents())
+            }
+            
+            self.dismiss(animated: true)
+        })
+    }
 }
-
 
 final class CustomTimePickerView: UIPickerView {
     
     // MARK: - Properties
     
     private let ampmSection = ["오전", "오후"]
-    private let hoursSection = Array(1...12)
+    private let hoursSection = Array(0...12)
     private let minutesSection = Array(0...59)
     
     // MARK: - UI Properties
     
-//    private let pickerView = UIPickerView()
+    private let modalTitle = UILabel()
     
     // MARK: - Init
     
@@ -123,21 +175,40 @@ final class CustomTimePickerView: UIPickerView {
             }
         }
     }
+    
+    /// 현재 선택된 값을 DateComponents 로 변환하는 메서드
+    func selectedTimeComponents() -> DateComponents {
+        let isPM = ampmSection[self.selectedRow(inComponent: 0)] == "오후"
+        let hour = hoursSection[self.selectedRow(inComponent: 1)]
+        let minute = minutesSection[self.selectedRow(inComponent: 2)]
+
+        var components = DateComponents()
+        components.hour = isPM ? hour + 12 : hour
+        components.minute = minute
+        return components
+    }
 }
 
 // MARK: - Private Extensions
 
 private extension CustomTimePickerView {
     func setupStyle() {
-
+        modalTitle.do {
+            $0.text = "시간 선택"
+            $0.font = .interSubtitle2()
+            $0.textColor = .black50
+        }
     }
     
     func setupHierarchy() {
-//        self.addSubviews(pickerView)
+        self.addSubviews(modalTitle)
     }
     
     func setupLayout() {
-        
+        modalTitle.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(22)
+        }
     }
     
     func setupDelegate() {
@@ -145,6 +216,8 @@ private extension CustomTimePickerView {
         self.delegate = self
     }
 }
+
+// MARK: - UIPickerViewDelegate Extensions
 
 extension CustomTimePickerView: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -183,6 +256,7 @@ extension CustomTimePickerView: UIPickerViewDelegate {
     }
 }
 
+// MARK: - UIPickerViewDataSource Extensions
 
 extension CustomTimePickerView: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
