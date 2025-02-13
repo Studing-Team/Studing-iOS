@@ -7,14 +7,18 @@
 
 import Foundation
 
-final class CreateAnnounceUseCase {
+protocol PostCreateAnnounceUseCase {
+    func execute(dto: CreateAnnounceRequestDTO) async throws -> EmptyResponse
+}
+
+final class CreateAnnounceUseCase: PostCreateAnnounceUseCase {
     private let repository: NoticesRepository
     
     init(repository: NoticesRepository) {
         self.repository = repository
     }
     
-    func execute(dto: CreateAnnounceRequestDTO) async -> Result<EmptyResponse, NetworkError> {
-        return await repository.postCreateAnnounce(dto: dto)
+    func execute(dto: CreateAnnounceRequestDTO) async throws -> EmptyResponse {
+        return try await repository.postCreateAnnounce(dto: dto)
     }
 }

@@ -149,22 +149,22 @@ extension UIViewController {
        }
    }
     
-    func showConfirmAlert(mainTitle: String, subTitle: String, confirmTitle: String, centerButtonHandler: (() -> Void)? = nil) {
+    func showConfirmAlert(mainTitle: String, subTitle: String, centerButtonStyle: ButtonStyle, centerButtonHandler: (() -> Void)? = nil) {
         
         let customAlertViewController = CustomAlertViewController(
             alertType: .onlyConfirm, mainTitle: mainTitle,
-            subTitle: subTitle, confirmTitle: confirmTitle,
+            subTitle: subTitle, centerButtonStyle: centerButtonStyle,
             centerButtonHandler: centerButtonHandler)
         
         customAlertViewController.modalPresentationStyle = .overFullScreen
         present(customAlertViewController, animated: false)
     }
     
-    func showConfirmCancelAlert(mainTitle: String, subTitle: String, rightButtonTitle: String, leftButtonTitle: String, leftButtonHandler: (() -> Void)? = nil, rightButtonHandler: (() -> Void)? = nil) {
+    func showConfirmCancelAlert(mainTitle: String, subTitle: String, leftButtonStyle: ButtonStyle, rightButtonStyle: ButtonStyle, leftButtonHandler: (() -> Void)? = nil, rightButtonHandler: (() -> Void)? = nil) {
         
         let customAlertViewController = CustomAlertViewController(
             alertType: .confirmCancel, mainTitle: mainTitle,
-            subTitle: subTitle, rightButtonTitle: rightButtonTitle, leftButtonTitle: leftButtonTitle, leftButtonHandler: leftButtonHandler , rightButtonHandler: rightButtonHandler)
+            subTitle: subTitle, leftButtonStyle: leftButtonStyle, rightButtonStyle: rightButtonStyle, leftButtonHandler: leftButtonHandler , rightButtonHandler: rightButtonHandler)
         
         customAlertViewController.modalPresentationStyle = .overFullScreen
         present(customAlertViewController, animated: false)

@@ -18,16 +18,22 @@ enum NavigationType: Equatable {
     case detail(isAuthor: Bool)
     case unRead(isAuthor: Bool)
     case post
+    case firstCome
     case editPost
     case unReadToHome
     case myPage
     case leftButton
 }
 
+protocol AlarmButtonTappedDelegate: AnyObject {
+    func didAlarmButtonTapped()
+}
+
 final class CustomAnnounceNavigationController: UINavigationController {
     
     // MARK: - Properties
     
+    weak var delgate: AlarmButtonTappedDelegate?
     let menuButtonTapped = PassthroughSubject<MenuType, Never>()
     
     private var currentUserAuth: UserAuth?
@@ -135,7 +141,8 @@ private extension CustomAnnounceNavigationController {
 
     // 버튼 상태를 토글하는 메서드
     @objc private func toggleAlarmButton(_ sender: UIButton) {
-        sender.isSelected.toggle() // selected 상태를 반전
+//        sender.isSelected.toggle() // selected 상태를 반전
+        delgate?.didAlarmButtonTapped()
     }
 
     @objc private func toggleDotMenuButton(_ sender: UIButton) {
@@ -208,32 +215,30 @@ private extension CustomAnnounceNavigationController {
             }
         )
     }
-    
-    
-    // TODO: - 1차 스프린트 알람 관련 기능 추가 시 해당 주석 삭제
-    
+
     func applyRightButtonSection(_ isAuthor: Bool) {
         switch currentUserAuth {
         case .collegeUser, .departmentUser, .universityUser:
-//            addAlarmButton()
+            
+            resetStackView(rightButtonSectionStackView)
+            
+            addAlarmButton()
             addDotMenuButton(isAuthor)
             
         case .successUser:
-//            addAlarmButton()
-            break
+            resetStackView(rightButtonSectionStackView)
+            
+            addAlarmButton()
         default:
             break
         }
     }
     
     func addAlarmButton() {
-        resetStackView(rightButtonSectionStackView)
         rightButtonSectionStackView.addArrangedSubview(alarmButton)
     }
     
     func addDotMenuButton(_ isAuthor: Bool) {
-        resetStackView(rightButtonSectionStackView)
-        
         if isAuthor {
             rightButtonSectionStackView.addArrangedSubviews(dotMenuButton)
         }
@@ -446,6 +451,7 @@ private extension CustomAnnounceNavigationController {
             applyDefaultLayout()
             
         case .detail(let isAuthor):
+            print("드렁온 값:", isAuthor)
             navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
@@ -474,7 +480,7 @@ private extension CustomAnnounceNavigationController {
             applyDetailLayout()
             applyRightButtonSection(isAuthor)
             
-        case .post, .editPost:
+        case .post, .editPost, .firstCome:
             navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
@@ -527,7 +533,7 @@ private extension CustomAnnounceNavigationController {
     
     @objc private func backButtonTapped(_ sender: UIButton) {
         print("뒤로가기 버튼 동작")
-        if currentType == .post || currentType == .editPost {
+        if currentType == .post || currentType == .editPost || currentType == .firstCome {
             self.dismiss(animated: true)
         } else {
             if case .unRead = currentType {
@@ -614,6 +620,8 @@ extension CustomAnnounceNavigationController {
             setNavigationTitle("Studing")
         case .post:
             setNavigationTitle("공지사항 작성")
+        case .firstCome:
+            setNavigationTitle("선착순 이벤트 등록")
         case .editPost:
             setNavigationTitle("공지사항 수정")
         case .myPage:
@@ -626,9 +634,13 @@ extension CustomAnnounceNavigationController {
     func setNavigationTitle(_ title: String) {
         titleLabel.text = title
     }
-    
+
     func addDotMenu(_ isAuthor: Bool) {
         addDotMenuButton(isAuthor)
+    }
+    
+    func updateAlarmMenu(_ isAlarm: Bool) {
+        alarmButton.isSelected = isAlarm
     }
 }
 

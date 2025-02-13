@@ -9,6 +9,8 @@ import Alamofire
 
 enum NotificationsAPI {
     case postNotificationToken(NotificationTokenRequestDTO)
+    case postAlarmNotice(noticeId: Int, dto: AlarmNoticeRequestDTO)
+    case deleteAlarmNotice(noticeId: Int)
 }
 
 extension NotificationsAPI: APIEndpoint {
@@ -20,11 +22,19 @@ extension NotificationsAPI: APIEndpoint {
         switch self {
         case .postNotificationToken:
             return basePath.rawValue + "/token"
+        case .postAlarmNotice(let noticeId, _), .deleteAlarmNotice(let noticeId):
+            return basePath.rawValue + "/alarm/notice/\(noticeId)"
         }
     }
     
-    var method: Alamofire.HTTPMethod {
-        return .post
+    var method: HTTPMethod {
+        switch self {
+        case .postNotificationToken, .postAlarmNotice:
+            return .post
+            
+        case .deleteAlarmNotice:
+            return .delete
+        }
     }
     
     var headerType: HeaderType {
@@ -39,6 +49,10 @@ extension NotificationsAPI: APIEndpoint {
         switch self {
         case .postNotificationToken(let dto):
             return dto
+        case .postAlarmNotice(_, let dto):
+            return dto
+        default:
+            return nil
         }
     }
 }

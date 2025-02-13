@@ -18,7 +18,7 @@ final class ToastMessageManager {
         // 위치 설정
         toastView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(window.safeAreaLayoutGuide).inset(97)
+            $0.bottom.equalTo(window.safeAreaLayoutGuide).inset(20)
         }
         
         // 애니메이션

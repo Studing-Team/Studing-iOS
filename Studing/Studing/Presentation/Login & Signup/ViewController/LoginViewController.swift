@@ -102,7 +102,7 @@ private extension LoginViewController {
                     self?.showConfirmAlert(
                         mainTitle: "잘못된 로그인 정보 입력",
                         subTitle: "입력한 아이디와 비밀번호가\n올바르지 않습니다.",
-                        confirmTitle: "다시 시도",
+                        centerButtonStyle: .retry,
                         centerButtonHandler: {
                             AmplitudeManager.shared.trackEvent(AnalyticsEvent.Login.askStuding)
                             self?.dismiss(animated: false)

@@ -7,14 +7,18 @@
 
 import Foundation
 
-final class DetailAnnounceUseCase {
+protocol GetDetailAnnounceUseCase {
+    func execute(noticeId: Int) async throws -> DetailAnnounceEntity
+}
+
+final class DetailAnnounceUseCase: GetDetailAnnounceUseCase {
     private let repository: NoticesRepository
     
     init(repository: NoticesRepository) {
         self.repository = repository
     }
     
-    func execute(noticeId: Int) async -> Result<DetailAnnounceResponseDTO,NetworkError> {
-        return await repository.getDetailAnnounce(noticeId: noticeId)
+    func execute(noticeId: Int) async throws -> DetailAnnounceEntity {
+        return try await repository.getDetailAnnounce(noticeId: noticeId)
     }
 }

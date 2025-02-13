@@ -99,8 +99,8 @@ private extension WithDrawViewController {
                 self?.showConfirmCancelAlert(
                     mainTitle: "잠깐만요",
                     subTitle: "모든 안내사항을 확인해주세요.\n탈퇴를 진행할까요?",
-                    rightButtonTitle: "아니요",
-                    leftButtonTitle: "탈퇴하기",
+                    leftButtonStyle: .no,
+                    rightButtonStyle: .withdraw,
                     leftButtonHandler: {
                     self?.comfirmButtonTappend.send()
                 })

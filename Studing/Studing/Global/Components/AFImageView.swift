@@ -68,6 +68,8 @@ final class AFImageView: UIImageView {
                 self.image = UIImage(resource: .defaultPost)
             case .postSmallImage:
                 self.image = UIImage(resource: .defaultPostSmall)
+            case .largeImage:
+                self.image = UIImage(resource: .defaultPost)
             }
             
             return

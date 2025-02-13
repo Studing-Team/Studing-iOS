@@ -30,6 +30,7 @@ final class DetailAnnounceViewController: UIViewController {
     private let currentImagePageSubject = PassthroughSubject<Int, Never>()
     private let deleteuttonTappedSubject = PassthroughSubject<Void, Never>()
     private let viewLifeCycleSubject = PassthroughSubject<ViewLifeCycleEvent, Never>()
+    private let firstComeButtonTappedSubejct = PassthroughSubject<FirstComeState, Never>()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -65,6 +66,8 @@ final class DetailAnnounceViewController: UIViewController {
     private let imageCountView = UIView()
     private let imageCountLabel = UILabel()
     
+    let customRefreshControl = CustomRefreshControl()
+    
     // MARK: - init
     
     init(type: DetailAnnounceType, detailAnnouceViewModel: DetailAnnouceViewModel, coordinator: HomeCoordinator) {
@@ -90,10 +93,11 @@ final class DetailAnnounceViewController: UIViewController {
         
         setupStyle()
         setupHierarchy(type)
-        setupLayout(type)
+        setupLayout(type, .basic)
         setupDelegate()
         bindViewModel()
         observeDotMenuButton()
+        setupRefreshControl()
         
         print("DetailAnnounceViewController viewDidLoad")
     }
@@ -104,10 +108,16 @@ final class DetailAnnounceViewController: UIViewController {
         print("DetailAnnounceViewController viewWillAppear")
         viewLifeCycleSubject.send(.viewWillAppear)
         
-        /// 놓친 공지사항 관련 메서드
-        if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
-            if type == .unreadAnnounce {
-                customNavController.setNavigationTitle("\(detailAnnouceViewModel.unReadCount ?? 0)개 남음")
+        if let customNav = navigationController as? CustomAnnounceNavigationController {
+            customNav.delgate = self
+            
+            switch type {
+            case .announce, .bookmarkAnnounce:
+                customNav.setNavigationType(.detail(isAuthor: detailAnnouceViewModel.isAuthor))
+                
+            case .unreadAnnounce:
+                customNav.setNavigationType(.unRead(isAuthor: detailAnnouceViewModel.isAuthor))
+                customNav.setNavigationTitle("\(detailAnnouceViewModel.unReadCount ?? 0)개 남음")
             }
         }
     }
@@ -141,8 +151,18 @@ private extension DetailAnnounceViewController {
                     
                     guard let content = self.detailAnnouceViewModel.announceContent else { return }
                     guard let noticeId = self.detailAnnouceViewModel.selectNoticeId() else { return }
-
-                    let dto = EditAnnounceContent(noticeId: noticeId, title: content.title, image: content.images, content: content.content, tag: content.tag)
+                    
+                    let dto = EditAnnounceContent(
+                        noticeId: noticeId,
+                        title: content.title,
+                        image: content.images,
+                        content: content.content,
+                        tag: content.tag,
+                        startDay: convertToDateComponents(data: content.startTime, components: [.year, .month, .day]),
+                        startTime: convertToDateComponents(data: content.startTime, components: [.hour, .minute]),
+                        endDay: convertToDateComponents(data: content.endTime, components: [.year, .month, .day]),
+                        endTime: convertToDateComponents(data: content.startTime, components: [.hour, .minute])
+                    )
                     
                     NotificationCenter.default.addObserver(
                         self,
@@ -150,13 +170,27 @@ private extension DetailAnnounceViewController {
                         name: Notification.Name("EditPostViewDismissed"),
                         object: nil)
                     
-                    self.coordinator?.presentPostAnnounce(type: .edit, noticeId: noticeId, content: dto)
+                        self.coordinator?.presentPostAnnounce(postType: .edit, postDisplayType: content.isFirstComeNotice == true ? .firstCome : .announce, noticeId: noticeId, content: dto)
                     
                 case .delete:
                     self.handleDotMenuButtonTap()
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func convertToDateComponents(data: String?, components: Set<Calendar.Component>) -> DateComponents? {
+        guard let data else { return nil }
+        
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        inputFormatter.locale = Locale(identifier: "ko_KR")
+        inputFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        
+        guard let date = inputFormatter.date(from: data) else { return nil }
+        
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.dateComponents(components, from: date)
     }
     
     @objc func handleDismiss() {
@@ -167,8 +201,8 @@ private extension DetailAnnounceViewController {
         self.showConfirmCancelAlert(
             mainTitle: "공지사항 삭제",
             subTitle: "해당 공지사항을 삭제하시겠습니까?",
-            rightButtonTitle: "삭제하기",
-            leftButtonTitle: "취소",
+            leftButtonStyle: .cancel,
+            rightButtonStyle: .delete,
             rightButtonHandler: {
                 self.deleteuttonTappedSubject.send()
             }
@@ -182,7 +216,8 @@ private extension DetailAnnounceViewController {
             bookmarkButtonTap: bookmarkButton.tapPublisher,
             deleteButtonTap: deleteuttonTappedSubject.eraseToAnyPublisher(),
             nextButtonTap: nextbuttonTapSubject.eraseToAnyPublisher(),
-            currentPageControlCount: currentImagePageSubject.eraseToAnyPublisher()
+            currentPageControlCount: currentImagePageSubject.eraseToAnyPublisher(),
+            firstComeButtonTap: firstComeButtonTappedSubejct.eraseToAnyPublisher()
         )
         
         let output = detailAnnouceViewModel.transform(input: input)
@@ -206,24 +241,40 @@ private extension DetailAnnounceViewController {
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    break
+                    print("✅ viewLifeCycleEventResult 성공적으로 완료됨")
+
                 case .failure(let error):
                     // 에러 처리
                     print("Error: \(error)")
                 }
-            }, receiveValue: { result in
-                // 결과 처리
-                print("결과: \(result)")
+            }, receiveValue: { isRefresh in
+                if isRefresh {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.customRefreshControl.endRefreshing()
+                        self.detailAnnouceViewModel.isRefresh = false
+                    }
+                }
             })
             .store(in: &cancellables)
         
-        output.authorResult
+        output.authorToContentResult
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] result in
+            .sink { [weak self] isAuthor in
                 guard let self else { return }
  
                 if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
-                    customNavController.addDotMenu(result)
+                    customNavController.addDotMenu(isAuthor)
+                }
+            }
+            .store(in: &cancellables)
+        
+        output.alarmSettingResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alarmData in
+                guard let self else { return }
+ 
+                if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
+                    customNavController.updateAlarmMenu(alarmData.isAlarm)
                 }
             }
             .store(in: &cancellables)
@@ -311,6 +362,25 @@ private extension DetailAnnounceViewController {
                     nextbuttonTapSubject.send()
                 }
             })
+            .store(in: &cancellables)
+        
+        output.headerOptionTypeResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] headerType in
+                guard let self, let headerType else { return }
+                self.setupLayout(self.type, headerType)
+            }
+            .store(in: &cancellables)
+        
+        output.firstComeButtonResult
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                if result {
+                    self?.showConfirmAlert(mainTitle: "이벤트 참여완료!", subTitle: "바로 순위를 확인할 수 있어요 :)", centerButtonStyle: .confirm(type: .event))
+                } else {
+                    self?.showConfirmAlert(mainTitle: "이벤트 참여 미완료!", subTitle: "오류가 발생했습니다.\n잠시후 다시 시도해주세요", centerButtonStyle: .confirm(type: .event))
+                }
+            }
             .store(in: &cancellables)
     }
     
@@ -402,7 +472,8 @@ private extension DetailAnnounceViewController {
         imageCountView.addSubview(imageCountLabel)
     }
     
-    func setupLayout(_ type: DetailAnnounceType) {
+    func setupLayout(_ type: DetailAnnounceType, _ headerType: PostOptionType) {
+        
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview().inset(20)
@@ -413,16 +484,17 @@ private extension DetailAnnounceViewController {
         
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
-            $0.width.equalTo(scrollView.frameLayoutGuide)  // 가로 스크롤 방지
+            $0.width.equalTo(scrollView.frameLayoutGuide)
         }
         
         collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalTo(80 + 355 + 44)
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(80 + 355 + 44 + 200)
         }
         
         imageCountView.snp.makeConstraints {
-            $0.top.equalTo(collectionView.snp.top).inset(92.5)
+            $0.top.equalTo(collectionView.snp.top).offset(headerType.countViewPadding)
             $0.trailing.equalTo(collectionView.snp.trailing).inset(12.5)
             $0.width.equalTo(29)
             $0.height.equalTo(22)
@@ -467,6 +539,16 @@ private extension DetailAnnounceViewController {
     func setupDelegate() {
         
     }
+    
+    func setupRefreshControl() {
+        customRefreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        scrollView.refreshControl = customRefreshControl
+    }
+    
+    @objc func handleRefresh() {
+        viewLifeCycleSubject.send(.viewWillAppear)
+        self.detailAnnouceViewModel.isRefresh = true
+    }
 }
 
 extension DetailAnnounceViewController: ContentCellDelegate {
@@ -476,21 +558,55 @@ extension DetailAnnounceViewController: ContentCellDelegate {
         
         var imageHeight = 355
         
-        let isImagesEmpty = detailAnnouceViewModel.sectionDataDict[.images]?.isEmpty ?? false
-        if isImagesEmpty {
+        if detailAnnouceViewModel.sectionDataDict[.images]?.isEmpty ?? true {
             imageHeight = 0
         }
+        guard let type = detailAnnouceViewModel.headerOptionTypeSubject.value else { return }
         
-        let baseHeight = 80 + 44 + 16 + 10
+        let baseHeight = type.headerHeight + 44 + 16 + 10 + 80
         let totalHeight = baseHeight + imageHeight + Int(height)
         
-        print("변경된 높이:", totalHeight)
         collectionView.snp.updateConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
             $0.height.equalTo(totalHeight)
         }
 
         view.layoutIfNeeded()
+    }
+}
+
+extension DetailAnnounceViewController: FirstComeButtonTappedDelegate {
+    func didFirstComeButtonTapped(buttonState: FirstComeState) {
+        switch buttonState {
+        case .wait, .end:
+            break
+        case .active:
+            firstComeButtonTappedSubejct.send(buttonState)
+        case .joined:
+            guard let noticeId = detailAnnouceViewModel.selectedNoticeId else { return }
+            
+            coordinator?.presentFirstComeRankMoal(noticeId: noticeId)
+        }
+    }
+}
+
+extension DetailAnnounceViewController: AlarmButtonTappedDelegate {
+    func didAlarmButtonTapped() {
+        guard let noticeId = detailAnnouceViewModel.selectedNoticeId else { return }
+        
+        let alarmData = detailAnnouceViewModel.alarmSettingSubject.value// ? .selected : .unSelected
+        
+        self.coordinator?.presentAnnounceAlarmSetting(noticeId: noticeId, alarmData: alarmData)
+    }
+}
+
+extension DetailAnnounceViewController: ImageTappableDelegate {
+    func didTapImageView(index: Int) {
+        guard let imageUrls = detailAnnouceViewModel.sectionDataDict[.images] as? [DetailAnnouceImageModel] else { return }
+        let image = imageUrls.map { $0.image }
+        
+        coordinator?.presentDetailImagePageView(index: index, imageUrls: image)
     }
 }
 
@@ -537,7 +653,7 @@ private extension DetailAnnounceViewController {
         // Item 정의
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
+            heightDimension: .estimated(228)//.fractionalHeight(1.0)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -545,7 +661,7 @@ private extension DetailAnnounceViewController {
         // Group 정의
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),  // 섹션 너비의 100%
-            heightDimension: .absolute(80)       // 높이만 고정
+            heightDimension: .estimated(228)     // 높이만 고정
         )
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
@@ -564,7 +680,7 @@ private extension DetailAnnounceViewController {
         // Item 정의
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
+            heightDimension: .absolute(335)//.fractionalHeight(1.0)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -572,7 +688,7 @@ private extension DetailAnnounceViewController {
         // Group 정의
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),  // 섹션 너비의 100%
-            heightDimension: .estimated(335)       // 높이만 고정
+            heightDimension: .absolute(335)       // 높이만 고정
         )
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
@@ -596,21 +712,25 @@ private extension DetailAnnounceViewController {
         section.orthogonalScrollingBehavior = .groupPagingCentered
         
         section.visibleItemsInvalidationHandler = { [weak self] (visibleItems, contentOffset, environment) in
-            
             guard let self else { return }
             let count = CGFloat(self.detailAnnouceViewModel.sectionDataDict[.images]?.count ?? 0)
+            guard count > 0 else { return }
             
             let pageWidth = environment.container.contentSize.width / count
             let currentPage = Int(round(contentOffset.x / pageWidth))
             
-            print("현재 페이지:", currentPage)
-            
-            if let footerView = self.collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionFooter)
-                .first(where: { $0 is PageFooterView }) as? PageFooterView {
-                
+            // 현재 페이지 계산 및 업데이트를 메인 큐에서 처리
+            DispatchQueue.main.async {
                 self.currentImagePage = currentPage / Int(count)
-                footerView.currentPage = self.currentImagePage
-                currentImagePageSubject.send(currentImagePage)
+                self.currentImagePageSubject.send(currentPage)
+                
+                // footer 업데이트
+                if let footerView = self.collectionView.supplementaryView(
+                    forElementKind: UICollectionView.elementKindSectionFooter,
+                    at: IndexPath(item: 0, section: 1)
+                ) as? PageFooterView {
+                    footerView.currentPage = self.currentImagePage
+                }
             }
         }
         
@@ -621,7 +741,7 @@ private extension DetailAnnounceViewController {
         // Item 정의
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
+            heightDimension: .estimated(70)//.fractionalHeight(1.0)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -629,17 +749,17 @@ private extension DetailAnnounceViewController {
         // Group 정의
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),  // 섹션 너비의 100%
-            heightDimension: .fractionalHeight(1.0) // 높이만 고정
+            heightDimension: .estimated(70) // .fractionalHeight(1.0) // 높이만 고정
         )
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         // Section 정의
         let section = NSCollectionLayoutSection(group: group)
+        
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         // 스크롤 비활성화 (단일 셀이므로)
         section.orthogonalScrollingBehavior = .none
-
         return section
     }
     
@@ -653,9 +773,27 @@ private extension DetailAnnounceViewController {
             switch sectionType {
             case .header:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailAnnouceHeaderCollectionViewCell.className, for: indexPath) as! DetailAnnouceHeaderCollectionViewCell
+                print("DetailAnnouceHeaderCollectionViewCell configureCell 실행")
+                guard let headerType = self.detailAnnouceViewModel.headerOptionTypeSubject.value else {
+                    return nil
+                }
                 
-                if let model = item as? DetailAnnouceHeaderModel {
-                    cell.configureCell(forModel: model)
+                switch headerType {
+                case .basic:
+                    if let model = item as? BaseDetailAnnounceHeaderModel {
+                        cell.configureCell(forModel: model)
+                    }
+                    
+                case .firstCome:
+                    if let model = item as? DetailAnnounceFirstComeHeaderModel {
+                        cell.configureCell(forModel: model)
+                        cell.delegate = self
+                    }
+                    
+                case .period:
+                    if let model = item as? DetailAnnouncePeriodHeaderModel {
+                        cell.configureCell(forModel: model)
+                    }
                 }
                 
                 return cell
@@ -663,7 +801,8 @@ private extension DetailAnnounceViewController {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailAnnouceImagesCollectionViewCell.className, for: indexPath) as! DetailAnnouceImagesCollectionViewCell
                 
                 if let model = item as? DetailAnnouceImageModel {
-                    cell.configureCell(forModel: model)
+                    cell.configureCell(forModel: model, index: indexPath.row)
+                    cell.delegate = self
                 }
                 
                 return cell
@@ -724,10 +863,22 @@ private extension DetailAnnounceViewController {
             switch section {
                 
             case .header:
-                guard let items = detailAnnouceViewModel.sectionDataDict[section] else { return }
-                let annouceHeaderItems = items.compactMap { $0 as? DetailAnnouceHeaderModel }
+                guard let items = detailAnnouceViewModel.sectionDataDict[section],
+                      let headerType = detailAnnouceViewModel.headerOptionTypeSubject.value else { return }
                 
-                snapshot.appendItems(annouceHeaderItems, toSection: section)
+                switch headerType {
+                case .basic:
+                    let annouceHeaderItems = items.compactMap { $0 as? BaseDetailAnnounceHeaderModel }
+                    snapshot.appendItems(annouceHeaderItems, toSection: section)
+                    
+                case .firstCome:
+                    let annouceHeaderItems = items.compactMap { $0 as? DetailAnnounceFirstComeHeaderModel }
+                    snapshot.appendItems(annouceHeaderItems, toSection: section)
+                    
+                case .period:
+                    let annouceHeaderItems = items.compactMap { $0 as? DetailAnnouncePeriodHeaderModel }
+                    snapshot.appendItems(annouceHeaderItems, toSection: section)
+                }
                 
             case .images:
                 guard let items = detailAnnouceViewModel.sectionDataDict[section],

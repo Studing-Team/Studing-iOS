@@ -12,4 +12,7 @@ struct CreateAnnounceRequestDTO: Codable {
     let content: String
     let noticeImages: [Data]?
     let tag: String
+    let startTime: String?
+    let endTime: String?
+    let firstComeNumber: String?
 }

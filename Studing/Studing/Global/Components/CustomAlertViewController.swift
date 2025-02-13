@@ -34,9 +34,9 @@ final class CustomAlertViewController: UIViewController {
     
     private let mainTitleLabel = UILabel()
     private let subTitleLabel = UILabel()
-    private let leftButton = UIButton()
-    private let rightButton = UIButton()
-    private let centerButton = UIButton()
+    private let leftButton: CustomButton?
+    private let rightButton: CustomButton?
+    private let centerButton: CustomButton?
     
     private let alertBackgroundView = UIView()
     private let titleStackView = UIStackView()
@@ -48,15 +48,18 @@ final class CustomAlertViewController: UIViewController {
     init(alertType: AlertType,
          mainTitle: String,
          subTitle: String,
-         rightButtonTitle: String,
-         leftButtonTitle: String,
+         leftButtonStyle: ButtonStyle,
+         rightButtonStyle: ButtonStyle,
          leftButtonHandler: ButtonAction?,
          rightButtonHandler: ButtonAction?) {
         self.alertType = alertType
         self.mainTitle = mainTitle
         self.subTitle = subTitle
-        self.rightButtonTitle = rightButtonTitle
-        self.leftButtonTitle = leftButtonTitle
+        
+        self.leftButton = CustomButton(buttonStyle: leftButtonStyle)
+        self.rightButton = CustomButton(buttonStyle: rightButtonStyle)
+        self.centerButton = nil
+        
         self.leftButtonHandler = leftButtonHandler
         self.rightButtonHandler = rightButtonHandler
         self.centerButtonHandler = nil
@@ -68,14 +71,16 @@ final class CustomAlertViewController: UIViewController {
     init(alertType: AlertType,
          mainTitle: String,
          subTitle: String,
-         confirmTitle: String,
+         centerButtonStyle: ButtonStyle,
          centerButtonHandler: ButtonAction?) {
         self.alertType = alertType
         self.mainTitle = mainTitle
         self.subTitle = subTitle
-        self.rightButtonTitle = confirmTitle
-        self.leftButtonTitle = nil
-        self.leftButtonHandler = nil
+        
+        self.centerButton = CustomButton(buttonStyle: centerButtonStyle)
+        
+        self.leftButton = nil
+        self.rightButton = nil
         self.rightButtonHandler = nil
         self.centerButtonHandler = centerButtonHandler
         
@@ -92,7 +97,7 @@ final class CustomAlertViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .black.withAlphaComponent(0.65)
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cancelAction)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cancelBackgroundAction)))
         
         setupStyle()
         setupHierarchy()
@@ -139,30 +144,6 @@ private extension CustomAlertViewController {
             $0.font = .interBody1()
             $0.textAlignment = .center
         }
-        
-        leftButton.do {
-            $0.setTitle(leftButtonTitle, for: .normal) // 버튼의 제목 설정
-            $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
-            $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
-            $0.backgroundColor = .black20 // 배경색 설정
-            $0.layer.cornerRadius = 8
-        }
-        
-        rightButton.do {
-            $0.setTitle(rightButtonTitle, for: .normal) // 버튼의 제목 설정
-            $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
-            $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
-            $0.backgroundColor = .primary50 // 배경색 설정
-            $0.layer.cornerRadius = 8
-        }
-        
-        centerButton.do {
-            $0.setTitle(rightButtonTitle, for: .normal) // 버튼의 제목 설정
-            $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
-            $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
-            $0.backgroundColor = .primary50 // 배경색 설정
-            $0.layer.cornerRadius = 8
-        }
     }
     
     func setupHierarchy() {
@@ -174,9 +155,15 @@ private extension CustomAlertViewController {
         
         switch alertType {
         case .confirmCancel:
+            
+            guard let leftButton, let rightButton else { return }
+            
             bottomStackView.addArrangedSubviews(leftButton, rightButton)
             
         case .onlyConfirm:
+            
+            guard let centerButton else { return }
+            
             bottomStackView.addArrangedSubview(centerButton)
         }
     }
@@ -201,7 +188,7 @@ private extension CustomAlertViewController {
         }
         
         [leftButton, rightButton, centerButton].forEach {
-            $0.snp.makeConstraints {
+            $0?.snp.makeConstraints {
                 $0.height.equalTo(38)
             }
         }
@@ -212,21 +199,21 @@ private extension CustomAlertViewController {
     }
     
     func setupButtonAction() {
-        leftButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        rightButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        centerButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-    }
-    
-    @objc func buttonTapped(_ sender: UIButton) {
-        switch sender {
-        case leftButton: leftButtonHandler?() ?? cancelAction()
-        case rightButton: rightButtonHandler?() ?? cancelAction()
-        case centerButton: centerButtonHandler?() ?? cancelAction()
-        default: break
+        switch alertType {
+        case .confirmCancel:
+            leftButton?.buttonAction = leftButtonHandler ?? cancelButtonAction
+            rightButton?.buttonAction = rightButtonHandler ?? cancelButtonAction
+            
+        case .onlyConfirm:
+            centerButton?.buttonAction = centerButtonHandler ?? cancelButtonAction
         }
     }
     
-    @objc func cancelAction() {
+    @objc func cancelBackgroundAction() {
+        dismiss(animated: false)
+    }
+    
+    func cancelButtonAction() {
         dismiss(animated: false)
     }
 }
