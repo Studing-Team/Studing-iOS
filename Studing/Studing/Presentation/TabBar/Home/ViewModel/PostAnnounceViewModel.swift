@@ -140,18 +140,15 @@ final class PostAnnounceViewModel: BaseViewModel {
             .prepend(false)
             .eraseToAnyPublisher()
         
-        let isFirstComeTypeEnableButton = Publishers.CombineLatest4(
+        let isFirstComeTypeEnableButton = Publishers.CombineLatest3(
             input.titleText,
             input.contentText,
-            input.tagButtonText,
             unwrapOptionalPublisher(input.firstComeNumber)
         )
-            .map { title, content, tagStyle, isFirstCome in
-                print("FirstComeType 현재 상태:", title, content, tagStyle)
+            .map { title, content, isFirstCome in
+                print("FirstComeType 현재 상태:", title, content)
                 
-                return !title.isEmpty &&
-                !content.isEmpty &&
-                (tagStyle == .announce || tagStyle == .event) && isFirstCome
+                return !title.isEmpty && !content.isEmpty && isFirstCome
             }
             .prepend(false)
             .eraseToAnyPublisher()

@@ -165,6 +165,10 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
             viewLifeCycleSubject.send(.viewWillAppear)
         }
         
+        if case .firstCome = postDisplayType {
+            tagButtonSubject.send(.event)
+        }
+        
         print("PostAnnounceViewController viewWillAppear")
     }
     
@@ -560,16 +564,16 @@ private extension PostAnnounceViewController {
         
         textSectionView.addArrangedSubviews(textViewHeader, contentTextView)
         
-        tagSectionView.addArrangedSubviews(tagViewHeader, tagStackView)
-        
         periodSectionView.addArrangedSubviews(periodViewHeader, periodContentView)
         
         if postDisplayType == .firstCome {
             personSectionView.addArrangedSubviews(personViewHeader, personContentView)
+        } else {
+            tagSectionView.addArrangedSubviews(tagViewHeader, tagStackView)
+            tagStackView.addArrangedSubviews(announceButton, eventButton)
         }
         
         contentTextView.addSubview(placeholderLabel)
-        tagStackView.addArrangedSubviews(announceButton, eventButton)
     }
     
     func setupLayout() {

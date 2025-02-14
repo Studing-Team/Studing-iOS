@@ -32,6 +32,7 @@ final class PersonContentView: UIView {
         setupStyle()
         setupHierarchy()
         setupLayout()
+        setupDelegate()
     }
     
     required init?(coder: NSCoder) {
@@ -55,6 +56,7 @@ private extension PersonContentView {
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.black10.cgColor
             $0.layer.cornerRadius = 10
+            $0.keyboardType = .numberPad
             $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         }
         
@@ -81,8 +83,36 @@ private extension PersonContentView {
         }
     }
     
+    func setupDelegate() {
+        textField.delegate = self
+    }
+    
     @objc private func textFieldDidChange() {
         textPublisher.send(textField.text ?? "")
+    }
+}
+
+// MARK: - UITextFieldDelegate (숫자 입력만 허용)
+
+extension PersonContentView: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        
+        // 숫자가 아닌 입력 방지
+        if !allowedCharacters.isSuperset(of: characterSet) {
+            return false
+        }
+
+        // 입력 후의 전체 텍스트 예측
+        let newText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? string
+        
+        // 숫자로 변환 후 999 초과 여부 확인
+        if let number = Int(newText), number > 999 {
+            return false
+        }
+
+        return true
     }
 }
 
