@@ -343,9 +343,25 @@ final class DetailAnnouceViewModel: BaseViewModel {
                 return Future { promise in
                     Task {
                         await self.bookmarkActionHandler()
+
+                        guard let type = self.headerOptionTypeSubject.value else { return }
                         
-                        let newData = self.sectionDataDict[.header]?.first as? DetailAnnouncePeriodHeaderModel
-                        promise(.success(newData?.base.isBookmark ?? false))
+                        let headerData: BaseDetailAnnounceHeaderModel
+                        switch type {
+                        case .basic:
+                            guard let data = self.sectionDataDict[.header]?.first as? BaseDetailAnnounceHeaderModel else { return }
+                            headerData = data
+                            
+                        case .period:
+                            guard let data = self.sectionDataDict[.header]?.first as? DetailAnnouncePeriodHeaderModel else { return }
+                            headerData = data.base
+                            
+                        case .firstCome:
+                            guard let data = self.sectionDataDict[.header]?.first as? DetailAnnounceFirstComeHeaderModel else { return }
+                            headerData = data.base
+                        }
+                        
+                        promise(.success(headerData.isBookmark))
                     }
                 }.eraseToAnyPublisher()
             }
