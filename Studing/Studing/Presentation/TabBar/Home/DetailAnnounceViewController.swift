@@ -161,7 +161,8 @@ private extension DetailAnnounceViewController {
                         startDay: convertToDateComponents(data: content.startTime, components: [.year, .month, .day]),
                         startTime: convertToDateComponents(data: content.startTime, components: [.hour, .minute]),
                         endDay: convertToDateComponents(data: content.endTime, components: [.year, .month, .day]),
-                        endTime: convertToDateComponents(data: content.startTime, components: [.hour, .minute])
+                        endTime: convertToDateComponents(data: content.endTime, components: [.hour, .minute]),
+                        firstComeNumber: String(content.firstComeNumber ?? 0)
                     )
                     
                     NotificationCenter.default.addObserver(

@@ -27,6 +27,7 @@ struct DetailAnnounceResponseDTO: Decodable {
     let isFirstComeNotice: Bool
     let isFirstComeApplied: Bool
     let alarmTime: String?
+    let firstComeNumber: Int?
 }
 
 extension DetailAnnounceResponseDTO {
@@ -51,7 +52,8 @@ extension DetailAnnounceResponseDTO {
             isFirstComeNotice: isFirstComeNotice,
             isFirstComeApplied: isFirstComeApplied,
             alarmDay: convertToDateComponents(alarmTime: alarmTime, components: [.year, .month, .day]),
-            alarmTime: convertToDateComponents(alarmTime: alarmTime, components: [.hour, .minute])
+            alarmTime: convertToDateComponents(alarmTime: alarmTime, components: [.hour, .minute]),
+            firstComeNumber: firstComeNumber
         )
     }
 }

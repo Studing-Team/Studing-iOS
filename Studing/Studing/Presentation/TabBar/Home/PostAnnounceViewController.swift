@@ -247,7 +247,6 @@ private extension PostAnnounceViewController {
                 if content.tag == "공지" {
                     self.announceButton.buttonState = .select
                     self.tagButtonSubject.send(.announce)
-                    
                 } else {
                     self.eventButton.buttonState = .select
                     self.tagButtonSubject.send(.event)
@@ -264,7 +263,12 @@ private extension PostAnnounceViewController {
                     postAnnounceViewModel.endTimeSubject.send(endTime)
                     postAnnounceViewModel.startDaySubject.send(startDay)
                     postAnnounceViewModel.endDaySubject.send(endDay)
-                    
+                }
+                
+                if let firstComeNumber = content.firstComeNumber {
+                    personContentView.bindingTitle(title: firstComeNumber)
+                    postAnnounceViewModel.changePostAnnounceOptionType(optionType: .firstCome)
+                } else {
                     postAnnounceViewModel.changePostAnnounceOptionType(optionType: .period)
                 }
             }

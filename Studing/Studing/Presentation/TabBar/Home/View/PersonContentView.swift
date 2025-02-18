@@ -40,7 +40,8 @@ final class PersonContentView: UIView {
     }
     
     func bindingTitle(title: String) {
-        titleLabel.text = title
+        textField.text = title
+        textPublisher.send(title)
     }
 }
 

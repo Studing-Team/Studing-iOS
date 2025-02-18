@@ -28,6 +28,7 @@ struct DetailAnnounceEntity: Decodable {
     let isFirstComeApplied: Bool
     let alarmDay: DateComponents?
     let alarmTime: DateComponents?
+    let firstComeNumber: Int?
     
     var type: PostOptionType {
         if let startTime, let endTime {
