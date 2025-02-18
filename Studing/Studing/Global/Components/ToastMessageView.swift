@@ -11,12 +11,15 @@ import SnapKit
 import Then
 
 enum ToastType: Equatable {
+    case createCompletion
     case bookmark(isBookmark: Bool)
     case deleteAnnounce
     case editCompletion
     
     var title: String {
         switch self {
+        case .createCompletion:
+            return "✏️ 공지사항 작성완료"
         case .bookmark(let isBookmark):
             return isBookmark ? "저장한 공지사항에 추가했어요 ⭐" : "저장한 공지사항을 취소했어요 ⭐"
         case .deleteAnnounce:
