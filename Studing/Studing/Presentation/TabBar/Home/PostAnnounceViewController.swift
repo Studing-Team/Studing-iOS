@@ -178,6 +178,10 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
         if case .edit = postType {
             NotificationCenter.default.post(name: Notification.Name("EditPostViewDismissed"), object: nil)
         }
+        
+        if case .create = postType {
+            NotificationCenter.default.post(name: Notification.Name("Create EditPostViewDismissed"), object: nil)
+        }
     }
     
     @objc private func closeButtonTapped() {
@@ -293,6 +297,10 @@ private extension PostAnnounceViewController {
                 if result {
                     if case .edit = self?.postType {
                         ToastMessageManager.showToastMessage(toastType: .editCompletion)
+                    }
+                    
+                    if case .create = self?.postType {
+                        ToastMessageManager.showToastMessage(toastType: .createCompletion)
                     }
                     
                     if let customNavController = self?.navigationController as? CustomAnnounceNavigationController {
