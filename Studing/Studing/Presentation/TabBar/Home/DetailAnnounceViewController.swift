@@ -368,7 +368,13 @@ private extension DetailAnnounceViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] headerType in
                 guard let self, let headerType else { return }
-                self.setupLayout(self.type, headerType)
+                
+                imageCountView.snp.remakeConstraints {
+                    $0.top.equalTo(self.collectionView.snp.top).offset(headerType.countViewPadding)
+                    $0.trailing.equalTo(self.collectionView.snp.trailing).inset(12.5)
+                    $0.width.equalTo(29)
+                    $0.height.equalTo(22)
+                }
             }
             .store(in: &cancellables)
         
@@ -419,7 +425,7 @@ private extension DetailAnnounceViewController {
         
         imageCountView.do {
             $0.backgroundColor = .black50
-            $0.layer.cornerRadius = 12
+            $0.layer.cornerRadius = 11
         }
         
         switch type {
@@ -586,7 +592,7 @@ extension DetailAnnounceViewController: FirstComeButtonTappedDelegate {
         case .joined:
             guard let noticeId = detailAnnouceViewModel.selectedNoticeId else { return }
             
-            coordinator?.presentFirstComeRankMoal(noticeId: noticeId)
+            coordinator?.presentFirstComeRankModal(noticeId: noticeId)
         }
     }
 }
