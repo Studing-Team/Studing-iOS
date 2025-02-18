@@ -383,9 +383,21 @@ private extension DetailAnnounceViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if result {
-                    self?.showConfirmAlert(mainTitle: "이벤트 참여완료!", subTitle: "바로 순위를 확인할 수 있어요 :)", centerButtonStyle: .confirm(type: .event))
+                    self?.showConfirmAlert(mainTitle: "이벤트 참여완료!",
+                                           subTitle: "바로 순위를 확인할 수 있어요 :)",
+                                           centerButtonStyle: .confirm(type: .event),
+                                           centerButtonHandler: {
+                        self?.dismiss(animated: false)
+                        self?.viewLifeCycleSubject.send(.viewWillAppear)
+                    })
                 } else {
-                    self?.showConfirmAlert(mainTitle: "이벤트 참여 미완료!", subTitle: "오류가 발생했습니다.\n잠시후 다시 시도해주세요", centerButtonStyle: .confirm(type: .event))
+                    self?.showConfirmAlert(mainTitle: "이벤트 참여 미완료!",
+                                           subTitle: "오류가 발생했습니다.\n잠시후 다시 시도해주세요",
+                                           centerButtonStyle: .confirm(type: .event),
+                                           centerButtonHandler: {
+                        self?.dismiss(animated: false)
+                        self?.viewLifeCycleSubject.send(.viewWillAppear)
+                    })
                 }
             }
             .store(in: &cancellables)
