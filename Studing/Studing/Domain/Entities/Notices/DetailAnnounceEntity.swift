@@ -57,7 +57,8 @@ extension DetailAnnounceEntity {
     }
     
     func toImagesModel() -> [DetailAnnouceImageModel]? {
-        return images?.compactMap { DetailAnnouceImageModel(image: $0) }
+        guard let images = images, !images.isEmpty else { return nil }
+        return images.map { DetailAnnouceImageModel(image: $0) }
     }
     
     func toHeaderModel() -> DetailAnnouceSectionData {

@@ -24,8 +24,12 @@ final class NoticesRepositoryImpl: NoticesRepository {
         return await NetworkManager.shared.request(NoticesAPI.postCheckAnnouce(noticeId: noticeId))
     }
     
-    func postUnreadAllAnnounce(associationName: String) async -> Result<UnreadAllAnnounceListResponseData, NetworkError> {
-        return await NetworkManager.shared.request(NoticesAPI.postUnreadAllAnnouce(UnreadAllAnnounceListRequestDTO(categorie: associationName)))
+    func postUnreadAllAnnounce(associationName: String) async throws -> [DetailAnnounceEntity] {
+        
+        let response: UnreadAllAnnounceListResponseData = try await NetworkManager.shared.request(NoticesAPI.postUnreadAllAnnouce(UnreadAllAnnounceListRequestDTO(categorie: associationName))).get()
+        
+        
+        return response.toEntities()
     }
     
     func getDetailAnnounce(noticeId: Int) async throws -> DetailAnnounceEntity {

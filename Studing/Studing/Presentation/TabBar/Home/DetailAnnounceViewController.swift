@@ -26,9 +26,9 @@ final class DetailAnnounceViewController: UIViewController {
     
     // MARK: - Combine Properties
     
-    private let nextbuttonTapSubject = PassthroughSubject<Void, Never>()
+    private let nextbuttonTapSubject = PassthroughSubject<DetailAnnounceType, Never>()
     private let currentImagePageSubject = PassthroughSubject<Int, Never>()
-    private let deleteuttonTappedSubject = PassthroughSubject<Void, Never>()
+    private let deleteButtonTappedSubject = PassthroughSubject<Void, Never>()
     private let viewLifeCycleSubject = PassthroughSubject<ViewLifeCycleEvent, Never>()
     private let firstComeButtonTappedSubejct = PassthroughSubject<FirstComeState, Never>()
     
@@ -205,7 +205,7 @@ private extension DetailAnnounceViewController {
             leftButtonStyle: .cancel,
             rightButtonStyle: .delete,
             rightButtonHandler: {
-                self.deleteuttonTappedSubject.send()
+                self.deleteButtonTappedSubject.send()
             }
         )
     }
@@ -215,7 +215,7 @@ private extension DetailAnnounceViewController {
             viewLifeCycleEventAction: viewLifeCycleSubject.eraseToAnyPublisher(),
             likeButtonTap: likeButton.tapPublisher,
             bookmarkButtonTap: bookmarkButton.tapPublisher,
-            deleteButtonTap: deleteuttonTappedSubject.eraseToAnyPublisher(),
+            deleteButtonTap: deleteButtonTappedSubject.eraseToAnyPublisher(),
             nextButtonTap: nextbuttonTapSubject.eraseToAnyPublisher(),
             currentPageControlCount: currentImagePageSubject.eraseToAnyPublisher(),
             firstComeButtonTap: firstComeButtonTappedSubejct.eraseToAnyPublisher()
@@ -243,10 +243,13 @@ private extension DetailAnnounceViewController {
                 switch completion {
                 case .finished:
                     print("✅ viewLifeCycleEventResult 성공적으로 완료됨")
-
                 case .failure(let error):
                     // 에러 처리
                     print("Error: \(error)")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.customRefreshControl.endRefreshing()
+                        self.detailAnnouceViewModel.isRefresh = false
+                    }
                 }
             }, receiveValue: { isRefresh in
                 if isRefresh {
@@ -341,26 +344,31 @@ private extension DetailAnnounceViewController {
                 guard let self else { return }
                 switch completion {
                 case .finished:
-                    if let presentedVC = self.presentedViewController as? CustomAlertViewController {
-                        presentedVC.dismiss(animated: false)
-                    }
+                    print("삭제 동작 완료")
                     
                 case .failure(_):
+                    // 삭제하기 버튼이 포함된 Alert View
                     if let presentedVC = self.presentedViewController as? CustomAlertViewController {
                         presentedVC.dismiss(animated: false)
                     }
                 }
             }, receiveValue: { [weak self] result in
                 guard let self else { return }
+                
+                if let presentedVC = self.presentedViewController as? CustomAlertViewController {
+                    presentedVC.dismiss(animated: false)
+                }
+                
+                ToastMessageManager.showToastMessage(toastType: .deleteAnnounce)
+                
                 switch self.type {
                 case .announce, .bookmarkAnnounce:
-                    ToastMessageManager.showToastMessage(toastType: .deleteAnnounce)
-                    
                     if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
                         customNavController.popViewController(animated: true)
                     }
+                    
                 case .unreadAnnounce:
-                    nextbuttonTapSubject.send()
+                    nextbuttonTapSubject.send(.unreadAnnounce)
                 }
             })
             .store(in: &cancellables)
@@ -474,7 +482,7 @@ private extension DetailAnnounceViewController {
     }
     
     @objc func nextbuttonTap() {
-        nextbuttonTapSubject.send()
+        nextbuttonTapSubject.send(.announce)
     }
     
     func setupHierarchy(_ type: DetailAnnounceType) {
@@ -565,8 +573,8 @@ private extension DetailAnnounceViewController {
     }
     
     @objc func handleRefresh() {
-        viewLifeCycleSubject.send(.viewWillAppear)
         self.detailAnnouceViewModel.isRefresh = true
+        viewLifeCycleSubject.send(.viewWillAppear)
     }
 }
 

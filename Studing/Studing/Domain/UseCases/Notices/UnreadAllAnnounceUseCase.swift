@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol PostUnreadAllAnnounceUseCase {
+    func execute(noticeId: Int) async throws -> [DetailAnnounceEntity]
+}
+
 final class UnreadAllAnnounceUseCase {
     private let repository: NoticesRepository
     
@@ -14,7 +18,7 @@ final class UnreadAllAnnounceUseCase {
         self.repository = repository
     }
     
-    func execute(associationName: String) async -> Result<UnreadAllAnnounceListResponseData,NetworkError> {
-        return await repository.postUnreadAllAnnounce(associationName: associationName)
+    func execute(associationName: String) async throws -> [DetailAnnounceEntity] {
+        return try await repository.postUnreadAllAnnounce(associationName: associationName)
     }
 }

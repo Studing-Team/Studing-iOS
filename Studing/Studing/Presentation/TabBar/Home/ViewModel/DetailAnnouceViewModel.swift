@@ -41,7 +41,7 @@ final class DetailAnnouceViewModel: BaseViewModel {
     private(set) var errorMessage: String?
 
     var sectionDataDict: [DetailAnnouceSectionType: [any DetailAnnouceSectionData]] = [:]
-    private var announceList: [UnreadAllAnnounceListResponseDTO] = []
+    private var announceList: [DetailAnnounceEntity] = []
     private var currentIndex: Int = 0 {
         didSet {
             updateCurrentUnreadAnnounce()
@@ -63,7 +63,7 @@ final class DetailAnnouceViewModel: BaseViewModel {
         let likeButtonTap: AnyPublisher<Void, Never>
         let bookmarkButtonTap: AnyPublisher<Void, Never>
         let deleteButtonTap: AnyPublisher<Void, Never>
-        let nextButtonTap: AnyPublisher<Void, Never>
+        let nextButtonTap: AnyPublisher<DetailAnnounceType, Never>
         let currentPageControlCount : AnyPublisher<Int, Never>
         let firstComeButtonTap: AnyPublisher<FirstComeState, Never>?
     }
@@ -197,9 +197,11 @@ final class DetailAnnouceViewModel: BaseViewModel {
             deleteLikeAnnounceUseCase: DeleteLikeAnnounceUseCase(repository: repository),
             bookmarkAnnounceUseCase: BookmarkAnnounceUseCase(repository: repository),
             deleteBookmarkAnnounceUseCase: DeleteBookmarkAnnounceUseCase(repository: repository),
+            detailAnnounceUseCase: DetailAnnounceUseCase(repository: repository),
             unreadAllAnnounceUseCase: UnreadAllAnnounceUseCase(repository: repository),
             unReadCount: unReadCount,
-            checkAnnounceUseCase: CheckAnnounceUseCase(repository: NoticesRepositoryImpl())
+            checkAnnounceUseCase: CheckAnnounceUseCase(repository: NoticesRepositoryImpl()),
+            deletePostAnnounceUseCase: DeletePostAnnounceUseCase(repository: repository)
         )
     }
 
@@ -237,22 +239,39 @@ final class DetailAnnouceViewModel: BaseViewModel {
                         }
                         .map { _ in self.isRefresh }
                         .eraseToAnyPublisher()
-
+                    
                 case .unreadAnnounce:
-                    return Future<Void, NetworkError> { promise in
-                        Task {
-                            do {
-                                try await self.postUnreadAllAnnounce()
-                                promise(.success(()))
-                            } catch let error as NetworkError {
-                                promise(.failure(error))
-                            } catch {
-                                promise(.failure(.serverError))
+                    if self.isRefresh == true {
+                        return self.postRefreshUnreadAnnouncePublisher()
+                            .map { [weak self] entity in
+                                
+                                guard let self else { return }
+                                
+                                self.sectionDataDict[.header]?[self.currentIndex] = entity.toHeaderModel()
+                                
+                                if let imageModels = entity.toImagesModel() {
+                                    self.sectionDataDict[.images]?[self.currentIndex] = imageModels as! any DetailAnnouceSectionData
+                                }
+                                
+                                self.sectionDataDict[.content]?[self.currentIndex] = entity.toContentModel()
+
                             }
-                        }
+                            .map { _ in self.isRefresh }
+                            .eraseToAnyPublisher()
+                    } else {
+                        return self.postUnreadAllAnnouncePublisher()
+                            .map { [weak self] result in
+                                self?.announceList = result
+                                self?.updateCurrentUnreadAnnounce()
+                            }
+                            .catch { error in
+                                self.errorSubject.send(error)
+                                return Fail<Void, NetworkError>(error: error)
+                                    .eraseToAnyPublisher()
+                            }
+                            .map { _ in self.isRefresh }
+                            .eraseToAnyPublisher()
                     }
-                    .map { _ in self.isRefresh }
-                    .eraseToAnyPublisher()
                 }
             }
             .eraseToAnyPublisher()
@@ -261,25 +280,39 @@ final class DetailAnnouceViewModel: BaseViewModel {
             .handleEvents(receiveOutput: { _ in
                 AmplitudeManager.shared.trackEvent(AnalyticsEvent.UnreadNotice.nextNotice)
             })
-            .flatMap { [weak self] _ -> AnyPublisher<Result<Bool, NetworkError>, Never> in
+            .flatMap { [weak self] announceType -> AnyPublisher<Result<Bool, NetworkError>, Never> in
                 guard let self else { return Just((.failure(NetworkError.unknown))).eraseToAnyPublisher() }
+                
+                // 놓친 공지사항을 삭제했을 때 다음 공지사항을 보기 위한 부분
+                if announceType == .unreadAnnounce {
+                    
+                    currentIndex += 1
+                    unReadCount = (unReadCount ?? 0) - 1
+                    
+                    if self.unReadCount == 0 {
+                        return Just(.success(false)).eraseToAnyPublisher()
+                    } else {
+                        return Just(.success(true)).eraseToAnyPublisher()
+                    }
+                }
                 
                 return Future { promise in
                     Task {
                         let result = await self.checkUnAnnounce()
                         switch result {
                         case .success:
-                            
                             if self.unReadCount == 0 {
                                 promise(.success(.success(false)))
                             } else {
                                 promise(.success(.success(true)))
                             }
+                            
                         case .failure(let error):
                             promise(.success(.failure(error)))
                         }
                     }
-                }.eraseToAnyPublisher()
+                }
+                .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
         
@@ -305,7 +338,7 @@ final class DetailAnnouceViewModel: BaseViewModel {
         let deleteResult = input.deleteButtonTap
             .flatMap { [weak self] _ -> AnyPublisher<Bool, NetworkError> in
                 guard let self else { return Empty().eraseToAnyPublisher() }
-
+                
                 return Future<Bool, NetworkError> { promise in
                     Task {
                         do {
@@ -324,7 +357,6 @@ final class DetailAnnouceViewModel: BaseViewModel {
                 }
                 .eraseToAnyPublisher()
             }
-            .first()
             .eraseToAnyPublisher()
         
         let bookmarkButtonResult = input.bookmarkButtonTap
@@ -421,7 +453,7 @@ final class DetailAnnouceViewModel: BaseViewModel {
         
         
         
-        let firstComeButtonResult: AnyPublisher<Bool, Never> = input.firstComeButtonTap?
+        let firstComeButtonResult = input.firstComeButtonTap?
             .flatMap { [weak self] _ -> AnyPublisher<Bool, Never> in
                 guard let self else { return Just(false).eraseToAnyPublisher() }
                 
@@ -600,22 +632,42 @@ private extension DetailAnnouceViewModel {
     func updateCurrentUnreadAnnounce() {
         guard currentIndex < announceList.count else { return }
         let currentAnnounce = announceList[currentIndex]
-        selectedNoticeId = currentAnnounce.id
-        sectionDataDict[.header] = [currentAnnounce.convertToHeader()]
+        self.announceContent = currentAnnounce
+        self.selectedNoticeId = currentAnnounce.id
         
-        if let imageModels = currentAnnounce.convertToImages() {
-            sectionDataDict[.images] = imageModels  // 배열 그대로 할당
-        }
-        sectionDataDict[.content] = [currentAnnounce.convertToContent()]
+        self.headerOptionTypeSubject.send(currentAnnounce.type)
         
-//        selectedNoticeId = currentAnnounce.id  // 현재 공지사항의 ID 업데이트
+        updateAnnounceDataToSectionDataDict(data: currentAnnounce)
+        
+        selectedNoticeId = currentAnnounce.id  // 현재 공지사항의 ID 업데이트
         
         self.isAuthor = currentAnnounce.isAuthor
         
-//        RightNavigationButtonType(isAlarmEnabled: currentAnnounce.alarmTime, isAuthor: currentAnnounce.isAuthor)
-//        
-//        rightNavigationButtonResult.send(currentAnnounce.isAuthor)
+        // 우측 상단 메뉴 업데이트
+        self.authorToContentSubject.send(currentAnnounce.isAuthor)
+        
+        // 알람 버튼 업데이트
+        self.updateAlarmSetting(data: currentAnnounce)
+        
         getMySections()
+    }
+    
+    /// 공지사항 데이터를 Section 별로 저장시키기 위한 메서드
+    func updateAnnounceDataToSectionDataDict(data: DetailAnnounceEntity) {
+        sectionDataDict[.header] = [data.toHeaderModel()]
+        
+        if let imageModels = data.toImagesModel() {
+            sectionDataDict[.images] = imageModels
+        }
+        
+        sectionDataDict[.content] = [data.toContentModel()]
+    }
+    
+    /// 알람 설정을 위한
+    func updateAlarmSetting(data: DetailAnnounceEntity) {
+        let alarmData = AlarmSettingData(isAlarm: data.isAlarmSet, alarmDay: data.alarmDay, alarmTime: data.alarmTime)
+        
+        self.alarmSettingSubject.send(alarmData)
     }
     
     func getMySections() {
@@ -692,9 +744,7 @@ extension DetailAnnouceViewModel {
                     self.headerOptionTypeSubject.send(entity.type)
                     self.authorToContentSubject.send(entity.isAuthor)
                     
-                    let alarmData = AlarmSettingData(isAlarm: entity.isAlarmSet, alarmDay: entity.alarmDay, alarmTime: entity.alarmTime)
-                    
-                    self.alarmSettingSubject.send(alarmData)
+                    self.updateAlarmSetting(data: entity)
                     
                     let contentModel = entity.toContentModel()
                     let imageData = entity.toImagesModel()
@@ -713,17 +763,62 @@ extension DetailAnnouceViewModel {
         .eraseToAnyPublisher()
     }
     
-    func postUnreadAllAnnounce() async throws {
-        guard let unreadAllAnnounceUseCase else { return }
-        
-        switch await unreadAllAnnounceUseCase.execute(associationName: selectedAssociationType ?? "") {
-        case .success(let response):
-            announceList = response.notices
-            updateCurrentUnreadAnnounce()
-            
-        case .failure(let error):
-            print("Error:", error.localizedDescription)
+    func postUnreadAllAnnouncePublisher() -> AnyPublisher<[DetailAnnounceEntity], NetworkError> {
+        guard let unreadAllAnnounceUseCase,
+              let selectedAssociationType else {
+            return Fail(error: NetworkError.unknown).eraseToAnyPublisher()
         }
+        
+        return Future { [weak self] promise in
+            guard let self = self else {
+                    promise(.failure(.unknown))
+                    return
+                }
+            
+            Task {
+                do {
+                    let result = try await unreadAllAnnounceUseCase.execute(associationName: selectedAssociationType)
+                
+                    promise(.success(result))
+                    
+                } catch let error as NetworkError {
+                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
+                    promise(.failure(error))
+                } catch {
+                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
+                    promise(.failure(.unknown))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func postRefreshUnreadAnnouncePublisher() -> AnyPublisher<DetailAnnounceEntity, NetworkError> {
+        guard let detailAnnounceUseCase, let selectedNoticeId else {
+            return Fail(error: NetworkError.unknown).eraseToAnyPublisher()
+        }
+        
+        return Future { [weak self] promise in
+            guard let self = self else {
+                    promise(.failure(.unknown))
+                    return
+                }
+            
+            Task {
+                do {
+                    let entity = try await detailAnnounceUseCase.execute(noticeId: selectedNoticeId)
+                    
+                    promise(.success(entity))
+                } catch let error as NetworkError {
+                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
+                    promise(.failure(error))
+                } catch {
+                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
+                    promise(.failure(.unknown))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
     
     func postLikeAnnounce(_ noticeId: Int?) async -> Result<Void, NetworkError> {
