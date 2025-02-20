@@ -62,8 +62,11 @@ final class NoticesRepositoryImpl: NoticesRepository {
         return response
     }
     
-    func editPostAnnounce(noticeId: Int, dto: CreateAnnounceRequestDTO) async -> Result<EmptyResponse, NetworkError> {
-        return await NetworkManager.shared.request(NoticesAPI.editPostAnnounce(noticeId: noticeId, dto))
+    func editPostAnnounce(noticeId: Int, dto: CreateAnnounceRequestDTO) async throws -> EmptyResponse {
+        
+        let response: EmptyResponse = try await NetworkManager.shared.request(NoticesAPI.editPostAnnounce(noticeId: noticeId, dto)).get()
+        
+        return response
     }
     
     func deletePostAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError> {

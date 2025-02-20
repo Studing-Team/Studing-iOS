@@ -19,7 +19,7 @@ protocol NoticesRepository {
     func postBookmarkAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError>
     func deleteBookmarkAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError>
     func postCreateAnnounce(dto: CreateAnnounceRequestDTO) async throws -> EmptyResponse
-    func editPostAnnounce(noticeId: Int, dto: CreateAnnounceRequestDTO) async -> Result<EmptyResponse, NetworkError>
+    func editPostAnnounce(noticeId: Int, dto: CreateAnnounceRequestDTO) async throws -> EmptyResponse
     func deletePostAnnounce(noticeId: Int) async -> Result<EmptyResponse, NetworkError>
     func postRegistFirstCome(noticeId: Int) async throws -> EmptyResponse
     func getFirstComeRankings(noticeId: Int) async throws -> FirstComeRankingsResponseData

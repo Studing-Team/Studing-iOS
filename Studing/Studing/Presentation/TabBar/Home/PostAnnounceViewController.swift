@@ -163,6 +163,10 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
         
         if case .edit = postType {
             viewLifeCycleSubject.send(.viewWillAppear)
+            
+            if let customNav = navigationController as? CustomAnnounceNavigationController {
+                customNav.setNavigationType(.editPost)
+            }
         }
         
         if case .firstCome = postDisplayType {
@@ -267,13 +271,13 @@ private extension PostAnnounceViewController {
                     postAnnounceViewModel.endTimeSubject.send(endTime)
                     postAnnounceViewModel.startDaySubject.send(startDay)
                     postAnnounceViewModel.endDaySubject.send(endDay)
-                }
-                
-                if let firstComeNumber = content.firstComeNumber {
-                    personContentView.bindingTitle(title: firstComeNumber)
-                    postAnnounceViewModel.changePostAnnounceOptionType(optionType: .firstCome)
-                } else {
-                    postAnnounceViewModel.changePostAnnounceOptionType(optionType: .period)
+                    
+                    self.showSomething()
+                    self.periodViewHeader.changeCheckBoxState()
+                    
+                    if let firstComeNumber = content.firstComeNumber {
+                        personContentView.bindingTitle(title: firstComeNumber)
+                    }
                 }
             }
             .store(in: &cancellables)
