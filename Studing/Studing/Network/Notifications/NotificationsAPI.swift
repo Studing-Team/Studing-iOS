@@ -45,7 +45,7 @@ extension NotificationsAPI: APIEndpoint {
         return .json
     }
     
-    var parameters: (any Encodable)? {
+    var parameters: Encodable? {
         switch self {
         case .postNotificationToken(let dto):
             return dto

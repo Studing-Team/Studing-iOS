@@ -55,12 +55,8 @@ final class CheckBoxButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateButtonState(_ isSeleted: Bool) {
-        if isSeleted == false {
-            checkBoxState = .unchecked
-        } else {
-            checkBoxState = .checked
-        }
+    func updateButtonState(_ isSelected: Bool) {
+        checkBoxState = isSelected ? .checked : .unchecked
     }
 }
 

@@ -217,7 +217,7 @@ extension HomeViewModel {
         case .success(let response):
             unReadCount = response.categorieCount
             let userName = KeychainManager.shared.loadData(key: .userInfo, type: UserInfo.self)?.userName ?? "알수없음"
-            
+        
             if unReadCount != 0 {
                 sectionDataDict[.missAnnouce] = [MissAnnounceEntity(userName: userName, missAnnounceCount: unReadCount)]
             } else {

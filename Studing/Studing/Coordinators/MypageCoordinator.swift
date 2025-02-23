@@ -50,6 +50,19 @@ final class MypageCoordinator: Coordinator {
         navigationController.pushViewController(withDrawVC, animated: true)
     }
     
+    func pushAlarmSettingView() {
+        let alarmSettingVM = AlarmSettingViewModel(
+            notificationTokenUseCase: NotificationTokenUseCase(repository: NotificationsRepositoryImpl()))
+        
+        let alarmSettingVC = AlarmSettingViewController(
+            alarmSettingViewModel: alarmSettingVM,
+            coordinator: self
+        )
+        
+        alarmSettingVC.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(alarmSettingVC, animated: true)
+    }
+    
     func removeAuthUser() {
         // parent chain을 통해 AppCoordinator 찾아서 직접 호출
         if let appCoordinator = findParentCoordinator(ofType: AppCoordinator.self) {
