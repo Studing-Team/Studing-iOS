@@ -100,6 +100,29 @@ final class DetailAnnounceViewController: UIViewController {
         setupRefreshControl()
         
         print("DetailAnnounceViewController viewDidLoad")
+        
+        // 공지사항 작성 후, 게시글 업데이트를 위한 옵저버
+        NotificationCenter.default
+            .publisher(for: Notification.Name("Alarm Error"))
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.showConfirmAlert(mainTitle: "알람 설정 에러", subTitle: "알람 설정이 되지 않았습니다\n 잠시 후 시도해주세요", centerButtonStyle: .confirm(type: .normal), centerButtonHandler: {
+                        self.dismiss(animated: false)
+                    })
+                }
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default
+            .publisher(for: Notification.Name("AlarmSetting"))
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                viewLifeCycleSubject.send(.viewWillAppear)
+            }
+            .store(in: &cancellables)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,7 +194,7 @@ private extension DetailAnnounceViewController {
                         name: Notification.Name("EditPostViewDismissed"),
                         object: nil)
                     
-                        self.coordinator?.presentPostAnnounce(postType: .edit, postDisplayType: content.isFirstComeNotice == true ? .firstCome : .announce, noticeId: noticeId, content: dto)
+                    self.coordinator?.presentPostAnnounce(postType: .edit, postDisplayType: content.isFirstComeNotice == true ? .firstCome : .announce, noticeId: noticeId, content: dto, postOptionType: content.type)
                     
                 case .delete:
                     self.handleDotMenuButtonTap()

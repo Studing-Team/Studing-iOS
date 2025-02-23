@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 final class PostAnnounceViewModel: BaseViewModel {
-
+    
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy년 M월 d일"
@@ -29,6 +29,8 @@ final class PostAnnounceViewModel: BaseViewModel {
     private var isProcessing = false
     private var noticeId: Int?
     private var editContent: EditAnnounceContent?
+    
+    // MARK: - Combine properties
     
     let editAnnounceDataSubject = PassthroughSubject<EditAnnounceContent?, Never>()
 
@@ -146,20 +148,18 @@ final class PostAnnounceViewModel: BaseViewModel {
             unwrapOptionalPublisher(input.firstComeNumber)
         )
             .map { title, content, isFirstCome in
-                print("FirstComeType 현재 상태:", title, content)
-                
+                print("FirstComeType 현재 상태:", title, content, isFirstCome)
                 return !title.isEmpty && !content.isEmpty && isFirstCome
             }
             .prepend(false)
             .eraseToAnyPublisher()
-        
         
         let createResult = input.bottomButtonTap
             .filter { !self.isProcessing }
             .combineLatest(input.titleText, input.contentText, input.tagButtonText)
             .map { _, title, content, type in
                 self.isProcessing = true
-                
+                             
                 if self.createAnnounceUseCase != nil {
                     AmplitudeManager.shared.trackEvent(AnalyticsEvent.NoticeCreate.upload)
                 }
@@ -172,10 +172,22 @@ final class PostAnnounceViewModel: BaseViewModel {
                 
                 switch self.postOptionType {
                 case .basic:
-                    return self.createBasicAnnounce(title, content, type.title)
+                    return self.basicAnnouncePublisher(title, content, type.title)
                         .map { _ in true }
                         .catch { _ in Just(false) }
                         .eraseToAnyPublisher()
+                    
+                case .period:
+                    return self.periodAnnouncePublisher(
+                        title,
+                        content,
+                        type.title,
+                        startTime: convertToAPITimeFormat(startDaySubject.value, startTimeSubject.value),
+                        endTime: convertToAPITimeFormat(endDaySubject.value, endTimeSubject.value)
+                    )
+                    .map { _ in true }
+                    .catch { _ in Just(false) }
+                    .eraseToAnyPublisher()
                     
                 case .firstCome:
                     
@@ -190,7 +202,7 @@ final class PostAnnounceViewModel: BaseViewModel {
                         .flatMap { [weak self] number in
                             guard let self else { return Just((false)).eraseToAnyPublisher() }
                             
-                            return self.createFirstComeAnnounce(
+                            return self.firstComeAnnouncePublisher(
                                 title,
                                 content,
                                 type.title,
@@ -203,18 +215,6 @@ final class PostAnnounceViewModel: BaseViewModel {
                             .eraseToAnyPublisher()
                         }
                         .eraseToAnyPublisher()
-
-                case .period:
-                    return self.createPeriodAnnounce(
-                        title,
-                        content,
-                        type.title,
-                        startTime: convertToAPITimeFormat(startDaySubject.value, startTimeSubject.value),
-                        endTime: convertToAPITimeFormat(endDaySubject.value, endTimeSubject.value)
-                    )
-                    .map { _ in true }
-                    .catch { _ in Just(false) }
-                    .eraseToAnyPublisher()
                 }
             }
             .eraseToAnyPublisher()
@@ -305,124 +305,36 @@ private extension PostAnnounceViewModel {
 }
 
 private extension PostAnnounceViewModel {
-    func createBasicAnnounce(_ title: String, _ content: String, _ tag: String) -> AnyPublisher<Void, NetworkError> {
-        
-        guard let createAnnounceUseCase else { return Fail(error: NetworkError.unknown).eraseToAnyPublisher() }
-        
+    func createOrEditAnnounce(dto: CreateAnnounceRequestDTO) -> AnyPublisher<Void, NetworkError> {
         return Future { [weak self] promise in
-            
-            guard let self = self else {
-                    promise(.failure(.unknown)) // self가 nil이면 실패 처리
-                    return
-                }
-            
-            Task {
-                do {
-                    let _ = try await createAnnounceUseCase.execute(
-                        dto: CreateAnnounceRequestDTO(
-                            title: title,
-                            content: content,
-                            noticeImages: self.selectedImageDatas,
-                            tag: tag,
-                            startTime: nil,
-                            endTime: nil,
-                            firstComeNumber: nil
-                        )
-                    )
-                    promise(.success(()))
-                } catch let error as NetworkError {
-//                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
-                    promise(.failure(error))
-                    
-                } catch {
-//                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
-                    promise(.failure(.unknown))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    func createPeriodAnnounce(
-        _ title: String,
-        _ content: String,
-        _ tag: String,
-        startTime: String,
-        endTime: String
-    ) -> AnyPublisher<Void, NetworkError> {
-        guard let createAnnounceUseCase else { return Fail(error: NetworkError.unknown).eraseToAnyPublisher() }
-        
-        return Future { [weak self] promise in
-            
-            guard let self = self else {
-                    promise(.failure(.unknown))
-                    return
-                }
-            
-            Task {
-                do {
-                    let _ = try await createAnnounceUseCase.execute(
-                        dto: CreateAnnounceRequestDTO(
-                            title: title,
-                            content: content,
-                            noticeImages: self.selectedImageDatas,
-                            tag: tag,
-                            startTime: startTime,
-                            endTime: endTime,
-                            firstComeNumber: nil
-                        )
-                    )
-                    promise(.success(()))
-                } catch let error as NetworkError {
-//                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
-                    promise(.failure(error))
-                    
-                } catch {
-//                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
-                    promise(.failure(.unknown))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    func createFirstComeAnnounce(
-        _ title: String,
-        _ content: String,
-        _ tag: String,
-        startTime: String,
-        endTime: String,
-        firstComeNumber: String
-    ) -> AnyPublisher<Void, NetworkError> {
-        guard let createAnnounceUseCase else { return Fail(error: NetworkError.unknown).eraseToAnyPublisher() }
-        
-        return Future { [weak self] promise in
-            
             guard let self = self else {
                 promise(.failure(.unknown))
                 return
             }
-
+            
             Task {
                 do {
-                    let _ = try await createAnnounceUseCase.execute(
-                        dto: CreateAnnounceRequestDTO(
-                            title: title,
-                            content: content,
-                            noticeImages: self.selectedImageDatas,
-                            tag: tag,
-                            startTime: startTime,
-                            endTime: endTime,
-                            firstComeNumber: firstComeNumber
-                        )
-                    )
+                    switch self.type {
+                    case .create:
+                        guard let useCase = self.createAnnounceUseCase else {
+                            promise(.failure(.unknown))
+                            return
+                        }
+                        
+                        let _ = try await useCase.execute(dto: dto)
+                        
+                    case .edit:
+                        guard let useCase = self.editAnnounceUseCase, let noticeId = self.noticeId else {
+                            promise(.failure(.unknown))
+                            return
+                        }
+                        
+                        let _ =  try await useCase.execute(noticeId: noticeId, dto: dto)
+                    }
                     promise(.success(()))
                 } catch let error as NetworkError {
-                    //                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
                     promise(.failure(error))
-                    
                 } catch {
-                    //                    self.errorMessage = "알 수 없는 에러가 발생했습니다."
                     promise(.failure(.unknown))
                 }
             }
@@ -430,14 +342,46 @@ private extension PostAnnounceViewModel {
         .eraseToAnyPublisher()
     }
     
-    func editAnnounce(_ title: String, _ content: String, _ tag: String) async -> Result<Void, NetworkError> {
-        guard let editAnnounceUseCase, let noticeId else { return .failure(.clientError(message: "데이터 없음")) }
-        
-        switch await editAnnounceUseCase.execute(noticeId: noticeId, dto: CreateAnnounceRequestDTO(title: title, content: content, noticeImages: selectedImageDatas, tag: tag, startTime: nil, endTime: nil, firstComeNumber: nil)) {
-        case .success:
-            return .success(())
-        case .failure(let error):
-            return .failure(error)
-        }
+    
+    // 기본 공지사항
+    func basicAnnouncePublisher(_ title: String, _ content: String, _ tag: String) -> AnyPublisher<Void, NetworkError> {
+        let dto = CreateAnnounceRequestDTO(
+            title: title,
+            content: content,
+            noticeImages: selectedImageDatas,
+            tag: tag,
+            startTime: nil,
+            endTime: nil,
+            firstComeNumber: nil
+        )
+        return createOrEditAnnounce(dto: dto)
+    }
+
+    // 기간 공지사항
+    func periodAnnouncePublisher(_ title: String, _ content: String, _ tag: String, startTime: String, endTime: String) -> AnyPublisher<Void, NetworkError> {
+        let dto = CreateAnnounceRequestDTO(
+            title: title,
+            content: content,
+            noticeImages: selectedImageDatas,
+            tag: tag,
+            startTime: startTime,
+            endTime: endTime,
+            firstComeNumber: nil
+        )
+        return createOrEditAnnounce(dto: dto)
+    }
+
+    // 선착순 공지사항
+    func firstComeAnnouncePublisher(_ title: String, _ content: String, _ tag: String, startTime: String, endTime: String, firstComeNumber: String) -> AnyPublisher<Void, NetworkError> {
+        let dto = CreateAnnounceRequestDTO(
+            title: title,
+            content: content,
+            noticeImages: selectedImageDatas,
+            tag: tag,
+            startTime: startTime,
+            endTime: endTime,
+            firstComeNumber: firstComeNumber
+        )
+        return createOrEditAnnounce(dto: dto)
     }
 }

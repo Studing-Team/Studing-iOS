@@ -172,8 +172,6 @@ extension AnnounceAlarmSettingViewModel {
         .eraseToAnyPublisher()
     }
     
-    
-    
     func deleteAlarmNoticePublisher() -> AnyPublisher<Bool, NetworkError> {
         
         guard let noticeId, let useCase = deleteAlarmNoticeUseCase else {

@@ -97,9 +97,22 @@ private extension AnnounceAlarmSettingViewController {
         
         output.confirmButtonResult
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { _ in
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("알림 설정 완료")
+                    
+                case .failure(_):
+                    self.dismiss(animated: false)
+                    
+                    NotificationCenter.default.post(name: Notification.Name("Alarm Error"), object: nil)
+                }
+            }, receiveValue: { result in
                 
-            }, receiveValue: { Bool in
+                if result {
+                    NotificationCenter.default.post(name: Notification.Name("AlarmSetting"), object: nil)
+                }
+                
                 self.dismiss(animated: false)
             })
             .store(in: &cancellables)
@@ -285,6 +298,7 @@ private extension AnnounceAlarmSettingViewController {
                     
                 }, completion: { _ in
                     self.dismissModal()
+                    self.alarmDayView.changeTextColor()
                 })
             }
         }
@@ -329,6 +343,7 @@ private extension AnnounceAlarmSettingViewController {
                 
             }, completion: {_ in
                 self.dismissModal()
+                self.alarmTimeView.changeTextColor()
             })
         }
     }
@@ -439,22 +454,6 @@ private extension AnnounceAlarmSettingViewController {
         
     }
     
-//    func setupBottonButtonAction() {
-//        
-//        guard let modalView else { return }
-//        
-//        if announceAlarmSettingViewModel.alarmStateSubject.value == .{
-//            
-//        }
-//    
-//        modalView.bindingBottomButtonAction { [weak self] in
-//            if let dateCompocnents = (modalView.dateView.selectionBehavior as? UICalendarSelectionSingleDate)?.selectedDate {
-//                
-//                self?.alarmDayView.bindingTitle(title: dateCompocnents.convertToStringDayFormat())
-//            }
-//        }
-//    }
-    
     func updateLayout(_ type: AlarmPeriodType) {
         UIView.animate(withDuration: 0.45,
                        delay: 0,
@@ -503,13 +502,3 @@ extension AnnounceAlarmSettingViewController: UIGestureRecognizerDelegate {
         return touch.view == view
     }
 }
-
-
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//#Preview("AnnounceAlarmSettingViewController - iPhone 13 mini") {
-//    AnnounceAlarmSettingViewController(announceAlarmSettingViewModel: AnnounceAlarmSettingViewModel)
-//        .showPreview()
-//}
-//#endif
