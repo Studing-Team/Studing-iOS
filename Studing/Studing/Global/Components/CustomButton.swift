@@ -50,7 +50,7 @@ final class CustomButton: UIButton {
         
         switch buttonStyle {
         case .login:
-            layer.cornerRadius =  18
+            layer.cornerRadius = 10
         case .studentCard:
             layer.cornerRadius = 12
         case .close, .startDay, .endDay, .startTime, .endTime, .myRanking, .alarmDay, .alarmTime:

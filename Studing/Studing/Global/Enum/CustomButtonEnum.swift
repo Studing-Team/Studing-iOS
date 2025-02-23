@@ -197,7 +197,9 @@ enum ButtonStyle: Equatable {
     /// - Returns: 버튼이 활성 상태일 때 적용될 배경색(`UIColor`)입니다.
     var enableBackground: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .alarmDay, .alarmTime, .delete, .yes, .no:
+        case .login:
+            return .white
+        case .next, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .alarmDay, .alarmTime, .delete, .yes, .no:
             return .primary50
         case .showStuding:
             return .white
@@ -228,6 +230,8 @@ enum ButtonStyle: Equatable {
     /// - Returns: 버튼이 비활성화 상태일 때 적용될 배경색(`UIColor`)입니다.
     var disableBackground: UIColor {
         switch self {
+        case .login:
+            return .white
         case .next, .authentication, .postAnnounce, .alarmDay, .alarmTime:
             return .black20
         case .showStuding:
@@ -244,7 +248,10 @@ enum ButtonStyle: Equatable {
     /// - Returns: 버튼 상태에 맞는 색상(`UIColor`)입니다.
     var foregroundColor: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home, .close, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .myRanking, .cancel, .confirm, .alarmDay, .alarmTime,  .delete, .yes, .no, .withdraw:
+        case .login:
+            return .GRA
+            
+        case .next, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home, .close, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .myRanking, .cancel, .confirm, .alarmDay, .alarmTime,  .delete, .yes, .no, .withdraw:
             return .white
             
         case .showStuding:

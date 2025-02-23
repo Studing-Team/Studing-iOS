@@ -26,14 +26,18 @@ final class LoginViewController: UIViewController {
     private let userIdTextField = UITextField()
     private let userPwTextField = UITextField()
     private let loginButton = CustomButton(buttonStyle: .login)
+    
+    private let bottomStackView = UIStackView()
     private let signUpButton = UIButton()
-    private let indicateImageView = UIImageView()
-    private let indicateTitleLabel = UILabel()
-    private let kakaoButton = UIButton()
+    private let divider = UIView()
+    private let askStudingButton = UIButton()
     
     // MARK: - init
     
-    init(viewModel: LoginViewModel, coordinator: LoginCoordinator) {
+    init(
+        viewModel: LoginViewModel,
+        coordinator: LoginCoordinator
+    ) {
         self.viewModel = viewModel
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
@@ -76,7 +80,7 @@ private extension LoginViewController {
             password: userPwTextField.textPublisher,
             signUpTap: signUpButton.tapPublisher,
             loginTap: loginButton.tapPublisher,
-            askTap: kakaoButton.tapPublisher
+            askTap: askStudingButton.tapPublisher
         )
         
         let output = viewModel.transform(input: input)
@@ -138,62 +142,69 @@ private extension LoginViewController {
         }
         
         userIdTextField.do {
-            $0.attributedPlaceholder = NSAttributedString(string: "아이디", attributes: [.foregroundColor: UIColor.black50])
+            $0.attributedPlaceholder = NSAttributedString(string: "아이디", attributes: [.foregroundColor: UIColor.white])
             $0.font = .interBody1()
-            $0.backgroundColor = .black10
+            $0.backgroundColor = .white.withAlphaComponent(0.1)
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
             $0.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
             $0.leftViewMode = .always
             $0.rightViewMode = .always
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.white.cgColor
-            $0.layer.cornerRadius = 18
+            $0.layer.borderWidth = 0.5
+            $0.layer.borderColor = UIColor.black5.cgColor
+            $0.layer.cornerRadius = 10
         }
         
         userPwTextField.do {
-            $0.attributedPlaceholder = NSAttributedString(string: "비밀번호", attributes: [.foregroundColor: UIColor.black50])
+            $0.attributedPlaceholder = NSAttributedString(string: "비밀번호", attributes: [.foregroundColor: UIColor.white])
             $0.isSecureTextEntry = true
             $0.font = .interBody1()
-            $0.backgroundColor = .black10
+            $0.backgroundColor = .white.withAlphaComponent(0.1)
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
             $0.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
             $0.leftViewMode = .always
             $0.rightViewMode = .always
-            $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.white.cgColor
-            $0.layer.cornerRadius = 17
+            $0.layer.borderWidth = 0.5
+            $0.layer.borderColor = UIColor.black5.cgColor
+            $0.layer.cornerRadius = 10
         }
 
+        bottomStackView.do {
+            $0.axis = .horizontal
+            $0.distribution = .fillProportionally
+            $0.spacing = 15
+            $0.addArrangedSubviews(signUpButton, divider, askStudingButton)
+        }
+        
         signUpButton.do {
             let attributedString = NSAttributedString(string: "회원가입", attributes: [
                 .font: UIFont.interBody2(),
-                .foregroundColor: UIColor.black50,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
+                .foregroundColor: UIColor.white
             ])
             $0.setAttributedTitle(attributedString, for: .normal)
         }
         
-        indicateImageView.do {
-            $0.image = UIImage(named: "indicateImage")
-            $0.clipsToBounds = true
+        divider.do {
+            $0.backgroundColor = .white
         }
-        
-        indicateTitleLabel.do {
-            $0.text = "스튜딩에 문의하기"
-            $0.textColor = .black30
-            $0.font = .interBody2()
-        }
-    
-        kakaoButton.do {
-            $0.setImage(UIImage.inquiry, for: .normal)
-            $0.layer.cornerRadius = 10
-            $0.clipsToBounds = true
+
+        askStudingButton.do {
+            let attributedString = NSAttributedString(string: "스튜딩 문의하기", attributes: [
+                .font: UIFont.interBody2(),
+                .foregroundColor: UIColor.white
+            ])
+            $0.setAttributedTitle(attributedString, for: .normal)
+            
         }
     }
     
     func setupHierarchy() {
-        view.addSubviews(studingTitleLabel, userIdTextField, userPwTextField, loginButton, signUpButton, indicateImageView, kakaoButton)
-        indicateImageView.addSubview(indicateTitleLabel)
+        view.addSubviews(
+            studingTitleLabel,
+            userIdTextField,
+            userPwTextField,
+            loginButton,
+            bottomStackView
+        )
     }
     
     func setupLayout() {
@@ -203,66 +214,47 @@ private extension LoginViewController {
         }
       
         userIdTextField.snp.makeConstraints {
-            $0.top.equalTo(studingTitleLabel.snp.bottom).offset(view.convertByHeightRatio(80))
+            $0.top.equalTo(studingTitleLabel.snp.bottom).offset(view.convertByHeightRatio(115))
             $0.leading.equalToSuperview().offset(38)
             $0.trailing.equalToSuperview().inset(37)
-            $0.height.equalTo(34)
+            $0.height.equalTo(48)
         }
         
         userPwTextField.snp.makeConstraints {
-            $0.top.equalTo(userIdTextField.snp.bottom).offset(view.convertByHeightRatio(15))
+            $0.top.equalTo(userIdTextField.snp.bottom).offset(view.convertByHeightRatio(7))
             $0.leading.equalToSuperview().offset(38)
             $0.trailing.equalToSuperview().inset(37)
-            $0.height.equalTo(34)
+            $0.height.equalTo(48)
         }
         
         loginButton.snp.makeConstraints {
-            $0.top.equalTo(userPwTextField.snp.bottom).offset(view.convertByHeightRatio(15))
+            $0.top.equalTo(userPwTextField.snp.bottom).offset(view.convertByHeightRatio(7))
             $0.leading.equalToSuperview().offset(38)
             $0.trailing.equalToSuperview().inset(37)
-            $0.height.equalTo(36)
+            $0.height.equalTo(48)
         }
     
-        signUpButton.snp.makeConstraints {
+        bottomStackView.snp.makeConstraints {
             $0.top.equalTo(loginButton.snp.bottom).offset(view.convertByHeightRatio(20))
-            $0.leading.equalToSuperview().offset(162)
-            $0.trailing.equalToSuperview().inset(161)
-            $0.height.equalTo(18)
-        }
-
-        indicateImageView.snp.makeConstraints {
-            $0.top.equalTo(signUpButton.snp.bottom).offset(view.convertByHeightRatio(137))
             $0.centerX.equalToSuperview()
         }
         
-        indicateTitleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(7)
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-15)
+        signUpButton.snp.makeConstraints {
+            $0.height.equalTo(48)
+            $0.width.equalTo(52)
         }
-
-        kakaoButton.snp.makeConstraints {
-            $0.top.equalTo(indicateImageView.snp.bottom).offset(10)
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(view.convertByHeightRatio(-20))
-            $0.width.height.equalTo(49)
+        
+        divider.snp.makeConstraints {
+            $0.width.equalTo(1)
+            $0.height.equalTo(14)
+        }
+ 
+        askStudingButton.snp.makeConstraints {
+            $0.width.equalTo(95)
         }
     }
     
     func setupDelegate() {
         
-    }
-    
-    // Divider를 생성하는 함수
-    func createDivider() -> UIView {
-        let divider = UIView()
-        divider.backgroundColor = .black40 // Divider 색상 설정
-        
-        divider.snp.makeConstraints {
-            $0.width.equalTo(1) // Divider의 너비를 설정
-            $0.height.equalTo(14)
-        }
-        
-        return divider
     }
 }
