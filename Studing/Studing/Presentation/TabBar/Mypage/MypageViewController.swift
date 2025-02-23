@@ -173,6 +173,9 @@ private extension MypageViewController {
                   UIApplication.shared.canOpenURL(url) else { return }
             UIApplication.shared.open(url, options: [:])
             
+        case .alarmSetting:
+            self.coordinator?.pushAlarmSettingView()
+            
         case .logout:
             // 로그아웃 처리
             self.showConfirmCancelAlert(
