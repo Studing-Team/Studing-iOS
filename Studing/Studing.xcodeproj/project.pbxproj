@@ -175,6 +175,7 @@
 		3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602E2CA1422100688FE3 /* UIStackView+.swift */; };
 		3F5D9E402D6A03170059EA3D /* AlarmSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D9E3F2D6A03170059EA3D /* AlarmSettingViewModel.swift */; };
 		3F5D9E422D6B24100059EA3D /* TestFlight.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */; };
+		3F5D9E472D708C1B0059EA3D /* AlarmSettingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D9E462D708C1B0059EA3D /* AlarmSettingState.swift */; };
 		3F5DEF812D5DB8A00016FE44 /* DateComponents+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF802D5DB8A00016FE44 /* DateComponents+.swift */; };
 		3F5DEF832D6324B40016FE44 /* SingleButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF822D6324B40016FE44 /* SingleButtonConfiguration.swift */; };
 		3F5DEF852D65693A0016FE44 /* Decodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF842D65693A0016FE44 /* Decodable+.swift */; };
@@ -495,6 +496,7 @@
 		3F59602E2CA1422100688FE3 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
 		3F5D9E3F2D6A03170059EA3D /* AlarmSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingViewModel.swift; sourceTree = "<group>"; };
 		3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestFlight.xcconfig; sourceTree = "<group>"; };
+		3F5D9E462D708C1B0059EA3D /* AlarmSettingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingState.swift; sourceTree = "<group>"; };
 		3F5DEF802D5DB8A00016FE44 /* DateComponents+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+.swift"; sourceTree = "<group>"; };
 		3F5DEF822D6324B40016FE44 /* SingleButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonConfiguration.swift; sourceTree = "<group>"; };
 		3F5DEF842D65693A0016FE44 /* Decodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+.swift"; sourceTree = "<group>"; };
@@ -1541,6 +1543,7 @@
 			children = (
 				3FE0432D2CC6631100B55EAA /* MyPageType.swift */,
 				3FFF992B2D0ADA5F00EEBB70 /* MypageNavigationType.swift */,
+				3F5D9E462D708C1B0059EA3D /* AlarmSettingState.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -2097,6 +2100,7 @@
 				3FFF2E992D534B6C00C5FFC8 /* DeleteAlarmNoticeUseCase.swift in Sources */,
 				3F25A3622C96CF4C006E2715 /* Coordinator.swift in Sources */,
 				3FFF99312D0ADD4300EEBB70 /* SerachResultType.swift in Sources */,
+				3F5D9E472D708C1B0059EA3D /* AlarmSettingState.swift in Sources */,
 				3F3A69372CE85764006334C3 /* SuccessSignUpViewModel.swift in Sources */,
 				3F1739852CC01CAB00DE8859 /* HomeViewController.swift in Sources */,
 				3FFCFEF32CE0D822009D07A6 /* MemberAPI.swift in Sources */,
