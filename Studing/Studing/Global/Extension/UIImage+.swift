@@ -31,7 +31,7 @@ extension UIImage {
         let image = UIImage(cgImage: downsampledImage)
         
         // 최초 JPEG 압축 (quality: 1.0)
-        guard let jpegData = image.jpegData(compressionQuality: 0.7) else {
+        guard let jpegData = image.jpegData(compressionQuality: 0.9) else {
             return nil
         }
         
