@@ -98,7 +98,10 @@ final class MypageViewModel: BaseViewModel {
         switch section {
         case .useInfo:
             switch index {
-            case 1: 
+            case 0:
+                navigationEventSubject.send(.alarmSetting)
+                
+            case 1:
                 navigationEventSubject.send(.notice)
                 AmplitudeManager.shared.trackEvent(AnalyticsEvent.MyPage.contact)
                 
@@ -107,9 +110,6 @@ final class MypageViewModel: BaseViewModel {
                 
             case 3:
                 navigationEventSubject.send(.privacyPolicy)
-                
-            case 4:
-                navigationEventSubject.send(.alarmSetting)
                 
             default: break
             }
