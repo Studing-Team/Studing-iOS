@@ -23,6 +23,7 @@ enum NavigationType: Equatable {
     case unReadToHome
     case myPage
     case leftButton
+    case alarmSetting
 }
 
 protocol AlarmButtonTappedDelegate: AnyObject {
@@ -399,6 +400,36 @@ private extension CustomAnnounceNavigationController {
         }
     }
     
+    private func applyAlarmSettingLayout() {
+        safeAreaView.snp.remakeConstraints {
+            $0.top.equalToSuperview()
+            $0.bottom.equalTo(view.snp.topMargin)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(navigationHeight)
+        }
+        
+        customNavigationBar.snp.remakeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        titleLabel.snp.remakeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalTo(leftButton)
+        }
+        
+        divider.snp.remakeConstraints {
+            $0.top.equalTo(customNavigationBar.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
+        leftButton.snp.remakeConstraints {
+            $0.leading.equalToSuperview().offset(16)
+            $0.bottom.equalToSuperview().inset(16)
+            $0.size.equalTo(24)
+        }
+    }
+    
     private func applyLeftButtonLayout() {
         safeAreaView.snp.remakeConstraints {
             $0.top.equalToSuperview()
@@ -451,7 +482,6 @@ private extension CustomAnnounceNavigationController {
             applyDefaultLayout()
             
         case .detail(let isAuthor):
-            print("드렁온 값:", isAuthor)
             navigationHeight = 56
             customNavigationBar.isHidden = false
             safeAreaView.isHidden = false
@@ -528,6 +558,18 @@ private extension CustomAnnounceNavigationController {
             
             applyLeftButtontyle()
             applyLeftButtonLayout()
+            
+        case .alarmSetting:
+            navigationHeight = 56
+            customNavigationBar.isHidden = false
+            safeAreaView.isHidden = false
+            divider.isHidden = false
+            leftButton.isHidden = false
+            rightButtonSectionStackView.isHidden = true
+            setupSafeArea(navigationBarHidden: false)
+            
+            applyAlarmSettingStyle()
+            applyAlarmSettingLayout()
         }
     }
     
@@ -596,6 +638,14 @@ private extension CustomAnnounceNavigationController {
         leftButton.tintColor = .black50
     }
     
+    private func applyAlarmSettingStyle() {
+        // detail 스타일 설정
+        customNavigationBar.backgroundColor = .black5
+        titleLabel.font = .interSubtitle1()
+        titleLabel.textColor = .black50
+        leftButton.tintColor = .black50
+    }
+    
     private func applyLeftButtontyle() {
         // detail 스타일 설정
         customNavigationBar.backgroundColor = .black5
@@ -628,6 +678,8 @@ extension CustomAnnounceNavigationController {
             setNavigationTitle("마이페이지")
         case .unRead, .unReadToHome, .leftButton:
             setNavigationTitle("")
+        case .alarmSetting:
+            setNavigationTitle("알림 설정")
         }
     }
     

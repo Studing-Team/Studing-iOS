@@ -42,7 +42,7 @@ final class DetailAnnouceHeaderCollectionViewCell: UICollectionViewCell {
     private let associationInfoStackView = UIStackView()
     private let announceTimeStackView = UIStackView()
     
-
+    private let firstComeNumberLabel = UILabel()
     private let firstComeIndexLabel = UILabel()
     private let startIndexLabel = UILabel()
     private var startTimeLabel = UILabel()
@@ -50,6 +50,7 @@ final class DetailAnnouceHeaderCollectionViewCell: UICollectionViewCell {
     private let endIndexLabel = UILabel()
     private var endTimeLabel = UILabel()
     
+    private let periodTitleStackView = UIStackView()
     private let startStackView = UIStackView()
     private let endStackView = UIStackView()
     
@@ -140,6 +141,7 @@ extension DetailAnnouceHeaderCollectionViewCell {
                                       model.base.isFavorite,
                                       model.base.isBookmark)
         
+        firstComeNumberLabel.text = "인원 " + model.firstComeNumber + "명"
         startTimeLabel.text = model.startTime
         endTimeLabel.text = model.endTime
         
@@ -209,7 +211,12 @@ private extension DetailAnnouceHeaderCollectionViewCell {
             $0.axis = .vertical
             $0.distribution = .equalSpacing
             $0.spacing = 10
-            $0.addArrangedSubviews(firstComeIndexLabel, startStackView, endStackView)
+            $0.addArrangedSubviews(periodTitleStackView, startStackView, endStackView)
+        }
+        
+        firstComeNumberLabel.do {
+            $0.textColor = .black20
+            $0.font = .interChips12()
         }
         
         firstComeButton.do {
@@ -220,19 +227,22 @@ private extension DetailAnnouceHeaderCollectionViewCell {
         
         [startStackView, endStackView].forEach {
             $0.axis = .horizontal
+            $0.distribution = .fill
+            $0.spacing = 5
         }
-
-        startStackView.addArrangedSubviews(startIndexLabel, flexibleSpaceView2, startTimeLabel)
-        endStackView.addArrangedSubviews(endIndexLabel, flexibleSpaceView3, endTimeLabel)
+        
+        periodTitleStackView.do {
+            $0.axis = .horizontal
+        }
         
         firstComeIndexLabel.do {
             $0.font = .interChips12()
             $0.textColor = .black50
             
             if case .firstCome = headerType {
-                $0.text = "선착순 이벤트 안내"
+                $0.text = "선착순 이벤트 기간"
             } else if case .period = headerType {
-                $0.text = "공지사항 안내"
+                $0.text = "공지사항 기간"
             }
         }
         
@@ -242,8 +252,8 @@ private extension DetailAnnouceHeaderCollectionViewCell {
             $0.numberOfLines = 1
         }
         
-        startIndexLabel.text = "시작 시간:"
-        endIndexLabel.text = "종료 시간:"
+        startIndexLabel.text = "시작 :"
+        endIndexLabel.text = "종료 :"
         
         [flexibleSpaceView1, flexibleSpaceView2, flexibleSpaceView3].forEach {
             $0.setContentHuggingPriority(.defaultLow, for: .horizontal) // 높은 우선 순위
@@ -261,11 +271,15 @@ private extension DetailAnnouceHeaderCollectionViewCell {
     
     func setupHierarchy() {
         self.addSubviews(headerStackView)
+        
+        periodTitleStackView.addArrangedSubviews(firstComeIndexLabel, flexibleSpaceView1, firstComeNumberLabel)
+        startStackView.addArrangedSubviews(startIndexLabel, startTimeLabel, flexibleSpaceView2)
+        endStackView.addArrangedSubviews(endIndexLabel, endTimeLabel, flexibleSpaceView3)
     }
     
     func setupLayout() {
         headerStackView.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 18, bottom: 10, right: 18))
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 15, left: 18, bottom: 15, right: 18))
         }
 
         associationLogoImage.snp.makeConstraints {

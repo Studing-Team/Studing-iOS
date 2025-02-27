@@ -50,13 +50,19 @@ final class CustomButton: UIButton {
         
         switch buttonStyle {
         case .login:
-            layer.cornerRadius =  18
+            layer.cornerRadius = 10
         case .studentCard:
             layer.cornerRadius = 12
         case .close, .startDay, .endDay, .startTime, .endTime, .myRanking, .alarmDay, .alarmTime:
             layer.cornerRadius = 10
-        case .cancel, .confirm, .delete, .retry:
+        case .cancel, .confirm, .delete, .retry, .no:
             layer.cornerRadius = 8
+        case .withdraw(let type):
+            if type == .alert {
+                layer.cornerRadius = 8
+            } else {
+                layer.cornerRadius = 24
+            }
         default:
             layer.cornerRadius = 24
         }

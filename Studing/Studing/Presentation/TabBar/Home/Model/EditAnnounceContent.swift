@@ -17,4 +17,5 @@ struct EditAnnounceContent {
     let startTime: DateComponents?
     let endDay: DateComponents?
     let endTime: DateComponents?
+    let firstComeNumber: String?
 }

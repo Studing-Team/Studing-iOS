@@ -28,6 +28,7 @@ struct DetailAnnounceEntity: Decodable {
     let isFirstComeApplied: Bool
     let alarmDay: DateComponents?
     let alarmTime: DateComponents?
+    let firstComeNumber: Int?
     
     var type: PostOptionType {
         if let startTime, let endTime {
@@ -56,7 +57,8 @@ extension DetailAnnounceEntity {
     }
     
     func toImagesModel() -> [DetailAnnouceImageModel]? {
-        return images?.compactMap { DetailAnnouceImageModel(image: $0) }
+        guard let images = images, !images.isEmpty else { return nil }
+        return images.map { DetailAnnouceImageModel(image: $0) }
     }
     
     func toHeaderModel() -> DetailAnnouceSectionData {
@@ -114,12 +116,13 @@ private extension DetailAnnounceEntity {
 
     func toFirstComeHeaderModel(startTime: String?, endTime: String?, isFirstComeApplied: Bool) -> DetailAnnounceFirstComeHeaderModel {
         
-        guard let startTime, let endTime else { return DetailAnnounceFirstComeHeaderModel(
+        guard let startTime, let endTime, let firstComeNumber else { return DetailAnnounceFirstComeHeaderModel(
             base: toBaseHeaderModel(),
             startTime: "정보 없음",
             endTime: "정보 없음",
             isFirstComeApplied: false,
-            firstComeButtonState: .active)
+            firstComeButtonState: .active,
+            firstComeNumber: "정보 없음")
         }
         
         return DetailAnnounceFirstComeHeaderModel(
@@ -127,7 +130,8 @@ private extension DetailAnnounceEntity {
             startTime: convertToKoreanTimeFormat(from: startTime),
             endTime: convertToKoreanTimeFormat(from: endTime),
             isFirstComeApplied: isFirstComeApplied,
-            firstComeButtonState: convertFirstComeState(startTime: startTime, endTime: endTime)
+            firstComeButtonState: convertFirstComeState(startTime: startTime, endTime: endTime),
+            firstComeNumber: String(firstComeNumber)
         )
     }
     
@@ -137,7 +141,7 @@ private extension DetailAnnounceEntity {
         isoFormatter.locale = Locale(identifier: "ko_KR")
 
         let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "yyyy년 M월 d일 HH:mm"
+        outputFormatter.dateFormat = "yyyy년 M월 d일 HH시 mm분"
         outputFormatter.locale = Locale(identifier: "ko_KR")
 
         if let date = isoFormatter.date(from: isoString) {

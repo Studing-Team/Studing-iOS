@@ -115,7 +115,7 @@ final class AFImageView: UIImageView {
                 
             case .failure(let error):
                 print("❌ Error loading image: \(error.localizedDescription)")
-                self.image = UIImage(resource: .dump)
+                self.image = UIImage(resource: .defaultPost)
             }
         }
     }

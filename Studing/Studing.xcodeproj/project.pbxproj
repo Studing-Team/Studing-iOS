@@ -47,6 +47,17 @@
 		3F25A36D2C96D34D006E2715 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A36C2C96D34D006E2715 /* BaseViewModel.swift */; };
 		3F25A36F2C96D42C006E2715 /* SignUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */; };
 		3F25A3712C96D4D9006E2715 /* UserInfoSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F25A3702C96D4D9006E2715 /* UserInfoSignUpViewController.swift */; };
+		3F2F55572D685BB400F0C86B /* FirstComeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F55562D685BB400F0C86B /* FirstComeContentView.swift */; };
+		3F2F55592D68606C00F0C86B /* PostSelectTypeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F55582D68606C00F0C86B /* PostSelectTypeContentView.swift */; };
+		3F2F555B2D68614A00F0C86B /* CalendarModalContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F555A2D68614A00F0C86B /* CalendarModalContentView.swift */; };
+		3F2F555D2D68617400F0C86B /* CustomTimePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F555C2D68617400F0C86B /* CustomTimePickerView.swift */; };
+		3F2F55602D68623E00F0C86B /* FirstComeButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F555F2D68623E00F0C86B /* FirstComeButtonConfiguration.swift */; };
+		3F2F55622D69CD5900F0C86B /* SheetContentConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F55612D69CD5900F0C86B /* SheetContentConfigurable.swift */; };
+		3F2F55642D69CD7A00F0C86B /* SheetButtonsConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F55632D69CD7A00F0C86B /* SheetButtonsConfigurable.swift */; };
+		3F2F55672D69D1A200F0C86B /* PostDisplayType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F55662D69D1A200F0C86B /* PostDisplayType.swift */; };
+		3F2F556B2D69D24600F0C86B /* TimePickerModalContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F556A2D69D24600F0C86B /* TimePickerModalContentView.swift */; };
+		3F2F556D2D69E1BC00F0C86B /* AlarmSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F556C2D69E1BC00F0C86B /* AlarmSettingViewController.swift */; };
+		3F2F556F2D69E6CB00F0C86B /* AlarmInfomationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2F556E2D69E6CB00F0C86B /* AlarmInfomationView.swift */; };
 		3F31B3DF2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F31B3DE2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf */; };
 		3F31B3E12CC1625D00EE92D6 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F31B3E02CC1625D00EE92D6 /* UIColor+.swift */; };
 		3F31B3E42CC1635300EE92D6 /* AnnounceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F31B3E32CC1635300EE92D6 /* AnnounceModel.swift */; };
@@ -79,6 +90,7 @@
 		3F3CFDC22C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDC12C980B0E00DC9F9A /* UserInfoSignUpViewModel.swift */; };
 		3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */; };
 		3F3CFDCC2C9827D200DC9F9A /* UserInfoSignUpViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3CFDCB2C9827D200DC9F9A /* UserInfoSignUpViewModelTests.swift */; };
+		3F4EEA5A2D69FD42007991C4 /* AlarmSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4EEA592D69FD42007991C4 /* AlarmSettingView.swift */; };
 		3F54D96C2CE10B8900314B46 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F54D96B2CE10B8900314B46 /* Config.swift */; };
 		3F54D96E2CE1148F00314B46 /* HeaderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F54D96D2CE1148F00314B46 /* HeaderType.swift */; };
 		3F54D9712CE1161400314B46 /* UniversityDataAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F54D9702CE1161400314B46 /* UniversityDataAPI.swift */; };
@@ -161,7 +173,11 @@
 		3F59602A2CA0EE5F00688FE3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5960292CA0EE5F00688FE3 /* CustomButton.swift */; };
 		3F59602D2CA13E8F00688FE3 /* TextFieldStateEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602C2CA13E8F00688FE3 /* TextFieldStateEnum.swift */; };
 		3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602E2CA1422100688FE3 /* UIStackView+.swift */; };
+		3F5D9E402D6A03170059EA3D /* AlarmSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D9E3F2D6A03170059EA3D /* AlarmSettingViewModel.swift */; };
+		3F5D9E422D6B24100059EA3D /* TestFlight.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */; };
 		3F5DEF812D5DB8A00016FE44 /* DateComponents+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF802D5DB8A00016FE44 /* DateComponents+.swift */; };
+		3F5DEF832D6324B40016FE44 /* SingleButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF822D6324B40016FE44 /* SingleButtonConfiguration.swift */; };
+		3F5DEF852D65693A0016FE44 /* Decodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF842D65693A0016FE44 /* Decodable+.swift */; };
 		3F5F93512CED6BDE00B74BBB /* PostAnnounceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F93502CED6BDE00B74BBB /* PostAnnounceViewController.swift */; };
 		3F5F93532CED814C00B74BBB /* PostAnnounceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F93522CED814C00B74BBB /* PostAnnounceViewModel.swift */; };
 		3F6992D12D2FC2E900A3CF9F /* PersonContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992D02D2FC2E900A3CF9F /* PersonContentView.swift */; };
@@ -172,7 +188,6 @@
 		3F6992DE2D32667700A3CF9F /* PostType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992DD2D32667700A3CF9F /* PostType.swift */; };
 		3F6992E02D3266A700A3CF9F /* PeriodSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992DF2D3266A700A3CF9F /* PeriodSettingView.swift */; };
 		3F6992E42D3369F000A3CF9F /* BaseSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E32D3369F000A3CF9F /* BaseSheetViewController.swift */; };
-		3F6992E62D336A8D00A3CF9F /* SingleButtonSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E52D336A8D00A3CF9F /* SingleButtonSheetViewController.swift */; };
 		3F6992E82D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E72D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift */; };
 		3F6992EA2D33876800A3CF9F /* CalendarModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992E92D33876800A3CF9F /* CalendarModalViewController.swift */; };
 		3F6992EC2D33971100A3CF9F /* TimePickerModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6992EB2D33971100A3CF9F /* TimePickerModalViewController.swift */; };
@@ -211,7 +226,6 @@
 		3F9DC8A82CB4ECA900850136 /* StudentIdInputCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DC8A72CB4ECA900850136 /* StudentIdInputCollectionCell.swift */; };
 		3F9DC8AC2CB4ECE000850136 /* StudentIdInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DC8AB2CB4ECE000850136 /* StudentIdInfoModel.swift */; };
 		3F9E8A4C2D475F2600130B07 /* DetailAnnounceEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9E8A4B2D475F2600130B07 /* DetailAnnounceEntity.swift */; };
-		3FA764202D42A35A009DE4A7 /* DoubleButtonSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA7641F2D42A35A009DE4A7 /* DoubleButtonSheetViewController.swift */; };
 		3FA764222D42A3CF009DE4A7 /* FirstComeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA764212D42A3CF009DE4A7 /* FirstComeModalViewController.swift */; };
 		3FA764242D4325E9009DE4A7 /* IndexSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA764232D4325E9009DE4A7 /* IndexSectionView.swift */; };
 		3FA764262D432B87009DE4A7 /* FirstComeModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA764252D432B87009DE4A7 /* FirstComeModalViewModel.swift */; };
@@ -351,6 +365,17 @@
 		3F25A36C2C96D34D006E2715 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		3F25A36E2C96D42C006E2715 /* SignUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCoordinator.swift; sourceTree = "<group>"; };
 		3F25A3702C96D4D9006E2715 /* UserInfoSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoSignUpViewController.swift; sourceTree = "<group>"; };
+		3F2F55562D685BB400F0C86B /* FirstComeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstComeContentView.swift; sourceTree = "<group>"; };
+		3F2F55582D68606C00F0C86B /* PostSelectTypeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSelectTypeContentView.swift; sourceTree = "<group>"; };
+		3F2F555A2D68614A00F0C86B /* CalendarModalContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModalContentView.swift; sourceTree = "<group>"; };
+		3F2F555C2D68617400F0C86B /* CustomTimePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTimePickerView.swift; sourceTree = "<group>"; };
+		3F2F555F2D68623E00F0C86B /* FirstComeButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstComeButtonConfiguration.swift; sourceTree = "<group>"; };
+		3F2F55612D69CD5900F0C86B /* SheetContentConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetContentConfigurable.swift; sourceTree = "<group>"; };
+		3F2F55632D69CD7A00F0C86B /* SheetButtonsConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetButtonsConfigurable.swift; sourceTree = "<group>"; };
+		3F2F55662D69D1A200F0C86B /* PostDisplayType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDisplayType.swift; sourceTree = "<group>"; };
+		3F2F556A2D69D24600F0C86B /* TimePickerModalContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePickerModalContentView.swift; sourceTree = "<group>"; };
+		3F2F556C2D69E1BC00F0C86B /* AlarmSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingViewController.swift; sourceTree = "<group>"; };
+		3F2F556E2D69E6CB00F0C86B /* AlarmInfomationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmInfomationView.swift; sourceTree = "<group>"; };
 		3F31B3DE2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MontserratAlternates-Bold.ttf"; sourceTree = "<group>"; };
 		3F31B3E02CC1625D00EE92D6 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		3F31B3E32CC1635300EE92D6 /* AnnounceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceModel.swift; sourceTree = "<group>"; };
@@ -384,6 +409,7 @@
 		3F3CFDC32C9815EB00DC9F9A /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		3F3CFDC92C9827D200DC9F9A /* StudingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F3CFDCB2C9827D200DC9F9A /* UserInfoSignUpViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoSignUpViewModelTests.swift; sourceTree = "<group>"; };
+		3F4EEA592D69FD42007991C4 /* AlarmSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingView.swift; sourceTree = "<group>"; };
 		3F54D96A2CE10B7F00314B46 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		3F54D96B2CE10B8900314B46 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		3F54D96D2CE1148F00314B46 /* HeaderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderType.swift; sourceTree = "<group>"; };
@@ -467,7 +493,11 @@
 		3F5960292CA0EE5F00688FE3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		3F59602C2CA13E8F00688FE3 /* TextFieldStateEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStateEnum.swift; sourceTree = "<group>"; };
 		3F59602E2CA1422100688FE3 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
+		3F5D9E3F2D6A03170059EA3D /* AlarmSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingViewModel.swift; sourceTree = "<group>"; };
+		3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestFlight.xcconfig; sourceTree = "<group>"; };
 		3F5DEF802D5DB8A00016FE44 /* DateComponents+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+.swift"; sourceTree = "<group>"; };
+		3F5DEF822D6324B40016FE44 /* SingleButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonConfiguration.swift; sourceTree = "<group>"; };
+		3F5DEF842D65693A0016FE44 /* Decodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+.swift"; sourceTree = "<group>"; };
 		3F5F93502CED6BDE00B74BBB /* PostAnnounceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAnnounceViewController.swift; sourceTree = "<group>"; };
 		3F5F93522CED814C00B74BBB /* PostAnnounceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostAnnounceViewModel.swift; sourceTree = "<group>"; };
 		3F6992D02D2FC2E900A3CF9F /* PersonContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonContentView.swift; sourceTree = "<group>"; };
@@ -478,7 +508,6 @@
 		3F6992DD2D32667700A3CF9F /* PostType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostType.swift; sourceTree = "<group>"; };
 		3F6992DF2D3266A700A3CF9F /* PeriodSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodSettingView.swift; sourceTree = "<group>"; };
 		3F6992E32D3369F000A3CF9F /* BaseSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSheetViewController.swift; sourceTree = "<group>"; };
-		3F6992E52D336A8D00A3CF9F /* SingleButtonSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonSheetViewController.swift; sourceTree = "<group>"; };
 		3F6992E72D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSelectTypeModalViewController.swift; sourceTree = "<group>"; };
 		3F6992E92D33876800A3CF9F /* CalendarModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModalViewController.swift; sourceTree = "<group>"; };
 		3F6992EB2D33971100A3CF9F /* TimePickerModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePickerModalViewController.swift; sourceTree = "<group>"; };
@@ -518,7 +547,6 @@
 		3F9DC8A72CB4ECA900850136 /* StudentIdInputCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdInputCollectionCell.swift; sourceTree = "<group>"; };
 		3F9DC8AB2CB4ECE000850136 /* StudentIdInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentIdInfoModel.swift; sourceTree = "<group>"; };
 		3F9E8A4B2D475F2600130B07 /* DetailAnnounceEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounceEntity.swift; sourceTree = "<group>"; };
-		3FA7641F2D42A35A009DE4A7 /* DoubleButtonSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonSheetViewController.swift; sourceTree = "<group>"; };
 		3FA764212D42A3CF009DE4A7 /* FirstComeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstComeModalViewController.swift; sourceTree = "<group>"; };
 		3FA764232D4325E9009DE4A7 /* IndexSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexSectionView.swift; sourceTree = "<group>"; };
 		3FA764252D432B87009DE4A7 /* FirstComeModalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstComeModalViewModel.swift; sourceTree = "<group>"; };
@@ -683,6 +711,7 @@
 				3FE042F22CC5CF3400B55EAA /* ViewModel */,
 				3F1739882CC01CDC00DE8859 /* MypageViewController.swift */,
 				3FF2E9112CF4E3D70098F0D2 /* WithDrawViewController.swift */,
+				3F2F556C2D69E1BC00F0C86B /* AlarmSettingViewController.swift */,
 			);
 			path = Mypage;
 			sourceTree = "<group>";
@@ -714,6 +743,7 @@
 				3FE403632CF82BD10078F36A /* Notification+.swift */,
 				3F705EE12CF9DE680055C7EC /* UIImage+.swift */,
 				3F5DEF802D5DB8A00016FE44 /* DateComponents+.swift */,
+				3F5DEF842D65693A0016FE44 /* Decodable+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -817,6 +847,45 @@
 				3F54D9C52CE2E01100314B46 /* SignUpDelegate.swift */,
 			);
 			path = Protocol;
+			sourceTree = "<group>";
+		};
+		3F2F555E2D68622700F0C86B /* ButtonConfiguration */ = {
+			isa = PBXGroup;
+			children = (
+				3F2F555F2D68623E00F0C86B /* FirstComeButtonConfiguration.swift */,
+				3F5DEF822D6324B40016FE44 /* SingleButtonConfiguration.swift */,
+			);
+			path = ButtonConfiguration;
+			sourceTree = "<group>";
+		};
+		3F2F55652D69D0CB00F0C86B /* PostSection */ = {
+			isa = PBXGroup;
+			children = (
+				3F6992E72D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift */,
+				3F2F55582D68606C00F0C86B /* PostSelectTypeContentView.swift */,
+				3F6992D52D30E49300A3CF9F /* PostModalSectionView.swift */,
+				3F6992D72D30E59F00A3CF9F /* PostModalView.swift */,
+			);
+			path = PostSection;
+			sourceTree = "<group>";
+		};
+		3F2F55682D69D1E500F0C86B /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				3F6992E92D33876800A3CF9F /* CalendarModalViewController.swift */,
+				3F2F555A2D68614A00F0C86B /* CalendarModalContentView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		3F2F55692D69D1EC00F0C86B /* TimePicker */ = {
+			isa = PBXGroup;
+			children = (
+				3F6992EB2D33971100A3CF9F /* TimePickerModalViewController.swift */,
+				3F2F556A2D69D24600F0C86B /* TimePickerModalContentView.swift */,
+				3F2F555C2D68617400F0C86B /* CustomTimePickerView.swift */,
+			);
+			path = TimePicker;
 			sourceTree = "<group>";
 		};
 		3F31B3DB2CC158F700EE92D6 /* View */ = {
@@ -973,6 +1042,7 @@
 				3FFF99342D27B62F00EEBB70 /* Debug.xcconfig */,
 				3FFF99352D27B65400EEBB70 /* Release.xcconfig */,
 				3F54D96A2CE10B7F00314B46 /* Config.xcconfig */,
+				3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */,
 				3F54D96B2CE10B8900314B46 /* Config.swift */,
 				3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */,
 			);
@@ -1274,13 +1344,12 @@
 		3F6992D42D30E47C00A3CF9F /* Modal */ = {
 			isa = PBXGroup;
 			children = (
+				3F2F55692D69D1EC00F0C86B /* TimePicker */,
+				3F2F55682D69D1E500F0C86B /* Calendar */,
+				3F2F55652D69D0CB00F0C86B /* PostSection */,
 				3FFF2EA52D59EAD600C5FFC8 /* Base */,
+				3F2F555E2D68622700F0C86B /* ButtonConfiguration */,
 				3FFF2EA42D59EAC800C5FFC8 /* FirstCome */,
-				3F6992D52D30E49300A3CF9F /* PostModalSectionView.swift */,
-				3F6992D72D30E59F00A3CF9F /* PostModalView.swift */,
-				3F6992E72D337F1A00A3CF9F /* PostSelectTypeModalViewController.swift */,
-				3F6992E92D33876800A3CF9F /* CalendarModalViewController.swift */,
-				3F6992EB2D33971100A3CF9F /* TimePickerModalViewController.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -1433,6 +1502,7 @@
 			children = (
 				3FE042F72CC5CF9400B55EAA /* MypageViewModel.swift */,
 				3FF2E9152CF4E7400098F0D2 /* WithDrawViewModel.swift */,
+				3F5D9E3F2D6A03170059EA3D /* AlarmSettingViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1460,6 +1530,8 @@
 			children = (
 				3FE043002CC626E600B55EAA /* SectionBackgroundView.swift */,
 				3FF2E9132CF4E5330098F0D2 /* DrawInfoView.swift */,
+				3F2F556E2D69E6CB00F0C86B /* AlarmInfomationView.swift */,
+				3F4EEA592D69FD42007991C4 /* AlarmSettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1481,6 +1553,7 @@
 				3F54D9DC2CE3BA6200314B46 /* AssociationType.swift */,
 				3F6992DB2D3265FE00A3CF9F /* TitleType.swift */,
 				3F6992DD2D32667700A3CF9F /* PostType.swift */,
+				3F2F55662D69D1A200F0C86B /* PostDisplayType.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1596,6 +1669,7 @@
 				3FA764232D4325E9009DE4A7 /* IndexSectionView.swift */,
 				3FA764252D432B87009DE4A7 /* FirstComeModalViewModel.swift */,
 				3FFF2EA62D59EB6100C5FFC8 /* TimeListCollectionViewCell.swift */,
+				3F2F55562D685BB400F0C86B /* FirstComeContentView.swift */,
 			);
 			path = FirstCome;
 			sourceTree = "<group>";
@@ -1603,9 +1677,9 @@
 		3FFF2EA52D59EAD600C5FFC8 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				3F2F55612D69CD5900F0C86B /* SheetContentConfigurable.swift */,
+				3F2F55632D69CD7A00F0C86B /* SheetButtonsConfigurable.swift */,
 				3F6992E32D3369F000A3CF9F /* BaseSheetViewController.swift */,
-				3F6992E52D336A8D00A3CF9F /* SingleButtonSheetViewController.swift */,
-				3FA7641F2D42A35A009DE4A7 /* DoubleButtonSheetViewController.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1716,6 +1790,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F5D9E422D6B24100059EA3D /* TestFlight.xcconfig in Resources */,
 				3F3992622C82C8E60045CF1E /* Assets.xcassets in Resources */,
 				3F31B3DF2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf in Resources */,
 				3F8D00562CF463C400083C22 /* MontserratAlternates-ExtraBold.ttf in Resources */,
@@ -1745,6 +1820,7 @@
 				3F54D98E2CE19CC700314B46 /* UnreadAssociationAuuonceResponseDTO.swift in Sources */,
 				3F54D9B12CE1CD0B00314B46 /* MemberRepositoryProtocol.swift in Sources */,
 				3F25A36D2C96D34D006E2715 /* BaseViewModel.swift in Sources */,
+				3F2F556F2D69E6CB00F0C86B /* AlarmInfomationView.swift in Sources */,
 				3F82C33B2CAE94CB00492EEE /* UniversityInfoModel.swift in Sources */,
 				3F54D9A02CE1AFEA00314B46 /* BookmarkAnnounceEntity.swift in Sources */,
 				3F54D9C42CE269FD00314B46 /* SignUpStore.swift in Sources */,
@@ -1752,6 +1828,7 @@
 				3F6992EC2D33971100A3CF9F /* TimePickerModalViewController.swift in Sources */,
 				3F3CFDB02C9733A100DC9F9A /* TermsOfServiceViewController.swift in Sources */,
 				3F6992D62D30E49300A3CF9F /* PostModalSectionView.swift in Sources */,
+				3F5DEF832D6324B40016FE44 /* SingleButtonConfiguration.swift in Sources */,
 				3F82C3312CAE93B700492EEE /* StudentIdViewController.swift in Sources */,
 				3FD4B9042CDA17FE00308E08 /* DetailAnnouceHeaderModel.swift in Sources */,
 				3F3CFDC42C9815EB00DC9F9A /* UIViewController+.swift in Sources */,
@@ -1759,7 +1836,9 @@
 				3F54DA0B2CE4DF4A00314B46 /* LikeAnnounceUseCase.swift in Sources */,
 				3F25A3592C96A676006E2715 /* UIView+.swift in Sources */,
 				3F31B3E12CC1625D00EE92D6 /* UIColor+.swift in Sources */,
+				3F2F555B2D68614A00F0C86B /* CalendarModalContentView.swift in Sources */,
 				3F54D9DF2CE3C2B900314B46 /* EmptyAnnounceCollectionViewCell.swift in Sources */,
+				3F2F55572D685BB400F0C86B /* FirstComeContentView.swift in Sources */,
 				3F1739892CC01CDC00DE8859 /* MypageViewController.swift in Sources */,
 				3F54D9F72CE4D74F00314B46 /* UnreadAllAnnounceListRequestDTO.swift in Sources */,
 				3F6AB78C2CBE3C77006D1A29 /* DashedLineBorderView.swift in Sources */,
@@ -1777,6 +1856,7 @@
 				3F54D9D32CE36D1F00314B46 /* UnreadAssociationAnnounceCountUseCase.swift in Sources */,
 				3F54D9DD2CE3BA6200314B46 /* AssociationType.swift in Sources */,
 				3F54DA032CE4DDFD00314B46 /* BookmarkAssociationAnnounceListUseCase.swift in Sources */,
+				3F2F55642D69CD7A00F0C86B /* SheetButtonsConfigurable.swift in Sources */,
 				3FE403912CF85F340078F36A /* StoreMapViewModel.swift in Sources */,
 				3F5DEF812D5DB8A00016FE44 /* DateComponents+.swift in Sources */,
 				3F8D00542CEF0F2500083C22 /* CustomAlertViewController.swift in Sources */,
@@ -1810,6 +1890,7 @@
 				3F82C3392CAE94A600492EEE /* NSObject+.swift in Sources */,
 				3FE043312CC6654200B55EAA /* SectionType.swift in Sources */,
 				3F31B3F22CC49CCB00EE92D6 /* HomeViewModel.swift in Sources */,
+				3F2F556D2D69E1BC00F0C86B /* AlarmSettingViewController.swift in Sources */,
 				3F54D9FB2CE4D8B400314B46 /* DetailAnnounceResponseDTO.swift in Sources */,
 				3F54D9912CE19D3D00314B46 /* UnreadAssocationAnnouceCountRequestDTO.swift in Sources */,
 				3FA764242D4325E9009DE4A7 /* IndexSectionView.swift in Sources */,
@@ -1853,6 +1934,7 @@
 				3FD4B9062CDA180C00308E08 /* DetailAnnouceImageModel.swift in Sources */,
 				3FE0432E2CC6631100B55EAA /* MyPageType.swift in Sources */,
 				3F1739872CC01CC300DE8859 /* StoreViewController.swift in Sources */,
+				3F4EEA5A2D69FD42007991C4 /* AlarmSettingView.swift in Sources */,
 				3F54D9B92CE2127000314B46 /* UniversityDataRepositoryProtocol.swift in Sources */,
 				3F3992592C82C8E40045CF1E /* AppDelegate.swift in Sources */,
 				3F6992F22D36A18500A3CF9F /* CustomMenuViewController.swift in Sources */,
@@ -1860,6 +1942,7 @@
 				3FE403662CF840550078F36A /* AllReadAnnounceViewController.swift in Sources */,
 				3FFF2EA72D59EB6100C5FFC8 /* TimeListCollectionViewCell.swift in Sources */,
 				3F3CFDB42C9742C900DC9F9A /* SuccessSignUpViewController.swift in Sources */,
+				3F2F55672D69D1A200F0C86B /* PostDisplayType.swift in Sources */,
 				3FE043012CC626E600B55EAA /* SectionBackgroundView.swift in Sources */,
 				3F54D96C2CE10B8900314B46 /* Config.swift in Sources */,
 				3FE042FE2CC5E05100B55EAA /* MypageHeaderCollectionReusableView.swift in Sources */,
@@ -1883,6 +1966,7 @@
 				3F54D9AF2CE1C3F900314B46 /* NetworkError.swift in Sources */,
 				3FD4B9112CDBDA1500308E08 /* StoreViewModel.swift in Sources */,
 				3FE0433B2CC7710A00B55EAA /* AnnounceListViewModel.swift in Sources */,
+				3F5D9E402D6A03170059EA3D /* AlarmSettingViewModel.swift in Sources */,
 				3F9263532CE74F6000ADC1EB /* PartnerRepositoryProtocol.swift in Sources */,
 				3F1CE0442CEDDA8A00981EDF /* AnnounceTagButton.swift in Sources */,
 				3F54D9772CE190ED00314B46 /* NoticesAPI.swift in Sources */,
@@ -1903,6 +1987,7 @@
 				3F54D9CD2CE367BF00314B46 /* AssociationLogoUseCase.swift in Sources */,
 				3F54DA182CE5369000314B46 /* BookmarkListEntity.swift in Sources */,
 				3FEA67572CB81A9A00675805 /* CheckBoxButton.swift in Sources */,
+				3F2F556B2D69D24600F0C86B /* TimePickerModalContentView.swift in Sources */,
 				3FF2E9162CF4E7400098F0D2 /* WithDrawViewModel.swift in Sources */,
 				3F5F93512CED6BDE00B74BBB /* PostAnnounceViewController.swift in Sources */,
 				3F92634B2CE6282400ADC1EB /* SignupResponseDTO.swift in Sources */,
@@ -1917,6 +2002,7 @@
 				3F1F1F7C2CA3B859006DFD76 /* CustomSignUpNavigationController.swift in Sources */,
 				3F54D9CB2CE3676D00314B46 /* MypageInfoResponseDTO.swift in Sources */,
 				3F25A3662C96D058006E2715 /* LoginCoordinator.swift in Sources */,
+				3F2F555D2D68617400F0C86B /* CustomTimePickerView.swift in Sources */,
 				3FFCFEEE2CE0D72E009D07A6 /* NetworkResult.swift in Sources */,
 				3F3CFDBB2C97BE5D00DC9F9A /* UIControl+.swift in Sources */,
 				3F6992F42D3D3AD500A3CF9F /* EditAnnounceContent.swift in Sources */,
@@ -1936,8 +2022,8 @@
 				3F705EE22CF9DE680055C7EC /* UIImage+.swift in Sources */,
 				3FE043372CC6A00600B55EAA /* AnnounceTypeView.swift in Sources */,
 				3F54D9DB2CE3BA3700314B46 /* AssociationTypeView.swift in Sources */,
-				3FA764202D42A35A009DE4A7 /* DoubleButtonSheetViewController.swift in Sources */,
 				3F54D9E12CE4CE1600314B46 /* ImageCacheManager.swift in Sources */,
+				3F2F55592D68606C00F0C86B /* PostSelectTypeContentView.swift in Sources */,
 				3FE403642CF82BD10078F36A /* Notification+.swift in Sources */,
 				3FE042FC2CC5DE7A00B55EAA /* MyPageAnotherCollectionViewCell.swift in Sources */,
 				3F3A693A2CE85ABB006334C3 /* UserInfoEntity.swift in Sources */,
@@ -1948,6 +2034,7 @@
 				3F31B3EB2CC1EFDC00EE92D6 /* CustomHeaderCollectionReusableView.swift in Sources */,
 				3FEA67552CB7F82D00675805 /* AgreeTypeView.swift in Sources */,
 				3F54D9882CE19BA100314B46 /* DepartmentListResponseDTO.swift in Sources */,
+				3F5DEF852D65693A0016FE44 /* Decodable+.swift in Sources */,
 				3F54D9D72CE36D9B00314B46 /* BookmarkAnnounceListUseCase.swift in Sources */,
 				3F25A35F2C96A85E006E2715 /* TitleTextFieldView.swift in Sources */,
 				3FA764262D432B87009DE4A7 /* FirstComeModalViewModel.swift in Sources */,
@@ -1973,6 +2060,7 @@
 				3F54D9D52CE36D6500314B46 /* RecentAnnounceUseCase.swift in Sources */,
 				3F54D9D92CE36DC500314B46 /* MypageUseCase.swift in Sources */,
 				3F039BB42D40B94F0041FC6E /* MenuType.swift in Sources */,
+				3F2F55602D68623E00F0C86B /* FirstComeButtonConfiguration.swift in Sources */,
 				3F54D9B52CE211E500314B46 /* DepartmentRequestDTO.swift in Sources */,
 				3F3CFDB92C97BCF800DC9F9A /* Combine+.swift in Sources */,
 				3F54D9E32CE4CE4900314B46 /* AFImageView.swift in Sources */,
@@ -1980,6 +2068,7 @@
 				3F59602D2CA13E8F00688FE3 /* TextFieldStateEnum.swift in Sources */,
 				3F54D9E62CE4D09700314B46 /* AllAnnounceListUseCase.swift in Sources */,
 				3FE4038D2CF859700078F36A /* StoreInfoView.swift in Sources */,
+				3F2F55622D69CD5900F0C86B /* SheetContentConfigurable.swift in Sources */,
 				3FD4B8FC2CDA03C500308E08 /* DetailAnnouceHeaderCollectionViewCell.swift in Sources */,
 				3F54D9F32CE4D59300314B46 /* BookmarkAssociationAnnounceListResponseDTO.swift in Sources */,
 				3F54D9802CE1998C00314B46 /* SignupRequsetDTO.swift in Sources */,
@@ -1989,7 +2078,6 @@
 				3FB2034B2CC5C41A003F381D /* AssociationAnnounceModel.swift in Sources */,
 				3FE403622CF715480078F36A /* ReSubmitUseCase.swift in Sources */,
 				3F54D98C2CE19C2A00314B46 /* UniversityLogoResponseDTO.swift in Sources */,
-				3F6992E62D336A8D00A3CF9F /* SingleButtonSheetViewController.swift in Sources */,
 				3FE042FA2CC5D38F00B55EAA /* MyInfoCollectionViewCell.swift in Sources */,
 				3FF2E91A2CF5AD230098F0D2 /* UnRegisteredAssociationCollectionViewCell.swift in Sources */,
 				3F54D9EC2CE4D2AB00314B46 /* AllAnnounceListResponseDTO.swift in Sources */,
@@ -2172,7 +2260,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
@@ -2189,7 +2277,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2211,7 +2299,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
@@ -2228,7 +2316,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2281,6 +2369,123 @@
 			};
 			name = Release;
 		};
+		3F5D9E432D6B256B0059EA3D /* TestFlight */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Studing/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = TestFlight;
+		};
+		3F5D9E442D6B256B0059EA3D /* TestFlight */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = N3H27N59VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "스튜딩";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing.Beta;
+				PRODUCT_NAME = "$(TARGET_NAME) Beta";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = TestFlight;
+		};
+		3F5D9E452D6B256B0059EA3D /* TestFlight */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N3H27N59VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Niro.StudingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Studing.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Studing";
+			};
+			name = TestFlight;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2289,6 +2494,7 @@
 			buildConfigurations = (
 				3F3992672C82C8E60045CF1E /* Debug */,
 				3F3992682C82C8E60045CF1E /* Release */,
+				3F5D9E432D6B256B0059EA3D /* TestFlight */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2298,6 +2504,7 @@
 			buildConfigurations = (
 				3F39926A2C82C8E60045CF1E /* Debug */,
 				3F39926B2C82C8E60045CF1E /* Release */,
+				3F5D9E442D6B256B0059EA3D /* TestFlight */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2307,6 +2514,7 @@
 			buildConfigurations = (
 				3F3CFDCF2C9827D200DC9F9A /* Debug */,
 				3F3CFDD02C9827D200DC9F9A /* Release */,
+				3F5D9E452D6B256B0059EA3D /* TestFlight */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

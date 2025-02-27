@@ -55,6 +55,10 @@ final class TitleSectionHeaderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func changeCheckBoxState() {
+        checkBoxButton.updateButtonState(true)
+    }
 }
 
 // MARK: - Private Extensions

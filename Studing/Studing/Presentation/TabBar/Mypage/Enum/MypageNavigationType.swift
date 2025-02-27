@@ -19,6 +19,7 @@ import Foundation
 ///   - `version`: 앱 버전 정보 화면으로 이동
 ///   - `terms`: 이용약관 화면으로 이동
 ///   - `privacyPolicy`: 개인정보 처리방침 화면으로 이동
+///   - `alarmSetting`: 알람 설정 화면으로 이동
 ///   - `logout`: 로그아웃 기능
 ///   - `withDraw`: 회원탈퇴 기능
 ///
@@ -40,6 +41,9 @@ enum MypageNavigationType {
     
     /// 개인정보 처리방침 화면
     case privacyPolicy
+    
+    /// 알람 설정 화면
+    case alarmSetting
     
     /// 로그아웃 기능
     case logout

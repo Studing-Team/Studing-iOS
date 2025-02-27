@@ -91,6 +91,10 @@ final class CustomAlertViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("deinit CustomAlertViewController")
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -201,11 +205,17 @@ private extension CustomAlertViewController {
     func setupButtonAction() {
         switch alertType {
         case .confirmCancel:
-            leftButton?.buttonAction = leftButtonHandler ?? cancelButtonAction
-            rightButton?.buttonAction = rightButtonHandler ?? cancelButtonAction
+            leftButton?.buttonAction = { [weak self] in
+                self?.leftButtonHandler?() ?? self?.cancelButtonAction()
+            }
+            rightButton?.buttonAction = { [weak self] in
+                self?.rightButtonHandler?() ?? self?.cancelButtonAction()
+            }
             
         case .onlyConfirm:
-            centerButton?.buttonAction = centerButtonHandler ?? cancelButtonAction
+            centerButton?.buttonAction = { [weak self] in
+                self?.centerButtonHandler?() ?? self?.cancelButtonAction()
+            }
         }
     }
     

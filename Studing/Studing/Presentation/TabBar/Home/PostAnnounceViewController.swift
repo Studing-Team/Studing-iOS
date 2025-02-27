@@ -163,6 +163,14 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
         
         if case .edit = postType {
             viewLifeCycleSubject.send(.viewWillAppear)
+            
+            if let customNav = navigationController as? CustomAnnounceNavigationController {
+                customNav.setNavigationType(.editPost)
+            }
+        }
+        
+        if case .firstCome = postDisplayType {
+            tagButtonSubject.send(.event)
         }
         
         print("PostAnnounceViewController viewWillAppear")
@@ -173,6 +181,10 @@ final class PostAnnounceViewController: UIViewController, UIAdaptivePresentation
         
         if case .edit = postType {
             NotificationCenter.default.post(name: Notification.Name("EditPostViewDismissed"), object: nil)
+        }
+        
+        if case .create = postType {
+            NotificationCenter.default.post(name: Notification.Name("Create EditPostViewDismissed"), object: nil)
         }
     }
     
@@ -243,7 +255,6 @@ private extension PostAnnounceViewController {
                 if content.tag == "공지" {
                     self.announceButton.buttonState = .select
                     self.tagButtonSubject.send(.announce)
-                    
                 } else {
                     self.eventButton.buttonState = .select
                     self.tagButtonSubject.send(.event)
@@ -261,7 +272,12 @@ private extension PostAnnounceViewController {
                     postAnnounceViewModel.startDaySubject.send(startDay)
                     postAnnounceViewModel.endDaySubject.send(endDay)
                     
-                    postAnnounceViewModel.changePostAnnounceOptionType(optionType: .period)
+                    self.showSomething()
+                    self.periodViewHeader.changeCheckBoxState()
+                    
+                    if let firstComeNumber = content.firstComeNumber {
+                        personContentView.bindingTitle(title: firstComeNumber)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -285,6 +301,10 @@ private extension PostAnnounceViewController {
                 if result {
                     if case .edit = self?.postType {
                         ToastMessageManager.showToastMessage(toastType: .editCompletion)
+                    }
+                    
+                    if case .create = self?.postType {
+                        ToastMessageManager.showToastMessage(toastType: .createCompletion)
                     }
                     
                     if let customNavController = self?.navigationController as? CustomAnnounceNavigationController {
@@ -560,16 +580,16 @@ private extension PostAnnounceViewController {
         
         textSectionView.addArrangedSubviews(textViewHeader, contentTextView)
         
-        tagSectionView.addArrangedSubviews(tagViewHeader, tagStackView)
-        
         periodSectionView.addArrangedSubviews(periodViewHeader, periodContentView)
         
         if postDisplayType == .firstCome {
             personSectionView.addArrangedSubviews(personViewHeader, personContentView)
+        } else {
+            tagSectionView.addArrangedSubviews(tagViewHeader, tagStackView)
+            tagStackView.addArrangedSubviews(announceButton, eventButton)
         }
         
         contentTextView.addSubview(placeholderLabel)
-        tagStackView.addArrangedSubviews(announceButton, eventButton)
     }
     
     func setupLayout() {

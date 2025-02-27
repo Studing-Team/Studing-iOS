@@ -144,7 +144,8 @@ final class HomeCoordinator: Coordinator {
     func presentPostAnnounce(postType: PostType,
                              postDisplayType: PostDisplayType,
                              noticeId: Int? = nil,
-                             content: EditAnnounceContent? = nil
+                             content: EditAnnounceContent? = nil,
+                             postOptionType: PostOptionType? = nil
     ) {
         switch postType {
         case .create:
@@ -155,10 +156,12 @@ final class HomeCoordinator: Coordinator {
             )
             
         case .edit:
+            guard let postOptionType else { return }
+            
             self.currentPostAnnounceVM =  PostAnnounceViewModel(
                 editAnnounceUseCase: EditPostAnnounceUseCase(repository: NoticesRepositoryImpl()),
                 type: .edit, 
-                postOptionType: postDisplayType == .announce ? .basic : .firstCome
+                postOptionType: postOptionType
             )
         }
 
@@ -202,7 +205,7 @@ final class HomeCoordinator: Coordinator {
             ]
             
             postSelectTypeModalVC.view.backgroundColor = .clear
-            postSelectTypeModalVC.modalPresentationStyle = .overFullScreen//.pageSheet//.overFullScreen
+            postSelectTypeModalVC.modalPresentationStyle = .pageSheet
         }
         navigationController.present(postSelectTypeModalVC, animated: true)
     }
@@ -255,7 +258,7 @@ final class HomeCoordinator: Coordinator {
         topMostVC.present(calendarModalVC, animated: true)
     }
     
-    func presentFirstComeRankMoal(noticeId: Int) {
+    func presentFirstComeRankModal(noticeId: Int) {
         
         let firstComeModalVM = FirstComeModalViewModel(noticeId: noticeId, firstComeRankingsUseCase: FirstComeRankingsUseCase(repository: NoticesRepositoryImpl()))
         

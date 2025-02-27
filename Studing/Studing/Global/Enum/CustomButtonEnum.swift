@@ -27,6 +27,11 @@ enum ConfirmType {
     case normal
 }
 
+enum WithDrawType {
+    case view
+    case alert
+}
+
 enum ButtonStyle: Equatable {
     /// `ButtonStyle` 열거형은 버튼 스타일을 정의하며, 각 스타일에 따라 버튼의 제목,
     /// 배경색, 활성 상태 및 비활성 상태를 설정합니다.
@@ -43,6 +48,7 @@ enum ButtonStyle: Equatable {
     ///  - retry: "다시 시도" 버튼입니다.
     ///  - studentCard: "학생증 업로드" 버튼입니다.
     ///  - postAnnounce: "등록하기" 버튼입니다.
+    ///  - editAnnounce: "수정하기" 버튼입니다.
     ///  - home: "홈으로 돌아가기" 버튼입니다.
     ///  - showStudingHome: "스튜딩 시작하기" 버튼으로, 일부 투명도가 적용됩니다.
     ///  - close: "닫기" 버튼입니다. `CloseType`에 따라 색상 다름.
@@ -51,6 +57,15 @@ enum ButtonStyle: Equatable {
     ///  - startTime: "시작 시간 선택" 버튼입니다.
     ///  - endTime: "종료 시간 선택" 버튼입니다.
     ///  - myRanking: "내 순위 조회" 버튼입니다.
+    ///  - cancel: "취소하기" 버튼입니다.
+    ///  - confirm: "확인" 버튼입니다.
+    ///  - alarmDay: "알림 날짜 선택" 버튼입니다.
+    ///  - alarmTime: "알림 시간 선택" 버튼입니다.
+    ///  - delete: "삭제하기" 버튼입니다.
+    ///  - yes: "네" 버튼입니다.
+    ///  - no: "아니오" 버튼입니다.
+    ///  - withdraw: "탈퇴할게요" 버튼입니다.
+    
     
     /// 다음 버튼
     case next
@@ -118,17 +133,23 @@ enum ButtonStyle: Equatable {
     /// 확인 버튼
     case confirm(type: ConfirmType)
     
+    /// 알림 날짜 선택 버튼
     case alarmDay
     
+    /// 알림 시간 선택 버튼
     case alarmTime
     
+    /// 삭제하기 버튼
     case delete
     
+    /// 알림 취소 확인 버튼
     case yes
     
+    /// 알림 취소 취소 버튼
     case no
     
-    case withdraw
+    /// 계정 탈퇴하기 버튼
+    case withdraw(type: WithDrawType)
     
     /// 버튼 제목을 반환합니다.
     ///
@@ -187,8 +208,13 @@ enum ButtonStyle: Equatable {
             return "네"
         case .no:
             return "아니요"
-        case .withdraw:
-            return "탈퇴하기"
+        case .withdraw(let type):
+            switch type {
+            case .alert:
+                return "탈퇴하기"
+            case .view:
+                return "탈퇴할게요"
+            }
         }
     }
     
@@ -197,27 +223,42 @@ enum ButtonStyle: Equatable {
     /// - Returns: 버튼이 활성 상태일 때 적용될 배경색(`UIColor`)입니다.
     var enableBackground: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .alarmDay, .alarmTime, .delete, .yes, .no:
+        case .login:
+            return .white
+        case .next, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .postAnnounce, .home, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .alarmDay, .alarmTime, .delete, .yes, .no:
             return .primary50
+            
         case .showStuding:
             return .white
+            
         case .showStudingHome:
             return .white.withAlphaComponent(0.1)
+            
         case .close(let type):
             if type == .blue {
                 return .primary50
             } else {
                 return .black20
             }
+            
         case .myRanking:
             return .studingRedButton
-        case .cancel, .withdraw:
+            
+        case .cancel:
             return .black20
             
         case .confirm(let type):
             if type == .event {
                 return .studingRedButton
             } else {
+                return .primary50
+            }
+            
+        case .withdraw(let type):
+            switch type {
+            case .alert:
+                return .black20
+            case .view:
                 return .primary50
             }
         }
@@ -228,6 +269,8 @@ enum ButtonStyle: Equatable {
     /// - Returns: 버튼이 비활성화 상태일 때 적용될 배경색(`UIColor`)입니다.
     var disableBackground: UIColor {
         switch self {
+        case .login:
+            return .white
         case .next, .authentication, .postAnnounce, .alarmDay, .alarmTime:
             return .black20
         case .showStuding:
@@ -244,7 +287,10 @@ enum ButtonStyle: Equatable {
     /// - Returns: 버튼 상태에 맞는 색상(`UIColor`)입니다.
     var foregroundColor: UIColor {
         switch self {
-        case .next, .login, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home, .close, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .myRanking, .cancel, .confirm, .alarmDay, .alarmTime,  .delete, .yes, .no, .withdraw:
+        case .login:
+            return .GRA
+            
+        case .next, .registerUniverstiy, .registerMajor, .authentication, .notification, .duplicate, .retry, .studentCard, .showStudingHome, .postAnnounce, .home, .close, .startDay, .endDay, .startTime, .endTime, .editAnnounce, .myRanking, .cancel, .confirm, .alarmDay, .alarmTime,  .delete, .yes, .no, .withdraw:
             return .white
             
         case .showStuding:

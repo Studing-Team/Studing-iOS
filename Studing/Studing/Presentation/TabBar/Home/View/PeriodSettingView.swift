@@ -45,6 +45,10 @@ final class PeriodSettingView: UIView {
     func bindingTitle(title: String) {
         titleLabel.text = title
     }
+    
+    func changeTextColor() {
+        titleLabel.textColor = .black40
+    }
 }
 
 // MARK: - Private Extensions
@@ -78,7 +82,6 @@ private extension PeriodSettingView {
         
         titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
-//            $0.horizontalEdges.equalToSuperview().inset(8)
         }
     }
     

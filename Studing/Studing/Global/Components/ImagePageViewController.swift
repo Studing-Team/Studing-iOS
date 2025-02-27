@@ -15,18 +15,11 @@ final class ImagePageViewController: UIPageViewController {
     // MARK: - Properties
     
     private var imageUrls: [String]
-    private var pendingIndex: Int?
-    private var currentIndex: Int = 0 {
-        didSet {
-            updateImageCountView()
-        }
-    }
-
+    private var currentIndex: Int = 0
+    
     // MARK: - UI Properties
     
     private var backgroundView = UIView()
-    private let imageCountView = UIView()
-    private let imageCountLabel = UILabel()
     
     // MARK: - Init
     
@@ -49,13 +42,9 @@ final class ImagePageViewController: UIPageViewController {
         super.viewDidLoad()
         
         setupStyle()
-        setupHierarchy()
-        setupLayout()
         setupDelegate()
-        updateImageCountView()
         
         if let firstVC = createImageViewController(at: currentIndex) {
-            firstVC.delegate = self
             setViewControllers([firstVC], direction: .forward, animated: true)
         }
     }
@@ -77,59 +66,14 @@ private extension ImagePageViewController {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         view.insertSubview(blurView, at: 0)
-        
-        imageCountLabel.do {
-            $0.textColor = .white
-            $0.font = .interCaption10()
-        }
-        
-        imageCountView.do {
-            $0.backgroundColor = .black50
-            $0.layer.cornerRadius = 11
-        }
-    }
-    
-    func setupHierarchy() {
-        view.addSubviews(imageCountView)
-        imageCountView.addSubview(imageCountLabel)
-    }
-    
-    func setupLayout() {
-        imageCountView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(view.convertByHeightRatio(233))
-            $0.trailing.equalToSuperview().inset(12.5)
-            $0.width.equalTo(29)
-            $0.height.equalTo(22)
-        }
-        
-        imageCountLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
-        }
     }
     
     func setupDelegate() {
         self.dataSource = self
-        self.delegate = self
-    }
-    
-    func updateImageCountView() {
-        imageCountLabel.text = "\(currentIndex + 1)/\(imageUrls.count)"
     }
     
     @objc private func dismissPageView(_ gesture: UITapGestureRecognizer) {
         self.dismiss(animated: false)
-    }
-}
-
-// MARK: - ImageZoomStateDelegate
-
-extension ImagePageViewController: ImageZoomStateDelegate {
-    func imageZoomState(isZoom: Bool) {
-        if isZoom == true {
-            imageCountView.isHidden = true
-        } else {
-            imageCountView.isHidden = false
-        }
     }
 }
 
@@ -138,46 +82,18 @@ extension ImagePageViewController: ImageZoomStateDelegate {
 extension ImagePageViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let imageVC = viewController as? ImageViewController else { return nil }
-        imageVC.delegate = self
         return createImageViewController(at: imageVC.index - 1)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let imageVC = viewController as? ImageViewController else { return nil }
-        imageVC.delegate = self
         return createImageViewController(at: imageVC.index + 1)
     }
-}
-
-// MARK: - UIPageViewControllerDelegate
-
-extension ImagePageViewController: UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-        guard let firstVC = pendingViewControllers.first as? ImageViewController else { return }
-        
-        print("새로운 VC")
-        pendingIndex = firstVC.index
-    }
-    
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if completed, let newIndex = pendingIndex {
-            currentIndex = newIndex
-        }
-        
-        pendingIndex = nil
-    }
-}
-
-
-protocol ImageZoomStateDelegate {
-    func imageZoomState(isZoom: Bool)
 }
 
 final class ImageViewController: UIViewController {
     
     // MARK: - Properties
-    
-    var delegate: ImageZoomStateDelegate?
     
     let index: Int
     private var lastZoomCenter: CGPoint = .zero
@@ -343,17 +259,6 @@ extension ImageViewController: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerImage()
-        
-        // 현재 zoom scale 확인
-        let currentScale = scrollView.zoomScale
-        print("Current zoom scale: \(currentScale)") // 1.0이면 기본 크기
-        
-        // 원하는 경우 특정 동작 수행
-        if currentScale == 1.0 {
-            delegate?.imageZoomState(isZoom: false)
-        } else if currentScale > 1.0 {
-            delegate?.imageZoomState(isZoom: true)
-        }
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
@@ -373,4 +278,3 @@ extension ImageViewController: UIGestureRecognizerDelegate {
         return touch.view == scrollView
     }
 }
-

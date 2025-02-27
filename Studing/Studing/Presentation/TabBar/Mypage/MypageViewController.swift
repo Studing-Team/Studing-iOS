@@ -50,7 +50,6 @@ final class MypageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavigationBar()
         setupStyle()
         setupHierarchy()
         setupLayout()
@@ -125,10 +124,6 @@ private extension MypageViewController {
 // MARK: - Private Extensions
 
 private extension MypageViewController {
-    func setNavigationBar() {
-//        self.navigationController?.isNavigationBarHidden = true
-    }
-    
     func setupStyle() {
         view.applyGradient(colors: [.loginStartGradient.withFigmaStyleAlpha(0.3), .loginEndGradient.withFigmaStyleAlpha(0.3)], direction: .topToBottom, locations: [0, 0.5])
     }
@@ -141,7 +136,7 @@ private extension MypageViewController {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(15)
         }
     }
     
@@ -172,6 +167,9 @@ private extension MypageViewController {
             guard let url = URL(string: "https://studingofficial.notion.site/11905c1258e08063bba2f82d320de454"),
                   UIApplication.shared.canOpenURL(url) else { return }
             UIApplication.shared.open(url, options: [:])
+            
+        case .alarmSetting:
+            self.coordinator?.pushAlarmSettingView()
             
         case .logout:
             // 로그아웃 처리

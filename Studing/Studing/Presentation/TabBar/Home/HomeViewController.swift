@@ -83,6 +83,16 @@ final class HomeViewController: UIViewController {
             name: .userAuthDidUpdate,
             object: nil
         )
+        
+        // 공지사항 작성 후, 게시글 업데이트를 위한 옵저버
+        NotificationCenter.default
+            .publisher(for: Notification.Name("Create EditPostViewDismissed"))
+            .sink { [weak self] _ in
+                Task {
+                    await self?.fetchInitialData()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -253,7 +263,6 @@ private extension HomeViewController {
         
         output.postButtonTap
             .sink { [weak self] _ in
-//                self?.coordinator?.presentPostAnnounce(postType: .edit, postOptionType: .announce)
                 self?.coordinator?.presentPostSection()
             }
             .store(in: &cancellables)

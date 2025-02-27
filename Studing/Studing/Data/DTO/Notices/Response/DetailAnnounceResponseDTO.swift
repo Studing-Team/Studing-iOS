@@ -27,6 +27,7 @@ struct DetailAnnounceResponseDTO: Decodable {
     let isFirstComeNotice: Bool
     let isFirstComeApplied: Bool
     let alarmTime: String?
+    let firstComeNumber: Int?
 }
 
 extension DetailAnnounceResponseDTO {
@@ -51,24 +52,8 @@ extension DetailAnnounceResponseDTO {
             isFirstComeNotice: isFirstComeNotice,
             isFirstComeApplied: isFirstComeApplied,
             alarmDay: convertToDateComponents(alarmTime: alarmTime, components: [.year, .month, .day]),
-            alarmTime: convertToDateComponents(alarmTime: alarmTime, components: [.hour, .minute])
+            alarmTime: convertToDateComponents(alarmTime: alarmTime, components: [.hour, .minute]),
+            firstComeNumber: firstComeNumber
         )
-    }
-}
-
-extension DetailAnnounceResponseDTO {
-    /// 주어진 날짜 문자열을 DateComponents로 변환
-    private func convertToDateComponents(alarmTime: String?, components: Set<Calendar.Component>) -> DateComponents? {
-        guard let alarmTime else { return nil }
-        
-        let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        inputFormatter.locale = Locale(identifier: "ko_KR")
-        inputFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
-        
-        guard let date = inputFormatter.date(from: alarmTime) else { return nil }
-        
-        let calendar = Calendar(identifier: .gregorian)
-        return calendar.dateComponents(components, from: date)
     }
 }

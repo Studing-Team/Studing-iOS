@@ -108,6 +108,9 @@ final class MypageViewModel: BaseViewModel {
             case 3:
                 navigationEventSubject.send(.privacyPolicy)
                 
+            case 4:
+                navigationEventSubject.send(.alarmSetting)
+                
             default: break
             }
             

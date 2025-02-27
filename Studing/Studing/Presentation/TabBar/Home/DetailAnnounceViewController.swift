@@ -26,9 +26,9 @@ final class DetailAnnounceViewController: UIViewController {
     
     // MARK: - Combine Properties
     
-    private let nextbuttonTapSubject = PassthroughSubject<Void, Never>()
+    private let nextbuttonTapSubject = PassthroughSubject<DetailAnnounceType, Never>()
     private let currentImagePageSubject = PassthroughSubject<Int, Never>()
-    private let deleteuttonTappedSubject = PassthroughSubject<Void, Never>()
+    private let deleteButtonTappedSubject = PassthroughSubject<Void, Never>()
     private let viewLifeCycleSubject = PassthroughSubject<ViewLifeCycleEvent, Never>()
     private let firstComeButtonTappedSubejct = PassthroughSubject<FirstComeState, Never>()
     
@@ -100,6 +100,29 @@ final class DetailAnnounceViewController: UIViewController {
         setupRefreshControl()
         
         print("DetailAnnounceViewController viewDidLoad")
+        
+        // 공지사항 작성 후, 게시글 업데이트를 위한 옵저버
+        NotificationCenter.default
+            .publisher(for: Notification.Name("Alarm Error"))
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.showConfirmAlert(mainTitle: "알람 설정 에러", subTitle: "알람 설정이 되지 않았습니다\n 잠시 후 시도해주세요", centerButtonStyle: .confirm(type: .normal), centerButtonHandler: {
+                        self.dismiss(animated: false)
+                    })
+                }
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default
+            .publisher(for: Notification.Name("AlarmSetting"))
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                viewLifeCycleSubject.send(.viewWillAppear)
+            }
+            .store(in: &cancellables)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -161,7 +184,8 @@ private extension DetailAnnounceViewController {
                         startDay: convertToDateComponents(data: content.startTime, components: [.year, .month, .day]),
                         startTime: convertToDateComponents(data: content.startTime, components: [.hour, .minute]),
                         endDay: convertToDateComponents(data: content.endTime, components: [.year, .month, .day]),
-                        endTime: convertToDateComponents(data: content.startTime, components: [.hour, .minute])
+                        endTime: convertToDateComponents(data: content.endTime, components: [.hour, .minute]),
+                        firstComeNumber: String(content.firstComeNumber ?? 0)
                     )
                     
                     NotificationCenter.default.addObserver(
@@ -170,7 +194,7 @@ private extension DetailAnnounceViewController {
                         name: Notification.Name("EditPostViewDismissed"),
                         object: nil)
                     
-                        self.coordinator?.presentPostAnnounce(postType: .edit, postDisplayType: content.isFirstComeNotice == true ? .firstCome : .announce, noticeId: noticeId, content: dto)
+                    self.coordinator?.presentPostAnnounce(postType: .edit, postDisplayType: content.isFirstComeNotice == true ? .firstCome : .announce, noticeId: noticeId, content: dto, postOptionType: content.type)
                     
                 case .delete:
                     self.handleDotMenuButtonTap()
@@ -204,7 +228,7 @@ private extension DetailAnnounceViewController {
             leftButtonStyle: .cancel,
             rightButtonStyle: .delete,
             rightButtonHandler: {
-                self.deleteuttonTappedSubject.send()
+                self.deleteButtonTappedSubject.send()
             }
         )
     }
@@ -214,7 +238,7 @@ private extension DetailAnnounceViewController {
             viewLifeCycleEventAction: viewLifeCycleSubject.eraseToAnyPublisher(),
             likeButtonTap: likeButton.tapPublisher,
             bookmarkButtonTap: bookmarkButton.tapPublisher,
-            deleteButtonTap: deleteuttonTappedSubject.eraseToAnyPublisher(),
+            deleteButtonTap: deleteButtonTappedSubject.eraseToAnyPublisher(),
             nextButtonTap: nextbuttonTapSubject.eraseToAnyPublisher(),
             currentPageControlCount: currentImagePageSubject.eraseToAnyPublisher(),
             firstComeButtonTap: firstComeButtonTappedSubejct.eraseToAnyPublisher()
@@ -242,10 +266,13 @@ private extension DetailAnnounceViewController {
                 switch completion {
                 case .finished:
                     print("✅ viewLifeCycleEventResult 성공적으로 완료됨")
-
                 case .failure(let error):
                     // 에러 처리
                     print("Error: \(error)")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.customRefreshControl.endRefreshing()
+                        self.detailAnnouceViewModel.isRefresh = false
+                    }
                 }
             }, receiveValue: { isRefresh in
                 if isRefresh {
@@ -340,26 +367,31 @@ private extension DetailAnnounceViewController {
                 guard let self else { return }
                 switch completion {
                 case .finished:
-                    if let presentedVC = self.presentedViewController as? CustomAlertViewController {
-                        presentedVC.dismiss(animated: false)
-                    }
+                    print("삭제 동작 완료")
                     
                 case .failure(_):
+                    // 삭제하기 버튼이 포함된 Alert View
                     if let presentedVC = self.presentedViewController as? CustomAlertViewController {
                         presentedVC.dismiss(animated: false)
                     }
                 }
             }, receiveValue: { [weak self] result in
                 guard let self else { return }
+                
+                if let presentedVC = self.presentedViewController as? CustomAlertViewController {
+                    presentedVC.dismiss(animated: false)
+                }
+                
+                ToastMessageManager.showToastMessage(toastType: .deleteAnnounce)
+                
                 switch self.type {
                 case .announce, .bookmarkAnnounce:
-                    ToastMessageManager.showToastMessage(toastType: .deleteAnnounce)
-                    
                     if let customNavController = self.navigationController as? CustomAnnounceNavigationController {
                         customNavController.popViewController(animated: true)
                     }
+                    
                 case .unreadAnnounce:
-                    nextbuttonTapSubject.send()
+                    nextbuttonTapSubject.send(.unreadAnnounce)
                 }
             })
             .store(in: &cancellables)
@@ -368,7 +400,13 @@ private extension DetailAnnounceViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] headerType in
                 guard let self, let headerType else { return }
-                self.setupLayout(self.type, headerType)
+                
+                imageCountView.snp.remakeConstraints {
+                    $0.top.equalTo(self.collectionView.snp.top).offset(headerType.countViewPadding)
+                    $0.trailing.equalTo(self.collectionView.snp.trailing).inset(12.5)
+                    $0.width.equalTo(29)
+                    $0.height.equalTo(22)
+                }
             }
             .store(in: &cancellables)
         
@@ -376,9 +414,21 @@ private extension DetailAnnounceViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if result {
-                    self?.showConfirmAlert(mainTitle: "이벤트 참여완료!", subTitle: "바로 순위를 확인할 수 있어요 :)", centerButtonStyle: .confirm(type: .event))
+                    self?.showConfirmAlert(mainTitle: "이벤트 참여완료!",
+                                           subTitle: "바로 순위를 확인할 수 있어요 :)",
+                                           centerButtonStyle: .confirm(type: .event),
+                                           centerButtonHandler: {
+                        self?.dismiss(animated: false)
+                        self?.viewLifeCycleSubject.send(.viewWillAppear)
+                    })
                 } else {
-                    self?.showConfirmAlert(mainTitle: "이벤트 참여 미완료!", subTitle: "오류가 발생했습니다.\n잠시후 다시 시도해주세요", centerButtonStyle: .confirm(type: .event))
+                    self?.showConfirmAlert(mainTitle: "이벤트 참여 미완료!",
+                                           subTitle: "오류가 발생했습니다.\n잠시후 다시 시도해주세요",
+                                           centerButtonStyle: .confirm(type: .event),
+                                           centerButtonHandler: {
+                        self?.dismiss(animated: false)
+                        self?.viewLifeCycleSubject.send(.viewWillAppear)
+                    })
                 }
             }
             .store(in: &cancellables)
@@ -419,7 +469,7 @@ private extension DetailAnnounceViewController {
         
         imageCountView.do {
             $0.backgroundColor = .black50
-            $0.layer.cornerRadius = 12
+            $0.layer.cornerRadius = 11
         }
         
         switch type {
@@ -455,7 +505,7 @@ private extension DetailAnnounceViewController {
     }
     
     @objc func nextbuttonTap() {
-        nextbuttonTapSubject.send()
+        nextbuttonTapSubject.send(.announce)
     }
     
     func setupHierarchy(_ type: DetailAnnounceType) {
@@ -546,8 +596,8 @@ private extension DetailAnnounceViewController {
     }
     
     @objc func handleRefresh() {
-        viewLifeCycleSubject.send(.viewWillAppear)
         self.detailAnnouceViewModel.isRefresh = true
+        viewLifeCycleSubject.send(.viewWillAppear)
     }
 }
 
@@ -586,7 +636,7 @@ extension DetailAnnounceViewController: FirstComeButtonTappedDelegate {
         case .joined:
             guard let noticeId = detailAnnouceViewModel.selectedNoticeId else { return }
             
-            coordinator?.presentFirstComeRankMoal(noticeId: noticeId)
+            coordinator?.presentFirstComeRankModal(noticeId: noticeId)
         }
     }
 }
