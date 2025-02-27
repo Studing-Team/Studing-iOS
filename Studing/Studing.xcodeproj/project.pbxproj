@@ -174,6 +174,7 @@
 		3F59602D2CA13E8F00688FE3 /* TextFieldStateEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602C2CA13E8F00688FE3 /* TextFieldStateEnum.swift */; };
 		3F59602F2CA1422100688FE3 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F59602E2CA1422100688FE3 /* UIStackView+.swift */; };
 		3F5D9E402D6A03170059EA3D /* AlarmSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D9E3F2D6A03170059EA3D /* AlarmSettingViewModel.swift */; };
+		3F5D9E422D6B24100059EA3D /* TestFlight.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */; };
 		3F5DEF812D5DB8A00016FE44 /* DateComponents+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF802D5DB8A00016FE44 /* DateComponents+.swift */; };
 		3F5DEF832D6324B40016FE44 /* SingleButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF822D6324B40016FE44 /* SingleButtonConfiguration.swift */; };
 		3F5DEF852D65693A0016FE44 /* Decodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DEF842D65693A0016FE44 /* Decodable+.swift */; };
@@ -493,6 +494,7 @@
 		3F59602C2CA13E8F00688FE3 /* TextFieldStateEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldStateEnum.swift; sourceTree = "<group>"; };
 		3F59602E2CA1422100688FE3 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
 		3F5D9E3F2D6A03170059EA3D /* AlarmSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingViewModel.swift; sourceTree = "<group>"; };
+		3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestFlight.xcconfig; sourceTree = "<group>"; };
 		3F5DEF802D5DB8A00016FE44 /* DateComponents+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+.swift"; sourceTree = "<group>"; };
 		3F5DEF822D6324B40016FE44 /* SingleButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonConfiguration.swift; sourceTree = "<group>"; };
 		3F5DEF842D65693A0016FE44 /* Decodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+.swift"; sourceTree = "<group>"; };
@@ -1040,6 +1042,7 @@
 				3FFF99342D27B62F00EEBB70 /* Debug.xcconfig */,
 				3FFF99352D27B65400EEBB70 /* Release.xcconfig */,
 				3F54D96A2CE10B7F00314B46 /* Config.xcconfig */,
+				3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */,
 				3F54D96B2CE10B8900314B46 /* Config.swift */,
 				3F54DA1D2CE5C39500314B46 /* GoogleService-Info.plist */,
 			);
@@ -1787,6 +1790,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F5D9E422D6B24100059EA3D /* TestFlight.xcconfig in Resources */,
 				3F3992622C82C8E60045CF1E /* Assets.xcassets in Resources */,
 				3F31B3DF2CC161CA00EE92D6 /* MontserratAlternates-Bold.ttf in Resources */,
 				3F8D00562CF463C400083C22 /* MontserratAlternates-ExtraBold.ttf in Resources */,
@@ -2256,7 +2260,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
@@ -2273,7 +2277,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2295,7 +2299,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = N3H27N59VG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
@@ -2312,7 +2316,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2365,6 +2369,123 @@
 			};
 			name = Release;
 		};
+		3F5D9E432D6B256B0059EA3D /* TestFlight */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Studing/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = TestFlight;
+		};
+		3F5D9E442D6B256B0059EA3D /* TestFlight */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Studing/Studing.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = N3H27N59VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "스튜딩";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한설정이 필요합니다.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Fouryears.Studing.Beta;
+				PRODUCT_NAME = "$(TARGET_NAME) Beta";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = TestFlight;
+		};
+		3F5D9E452D6B256B0059EA3D /* TestFlight */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F5D9E412D6B24100059EA3D /* TestFlight.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N3H27N59VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Studing/Global/Supporting Files/Info.plist";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Niro.StudingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Studing.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Studing";
+			};
+			name = TestFlight;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2373,6 +2494,7 @@
 			buildConfigurations = (
 				3F3992672C82C8E60045CF1E /* Debug */,
 				3F3992682C82C8E60045CF1E /* Release */,
+				3F5D9E432D6B256B0059EA3D /* TestFlight */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2382,6 +2504,7 @@
 			buildConfigurations = (
 				3F39926A2C82C8E60045CF1E /* Debug */,
 				3F39926B2C82C8E60045CF1E /* Release */,
+				3F5D9E442D6B256B0059EA3D /* TestFlight */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2391,6 +2514,7 @@
 			buildConfigurations = (
 				3F3CFDCF2C9827D200DC9F9A /* Debug */,
 				3F3CFDD02C9827D200DC9F9A /* Release */,
+				3F5D9E452D6B256B0059EA3D /* TestFlight */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
