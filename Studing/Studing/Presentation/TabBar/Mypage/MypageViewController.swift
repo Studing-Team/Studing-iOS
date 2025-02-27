@@ -136,7 +136,7 @@ private extension MypageViewController {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(15)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(10)
         }
     }
     

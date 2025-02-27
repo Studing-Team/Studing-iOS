@@ -101,7 +101,7 @@ private extension AlarmSettingViewController {
         output.viewLifeCycleEventResult
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
-                self?.alarmInfomationView.isHidden = result
+                self?.alarmInfomationView.changeAlarmState(isAlarm: result)
             }
             .store(in: &cancellables)
         
@@ -126,17 +126,11 @@ private extension AlarmSettingViewController {
             $0.axis = .vertical
             $0.distribution = .fill
             $0.spacing = 0
-            $0.addArrangedSubviews(alarmInfomationView, announceAlarmSettingView)
+            $0.addArrangedSubviews(alarmInfomationView)
         }
         
-        alarmInfomationView.do {
-            $0.isUserInteractionEnabled = true
-            $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(alarmInfomationViewTappend)))
-        }
-        
-        announceAlarmSettingView.do {
-            $0.isUserInteractionEnabled = true
-            $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(alarmInfomationViewTappend)))
+        alarmInfomationView.setAlarmSettingAction { [weak self] in
+            self?.osSettingSubject.send()
         }
     }
     
@@ -149,10 +143,6 @@ private extension AlarmSettingViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview().inset(15)
             $0.bottom.equalToSuperview()
-        }
-        
-        alarmInfomationView.snp.makeConstraints {
-            $0.height.equalTo(94)
         }
     }
     

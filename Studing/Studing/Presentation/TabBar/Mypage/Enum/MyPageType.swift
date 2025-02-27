@@ -41,7 +41,7 @@ enum MyPageType: CaseIterable {
     var title: String {
         switch self {
         case .myInfo: return ""
-        case .useInfo: return "이용 안내"
+        case .useInfo: return "이용안내"
         case .etc: return "기타"
         }
     }
@@ -52,7 +52,7 @@ enum MyPageType: CaseIterable {
     var items: [String] {
         switch self {
         case .myInfo: return [""]
-        case .useInfo: return ["앱 버전", "문의하기", "서비스 이용안내", "개인정보 처리방침", "알림 설정"]
+        case .useInfo: return ["알림 설정", "문의하기", "서비스 이용안내", "개인정보 처리방침", "앱 버전"]
         case .etc: return ["로그아웃", "회원탈퇴"]
         }
     }

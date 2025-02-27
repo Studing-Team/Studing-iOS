@@ -89,8 +89,16 @@ extension UIFont {
         return  UIFont(name: FontName.InterRegualrMedium.rawValue, size: 14)!
     }
     
+    @nonobjc class func interSemiBoldBody14() -> UIFont {
+        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 14)!
+    }
+    
     @nonobjc class func interCaption16() -> UIFont {
         return UIFont(name: FontName.InterRegualr.rawValue, size: 16)!
+    }
+    
+    @nonobjc class func interSemiBoldCaption12() -> UIFont {
+        return UIFont(name: FontName.InterRegualrSemiBold.rawValue, size: 12)!
     }
     
     @nonobjc class func interCaption12() -> UIFont {
