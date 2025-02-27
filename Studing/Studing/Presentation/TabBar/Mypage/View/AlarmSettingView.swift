@@ -17,7 +17,7 @@ final class AlarmSettingView: UIView {
     private let backgroundView = UIView()
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
-    private let announceSwitchView = UISwitch()
+    private let arrowImageView = UIImageView()
     
     // MARK: - Init
     
@@ -31,11 +31,6 @@ final class AlarmSettingView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func changeAnnounceSwitchOn(_ isOn: Bool) {
-        announceSwitchView.isOn = isOn
-        announceSwitchView.isEnabled = isOn
     }
 }
 
@@ -60,15 +55,15 @@ private extension AlarmSettingView {
             $0.numberOfLines = 0
         }
         
-        announceSwitchView.do {
-            $0.onTintColor = .primary50
-            $0.isEnabled = true
+        arrowImageView.do {
+            $0.image = UIImage(systemName: "chevron.right")
+            $0.tintColor = .black30
         }
     }
     
     func setupHierarchy() {
         self.addSubview(backgroundView)
-        backgroundView.addSubviews(titleLabel, subTitleLabel, announceSwitchView)
+        backgroundView.addSubviews(titleLabel, subTitleLabel, arrowImageView)
     }
     
     func setupLayout() {
@@ -87,7 +82,7 @@ private extension AlarmSettingView {
             $0.leading.equalToSuperview().inset(5)
         }
         
-        announceSwitchView.snp.makeConstraints {
+        arrowImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(5)
         }

@@ -101,7 +101,6 @@ private extension AlarmSettingViewController {
         output.viewLifeCycleEventResult
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
-                self?.announceAlarmSettingView.changeAnnounceSwitchOn(result)
                 self?.alarmInfomationView.isHidden = result
             }
             .store(in: &cancellables)
@@ -131,6 +130,11 @@ private extension AlarmSettingViewController {
         }
         
         alarmInfomationView.do {
+            $0.isUserInteractionEnabled = true
+            $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(alarmInfomationViewTappend)))
+        }
+        
+        announceAlarmSettingView.do {
             $0.isUserInteractionEnabled = true
             $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(alarmInfomationViewTappend)))
         }

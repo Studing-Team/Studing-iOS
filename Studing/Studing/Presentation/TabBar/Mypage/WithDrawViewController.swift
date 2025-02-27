@@ -33,7 +33,7 @@ final class WithDrawViewController: UIViewController {
     private let subTitleLabel = UILabel()
     
     private let cancelButton = UIButton()
-    private let withDrawButton = UIButton()
+    private let withDrawButton = CustomButton(buttonStyle: .withdraw(type: .view))
     
     // MARK: - init
     
@@ -99,8 +99,8 @@ private extension WithDrawViewController {
                 self?.showConfirmCancelAlert(
                     mainTitle: "잠깐만요",
                     subTitle: "모든 안내사항을 확인해주세요.\n탈퇴를 진행할까요?",
-                    leftButtonStyle: .no,
-                    rightButtonStyle: .withdraw,
+                    leftButtonStyle: .withdraw(type: .alert),
+                    rightButtonStyle: .no,
                     leftButtonHandler: {
                     self?.comfirmButtonTappend.send()
                 })
@@ -131,14 +131,6 @@ private extension WithDrawViewController {
 
 private extension WithDrawViewController {
     func setupStyle() {
-//        backbutton.do {
-//            $0.setTitleColor(.black50, for: .normal)
-//            $0.setImage(UIImage(systemName: "chevron.backward")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)),
-//                        for: .normal)
-//            $0.tintColor = .black50
-//            $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-//        }
-        
         titleLabel.do {
             $0.text = "탈퇴하기"
             $0.textColor = .black50
@@ -169,30 +161,15 @@ private extension WithDrawViewController {
             $0.layer.borderColor = UIColor.black10.cgColor
             $0.layer.borderWidth = 1
         }
-        
-        withDrawButton.do {
-            $0.setTitle("탈퇴할게요", for: .normal) // 버튼의 제목 설정
-            $0.setTitleColor(.white, for: .normal) // 제목 색상 설정
-            $0.titleLabel?.font = .interSubtitle2() // 폰트 설정
-            $0.backgroundColor = .primary50 // 배경색 설정
-            $0.layer.cornerRadius = 24
-        }
     }
     
     func setupHierarchy() {
-//        view.addSubviews(backbutton, titleLabel, subTitleLabel, drawInfoStackView, cancelButton, withDrawButton)
         view.addSubviews(titleLabel, subTitleLabel, drawInfoStackView, cancelButton, withDrawButton)
     }
     
     func setupLayout() {
-//        backbutton.snp.makeConstraints {
-//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
-//            $0.leading.equalToSuperview().inset(20)
-//        }
-        
         titleLabel.snp.makeConstraints {
-//            $0.top.equalTo(backbutton.snp.bottom).offset(50)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
             $0.centerX.equalToSuperview()
         }
         
