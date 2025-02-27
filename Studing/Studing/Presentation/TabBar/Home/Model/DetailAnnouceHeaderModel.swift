@@ -21,8 +21,6 @@ struct BaseDetailAnnounceHeaderModel: Hashable, DetailAnnouceSectionData {
     var isFavorite: Bool
     var isBookmark: Bool
     let isAuthor: Bool
-//    let isAlarm: Bool
-//    let alarmTime: DateComponents?
 }
 
 struct DetailAnnouncePeriodHeaderModel: Hashable, DetailAnnouceSectionData {
@@ -37,4 +35,5 @@ struct DetailAnnounceFirstComeHeaderModel: Hashable, DetailAnnouceSectionData {
     let endTime: String
     var isFirstComeApplied: Bool
     var firstComeButtonState: FirstComeState
+    let firstComeNumber: String
 }
