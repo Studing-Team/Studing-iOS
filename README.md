@@ -41,6 +41,11 @@
 
 <br>
 
+![modal](https://github.com/user-attachments/assets/03ce10cf-09ea-4cc8-9d03-73365822e227)
+
+
+<br>
+
 **🔗 [[Feat] #56 - 1차 스프린트 관련 QA 반영](https://github.com/Studing-Team/Studing-iOS/pull/57)**
 
 <br>
