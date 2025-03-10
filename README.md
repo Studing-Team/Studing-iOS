@@ -66,6 +66,11 @@
 
 <br>
 
+![Coordinator Pattern](https://github.com/user-attachments/assets/8c6fe384-7b1c-411f-8b84-c8737ed1b5ff)
+
+
+<br>
+
 **🔗 [[Feat] #50 - 푸시 알람 딥링크 로직 구현](https://github.com/Studing-Team/Studing-iOS/pull/53)**
 
 <br>
