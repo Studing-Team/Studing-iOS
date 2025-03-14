@@ -66,12 +66,17 @@
 
 <br>
 
-![Coordinator Pattern](https://github.com/user-attachments/assets/8c6fe384-7b1c-411f-8b84-c8737ed1b5ff)
-
+**🔗 [[Feat] #50 - 푸시 알람 딥링크 로직 구현](https://github.com/Studing-Team/Studing-iOS/pull/53)**
 
 <br>
 
-**🔗 [[Feat] #50 - 푸시 알람 딥링크 로직 구현](https://github.com/Studing-Team/Studing-iOS/pull/53)**
+### 3. 화면 전환 역할을 담당하는 Coordinator Pattern 도입
+
+ViewController 에서 화면 전환을 처리하는 것이 일반적이지만 다른 ViewController 에 대한 의존성이 증가되고 사용자 흐름 관련 로직이 존재하는 것이 책임 범위를 초과한다고 생각했습니다. Coordinator 패턴을 적용하여 화면 전환과 앱 흐름을 관리하는 역할을 맡고 ViewController 는 뷰 로직에만 집중하도록 설계했습니다. 
+
+<br>
+
+![Coordinator Pattern](https://github.com/user-attachments/assets/8c6fe384-7b1c-411f-8b84-c8737ed1b5ff)
 
 <br>
 
